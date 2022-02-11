@@ -8,9 +8,9 @@ import 'package:flutter/material.dart'
         kMinInteractiveDimension;
 import 'package:flutter/widgets.dart';
 
-import 'platform.dart';
-import 'platform_widget.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
 class PopupMenuOption {
   final String label;

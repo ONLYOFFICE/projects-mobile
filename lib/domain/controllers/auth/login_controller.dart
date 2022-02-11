@@ -105,6 +105,10 @@ class LoginController extends GetxController {
     _passwordController = TextEditingController();
     _portalAdressController = TextEditingController();
 
+    _portalAdressController.addListener(() {
+      checkBoxValue.value = false;
+    });
+
     accountManager = Get.isRegistered<AccountManagerController>()
         ? Get.find<AccountManagerController>()
         : Get.put(AccountManagerController());

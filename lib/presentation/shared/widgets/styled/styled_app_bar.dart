@@ -82,36 +82,25 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-    //     statusBarColor: Colors.yellow.withOpacity(0.1),
-    //     statusBarBrightness: Brightness.light));
+    final _backButtonIcon = backButtonIcon ?? Icon(PlatformIcons(context).back);
 
     return AppBar(
       centerTitle: centerTitle,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
       backgroundColor: backgroundColor,
-      // backgroundColor: CupertinoColors.white, // TODO
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       shadowColor: Get.theme.colors().outline,
-      // backwardsCompatibility: false,
-      // systemOverlayStyle: const SystemUiOverlayStyle(
-      //   statusBarColor: Colors.transparent,
-      //   statusBarIconBrightness: Brightness.dark,
-      // ),
       leadingWidth: leadingWidth,
       leading: leading == null && showBackButton
           ? PlatformIconButton(
               padding: EdgeInsets.zero,
-              icon: Icon(PlatformIcons(context).back),
+              icon: _backButtonIcon,
               onPressed: onLeadingPressed ?? Get.back,
             )
           : leading,
       toolbarTextStyle: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-
       actions: actions,
-
-      // ignore: prefer_if_null_operators
       title: title != null
           ? PreferredSize(preferredSize: Size.fromHeight(titleHeight), child: title!)
           : titleText != null

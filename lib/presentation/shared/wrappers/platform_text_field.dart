@@ -10,14 +10,11 @@ import 'package:flutter/cupertino.dart'
     show CupertinoColors, CupertinoDynamicColor, CupertinoTextField, OverlayVisibilityMode;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' show InputDecoration, TextField, InputCounterWidgetBuilder;
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart'
-    show Brightness, TextInputFormatter, TextInputType, TextInputAction, TextCapitalization;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import 'platform.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 
 const BorderSide _kDefaultRoundedBorderSide = BorderSide(
   color: CupertinoDynamicColor.withBrightness(
@@ -25,7 +22,7 @@ const BorderSide _kDefaultRoundedBorderSide = BorderSide(
     darkColor: Color(0x33FFFFFF),
   ),
   style: BorderStyle.solid,
-  width: 0.0,
+  width: 0,
 );
 
 const Border _kDefaultRoundedBorder = Border(
@@ -41,7 +38,7 @@ const BoxDecoration kDefaultRoundedBorderDecoration = BoxDecoration(
     darkColor: CupertinoColors.black,
   ),
   border: _kDefaultRoundedBorder,
-  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+  borderRadius: BorderRadius.all(Radius.circular(5)),
 );
 
 class MaterialTextFieldData {
@@ -481,7 +478,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
       autofocus: data?.autofocus ?? autofocus ?? false,
       controller: data?.controller ?? controller,
       cursorColor: data?.cursorColor ?? cursorColor ?? CupertinoColors.activeBlue,
-      cursorRadius: data?.cursorRadius ?? cursorRadius ?? const Radius.circular(2.0),
+      cursorRadius: data?.cursorRadius ?? cursorRadius ?? const Radius.circular(2),
       cursorWidth: data?.cursorWidth ?? cursorWidth ?? 2.0,
       enabled: data?.enabled ?? enabled,
       focusNode: data?.focusNode ?? focusNode,
@@ -494,7 +491,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
       onChanged: data?.onChanged ?? onChanged,
       onEditingComplete: data?.onEditingComplete ?? onEditingComplete,
       onSubmitted: data?.onSubmitted ?? onSubmitted,
-      scrollPadding: data?.scrollPadding ?? scrollPadding ?? const EdgeInsets.all(20.0),
+      scrollPadding: data?.scrollPadding ?? scrollPadding ?? const EdgeInsets.all(20),
       style: data?.style ?? style,
       textAlign: data?.textAlign ?? textAlign ?? TextAlign.start,
       textCapitalization: data?.textCapitalization ?? textCapitalization ?? TextCapitalization.none,
@@ -502,7 +499,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
       decoration: data?.decoration ??
           (makeCupertinoDecorationNull ? null : kDefaultRoundedBorderDecoration),
       clearButtonMode: data?.clearButtonMode ?? OverlayVisibilityMode.never,
-      padding: data?.padding ?? decoration?.contentPadding ?? const EdgeInsets.all(6.0),
+      padding: data?.padding ?? decoration?.contentPadding ?? const EdgeInsets.all(6),
       placeholder: data?.placeholder ?? hintText ?? decoration?.hintText,
       placeholderStyle: data?.placeholderStyle ??
           decoration?.hintStyle ??

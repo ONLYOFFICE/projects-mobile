@@ -8,8 +8,8 @@ import 'package:flutter/cupertino.dart' show CupertinoAlertDialog;
 import 'package:flutter/material.dart' show AlertDialog;
 import 'package:flutter/widgets.dart';
 
-import 'platform.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 
 const EdgeInsets _defaultInsetPadding = EdgeInsets.symmetric(horizontal: 40, vertical: 24);
 

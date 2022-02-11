@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
@@ -47,10 +49,8 @@ import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
-import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/discussions/discussions_shared.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
@@ -69,6 +69,8 @@ class ProjectDetailedTabs {
   static const discussions = 3;
   static const documents = 4;
   static const team = 5;
+
+  static const length = 6;
 }
 
 class PopupMenuItemValue {
@@ -113,8 +115,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     projectController.setup();
 
     _tabController = TabController(
+      initialIndex: ProjectDetailedTabs.overview,
       vsync: this,
-      length: 6,
+      length: ProjectDetailedTabs.length,
     );
 
     _tabController.addListener(() {
@@ -364,10 +367,10 @@ Future<void> _onSelected(
       break;
 
     case PopupMenuItemValue.editProject:
-      Get.find<NavigationController>().to(EditProjectView(projectDetailed: controller.projectData),
+      unawaited(Get.find<NavigationController>().to(const EditProjectView(),
           transition: GetPlatform.isAndroid ? Transition.downToUp : Transition.cupertinoDialog,
           fullscreenDialog: true,
-          arguments: {'projectDetailed': controller.projectData});
+          arguments: {'projectDetailed': controller.projectData}));
       break;
 
     case PopupMenuItemValue.followProject:

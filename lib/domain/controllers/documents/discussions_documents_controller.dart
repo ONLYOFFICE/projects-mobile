@@ -79,12 +79,6 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
   @override
   int? get currentFolderID => _currentFolderId;
 
-  @override
-  RxString documentsScreenName = tr('documents').obs;
-
-  @override
-  late String screenName = tr('documents');
-
   late DocumentsSortController _sortController;
 
   @override
@@ -111,6 +105,8 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
     PaginationController paginationController,
     DocumentsSortController sortController,
   ) {
+    screenName = tr('documents');
+
     _sortController = sortController;
     _paginationController = paginationController;
     _filterController = filterController;

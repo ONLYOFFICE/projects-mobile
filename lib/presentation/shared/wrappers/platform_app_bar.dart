@@ -9,18 +9,18 @@ import 'package:flutter/material.dart' show AppBar, Brightness, TextTheme;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import 'extensions.dart';
-import 'platform.dart';
-import 'platform_provider.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/extensions.dart';
+import 'package:projects/presentation/shared/wrappers/platform_provider.dart';
 
 //the default has alpha which will cause the content to slide under the header for ios
-const Color _kDefaultNavBarBorderColor = const Color(0x4C000000);
+const Color _kDefaultNavBarBorderColor = Color(0x4C000000);
 
-const Border _kDefaultNavBarBorder = const Border(
-  bottom: const BorderSide(
+const Border _kDefaultNavBarBorder = Border(
+  bottom: BorderSide(
     color: _kDefaultNavBarBorderColor,
-    width: 0.0, // One physical pixel.
+    width: 0, // One physical pixel.
     style: BorderStyle.solid,
   ),
 );

@@ -60,7 +60,7 @@ class SearchField extends StatefulWidget {
       this.controller,
       this.height = 32,
       this.hintText,
-      this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 4),
+      this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
       this.onChanged,
       this.onClearPressed,
       this.onSubmitted,
@@ -93,6 +93,8 @@ class _SearchFieldState extends State<SearchField> {
             onSubmitted: widget.onSubmitted,
             onChanged: widget.onChanged,
             autofocus: widget.autofocus,
+            prefixInsets: const EdgeInsetsDirectional.fromSTEB(6, 1, 0, 4),
+            padding: const EdgeInsetsDirectional.fromSTEB(3.8, 6, 5, 8),
           );
         },
         material: (_, __) {

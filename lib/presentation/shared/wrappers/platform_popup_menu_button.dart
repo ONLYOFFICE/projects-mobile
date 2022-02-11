@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 
@@ -153,7 +154,6 @@ class PlatformPopupMenuButtonState<T> extends State<PlatformPopupMenuButton<T>> 
     return PlatformIconButton(
       icon: widget.icon ?? Icon(Icons.adaptive.more),
       padding: widget.padding,
-      iconSize: widget.iconSize ?? 24.0,
       //tooltip: widget.tooltip ?? MaterialLocalizations.of(context).showMenuTooltip,
       onPressed: widget.enabled ? showButtonMenu : null,
       //enableFeedback: enableFeedback,

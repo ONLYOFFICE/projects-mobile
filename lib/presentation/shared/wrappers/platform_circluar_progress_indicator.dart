@@ -8,10 +8,10 @@ import 'package:flutter/cupertino.dart' show CupertinoActivityIndicator;
 import 'package:flutter/material.dart' show CircularProgressIndicator;
 import 'package:flutter/widgets.dart';
 
-import 'platform.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 
-const double _kDefaultIndicatorRadius = 10.0;
+const double _kDefaultIndicatorRadius = 10;
 
 class MaterialProgressIndicatorData {
   MaterialProgressIndicatorData({

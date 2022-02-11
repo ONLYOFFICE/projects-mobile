@@ -7,10 +7,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
-import 'platform.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
 
-typedef T PlatformBuilder<T>(BuildContext context, PlatformTarget platform);
-typedef T PlatformIndexBuilder<T>(BuildContext context, PlatformTarget platform, int index);
+typedef PlatformBuilder<T> = T Function(BuildContext context, PlatformTarget platform);
+typedef PlatformIndexBuilder<T> = T Function(
+    BuildContext context, PlatformTarget platform, int index);
 
 abstract class PlatformWidgetBase<I extends Widget, A extends Widget> extends StatelessWidget {
   const PlatformWidgetBase({Key? key}) : super(key: key);

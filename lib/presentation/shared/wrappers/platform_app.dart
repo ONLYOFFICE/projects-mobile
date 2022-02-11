@@ -4,14 +4,13 @@
  * See LICENSE for distribution and usage details.
  */
 
-import 'package:flutter/cupertino.dart' show CupertinoApp, CupertinoThemeData;
-import 'package:flutter/material.dart'
-    show MaterialApp, ScaffoldMessengerState, Theme, ThemeData, ThemeMode;
+import 'package:flutter/cupertino.dart' show CupertinoThemeData;
+import 'package:flutter/material.dart' show ScaffoldMessengerState, ThemeData, ThemeMode;
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
-import 'platform.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 
 abstract class _BaseData {
   _BaseData({

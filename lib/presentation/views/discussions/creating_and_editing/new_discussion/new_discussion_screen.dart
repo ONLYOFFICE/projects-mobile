@@ -69,7 +69,7 @@ class NewDiscussionScreen extends StatelessWidget {
         appBar: StyledAppBar(
           titleText: tr('newDiscussion'),
           leadingWidth: 65,
-          centerTitle: GetPlatform.isAndroid ? false : true,
+          centerTitle: !GetPlatform.isAndroid,
           actions: [
             PlatformWidget(
               material: (platformContext, __) => IconButton(

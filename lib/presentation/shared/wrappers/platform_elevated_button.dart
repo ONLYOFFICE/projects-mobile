@@ -8,10 +8,10 @@ import 'package:flutter/cupertino.dart' show CupertinoButton, CupertinoColors;
 import 'package:flutter/material.dart' show ElevatedButton, ButtonStyle;
 import 'package:flutter/widgets.dart';
 
-import 'platform.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 
-const double _kMinInteractiveDimensionCupertino = 44.0;
+const double _kMinInteractiveDimensionCupertino = 44;
 
 abstract class _BaseData {
   _BaseData({
@@ -143,7 +143,7 @@ class PlatformElevatedButton extends PlatformWidgetBase<CupertinoButton, Elevate
         key: data?.widgetKey ?? widgetKey,
         child: data?.child ?? child!,
         onPressed: data?.onPressed ?? onPressed,
-        borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
+        borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8)),
         minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
         padding: data?.padding ?? padding,
         pressedOpacity: data?.pressedOpacity ?? 0.4,
@@ -156,7 +156,7 @@ class PlatformElevatedButton extends PlatformWidgetBase<CupertinoButton, Elevate
         key: data?.widgetKey ?? widgetKey,
         child: data?.child ?? child!,
         onPressed: data?.onPressed ?? onPressed,
-        borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
+        borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8)),
         minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
         padding: data?.padding ?? padding,
         pressedOpacity: data?.pressedOpacity ?? 0.4,

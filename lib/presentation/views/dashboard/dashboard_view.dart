@@ -94,23 +94,23 @@ class _BodyDashboardWidget extends StatelessWidget {
         // controller: dashboardController.scrollController,
         children: <Widget>[
           DashboardCardView(
-            overline: tr('tasks'),
+            overline: GetPlatform.isIOS ? tr('tasks') : tr('tasks').toUpperCase(),
             controller: dashboardController.myTaskController,
           ),
           DashboardCardView(
-            overline: tr('tasks'),
+            overline: GetPlatform.isIOS ? tr('tasks') : tr('tasks').toUpperCase(),
             controller: dashboardController.upcomingTaskscontroller,
           ),
           DashboardCardView(
-            overline: tr('projects'),
+            overline: GetPlatform.isIOS ? tr('projects') : tr('projects').toUpperCase(),
             controller: dashboardController.myProjectsController,
           ),
           DashboardCardView(
-            overline: tr('projects'),
+            overline: GetPlatform.isIOS ? tr('projects') : tr('projects').toUpperCase(),
             controller: dashboardController.folowedProjectsController,
           ),
           DashboardCardView(
-            overline: tr('projects'),
+            overline: GetPlatform.isIOS ? tr('projects') : tr('projects').toUpperCase(),
             controller: dashboardController.activeProjectsController,
           ),
         ],
@@ -154,7 +154,7 @@ class DashboardCardView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            overline.toUpperCase(),
+                            overline,
                             style: TextStyleHelper.overline(
                               color: Get.theme.colors().onSurface.withOpacity(0.6),
                             ),
@@ -264,13 +264,17 @@ class DashboardCardView extends StatelessWidget {
                                     },
                                     child: !(controller.showAll.value as bool)
                                         ? Text(
-                                            tr('viewAll').toUpperCase(),
+                                            GetPlatform.isIOS
+                                                ? tr('viewAll')
+                                                : tr('viewAll').toUpperCase(),
                                             style: TextStyleHelper.button(
                                               color: Get.theme.colors().primary,
                                             ),
                                           )
                                         : Text(
-                                            tr('viewLess').toUpperCase(),
+                                            GetPlatform.isIOS
+                                                ? tr('viewLess')
+                                                : tr('viewLess').toUpperCase(),
                                             style: TextStyleHelper.button(
                                               color: Get.theme.colors().primary,
                                             ),

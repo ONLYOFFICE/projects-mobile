@@ -31,7 +31,6 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -39,7 +38,8 @@ import 'package:projects/domain/controllers/projects/detailed_project/project_ed
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/description.dart';
@@ -49,12 +49,7 @@ import 'package:projects/presentation/views/projects_view/new_project/tiles/team
 import 'package:projects/presentation/views/projects_view/new_project/tiles/title.dart';
 
 class EditProjectView extends StatelessWidget {
-  final ProjectDetailed? projectDetailed;
-
-  const EditProjectView({Key? key, required this.projectDetailed})
-      : super(
-          key: key,
-        );
+  const EditProjectView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,46 +64,29 @@ class EditProjectView extends StatelessWidget {
       child: Scaffold(
         //backgroundColor: Get.theme.backgroundColor,
         appBar: StyledAppBar(
-          // titleText: tr('editProject'),
-          // title: Text(
-          //   tr('editProject'),
-          //   style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
-          // ),
           titleText: tr('editProject'),
-          centerTitle: GetPlatform.isAndroid ? false : true,
-          elevation: 1,
+          centerTitle: !GetPlatform.isAndroid,
           leadingWidth: 65,
-          leading: PlatformWidget(
-            cupertino: (_, __) => CupertinoButton(
-              padding: const EdgeInsets.only(left: 16),
-              alignment: Alignment.centerLeft,
-              onPressed: Get.back,
-              child: Text(
-                tr('closeLowerCase'),
-                style: TextStyleHelper.button(),
-              ),
+          leading: PlatformIconButton(
+            padding: GetPlatform.isAndroid ? EdgeInsets.zero : const EdgeInsets.only(left: 16),
+            onPressed: editProjectController.discardChanges,
+            cupertinoIcon: Text(
+              tr('closeLowerCase'),
+              style: TextStyleHelper.button(),
+              softWrap: false,
             ),
-            material: (_, __) => IconButton(
-              onPressed: Get.back,
-              icon: const Icon(Icons.close),
-            ),
+            materialIcon: const Icon(Icons.close),
           ),
           actions: [
-            PlatformWidget(
-              material: (_, __) => IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: editProjectController.confirmChanges,
+            PlatformIconButton(
+              padding: GetPlatform.isAndroid ? EdgeInsets.zero : const EdgeInsets.only(right: 16),
+              onPressed: editProjectController.confirmChanges,
+              cupertinoIcon: Text(
+                tr('Done'),
+                style: TextStyleHelper.headline7(),
               ),
-              cupertino: (_, __) => CupertinoButton(
-                onPressed: editProjectController.confirmChanges,
-                padding: const EdgeInsets.only(right: 16),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  tr('Done'),
-                  style: TextStyleHelper.headline7(),
-                ),
-              ),
-            )
+              materialIcon: const Icon(Icons.check_rounded),
+            ),
           ],
         ),
         body: Obx(
@@ -131,20 +109,36 @@ class EditProjectView extends StatelessWidget {
                   TeamMembersTile(controller: editProjectController),
                   TagsTile(controller: editProjectController),
                   AdvancedOptions(
-                    options: <Widget>[
-                      OptionWithSwitch(
-                        title: tr('privateProject'),
-                        switchValue: editProjectController.isPrivate,
-                        switchOnChanged: (bool value) {
-                          editProjectController.setPrivate(value);
-                        },
+                    options: [
+                      const StyledDivider(
+                        leftPadding: 72,
+                        height: 1,
+                        thickness: 1,
                       ),
-                      OptionWithSwitch(
-                        title: tr('notifyPM'),
-                        switchValue: editProjectController.notificationEnabled,
-                        switchOnChanged: (bool value) {
-                          editProjectController.enableNotification(value);
-                        },
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                        child: OptionWithSwitch(
+                          title: tr('privateProject'),
+                          switchValue: editProjectController.isPrivate,
+                          switchOnChanged: (bool value) {
+                            editProjectController.setPrivate(value);
+                          },
+                        ),
+                      ),
+                      const StyledDivider(
+                        leftPadding: 72,
+                        height: 1,
+                        thickness: 1,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                        child: OptionWithSwitch(
+                          title: tr('notifyPM'),
+                          switchValue: editProjectController.notificationEnabled,
+                          switchOnChanged: (bool value) {
+                            editProjectController.enableNotification(value);
+                          },
+                        ),
                       ),
                     ],
                   ),

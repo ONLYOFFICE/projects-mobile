@@ -88,7 +88,7 @@ class SelfProfileScreen extends StatelessWidget {
             tr('profile'),
             style: TextStyle(color: Get.theme.colors().onSurface),
           ),
-          centerTitle: GetPlatform.isAndroid ? false : true,
+          centerTitle: !GetPlatform.isAndroid,
           actions: [
             if (showSettingsButton)
               PlatformIconButton(

@@ -40,8 +40,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
+import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 
 class PasscodeSettingsScreen extends StatelessWidget {
   const PasscodeSettingsScreen({Key? key}) : super(key: key);
@@ -62,7 +62,6 @@ class PasscodeSettingsScreen extends StatelessWidget {
           titleText: tr('passcodeLock'),
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           onLeadingPressed: controller.leavePasscodeSettingsScreen,
-          backButtonIcon: Icon(PlatformIcons(context).back),
         ),
         body: Obx(
           () {
@@ -72,28 +71,20 @@ class PasscodeSettingsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 3),
-                    Obx(
-                      () => SwitchListTile(
-                        value: controller.isPasscodeEnable.value,
-                        activeColor: Get.theme.colors().primary,
-                        onChanged: (value) async => controller.onPasscodeTilePressed(value),
-                        // controller.tryEnablingPasscode(),
-                        title: Text(
-                          tr('enablePasscode'),
-                          style: TextStyleHelper.subtitle1(),
-                        ),
-                      ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: OptionWithSwitch(
+                          title: tr('enablePasscode'),
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                          switchOnChanged: controller.onPasscodeTilePressed,
+                          switchValue: controller.isPasscodeEnable),
                     ),
                     if (controller.isPasscodeEnable.value == true)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 7),
-                        child: PlatformTextButton(
-                          onPressed: controller.tryChangingPasscode,
-                          child: Text(
-                            tr('changePasscode'),
-                            style: TextStyleHelper.subtitle1()
-                                .copyWith(color: Get.theme.colors().primary),
-                          ),
+                      PlatformTextButton(
+                        onPressed: controller.tryChangingPasscode,
+                        child: Text(
+                          tr('changePasscode'),
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                         ),
                       ),
                     const StyledDivider(leftPadding: 16, rightPadding: 16),

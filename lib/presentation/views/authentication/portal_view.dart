@@ -44,6 +44,7 @@ import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.da
 
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
@@ -54,6 +55,7 @@ class PortalInputView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<LoginController>();
+    controller.checkBoxValue.value = false;
 
     if (Get.isRegistered<AccountManagerController>()) {
       Get.find<AccountManagerController>();
@@ -78,7 +80,7 @@ class PortalInputView extends StatelessWidget {
               appBar: controller.accountManager.accounts.isEmpty
                   ? null
                   : StyledAppBar(
-                      backButtonIcon: const Icon(Icons.close),
+                      backButtonIcon: Icon(PlatformIcons(context).clear),
                       title: Text(
                         tr('addNewAccount'),
                         style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
@@ -139,7 +141,7 @@ class PortalInputView extends StatelessWidget {
                           PrivacyAndTermsFooter.withCheckbox()
                         else
                           const Spacer(),
-                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter()
+                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter(),
                       ],
                     ),
                   ),

@@ -56,7 +56,6 @@ class ColorThemeSelectionScreen extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('colorTheme'),
-          backButtonIcon: Icon(PlatformIcons(context).back),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

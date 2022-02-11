@@ -8,8 +8,8 @@ import 'package:flutter/cupertino.dart' show CupertinoPage;
 import 'package:flutter/material.dart' show MaterialPage;
 import 'package:flutter/widgets.dart' show BuildContext, Page, Widget, LocalKey;
 
-import 'platform.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 
 class _BasePageData {
   /// The content to be shown in the [Route] created by this page.

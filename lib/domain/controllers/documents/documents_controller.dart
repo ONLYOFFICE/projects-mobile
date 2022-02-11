@@ -76,9 +76,6 @@ class DocumentsController extends BaseDocumentsController {
   @override
   int? get currentFolderID => _currentFolderId;
 
-  @override
-  RxString documentsScreenName = tr('documents').obs;
-
   final _sortController = DocumentsSortController();
   @override
   DocumentsSortController get sortController => _sortController;
@@ -94,6 +91,8 @@ class DocumentsController extends BaseDocumentsController {
 
   final _lock = Lock();
   DocumentsController() {
+    screenName = tr('documents');
+
     _filterController.applyFiltersDelegate = () async => await refreshContent();
     sortController.updateSortDelegate = () async => await refreshContent();
 
@@ -260,7 +259,4 @@ class DocumentsController extends BaseDocumentsController {
         'folderId': currentFolderID,
         'documentsController': this,
       });
-
-  @override
-  String screenName = tr('documents');
 }

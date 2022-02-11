@@ -79,7 +79,7 @@ class PasscodeSettingsController extends GetxController {
       enteredPasscodeLen.value++;
     }
     if (_passcode.length == 4) {
-      Get.to(() => NewPasscodeScreen2());
+      Get.to(NewPasscodeScreen2.new);
     }
   }
 
@@ -171,7 +171,7 @@ class PasscodeSettingsController extends GetxController {
 
   void tryEnablingPasscode() async {
     isPasscodeEnable.value = true;
-    await Get.to(() => NewPasscodeScreen1(), preventDuplicates: false);
+    await Get.to(NewPasscodeScreen1.new, preventDuplicates: false);
   }
 
   void tryDisablingPasscode() async {
@@ -189,13 +189,12 @@ class PasscodeSettingsController extends GetxController {
   }
 
   Future<void> tryChangingPasscode() async {
-    await Get.to(
-        () => EnterCurrentPasscodeScreen(onPass: () => Get.to(() => EditPasscodeScreen1())),
+    await Get.to(() => EnterCurrentPasscodeScreen(onPass: () => Get.to(EditPasscodeScreen1.new)),
         preventDuplicates: false);
   }
 
-  void onPasscodeTilePressed(value) {
-    if (value == true) {
+  void onPasscodeTilePressed(bool value) {
+    if (value) {
       tryEnablingPasscode();
     } else {
       tryDisablingPasscode();

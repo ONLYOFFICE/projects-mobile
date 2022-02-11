@@ -177,9 +177,10 @@ class ProjectService {
       });
 
       return result.response;
-    } else {
+    } else
       await Get.find<ErrorDialog>().show(result.error!.message);
-    }
+
+    return null;
   }
 
   Future<bool> editProject({required EditProjectDTO project, required int projectId}) async {

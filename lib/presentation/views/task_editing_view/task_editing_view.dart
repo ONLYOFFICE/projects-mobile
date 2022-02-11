@@ -38,7 +38,6 @@ import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/new_task/tiles/description_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/due_date_tile.dart';
@@ -70,7 +69,7 @@ class TaskEditingView extends StatelessWidget {
         appBar: StyledAppBar(
           titleText: tr('editTask'),
           leadingWidth: 65,
-          centerTitle: GetPlatform.isAndroid ? false : true,
+          centerTitle: !GetPlatform.isAndroid,
           actions: [
             PlatformWidget(
               material: (_, __) => IconButton(

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart'
     show Theme, showDatePicker, SelectableDayPredicate, DatePickerEntryMode, DatePickerMode;
 import 'package:flutter/widgets.dart';
 
-import 'platform.dart';
-import 'platform_text_button.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class DatePickerContentData {
   final DateTime? initialDate;
