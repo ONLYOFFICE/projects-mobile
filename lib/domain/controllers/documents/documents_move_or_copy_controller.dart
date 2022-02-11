@@ -38,17 +38,15 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
+import 'package:projects/domain/controllers/documents/conflict_resolving_dialog.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
 class DocumentsMoveOrCopyController extends BaseDocumentsController {
@@ -228,13 +226,15 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       folderIds: [_targetId.toString()],
     );
 
-    var type = ConflictResolveType.Skip;
+    ConflictResolveType? type;
     if (conflictsResult != null && conflictsResult.isNotEmpty) {
       final titles = <String>[];
       for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
-      type = (await showConflictResolvingDialog(titles)) ?? ConflictResolveType.Skip;
+      type = await showConflictResolvingDialog(titles);
     }
+
+    if (type == null) return;
 
     final result = await _api.moveDocument(
       movingFolder: _targetId.toString(),
@@ -257,13 +257,15 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       folderIds: [_targetId.toString()],
     );
 
-    var type = ConflictResolveType.Skip;
+    ConflictResolveType? type;
     if (conflictsResult != null && conflictsResult.isNotEmpty) {
       final titles = <String>[];
       for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
-      type = (await showConflictResolvingDialog(titles)) ?? ConflictResolveType.Skip;
+      type = await showConflictResolvingDialog(titles);
     }
+
+    if (type == null) return;
 
     final result = await _api.copyDocument(
       copyingFolder: _targetId.toString(),
@@ -286,13 +288,15 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       fileIds: [_targetId.toString()],
     );
 
-    var type = ConflictResolveType.Skip;
+    ConflictResolveType? type;
     if (conflictsResult != null && conflictsResult.isNotEmpty) {
       final titles = <String>[];
       for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
-      type = (await showConflictResolvingDialog(titles)) ?? ConflictResolveType.Skip;
+      type = await showConflictResolvingDialog(titles);
     }
+
+    if (type == null) return;
 
     final result = await _api.moveDocument(
       movingFile: _targetId.toString(),
@@ -315,13 +319,15 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       fileIds: [_targetId.toString()],
     );
 
-    var type = ConflictResolveType.Skip;
+    ConflictResolveType? type;
     if (conflictsResult != null && conflictsResult.isNotEmpty) {
       final titles = <String>[];
       for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
-      type = (await showConflictResolvingDialog(titles)) ?? ConflictResolveType.Skip;
+      type = await showConflictResolvingDialog(titles);
     }
+
+    if (type == null) return;
 
     final result = await _api.copyDocument(
       copyingFile: _targetId.toString(),
@@ -349,41 +355,6 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       'initialFolderId': initialFolderId,
       'nestingCounter': nestingCounter,
     });
-  }
-
-  Future<ConflictResolveType?> showConflictResolvingDialog(List<String> titles) async {
-    return await Get.dialog(StyledAlertDialog(
-      titleText: tr('overwriteDialogTitle'),
-      contentText: tr('overwriteDialogContent', args: titles),
-      actions: [
-        PlatformTextButton(
-          onPressed: () {
-            Get.back(result: ConflictResolveType.Overwrite);
-          },
-          child: Text(
-            tr('replaceConfirmation'),
-          ),
-        ),
-        PlatformTextButton(
-          onPressed: () {
-            Get.back(result: ConflictResolveType.Duplicate);
-          },
-          child: Text(
-            tr('copyConfirmation'),
-            softWrap: false,
-          ),
-        ),
-        PlatformTextButton(
-          onPressed: () {
-            Get.back(result: ConflictResolveType.Skip);
-          },
-          child: Text(
-            tr('skipConfirmation'),
-            softWrap: false,
-          ),
-        ),
-      ],
-    ));
   }
 
   @override
