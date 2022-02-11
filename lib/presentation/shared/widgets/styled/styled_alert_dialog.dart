@@ -77,14 +77,18 @@ class StyledAlertDialog extends StatelessWidget {
     final platformAcceptText =
         GetPlatform.isIOS ? acceptText?.toLowerCase().capitalizeFirst : acceptText;
 
-    final _title = title ?? Text(titleText!);
+    final _title = title ??
+        Text(
+          titleText!,
+          style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
+        );
     final _content = content ?? (contentText != null ? Text(contentText!) : null);
 
     return PlatformAlertDialog(
       title: _title,
       content: _content != null
           ? Container(
-              padding: GetPlatform.isIOS ? const EdgeInsets.only(top: 18) : null,
+              padding: GetPlatform.isIOS ? const EdgeInsets.only(top: 5) : null,
               child: _content,
             )
           : null,

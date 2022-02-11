@@ -479,7 +479,10 @@
 	"openDiscussion": "Open",
 	"archiveDiscussion": "To archive",
 	"overwriteDialogTitle": "Duplicate name",
-	"overwriteDialogContent": "The file with the name {} already exists in the destination folder.",
+	"overwriteDialogContent": {
+		"beforeText": "The file with the name ",
+		"afterText": " already exists in the destination folder."
+	},
 	"replaceConfirmation": "Overwrite",
 	"copyConfirmation": "Keep Both",
 	"skipConfirmation": "Skip"

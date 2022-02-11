@@ -50,7 +50,20 @@ Future<ConflictResolveType?> showConflictResolvingDialog(List<String> titles) as
 Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
   return await Get.dialog(StyledAlertDialog(
     titleText: tr('overwriteDialogTitle'),
-    contentText: tr('overwriteDialogContent', args: titles),
+    content: RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+        children: [
+          TextSpan(text: tr('overwriteDialogContent.beforeText')),
+          TextSpan(
+              text: '"${titles.join(', ')}"',
+              style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)
+                  .copyWith(fontWeight: FontWeight.w700)),
+          TextSpan(text: tr('overwriteDialogContent.afterText')),
+        ],
+      ),
+    ),
     actions: [
       PlatformTextButton(
         onPressed: () {
@@ -97,17 +110,24 @@ Future<ConflictResolveType?> _showForAndroid(List<String> titles) async {
   ConflictResolveType? type;
 
   return await Get.dialog(StyledAlertDialog(
-    title: Text(
-      tr('overwriteDialogTitle'),
-      style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
-    ),
-    contentText: tr('overwriteDialogContent', args: titles),
+    titleText: tr('overwriteDialogTitle'),
     content: Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          tr('overwriteDialogContent', args: titles),
-          style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+        RichText(
+          textAlign: TextAlign.start,
+          text: TextSpan(
+            style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+            children: [
+              TextSpan(text: tr('overwriteDialogContent.beforeText')),
+              TextSpan(
+                  text: '"${titles.join(', ')}"',
+                  style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)
+                      .copyWith(fontWeight: FontWeight.w700)),
+              TextSpan(text: tr('overwriteDialogContent.afterText')),
+            ],
+          ),
         ),
         const SizedBox(height: 16),
         _DialogContent(
