@@ -477,5 +477,13 @@
 	"discussionIsOpen": "Open",
 	"discussionInArchive": "Archived",
 	"openDiscussion": "Open",
-	"archiveDiscussion": "To archive"
+	"archiveDiscussion": "To archive",
+	"overwriteDialogTitle": "Duplicate name",
+	"overwriteDialogContent": {
+		"beforeText": "The file with the name ",
+		"afterText": " already exists in the destination folder."
+	},
+	"replaceConfirmation": "Overwrite",
+	"copyConfirmation": "Keep Both",
+	"skipConfirmation": "Skip"
 }

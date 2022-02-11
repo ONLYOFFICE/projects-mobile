@@ -48,6 +48,7 @@ class StyledAlertDialog extends StatelessWidget {
   final Color? acceptColor;
   final Function()? onCancelTap;
   final Function()? onAcceptTap;
+  final List<Widget>? actions;
 
   const StyledAlertDialog({
     Key? key,
@@ -59,8 +60,8 @@ class StyledAlertDialog extends StatelessWidget {
     this.titleText,
     this.contentText,
     this.onAcceptTap,
-    // Default: pop window
     this.onCancelTap,
+    this.actions,
   })  : assert(titleText != null || title != null, content != null || contentText != null),
         super(key: key);
 
@@ -76,33 +77,38 @@ class StyledAlertDialog extends StatelessWidget {
     final platformAcceptText =
         GetPlatform.isIOS ? acceptText?.toLowerCase().capitalizeFirst : acceptText;
 
-    final _title = title ?? Text(titleText!);
+    final _title = title ??
+        Text(
+          titleText!,
+          style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
+        );
     final _content = content ?? (contentText != null ? Text(contentText!) : null);
 
     return PlatformAlertDialog(
       title: _title,
       content: _content != null
           ? Container(
-              padding: GetPlatform.isIOS ? const EdgeInsets.only(top: 18) : null,
+              padding: GetPlatform.isIOS ? const EdgeInsets.only(top: 5) : null,
               child: _content,
             )
           : null,
-      actions: [
-        PlatformTextButton(
-          onPressed: onCancelTap ?? Get.back,
-          child: Text(
-            platformCancelText ?? defaultCancelText,
-            style: TextStyleHelper.button(),
-            softWrap: false,
-          ),
-        ),
-        PlatformTextButton(
-          onPressed: onAcceptTap,
-          child: Text(platformAcceptText ?? defaultAcceptText,
-              style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().links),
-              softWrap: false),
-        ),
-      ],
+      actions: actions ??
+          [
+            PlatformTextButton(
+              onPressed: onCancelTap ?? Get.back,
+              child: Text(
+                platformCancelText ?? defaultCancelText,
+                style: TextStyleHelper.button(),
+                softWrap: false,
+              ),
+            ),
+            PlatformTextButton(
+              onPressed: onAcceptTap,
+              child: Text(platformAcceptText ?? defaultAcceptText,
+                  style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().links),
+                  softWrap: false),
+            ),
+          ],
     );
   }
 }
