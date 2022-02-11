@@ -174,20 +174,44 @@ class _DialogContentState extends State<_DialogContent> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         ListTile(
+          onTap: () {
+            _onChanged(ConflictResolveType.Overwrite);
+          },
+          dense: true,
+          visualDensity: VisualDensity.compact,
           contentPadding: EdgeInsets.zero,
-          title: Text(tr('copyConfirmation')),
-          leading: Radio<ConflictResolveType>(
-              value: ConflictResolveType.Duplicate, groupValue: _character, onChanged: _onChanged),
-        ),
-        ListTile(
-          contentPadding: EdgeInsets.zero,
-          title: Text(tr('replaceConfirmation')),
+          title: Text(
+            tr('replaceConfirmation'),
+            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+          ),
           leading: Radio<ConflictResolveType>(
               value: ConflictResolveType.Overwrite, groupValue: _character, onChanged: _onChanged),
         ),
         ListTile(
+          onTap: () {
+            _onChanged(ConflictResolveType.Duplicate);
+          },
+          dense: true,
+          visualDensity: VisualDensity.compact,
           contentPadding: EdgeInsets.zero,
-          title: Text(tr('skipConfirmation')),
+          title: Text(
+            tr('copyConfirmation'),
+            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+          ),
+          leading: Radio<ConflictResolveType>(
+              value: ConflictResolveType.Duplicate, groupValue: _character, onChanged: _onChanged),
+        ),
+        ListTile(
+          onTap: () {
+            _onChanged(ConflictResolveType.Skip);
+          },
+          dense: true,
+          visualDensity: VisualDensity.compact,
+          contentPadding: EdgeInsets.zero,
+          title: Text(
+            tr('skipConfirmation'),
+            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+          ),
           leading: Radio<ConflictResolveType>(
               value: ConflictResolveType.Skip, groupValue: _character, onChanged: _onChanged),
         ),
