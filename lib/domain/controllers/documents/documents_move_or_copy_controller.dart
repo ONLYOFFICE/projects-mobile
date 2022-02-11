@@ -226,7 +226,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       folderIds: [_targetId.toString()],
     );
 
-    ConflictResolveType? type;
+    ConflictResolveType? type = ConflictResolveType.Skip;
     if (conflictsResult != null && conflictsResult.isNotEmpty) {
       final titles = <String>[];
       for (final portalFile in conflictsResult) titles.add(portalFile.title!);
@@ -257,7 +257,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       folderIds: [_targetId.toString()],
     );
 
-    ConflictResolveType? type;
+    ConflictResolveType? type = ConflictResolveType.Skip;
     if (conflictsResult != null && conflictsResult.isNotEmpty) {
       final titles = <String>[];
       for (final portalFile in conflictsResult) titles.add(portalFile.title!);
@@ -288,7 +288,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       fileIds: [_targetId.toString()],
     );
 
-    ConflictResolveType? type;
+    ConflictResolveType? type = ConflictResolveType.Skip;
     if (conflictsResult != null && conflictsResult.isNotEmpty) {
       final titles = <String>[];
       for (final portalFile in conflictsResult) titles.add(portalFile.title!);
@@ -319,7 +319,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       fileIds: [_targetId.toString()],
     );
 
-    ConflictResolveType? type;
+    ConflictResolveType? type = ConflictResolveType.Skip;
     if (conflictsResult != null && conflictsResult.isNotEmpty) {
       final titles = <String>[];
       for (final portalFile in conflictsResult) titles.add(portalFile.title!);
