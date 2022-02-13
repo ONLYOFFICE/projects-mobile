@@ -90,7 +90,7 @@ class TextStyleHelper {
   static TextStyle _iosButton({Color? color}) {
     return TextStyle(
       fontFamily: '.SF Pro Display',
-      fontSize: 17,
+      fontSize: 16,
       height: 1.412,
       color: color,
     );
