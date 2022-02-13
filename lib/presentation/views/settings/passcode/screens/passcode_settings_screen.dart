@@ -67,31 +67,28 @@ class PasscodeSettingsScreen extends StatelessWidget {
           () {
             if (controller.loaded.value == true) {
               return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 3),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: OptionWithSwitch(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 3),
+                      OptionWithSwitch(
                           title: tr('enablePasscode'),
                           style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                           switchOnChanged: controller.onPasscodeTilePressed,
                           switchValue: controller.isPasscodeEnable),
-                    ),
-                    if (controller.isPasscodeEnable.value == true)
-                      PlatformTextButton(
-                        onPressed: controller.tryChangingPasscode,
-                        child: Text(
-                          tr('changePasscode'),
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                      if (controller.isPasscodeEnable.value == true)
+                        PlatformTextButton(
+                          onPressed: controller.tryChangingPasscode,
+                          child: Text(
+                            tr('changePasscode'),
+                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                          ),
                         ),
-                      ),
-                    const StyledDivider(leftPadding: 16, rightPadding: 16),
-                    const SizedBox(height: 17),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 12),
-                      child: RichText(
+                      const StyledDivider(),
+                      const SizedBox(height: 17),
+                      RichText(
                         text: TextSpan(
                           text: tr('passcodeLock'),
                           style: TextStyleHelper.caption().copyWith(
@@ -106,20 +103,16 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    if (controller.isFingerprintAvailable.value == true &&
-                        controller.isPasscodeEnable.value == true)
-                      SwitchListTile(
-                        value: controller.isFingerprintEnable.value,
-                        onChanged: controller.tryTogglingFingerprintStatus,
-                        activeColor: Get.theme.colors().primary,
-                        title: Text(
-                          tr('fingerprint'),
-                          style: TextStyleHelper.subtitle1(),
-                        ),
-                      ),
-                  ],
+                      const SizedBox(height: 6),
+                      if (controller.isFingerprintAvailable.value == true &&
+                          controller.isPasscodeEnable.value == true)
+                        OptionWithSwitch(
+                            title: tr('fingerprint'),
+                            style: TextStyleHelper.subtitle1(),
+                            switchOnChanged: controller.tryTogglingFingerprintStatus,
+                            switchValue: controller.isFingerprintEnable),
+                    ],
+                  ),
                 ),
               );
             } else {

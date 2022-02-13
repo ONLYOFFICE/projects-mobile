@@ -39,6 +39,7 @@ import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 
 class AnalyticsScreen extends StatelessWidget {
   const AnalyticsScreen({Key? key}) : super(key: key);
@@ -54,19 +55,23 @@ class AnalyticsScreen extends StatelessWidget {
         titleText: tr('analytics'),
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       ),
-      body: Obx(
-        () => SwitchListTile(
-          value: controller.shareAnalytics.value,
-          activeColor: Get.theme.colors().primary,
-          contentPadding: const EdgeInsets.fromLTRB(16, 14, 5, 30),
-          title: Text(tr('shareAnalytics'),
-              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground)),
-          subtitle: Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Text(tr('shareAnalyticsDescription'),
-                  style: TextStyleHelper.body2(
-                      color: Theme.of(context).colors().onSurface.withOpacity(0.6)))),
-          onChanged: controller.changeAnalyticsSharingEnability,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            const SizedBox(height: 3),
+            OptionWithSwitch(
+              title: tr('shareAnalytics'),
+              switchOnChanged: controller.changeAnalyticsSharingEnability,
+              switchValue: controller.shareAnalytics,
+              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+            ),
+            Padding(
+                padding: const EdgeInsets.only(top: 2),
+                child: Text(tr('shareAnalyticsDescription'),
+                    style: TextStyleHelper.body2(
+                        color: Theme.of(context).colors().onSurface.withOpacity(0.6)))),
+          ],
         ),
       ),
     );
