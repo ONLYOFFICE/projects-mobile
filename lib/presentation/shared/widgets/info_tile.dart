@@ -149,7 +149,7 @@ class InfoTileWithButton extends StatelessWidget {
             color: Get.theme.colors().onBackground.withOpacity(0.6),
           ),
         ),
-        const SizedBox(width: 23),
+        // const SizedBox(width: 23),
       ],
     );
   }

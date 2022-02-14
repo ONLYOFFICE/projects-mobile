@@ -34,10 +34,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/presentation/shared/project_team_responsible.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
-import 'package:projects/presentation/shared/project_team_responsible.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class ResponsibleTile extends StatelessWidget {
@@ -71,9 +71,9 @@ class ResponsibleTile extends StatelessWidget {
           suffix: _isSelected
               ? suffixIcon ??
                   Icon(PlatformIcons(context).rightChevron,
-                      size: 24, color: Get.theme.colors().onBackground)
+                      size: 24, color: Get.theme.colors().onBackground.withOpacity(0.6))
               : null,
-          suffixPadding: const EdgeInsets.only(right: 21),
+          suffixPadding: const EdgeInsets.only(right: 16),
           icon: SvgIcons.person,
           onTap: () => Get.find<NavigationController>().toScreen(
               const ProjectTeamResponsibleSelectionView(),

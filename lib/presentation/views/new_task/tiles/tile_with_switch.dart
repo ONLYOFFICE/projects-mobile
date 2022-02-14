@@ -62,7 +62,7 @@ class TileWithSwitch extends StatelessWidget {
               onChanged: onChanged,
               activeColor: Get.theme.colors().primary,
             ),
-            const SizedBox(width: 3)
+            const SizedBox(width: 16)
           ],
         ),
         if (enableBorder) const StyledDivider(leftPadding: 72),

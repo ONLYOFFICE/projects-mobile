@@ -90,6 +90,7 @@ class TasksView extends StatelessWidget {
                   SearchButton(controller: controller),
                   TasksFilterButton(controller: controller),
                   TasksMoreButtonWidget(controller: controller),
+                  const SizedBox(width: 7),
                 ],
               ),
             ];

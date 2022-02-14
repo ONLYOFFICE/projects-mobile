@@ -33,9 +33,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_switch.dart';
 
@@ -63,7 +62,7 @@ class AdvancedOptions extends StatelessWidget {
                 child: ExpansionTile(
                   expandedAlignment: Alignment.topLeft,
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                  tilePadding: const EdgeInsets.only(right: 25),
+                  tilePadding: const EdgeInsets.only(right: 18),
                   iconColor: Get.theme.colors().onBackground.withOpacity(0.75),
                   collapsedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
                   title: Row(

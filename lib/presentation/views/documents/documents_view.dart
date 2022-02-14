@@ -148,6 +148,7 @@ class DocumentsScreen extends StatelessWidget {
               SearchButton(controller: controller),
               DocumentsFilterButton(controller: controller),
               _MoreButtonWidget(controller: controller),
+              const SizedBox(width: 7),
             ],
           ),
         ];

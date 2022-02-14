@@ -64,7 +64,7 @@ class NewItemTile extends StatelessWidget {
     this.onTap,
     this.selectedIconColor,
     this.suffix,
-    this.suffixPadding = const EdgeInsets.symmetric(horizontal: 25),
+    this.suffixPadding = const EdgeInsets.symmetric(horizontal: 16),
     this.textOverflow = TextOverflow.ellipsis,
     this.textColor,
     this.textStyle,
@@ -115,8 +115,9 @@ class NewItemTile extends StatelessWidget {
                 ),
                 if (suffix != null)
                   Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(padding: suffixPadding, child: suffix)),
+                    alignment: Alignment.centerRight,
+                    child: Padding(padding: suffixPadding, child: suffix),
+                  ),
               ],
             ),
             if (enableBorder) const StyledDivider(leftPadding: 72.5),

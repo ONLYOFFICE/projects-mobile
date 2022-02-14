@@ -93,7 +93,8 @@ class ProjectsView extends StatelessWidget {
                   icon: FiltersButton(controller: controller),
                   padding: EdgeInsets.zero,
                 ),
-                ProjectsMoreButtonWidget(controller: controller)
+                ProjectsMoreButtonWidget(controller: controller),
+                const SizedBox(width: 7),
               ],
             ),
           ];

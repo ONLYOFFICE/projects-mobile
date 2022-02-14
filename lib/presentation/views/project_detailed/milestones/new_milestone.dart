@@ -42,13 +42,10 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
-
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
@@ -263,14 +260,15 @@ class ProjectTile extends StatelessWidget {
             caption: _isSelected ? tr('project') : null,
             suffix: _isSelected
                 ? PlatformIconButton(
+                    padding: EdgeInsets.zero,
                     icon: Icon(
                       PlatformIcons(context).rightChevron,
                       size: 24,
-                      color: Get.theme.colors().onBackground,
+                      color: Get.theme.colors().onBackground.withOpacity(0.6),
                     ),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
-            suffixPadding: const EdgeInsets.only(right: 13),
+            suffixPadding: EdgeInsets.zero,
             onTap: () => {
                   Get.find<NavigationController>().toScreen(const SelectProjectView(), arguments: {
                     'controller': controller,

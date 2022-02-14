@@ -40,7 +40,7 @@ class _AppBarMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final task = controller.task.value;
     return PlatformPopupMenuButton(
-      padding: EdgeInsets.zero,
+      padding: EdgeInsets.only(right: 12),
       icon: PlatformIconButton(
         padding: EdgeInsets.zero,
         cupertinoIcon: Icon(

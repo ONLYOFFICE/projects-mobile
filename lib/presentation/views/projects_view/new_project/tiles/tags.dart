@@ -33,10 +33,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class TagsTile extends StatelessWidget {
@@ -66,7 +65,7 @@ class TagsTile extends StatelessWidget {
                   child: Icon(
                     PlatformIcons(context).rightChevron,
                     size: 24,
-                    color: Get.theme.colors().onBackground,
+                    color: Get.theme.colors().onBackground.withOpacity(0.6),
                   ),
                 )
               : null,
