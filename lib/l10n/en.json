@@ -483,7 +483,7 @@
 		"beforeText": "The file with the name ",
 		"afterText": " already exists in the destination folder."
 	},
-	"replaceConfirmation": "Overwrite",
-	"copyConfirmation": "Keep Both",
+	"overwriteConfirmation": "Overwrite",
+	"duplicateConfirmation": "Keep Both",
 	"skipConfirmation": "Skip"
 }

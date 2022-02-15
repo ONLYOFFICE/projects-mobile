@@ -70,7 +70,7 @@ Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
           Get.back(result: ConflictResolveType.Overwrite);
         },
         child: Text(
-          tr('replaceConfirmation'),
+          tr('overwriteConfirmation'),
           textAlign: TextAlign.center,
         ),
       ),
@@ -79,7 +79,7 @@ Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
           Get.back(result: ConflictResolveType.Duplicate);
         },
         child: Text(
-          tr('copyConfirmation'),
+          tr('duplicateConfirmation'),
           softWrap: false,
           textAlign: TextAlign.center,
         ),
@@ -158,7 +158,7 @@ class _DialogContent extends StatefulWidget {
 }
 
 class _DialogContentState extends State<_DialogContent> {
-  ConflictResolveType? _character = ConflictResolveType.Skip;
+  ConflictResolveType? _character = ConflictResolveType.Overwrite;
 
   void _onChanged(ConflictResolveType? value) {
     setState(() {
@@ -181,7 +181,7 @@ class _DialogContentState extends State<_DialogContent> {
           visualDensity: VisualDensity.compact,
           contentPadding: EdgeInsets.zero,
           title: Text(
-            tr('replaceConfirmation'),
+            tr('overwriteConfirmation'),
             style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
           ),
           leading: Radio<ConflictResolveType>(
@@ -195,7 +195,7 @@ class _DialogContentState extends State<_DialogContent> {
           visualDensity: VisualDensity.compact,
           contentPadding: EdgeInsets.zero,
           title: Text(
-            tr('copyConfirmation'),
+            tr('duplicateConfirmation'),
             style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
           ),
           leading: Radio<ConflictResolveType>(
