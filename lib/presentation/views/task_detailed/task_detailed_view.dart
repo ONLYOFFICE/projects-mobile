@@ -118,6 +118,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
       appBar: StyledAppBar(
         actions: [
           _AppBarMenu(controller: taskItemController),
+          if (GetPlatform.isIOS) const SizedBox(width: 6),
         ],
         bottom: SizedBox(
           height: 40,

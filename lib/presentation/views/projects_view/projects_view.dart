@@ -92,9 +92,9 @@ class ProjectsView extends StatelessWidget {
                   ),
                   icon: FiltersButton(controller: controller),
                   padding: EdgeInsets.zero,
+                  cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
                 ),
                 ProjectsMoreButtonWidget(controller: controller),
-                const SizedBox(width: 7),
               ],
             ),
           ];

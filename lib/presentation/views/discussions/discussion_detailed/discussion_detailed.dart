@@ -91,7 +91,9 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
-          actions: [AppBarMenuButton(controller: controller)],
+          actions: [
+            AppBarMenuButton(controller: controller),
+          ],
           bottom: SizedBox(
             height: 40,
             child: TabBar(

@@ -31,11 +31,12 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 
@@ -49,7 +50,18 @@ class AppBarMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformPopupMenuButton(
-      icon: Icon(PlatformIcons(context).ellipsis, size: 26),
+      icon: PlatformIconButton(
+        padding: EdgeInsets.zero,
+        cupertinoIcon: Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Get.theme.colors().primary,
+        ),
+        materialIcon: Icon(
+          Icons.more_vert,
+          color: Get.theme.colors().primary,
+        ),
+        cupertino: (_, __) => CupertinoIconButtonData(minSize: 38),
+      ),
       offset: const Offset(0, 25),
       onSelected: (String value) => _onSelected(controller, value),
       itemBuilder: (context) {

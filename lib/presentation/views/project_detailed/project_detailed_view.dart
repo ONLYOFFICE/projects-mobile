@@ -151,7 +151,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
               controller: projectController,
               index: _activeIndex.value,
             ),
-          )
+          ),
+          if (GetPlatform.isIOS) const SizedBox(width: 6),
         ],
         bottom: SizedBox(
           height: 40,
@@ -269,7 +270,7 @@ class _ProjectContextMenu extends StatelessWidget {
     return PlatformPopupMenuButton(
       padding: EdgeInsets.zero,
       icon: PlatformIconButton(
-        padding: const EdgeInsets.only(right: 12),
+        padding: EdgeInsets.zero,
         cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
           color: Get.theme.colors().primary,
@@ -278,6 +279,7 @@ class _ProjectContextMenu extends StatelessWidget {
           Icons.more_vert,
           color: Get.theme.colors().primary,
         ),
+        cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
       //offset: const Offset(0, 25),
       onSelected: (String value) => _onSelected(value, controller, context),

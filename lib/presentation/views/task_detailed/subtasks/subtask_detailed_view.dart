@@ -63,7 +63,7 @@ class SubtaskDetailedView extends StatelessWidget {
             actions: [
               if (_subtask.canEdit! || controller.canCreateSubtask)
                 PlatformPopupMenuButton(
-                  padding: EdgeInsets.zero,
+                  padding: GetPlatform.isIOS ? const EdgeInsets.only(right: 6) : EdgeInsets.zero,
                   icon: PlatformIconButton(
                     padding: EdgeInsets.zero,
                     cupertinoIcon: Icon(
