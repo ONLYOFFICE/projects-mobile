@@ -151,7 +151,7 @@ class LoginView extends StatelessWidget {
                                       ]),
                             child: WideButton(
                               text: tr('next'),
-                              onPressed: () async => await controller.loginByPassword(),
+                              onPressed: controller.loginByPassword,
                             ),
                           ),
                           const SizedBox(height: 4),

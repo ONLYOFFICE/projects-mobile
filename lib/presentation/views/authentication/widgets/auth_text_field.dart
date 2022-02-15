@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_elevated_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_form_field.dart';
 
 class AuthTextField extends StatelessWidget {
@@ -80,23 +81,33 @@ class AuthTextField extends StatelessWidget {
       style: TextStyleHelper.subtitle1(
         color: hasError ? Get.theme.colors().colorError : Get.theme.colors().onSurface,
       ),
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        labelText: hintText,
-        labelStyle: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
-        hintText: hintText,
-        hintStyle: TextStyleHelper.subtitle1(
+      material: (_, __) => MaterialTextFormFieldData(
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          labelText: hintText,
+          labelStyle: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+          hintText: hintText,
+          hintStyle: TextStyleHelper.subtitle1(
+            color: !hasError
+                ? Get.theme.colors().onSurface.withOpacity(0.6)
+                : Get.theme.colors().colorError,
+          ),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42))),
+        ),
+      ),
+      cupertino: (_, __) => CupertinoTextFormFieldData(
+        placeholder: hintText,
+        placeholderStyle: TextStyleHelper.subtitle1(
           color: !hasError
               ? Get.theme.colors().onSurface.withOpacity(0.6)
               : Get.theme.colors().colorError,
         ),
-        focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42))),
+        decoration: BoxDecoration(
+            border:
+                Border(bottom: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42)))),
       ),
-      cupertinoDecoration: BoxDecoration(
-          border:
-              Border(bottom: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42)))),
     );
   }
 }

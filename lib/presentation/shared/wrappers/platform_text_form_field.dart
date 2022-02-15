@@ -269,60 +269,55 @@ class PlatformTextFormField extends PlatformWidgetBase<CupertinoTextFormFieldRow
   final PlatformBuilder<MaterialTextFormFieldData>? material;
   final PlatformBuilder<CupertinoTextFormFieldData>? cupertino;
 
-  final InputDecoration? decoration;
-  final BoxDecoration? cupertinoDecoration;
-
-  const PlatformTextFormField(
-      {Key? key,
-      this.widgetKey,
-      this.controller,
-      this.initialValue,
-      this.focusNode,
-      TextInputType? keyboardType,
-      this.textCapitalization = TextCapitalization.none,
-      this.textInputAction,
-      this.style,
-      this.strutStyle,
-      this.textAlign,
-      this.textAlignVertical,
-      this.autofocus,
-      this.readOnly,
-      this.toolbarOptions,
-      this.showCursor,
-      this.obscuringCharacter,
-      this.obscureText,
-      this.autocorrect,
-      this.smartDashesType,
-      this.smartQuotesType,
-      this.enableSuggestions,
-      this.maxLines = 1,
-      this.minLines,
-      this.expands,
-      this.maxLength,
-      this.onChanged,
-      this.onTap,
-      this.onEditingComplete,
-      this.onFieldSubmitted,
-      this.onSaved,
-      this.validator,
-      this.inputFormatters,
-      this.enabled,
-      this.cursorWidth,
-      this.cursorHeight,
-      this.cursorColor,
-      this.keyboardAppearance,
-      this.scrollPadding,
-      this.enableInteractiveSelection,
-      this.selectionControls,
-      this.scrollPhysics,
-      this.autofillHints,
-      this.autovalidateMode,
-      this.hintText,
-      this.material,
-      this.cupertino,
-      this.decoration,
-      this.cupertinoDecoration})
-      : keyboardType =
+  const PlatformTextFormField({
+    Key? key,
+    this.widgetKey,
+    this.controller,
+    this.initialValue,
+    this.focusNode,
+    TextInputType? keyboardType,
+    this.textCapitalization = TextCapitalization.none,
+    this.textInputAction,
+    this.style,
+    this.strutStyle,
+    this.textAlign,
+    this.textAlignVertical,
+    this.autofocus,
+    this.readOnly,
+    this.toolbarOptions,
+    this.showCursor,
+    this.obscuringCharacter,
+    this.obscureText,
+    this.autocorrect,
+    this.smartDashesType,
+    this.smartQuotesType,
+    this.enableSuggestions,
+    this.maxLines = 1,
+    this.minLines,
+    this.expands,
+    this.maxLength,
+    this.onChanged,
+    this.onTap,
+    this.onEditingComplete,
+    this.onFieldSubmitted,
+    this.onSaved,
+    this.validator,
+    this.inputFormatters,
+    this.enabled,
+    this.cursorWidth,
+    this.cursorHeight,
+    this.cursorColor,
+    this.keyboardAppearance,
+    this.scrollPadding,
+    this.enableInteractiveSelection,
+    this.selectionControls,
+    this.scrollPhysics,
+    this.autofillHints,
+    this.autovalidateMode,
+    this.hintText,
+    this.material,
+    this.cupertino,
+  })  : keyboardType =
             keyboardType ?? (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
         super(key: key);
 
@@ -331,13 +326,12 @@ class PlatformTextFormField extends PlatformWidgetBase<CupertinoTextFormFieldRow
     final data = material?.call(context, platform(context));
 
     final hintText = this.hintText;
-    final decoration = this.decoration ??
-        (hintText == null
-            ? (data?.decoration ?? const InputDecoration())
-            : _inputDecorationWithHint(
-                hintText,
-                data?.decoration ?? this.decoration ?? const InputDecoration(),
-              ));
+    final decoration = hintText == null
+        ? (data?.decoration ?? const InputDecoration())
+        : _inputDecorationWithHint(
+            hintText,
+            data?.decoration ?? const InputDecoration(),
+          );
 
     return TextFormField(
       key: data?.widgetKey ?? widgetKey,
@@ -392,8 +386,6 @@ class PlatformTextFormField extends PlatformWidgetBase<CupertinoTextFormFieldRow
       scrollController: data?.scrollController,
       enableIMEPersonalizedLearning: data?.enableIMEPersonalizedLearning ?? true,
       restorationId: data?.restorationId,
-      //autovalidate: , deprecated
-      //maxLengthEnforced: , deprecated
     );
   }
 
@@ -406,7 +398,7 @@ class PlatformTextFormField extends PlatformWidgetBase<CupertinoTextFormFieldRow
       controller: data?.controller ?? controller,
       initialValue: data?.initialValue ?? initialValue,
       focusNode: data?.focusNode ?? focusNode,
-      decoration: data?.decoration ?? cupertinoDecoration,
+      decoration: data?.decoration,
       keyboardType: data?.keyboardType ?? keyboardType,
       textCapitalization: data?.textCapitalization ?? textCapitalization ?? TextCapitalization.none,
       textInputAction: data?.textInputAction ?? textInputAction,
@@ -448,13 +440,12 @@ class PlatformTextFormField extends PlatformWidgetBase<CupertinoTextFormFieldRow
       autofillHints: data?.autofillHints ?? autofillHints,
       autovalidateMode: data?.autovalidateMode ?? autovalidateMode ?? AutovalidateMode.disabled,
       prefix: data?.prefix,
-      padding: data?.padding ?? /*  decoration?.contentPadding ??*/ EdgeInsets.zero,
-      placeholder: data?.placeholder ?? hintText ?? decoration!.hintText,
+      padding: data?.padding ?? const EdgeInsets.all(6),
+      placeholder: data?.placeholder ?? hintText,
       placeholderStyle: data?.placeholderStyle ??
-          decoration?.hintStyle ??
-          TextStyle(
+          const TextStyle(
             fontWeight: FontWeight.w400,
-            color: decoration?.hintStyle?.color ?? CupertinoColors.placeholderText,
+            color: CupertinoColors.placeholderText,
           ),
       textDirection: data?.textDirection,
     );
