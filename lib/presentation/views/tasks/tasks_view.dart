@@ -90,7 +90,6 @@ class TasksView extends StatelessWidget {
                   SearchButton(controller: controller),
                   TasksFilterButton(controller: controller),
                   TasksMoreButtonWidget(controller: controller),
-                  const SizedBox(width: 7),
                 ],
               ),
             ];
@@ -122,6 +121,7 @@ class TasksMoreButtonWidget extends StatelessWidget {
           Icons.more_vert,
           color: Get.theme.colors().primary,
         ),
+        cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
       onSelected: (String value) => _onSelected(value, controller, context),
       itemBuilder: (context) {

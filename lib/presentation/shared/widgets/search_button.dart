@@ -56,6 +56,7 @@ class SearchButton extends StatelessWidget {
           ),
           padding: EdgeInsets.zero,
           onPressed: controller.showSearch,
+          cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
         );
 
       return const SizedBox();

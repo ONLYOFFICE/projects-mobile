@@ -118,6 +118,7 @@ class TasksFilterButton extends StatelessWidget {
             fullscreenDialog: true,
           ),
           padding: EdgeInsets.zero,
+          cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
         );
       return const SizedBox();
     });

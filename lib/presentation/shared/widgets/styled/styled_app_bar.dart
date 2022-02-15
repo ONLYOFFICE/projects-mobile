@@ -142,7 +142,7 @@ class MainAppBar extends StatelessWidget {
       ),
       cupertino: (context, target) => CupertinoAppBar(
         title: cupertinoTitle,
-        actions: actions,
+        actions: actions.isNotEmpty ? [...actions, const SizedBox(width: 6)] : actions,
         isCollapsed: isCollapsed,
       ),
     );

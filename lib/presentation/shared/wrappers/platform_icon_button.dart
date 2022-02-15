@@ -7,7 +7,6 @@
 import 'package:flutter/cupertino.dart' show CupertinoButton, CupertinoColors;
 import 'package:flutter/material.dart' show IconButton, VisualDensity;
 import 'package:flutter/widgets.dart';
-
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 

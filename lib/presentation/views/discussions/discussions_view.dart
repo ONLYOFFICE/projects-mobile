@@ -77,7 +77,6 @@ class PortalDiscussionsView extends StatelessWidget {
               SearchButton(controller: controller),
               DiscussionsFilterButton(controller: controller),
               DiscussionsMoreButtonWidget(controller: controller),
-              const SizedBox(width: 7),
             ],
           ),
         ],

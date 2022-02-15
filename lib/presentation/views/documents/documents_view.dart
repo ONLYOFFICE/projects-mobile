@@ -148,7 +148,6 @@ class DocumentsScreen extends StatelessWidget {
               SearchButton(controller: controller),
               DocumentsFilterButton(controller: controller),
               _MoreButtonWidget(controller: controller),
-              const SizedBox(width: 7),
             ],
           ),
         ];
@@ -180,6 +179,7 @@ class _MoreButtonWidget extends StatelessWidget {
           Icons.more_vert,
           color: Get.theme.colors().primary,
         ),
+        cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
       onSelected: (String value) => _onSelected(value, controller, context),
       itemBuilder: (context) {
