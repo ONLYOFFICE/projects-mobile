@@ -60,7 +60,7 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final target = Get.arguments['target'] as int;
-    final initialFolderId = Get.arguments['initialFolderId'] as int;
+    final initialFolderId = Get.arguments['initialFolderId'] as int?;
     final mode = Get.arguments['mode'] as String;
 
     final currentFolder = Get.arguments['currentFolder'] as Folder?;
