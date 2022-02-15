@@ -98,14 +98,14 @@ class StyledAlertDialog extends StatelessWidget {
               onPressed: onCancelTap ?? Get.back,
               child: Text(
                 platformCancelText ?? defaultCancelText,
-                style: TextStyleHelper.button(),
+                style: TextStyleHelper.button(color: Get.theme.colors().primary),
                 softWrap: false,
               ),
             ),
             PlatformTextButton(
               onPressed: onAcceptTap,
               child: Text(platformAcceptText ?? defaultAcceptText,
-                  style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().links),
+                  style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().primary),
                   softWrap: false),
             ),
           ],
