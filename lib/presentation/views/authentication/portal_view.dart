@@ -116,16 +116,19 @@ class PortalInputView extends StatelessWidget {
                         ),
                         SizedBox(height: height * 0.033),
                         DecoratedBox(
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                                blurRadius: 3,
-                                offset: const Offset(0, 0.85),
-                                color: Get.theme.colors().onBackground.withOpacity(0.19)),
-                            BoxShadow(
-                                blurRadius: 3,
-                                offset: const Offset(0, 0.25),
-                                color: Get.theme.colors().onBackground.withOpacity(0.04)),
-                          ]),
+                          decoration: BoxDecoration(
+                              boxShadow: Get.isDarkMode
+                                  ? []
+                                  : [
+                                      BoxShadow(
+                                          blurRadius: 3,
+                                          offset: const Offset(0, 0.85),
+                                          color: Get.theme.colors().onBackground.withOpacity(0.19)),
+                                      BoxShadow(
+                                          blurRadius: 3,
+                                          offset: const Offset(0, 0.25),
+                                          color: Get.theme.colors().onBackground.withOpacity(0.04)),
+                                    ]),
                           child: WideButton(
                             text: tr('next'),
                             textColor: controller.needAgreement && !controller.checkBoxValue.value

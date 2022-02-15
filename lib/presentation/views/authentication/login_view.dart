@@ -134,16 +134,21 @@ class LoginView extends StatelessWidget {
                           ),
                           SizedBox(height: Get.height * 0.0333),
                           DecoratedBox(
-                            decoration: BoxDecoration(boxShadow: [
-                              BoxShadow(
-                                  blurRadius: 3,
-                                  offset: const Offset(0, 0.85),
-                                  color: Get.theme.colors().onBackground.withOpacity(0.19)),
-                              BoxShadow(
-                                  blurRadius: 3,
-                                  offset: const Offset(0, 0.25),
-                                  color: Get.theme.colors().onBackground.withOpacity(0.04)),
-                            ]),
+                            decoration: BoxDecoration(
+                                boxShadow: Get.isDarkMode
+                                    ? []
+                                    : [
+                                        BoxShadow(
+                                            blurRadius: 3,
+                                            offset: const Offset(0, 0.85),
+                                            color:
+                                                Get.theme.colors().onBackground.withOpacity(0.19)),
+                                        BoxShadow(
+                                            blurRadius: 3,
+                                            offset: const Offset(0, 0.25),
+                                            color:
+                                                Get.theme.colors().onBackground.withOpacity(0.04)),
+                                      ]),
                             child: WideButton(
                               text: tr('next'),
                               onPressed: () async => await controller.loginByPassword(),

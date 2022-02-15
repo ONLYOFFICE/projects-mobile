@@ -4,7 +4,7 @@
  * See LICENSE for distribution and usage details.
  */
 
-import 'package:flutter/cupertino.dart' show CupertinoButton, CupertinoColors;
+import 'package:flutter/cupertino.dart' show CupertinoButton, CupertinoColors, CupertinoTheme;
 import 'package:flutter/material.dart' show TextButton, ButtonStyle;
 import 'package:flutter/widgets.dart';
 
@@ -36,6 +36,8 @@ class MaterialTextButtonData extends _BaseData {
     this.autofocus,
     this.clipBehavior,
     this.icon,
+    this.onHover,
+    this.onFocusChange,
   }) : super(
           widgetKey: widgetKey,
           child: child,
@@ -48,6 +50,8 @@ class MaterialTextButtonData extends _BaseData {
   final bool? autofocus;
   final Clip? clipBehavior;
   final Widget? icon;
+  final ValueChanged<bool>? onHover;
+  final ValueChanged<bool>? onFocusChange;
 }
 
 class CupertinoTextButtonData extends _BaseData {
@@ -81,7 +85,7 @@ class CupertinoTextButtonData extends _BaseData {
   final bool originalStyle;
 }
 
-class PlatformTextButton extends PlatformWidgetBase<CupertinoButton, TextButton> {
+class PlatformTextButton extends PlatformWidgetBase<Widget, TextButton> {
   final Key? widgetKey;
 
   final VoidCallback? onPressed;
@@ -89,19 +93,22 @@ class PlatformTextButton extends PlatformWidgetBase<CupertinoButton, TextButton>
 
   final EdgeInsetsGeometry? padding;
   final AlignmentGeometry? alignment;
+  final Color? color;
 
   final PlatformBuilder<CupertinoTextButtonData>? cupertino;
   final PlatformBuilder<MaterialTextButtonData>? material;
 
   PlatformTextButton({
+    Key? key,
     this.widgetKey,
     this.onPressed,
     this.child,
     this.padding,
     this.alignment,
+    this.color,
     this.material,
     this.cupertino,
-  });
+  }) : super(key: key);
 
   @override
   TextButton createMaterialWidget(BuildContext context) {
@@ -119,7 +126,14 @@ class PlatformTextButton extends PlatformWidgetBase<CupertinoButton, TextButton>
         autofocus: data?.autofocus ?? false,
         clipBehavior: data?.clipBehavior ?? Clip.none,
         focusNode: data?.focusNode,
-        style: data?.style ?? TextButton.styleFrom(padding: padding, alignment: alignment),
+        style: data?.style ??
+            TextButton.styleFrom(
+              primary: color,
+              padding: padding,
+              alignment: alignment,
+            ),
+        onHover: data?.onHover,
+        onFocusChange: data?.onFocusChange,
       );
     }
 
@@ -130,17 +144,24 @@ class PlatformTextButton extends PlatformWidgetBase<CupertinoButton, TextButton>
       autofocus: data?.autofocus ?? false,
       clipBehavior: data?.clipBehavior ?? Clip.none,
       focusNode: data?.focusNode,
-      style: data?.style ?? TextButton.styleFrom(padding: padding, alignment: alignment),
+      style: data?.style ??
+          TextButton.styleFrom(
+            primary: color,
+            padding: padding,
+            alignment: alignment,
+          ),
+      onHover: data?.onHover,
+      onFocusChange: data?.onFocusChange,
       child: data?.child ?? child!,
     );
   }
 
   @override
-  CupertinoButton createCupertinoWidget(BuildContext context) {
+  Widget createCupertinoWidget(BuildContext context) {
     final data = cupertino?.call(context, platform(context));
 
     if (data?.originalStyle ?? false) {
-      return CupertinoButton.filled(
+      final button = CupertinoButton.filled(
         key: data?.widgetKey ?? widgetKey,
         onPressed: data?.onPressed ?? onPressed,
         borderRadius: data?.borderRadius ?? const BorderRadius.all(Radius.circular(8)),
@@ -151,17 +172,25 @@ class PlatformTextButton extends PlatformWidgetBase<CupertinoButton, TextButton>
         alignment: data?.alignment ?? alignment ?? Alignment.center,
         child: data?.child ?? child!,
       );
+      if (color != null) {
+        final themeData = CupertinoTheme.of(context);
+        return CupertinoTheme(
+          data: themeData.copyWith(primaryColor: color),
+          child: button,
+        );
+      }
+      return button;
     } else {
       return CupertinoButton(
         key: data?.widgetKey ?? widgetKey,
         onPressed: data?.onPressed ?? onPressed,
         borderRadius: data?.borderRadius ?? const BorderRadius.all(Radius.circular(8)),
-        minSize: data?.minSize /* ?? _kMinInteractiveDimensionCupertino */,
+        minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
         padding: data?.padding ?? padding,
         pressedOpacity: data?.pressedOpacity ?? 0.4,
         disabledColor: data?.disabledColor ?? CupertinoColors.quaternarySystemFill,
         alignment: data?.alignment ?? alignment ?? Alignment.center,
-        color: data?.color,
+        color: color ?? data?.color,
         child: data?.child ?? child!,
       );
     }
