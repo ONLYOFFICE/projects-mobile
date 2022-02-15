@@ -95,6 +95,7 @@ class StyledAlertDialog extends StatelessWidget {
       actions: actions ??
           [
             PlatformTextButton(
+              padding: EdgeInsets.zero,
               onPressed: onCancelTap ?? Get.back,
               child: Text(
                 platformCancelText ?? defaultCancelText,
@@ -103,6 +104,7 @@ class StyledAlertDialog extends StatelessWidget {
               ),
             ),
             PlatformTextButton(
+              padding: EdgeInsets.zero,
               onPressed: onAcceptTap,
               child: Text(platformAcceptText ?? defaultAcceptText,
                   style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().primary),
