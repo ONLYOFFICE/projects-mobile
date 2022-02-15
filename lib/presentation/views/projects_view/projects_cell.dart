@@ -306,7 +306,6 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
     context: context,
     headerHeight: 60,
     initHeight: _getInitialSize(statusCount: _statusesController.statuses.length),
-    // maxHeight: 0.7,
     decoration: BoxDecoration(
         color: Get.theme.colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
@@ -316,15 +315,14 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
             color: Get.theme.colors().surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 18.5),
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Text(tr('selectStatus'),
                   style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
             ),
-            const SizedBox(height: 18.5),
           ],
         ),
       );
