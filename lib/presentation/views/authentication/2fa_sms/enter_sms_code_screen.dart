@@ -86,32 +86,35 @@ class EnterSMSCodeScreen extends StatelessWidget {
                       style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface)
                           .copyWith(fontWeight: FontWeight.w500)),
                   SizedBox(height: h(100)),
-                  Obx(
-                    () => PlatformTextField(
+                  Obx(() {
+                    final codeError = controller.needToShowError.value;
+                    return PlatformTextField(
                       controller: codeController,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       style: TextStyleHelper.subtitle1(),
                       obscureText: true,
                       obscuringCharacter: '*',
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: controller.needToShowError.value == true
-                                ? Get.theme.colors().colorError
-                                : Get.theme.colors().onSurface.withOpacity(0.3),
+                      material: (_, __) => MaterialTextFieldData(
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: codeError
+                                  ? Get.theme.colors().colorError
+                                  : Get.theme.colors().onSurface.withOpacity(0.3),
+                            ),
                           ),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: controller.needToShowError.value
-                                ? Get.theme.colors().colorError
-                                : Get.theme.colors().onSurface.withOpacity(0.3),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: codeError
+                                  ? Get.theme.colors().colorError
+                                  : Get.theme.colors().onSurface.withOpacity(0.3),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                   Obx(
                     () => SizedBox(
                       height: h(24),

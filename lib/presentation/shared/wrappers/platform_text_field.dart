@@ -210,6 +210,7 @@ class CupertinoTextFieldData {
     this.selectionControls,
     this.enableIMEPersonalizedLearning,
     this.textDirection,
+    this.clipBehavior,
   });
 
   final Key? widgetKey;
@@ -269,6 +270,7 @@ class CupertinoTextFieldData {
   final TextSelectionControls? selectionControls;
   final bool? enableIMEPersonalizedLearning;
   final TextDirection? textDirection;
+  final Clip? clipBehavior;
 }
 
 class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField> {
@@ -335,8 +337,6 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
 
   final bool? enableIMEPersonalizedLearning;
 
-  final InputDecoration? decoration;
-
   PlatformTextField({
     Key? key,
     this.widgetKey,
@@ -387,7 +387,6 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     this.hintText,
     this.enableIMEPersonalizedLearning,
     this.makeCupertinoDecorationNull = true,
-    this.decoration,
     this.material,
     this.cupertino,
   })  : keyboardType =
@@ -399,13 +398,12 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     final data = material?.call(context, platform(context));
 
     final hintText = this.hintText;
-    final decoration = this.decoration ??
-        (hintText == null
-            ? (data?.decoration ?? const InputDecoration())
-            : _inputDecorationWithHint(
-                hintText,
-                data?.decoration ?? this.decoration ?? const InputDecoration(),
-              ));
+    final decoration = hintText == null
+        ? (data?.decoration ?? const InputDecoration())
+        : _inputDecorationWithHint(
+            hintText,
+            data?.decoration ?? const InputDecoration(),
+          );
 
     return TextField(
       key: data?.widgetKey ?? widgetKey,
@@ -464,6 +462,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
       selectionControls: data?.selectionControls ?? selectionControls,
       enableIMEPersonalizedLearning:
           data?.enableIMEPersonalizedLearning ?? enableIMEPersonalizedLearning ?? true,
+      // clipBehavior: ,
       //maxLengthEnforced: deprecated
     );
   }
@@ -499,17 +498,16 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
       decoration: data?.decoration ??
           (makeCupertinoDecorationNull ? null : kDefaultRoundedBorderDecoration),
       clearButtonMode: data?.clearButtonMode ?? OverlayVisibilityMode.never,
-      padding: data?.padding ?? decoration?.contentPadding ?? const EdgeInsets.all(6),
-      placeholder: data?.placeholder ?? hintText ?? decoration?.hintText,
+      padding: data?.padding ?? const EdgeInsets.all(6),
+      placeholder: data?.placeholder ?? hintText,
       placeholderStyle: data?.placeholderStyle ??
-          decoration?.hintStyle ??
           const TextStyle(
             fontWeight: FontWeight.w400,
             color: CupertinoColors.placeholderText,
           ),
       prefix: data?.prefix,
       prefixMode: data?.prefixMode ?? OverlayVisibilityMode.always,
-      suffix: data?.suffix ?? decoration?.suffixIcon,
+      suffix: data?.suffix,
       suffixMode: data?.suffixMode ?? OverlayVisibilityMode.always,
       dragStartBehavior: data?.dragStartBehavior ?? dragStartBehavior ?? DragStartBehavior.start,
       expands: data?.expands ?? expands ?? false,
@@ -540,6 +538,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
       enableIMEPersonalizedLearning:
           data?.enableIMEPersonalizedLearning ?? enableIMEPersonalizedLearning ?? true,
       textDirection: data?.textDirection,
+      clipBehavior: data?.clipBehavior ?? Clip.hardEdge,
       //maxLengthEnforced: deprecated
     );
   }

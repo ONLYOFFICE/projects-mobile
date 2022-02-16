@@ -304,17 +304,22 @@ void _renameFolder(dynamic controller, Folder element, BuildContext context) {
       cancelText: tr('cancel'),
       onAcceptTap: () async {
         inputController.text = inputController.text.trim();
+        inputController.selection = TextSelection.fromPosition(
+          TextPosition(offset: inputController.text.length),
+        );
+
         if (inputController.text.isEmpty) {
           isErrorInputText.value = true;
         } else {
           if (inputController.text != element.title) {
             final success = await controller.renameFolder(element, inputController.text) as bool;
-            if (success) {
+            if (success)
               MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
-              Get.back();
-            }
-          } else
-            Get.back();
+            else
+              MessagesHandler.showSnackBar(context: context, text: tr('error'));
+          }
+
+          Get.back();
         }
       },
       onCancelTap: Get.back,
@@ -342,32 +347,53 @@ class _NameFolderTextFieldWidget extends StatelessWidget {
       autofocus: true,
       textInputAction: TextInputAction.done,
       controller: inputController,
-      decoration: InputDecoration.collapsed(
-        hintText: tr('enterFolderName'),
-        hintStyle: TextStyleHelper.body2(
+      hintText: tr('enterFolderName'),
+      style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+      cupertino: (_, __) => CupertinoTextFieldData(
+        decoration: BoxDecoration(
+          color: Get.theme.colors().background,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        placeholderStyle: TextStyleHelper.body2(
           color: isErrorInputText.value
               ? Get.theme.colors().colorError
               : Get.theme.colors().onSurface.withOpacity(0.5),
         ),
       ),
-      onChanged: (_) {
-        if (isErrorInputText.value) {
+      material: (_, __) => MaterialTextFieldData(
+        decoration: InputDecoration.collapsed(
+          hintText: tr('enterFolderName'),
+          fillColor: Get.theme.colors().background,
+          hintStyle: TextStyleHelper.body2(
+            color: isErrorInputText.value
+                ? Get.theme.colors().colorError
+                : Get.theme.colors().onSurface.withOpacity(0.5),
+          ),
+        ),
+      ),
+      onChanged: (value) {
+        if (isErrorInputText.value && value.isNotEmpty) {
           isErrorInputText.value = false;
         }
       },
       onSubmitted: (_) async {
         inputController.text = inputController.text.trim();
+        inputController.selection = TextSelection.fromPosition(
+          TextPosition(offset: inputController.text.length),
+        );
+
         if (inputController.text.isEmpty) {
           isErrorInputText.value = true;
         } else {
           if (inputController.text != element.title) {
             final success = await controller.renameFolder(element, inputController.text) as bool;
-            if (success) {
+            if (success)
               MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
-              Get.back();
-            }
-          } else
-            Get.back();
+            else
+              MessagesHandler.showSnackBar(context: context, text: tr('error'));
+          }
+
+          Get.back();
         }
       },
     );

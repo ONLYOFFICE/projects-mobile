@@ -94,9 +94,14 @@ class _SarchField extends StatelessWidget {
     return PlatformTextField(
       autofocus: true,
       style: TextStyleHelper.headline6(),
-      decoration: InputDecoration.collapsed(
-        hintText: tr('search'),
-        hintStyle: TextStyleHelper.headline6().copyWith(height: 1),
+      hintText: tr('search'),
+      cupertino: (_, __) =>
+          CupertinoTextFieldData(placeholderStyle: TextStyleHelper.headline6().copyWith(height: 1)),
+      material: (_, __) => MaterialTextFieldData(
+        decoration: InputDecoration.collapsed(
+          hintText: tr('search'),
+          hintStyle: TextStyleHelper.headline6().copyWith(height: 1),
+        ),
       ),
       onChanged: controller.onSearch,
     );

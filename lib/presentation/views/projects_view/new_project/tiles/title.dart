@@ -79,22 +79,33 @@ class ProjectTitleTile extends StatelessWidget {
                   Text('${tr('projectTitle')}:',
                       style: TextStyleHelper.caption(
                           color: Get.theme.colors().onBackground.withOpacity(0.75))),
-                Obx(
-                  () => PlatformTextField(
-                      focusNode: focusOnTitle ? controller.titleFocus : null,
-                      maxLines: null,
-                      controller: controller.titleController,
-                      style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-                      cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                Obx(() {
+                  final needToFillTitle = controller.needToFillTitle.value;
+                  return PlatformTextField(
+                    focusNode: focusOnTitle ? controller.titleFocus : null,
+                    maxLines: null,
+                    controller: controller.titleController,
+                    style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
+                    cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                    hintText: tr('projectTitle'),
+                    cupertino: (_, __) => CupertinoTextFieldData(
+                      padding: EdgeInsets.zero,
+                      placeholderStyle: TextStyleHelper.headline6(
+                          color: needToFillTitle
+                              ? Get.theme.colors().colorError
+                              : Get.theme.colors().onSurface.withOpacity(0.5)),
+                    ),
+                    material: (_, __) => MaterialTextFieldData(
                       decoration: InputDecoration(
-                          hintText: tr('projectTitle'),
                           contentPadding: EdgeInsets.zero,
                           hintStyle: TextStyleHelper.headline6(
-                              color: controller.needToFillTitle.value == true
+                              color: needToFillTitle
                                   ? Get.theme.colors().colorError
                                   : Get.theme.colors().onSurface.withOpacity(0.5)),
-                          border: InputBorder.none)),
-                ),
+                          border: InputBorder.none),
+                    ),
+                  );
+                }),
               ],
             ),
           ),

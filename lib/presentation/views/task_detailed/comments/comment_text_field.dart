@@ -49,10 +49,17 @@ class CommentTextField extends StatelessWidget {
         autofocus: true,
         controller: controller.textController as TextEditingController?,
         scrollPadding: const EdgeInsets.all(10),
-        decoration: InputDecoration.collapsed(
-          hintText: tr('replyText'),
-          hintStyle: TextStyle(
+        hintText: tr('replyText'),
+        cupertino: (_, __) => CupertinoTextFieldData(
+          placeholderStyle: TextStyle(
               color: controller.setTitleError == true ? Get.theme.colors().colorError : null),
+        ),
+        material: (_, __) => MaterialTextFieldData(
+          decoration: InputDecoration.collapsed(
+            hintText: tr('replyText'),
+            hintStyle: TextStyle(
+                color: controller.setTitleError == true ? Get.theme.colors().colorError : null),
+          ),
         ),
       ),
     );

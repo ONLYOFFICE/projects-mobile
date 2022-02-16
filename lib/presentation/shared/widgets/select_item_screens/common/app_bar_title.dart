@@ -53,7 +53,10 @@ class _AppBarTitle extends StatelessWidget {
               ? PlatformTextField(
                   autofocus: true,
                   controller: searchController.textController,
-                  decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
+                  hintText: tr('enterQuery'),
+                  material: (_, __) => MaterialTextFieldData(
+                    decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
+                  ),
                   style: TextStyleHelper.headline6(
                     color: Get.theme.colors().onSurface,
                   ),

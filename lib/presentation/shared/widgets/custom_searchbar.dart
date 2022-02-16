@@ -62,7 +62,10 @@ class CustomSearchBar extends StatelessWidget {
               autofocus: true,
               textInputAction: TextInputAction.search,
               controller: controller.searchInputController as TextEditingController?,
-              decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
+              hintText: tr('enterQuery'),
+              material: (_, __) => MaterialTextFieldData(
+                decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
+              ),
               onSubmitted: searchFunction ?? controller.newSearch as Function(String)?,
               onChanged: searchFunction ?? controller.newSearch as Function(String)?,
             ),

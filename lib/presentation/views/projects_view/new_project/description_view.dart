@@ -74,8 +74,14 @@ class NewProjectDescription extends StatelessWidget {
           controller: controller.descriptionController as TextEditingController,
           maxLines: null,
           style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
-          decoration: InputDecoration.collapsed(
-              hintText: tr('enterText'), hintStyle: TextStyleHelper.subtitle1()),
+          hintText: tr('enterText'),
+          cupertino: (_, __) => CupertinoTextFieldData(
+            placeholderStyle: TextStyleHelper.subtitle1(),
+          ),
+          material: (_, __) => MaterialTextFieldData(
+            decoration: InputDecoration.collapsed(
+                hintText: tr('enterText'), hintStyle: TextStyleHelper.subtitle1()),
+          ),
         ),
       ),
     );

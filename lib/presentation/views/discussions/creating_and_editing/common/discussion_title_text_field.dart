@@ -69,25 +69,36 @@ class DiscussionTitleTextField extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Obx(
-              () => PlatformTextField(
+            child: Obx(() {
+              final setTitleError = controller.setTitleError.value;
+              return PlatformTextField(
                 onChanged: controller.changeTitle,
                 focusNode: controller.titleFocus,
                 maxLines: null,
                 controller: controller.titleController,
                 style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
                 cursorColor: Get.theme.colors().primary.withOpacity(0.87),
-                decoration: InputDecoration(
-                    hintText: tr('discussionTitle'),
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyleHelper.headline6(
-                      color: controller.setTitleError.value == true
-                          ? Get.theme.colors().colorError
-                          : Get.theme.colors().onSurface.withOpacity(0.5),
-                    ),
-                    border: InputBorder.none),
-              ),
-            ),
+                hintText: tr('discussionTitle'),
+                cupertino: (_, __) => CupertinoTextFieldData(
+                  padding: EdgeInsets.zero,
+                  placeholderStyle: TextStyleHelper.headline6(
+                    color: setTitleError
+                        ? Get.theme.colors().colorError
+                        : Get.theme.colors().onSurface.withOpacity(0.5),
+                  ),
+                ),
+                material: (_, __) => MaterialTextFieldData(
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.zero,
+                      hintStyle: TextStyleHelper.headline6(
+                        color: setTitleError
+                            ? Get.theme.colors().colorError
+                            : Get.theme.colors().onSurface.withOpacity(0.5),
+                      ),
+                      border: InputBorder.none),
+                ),
+              );
+            }),
           )
         ],
       ),

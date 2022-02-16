@@ -222,14 +222,12 @@ void _renameFile(
       titleText: tr('renameFile'),
       content: ValueListenableBuilder<bool>(
         valueListenable: isErrorInputText,
-        builder: (_, __, ___) {
-          return _NewFileTextFieldWidget(
-            inputController: inputController,
-            docController: docController,
-            isErrorInputText: isErrorInputText,
-            cellController: cellController,
-          );
-        },
+        builder: (_, __, ___) => _NewFileTextFieldWidget(
+          inputController: inputController,
+          docController: docController,
+          isErrorInputText: isErrorInputText,
+          cellController: cellController,
+        ),
       ),
       acceptText: tr('confirm'),
       cancelText: tr('cancel'),
@@ -277,35 +275,57 @@ class _NewFileTextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformTextField(
       autofocus: true,
+      style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
       textInputAction: TextInputAction.done,
       controller: inputController,
-      decoration: InputDecoration.collapsed(
-        hintText: tr('enterFileName'),
-        hintStyle: TextStyleHelper.body2(
+      makeCupertinoDecorationNull: false,
+      hintText: tr('enterFileName'),
+      cupertino: (_, __) => CupertinoTextFieldData(
+        decoration: BoxDecoration(
+          color: Get.theme.colors().background,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        placeholderStyle: TextStyleHelper.body2(
           color: isErrorInputText.value
               ? Get.theme.colors().colorError
               : Get.theme.colors().onSurface.withOpacity(0.5),
         ),
       ),
-      onChanged: (_) {
-        if (isErrorInputText.value) {
+      material: (_, __) => MaterialTextFieldData(
+        decoration: InputDecoration.collapsed(
+          hintText: tr('enterFileName'),
+          fillColor: Get.theme.colors().background,
+          hintStyle: TextStyleHelper.body2(
+            color: isErrorInputText.value
+                ? Get.theme.colors().colorError
+                : Get.theme.colors().onSurface.withOpacity(0.5),
+          ),
+        ),
+      ),
+      onChanged: (value) {
+        if (isErrorInputText.value && value.isNotEmpty) {
           isErrorInputText.value = false;
         }
       },
       onSubmitted: (_) async {
         inputController.text = inputController.text.trim();
+        inputController.selection = TextSelection.fromPosition(
+          TextPosition(offset: inputController.text.length),
+        );
+
         if (inputController.text.isEmpty) {
           isErrorInputText.value = true;
         } else {
           if (inputController.text != cellController.file.title) {
             final success =
                 await cellController.renameFile(cellController.file, inputController.text);
-            if (success) {
+            if (success)
               MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
-              Get.back();
-            }
-          } else
-            Get.back();
+            else
+              MessagesHandler.showSnackBar(context: context, text: tr('error'));
+          }
+
+          Get.back();
         }
       },
     );

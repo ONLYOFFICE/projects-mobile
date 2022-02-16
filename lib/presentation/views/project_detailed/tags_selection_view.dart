@@ -183,19 +183,21 @@ class _TagTextFieldWidget extends StatelessWidget {
         onChanged: (_) {
           validate.value = true;
         },
-        decoration: InputDecoration(
-          hintText: '',
-          border: InputBorder.none,
-          isCollapsed: true,
-          errorText: !validate.value ? tr('newTagNoTitleErrorMessage') : null,
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42))),
-          focusedErrorBorder: !validate.value
-              ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
-              : null,
-          errorBorder: !validate.value
-              ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
-              : null,
+        hintText: '',
+        material: (_, __) => MaterialTextFieldData(
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            isCollapsed: true,
+            errorText: !validate.value ? tr('newTagNoTitleErrorMessage') : null,
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42))),
+            focusedErrorBorder: !validate.value
+                ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
+                : null,
+            errorBorder: !validate.value
+                ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
+                : null,
+          ),
         ),
         onSubmitted: (value) {
           if (inputController.text.isNotEmpty) {

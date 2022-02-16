@@ -142,14 +142,23 @@ class _CountrySelection extends StatelessWidget {
                     controller: controller.phoneCodeController,
                     onChanged: (value) {},
                     autofocus: controller.deviceCountry.value?.phoneCode == null,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding:
-                          const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
-                      prefixIconConstraints: const BoxConstraints(minWidth: 10, minHeight: 0),
-                      prefixIcon: Text(
+                    cupertino: (_, __) => CupertinoTextFieldData(
+                      padding: const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
+                      prefix: Text(
                         '+',
                         style: TextStyleHelper.subtitle1(),
+                      ),
+                    ),
+                    material: (_, __) => MaterialTextFieldData(
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding:
+                            const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
+                        prefixIconConstraints: const BoxConstraints(minWidth: 10, minHeight: 0),
+                        prefixIcon: Text(
+                          '+',
+                          style: TextStyleHelper.subtitle1(),
+                        ),
                       ),
                     ),
                   ),
@@ -161,10 +170,14 @@ class _CountrySelection extends StatelessWidget {
                     autofocus: controller.deviceCountry.value?.phoneCode != null,
                     controller: controller.phoneNumberController,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: controller.numberHint,
-                      contentPadding:
-                          const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
+                    hintText: controller.numberHint,
+                    cupertino: (_, __) => CupertinoTextFieldData(
+                      padding: const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
+                    ),
+                    material: (_, __) => MaterialTextFieldData(
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
+                      ),
                     ),
                   ),
                 )

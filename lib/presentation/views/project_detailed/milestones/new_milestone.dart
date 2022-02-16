@@ -180,23 +180,34 @@ class MilestoneInput extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Obx(
-              () => PlatformTextField(
+            child: Obx(() {
+              final needToSetTitle = controller.needToSetTitle.value;
+              return PlatformTextField(
                 focusNode: focusOnTitle ? controller.titleFocus : null,
                 maxLines: null,
                 controller: controller.titleController,
                 style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
                 cursorColor: Get.theme.colors().primary.withOpacity(0.87),
-                decoration: InputDecoration(
-                    hintText: tr('milestoneTitle'),
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyleHelper.headline6(
-                        color: controller.needToSetTitle.value
-                            ? Get.theme.colors().colorError
-                            : Get.theme.colors().onSurface.withOpacity(0.5)),
-                    border: InputBorder.none),
-              ),
-            ),
+                hintText: tr('milestoneTitle'),
+                cupertino: (_, __) => CupertinoTextFieldData(
+                  padding: EdgeInsets.zero,
+                  placeholderStyle: TextStyleHelper.headline6(
+                      color: needToSetTitle
+                          ? Get.theme.colors().colorError
+                          : Get.theme.colors().onSurface.withOpacity(0.5)),
+                ),
+                material: (_, __) => MaterialTextFieldData(
+                  decoration: InputDecoration(
+                      hintText: tr('milestoneTitle'),
+                      contentPadding: EdgeInsets.zero,
+                      hintStyle: TextStyleHelper.headline6(
+                          color: needToSetTitle
+                              ? Get.theme.colors().colorError
+                              : Get.theme.colors().onSurface.withOpacity(0.5)),
+                      border: InputBorder.none),
+                ),
+              );
+            }),
           )
         ],
       ),

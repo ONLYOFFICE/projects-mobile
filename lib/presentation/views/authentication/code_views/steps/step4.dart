@@ -73,14 +73,19 @@ class _Step4 extends StatelessWidget {
               child: PlatformTextField(
                 controller: codeController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    labelText: tr('code'),
-                    contentPadding: const EdgeInsets.only(left: 12, bottom: 8, top: 2),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 0.5, color: Get.theme.colors().onSurface.withOpacity(0.6))),
-                    labelStyle: TextStyleHelper.caption(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                cupertino: (_, __) => CupertinoTextFieldData(
+                  padding: const EdgeInsets.only(left: 12, bottom: 8, top: 2),
+                ),
+                material: (_, __) => MaterialTextFieldData(
+                  decoration: InputDecoration(
+                      labelText: tr('code'),
+                      contentPadding: const EdgeInsets.only(left: 12, bottom: 8, top: 2),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 0.5, color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                      labelStyle: TextStyleHelper.caption(
+                          color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                ),
                 style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
               ),
             ),

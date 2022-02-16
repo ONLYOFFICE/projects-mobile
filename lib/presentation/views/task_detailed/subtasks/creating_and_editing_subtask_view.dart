@@ -135,21 +135,33 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                         ),
                         Expanded(
                           child: Center(
-                            child: Obx(() => PlatformTextField(
-                                  controller: controller.titleController,
-                                  maxLines: null,
-                                  // focusNode = null if subtaskEditingController
-                                  focusNode: controller.titleFocus,
-                                  style: TextStyleHelper.subtitle1(
-                                      color: Get.theme.colors().onBackground),
+                            child: Obx(() {
+                              final setTiltleError = controller.setTiltleError!.value;
+                              return PlatformTextField(
+                                controller: controller.titleController,
+                                maxLines: null,
+                                // focusNode = null if subtaskEditingController
+                                focusNode: controller.titleFocus,
+                                style: TextStyleHelper.subtitle1(
+                                    color: Get.theme.colors().onBackground),
+                                hintText: tr('describeSubtask'),
+                                cupertino: (_, __) => CupertinoTextFieldData(
+                                  placeholderStyle: TextStyleHelper.subtitle1(
+                                      color: setTiltleError
+                                          ? Get.theme.colors().colorError
+                                          : Get.theme.colors().onBackground.withOpacity(0.5)),
+                                ),
+                                material: (_, __) => MaterialTextFieldData(
                                   decoration: InputDecoration.collapsed(
                                     hintText: tr('describeSubtask'),
                                     hintStyle: TextStyleHelper.subtitle1(
-                                        color: controller.setTiltleError!.value == true
+                                        color: setTiltleError
                                             ? Get.theme.colors().colorError
                                             : Get.theme.colors().onBackground.withOpacity(0.5)),
                                   ),
-                                )),
+                                ),
+                              );
+                            }),
                           ),
                         ),
                         const SizedBox(width: 4),

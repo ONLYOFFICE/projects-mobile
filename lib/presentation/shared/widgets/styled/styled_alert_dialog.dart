@@ -83,13 +83,21 @@ class StyledAlertDialog extends StatelessWidget {
           titleText!,
           style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
         );
-    final _content = content ?? (contentText != null ? Text(contentText!) : null);
+    final _content = content ??
+        (contentText != null
+            ? Text(
+                contentText!,
+                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+              )
+            : null);
 
     return PlatformAlertDialog(
       title: _title,
       content: _content != null
           ? Container(
-              padding: GetPlatform.isIOS ? const EdgeInsets.only(top: 5) : null,
+              padding: GetPlatform.isIOS
+                  ? const EdgeInsets.only(top: 8)
+                  : const EdgeInsets.symmetric(vertical: 8),
               child: _content,
             )
           : null,
@@ -110,6 +118,11 @@ class StyledAlertDialog extends StatelessWidget {
                   softWrap: false),
             ),
           ],
+      material: (_, __) => MaterialAlertDialogData(
+        contentPadding: const EdgeInsets.only(left: 24, right: 24),
+        insetPadding: EdgeInsets.zero,
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+      ),
     );
   }
 }

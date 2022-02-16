@@ -79,21 +79,35 @@ class TaskTitle extends StatelessWidget {
                   Text('${tr('taskTitle')}:',
                       style: TextStyleHelper.caption(
                           color: Get.theme.colors().onBackground.withOpacity(0.75))),
-                Obx(() => PlatformTextField(
+                Obx(() {
+                  final setTitleError = controller.setTitleError!.value;
+                  return PlatformTextField(
                     onChanged: controller.changeTitle,
                     focusNode: focusOnTitle ? controller.titleFocus : null,
                     maxLines: null,
                     controller: controller.titleController,
                     style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
                     cursorColor: Get.theme.colors().primary.withOpacity(0.87),
-                    decoration: InputDecoration(
-                        hintText: tr('taskTitle'),
-                        contentPadding: EdgeInsets.zero,
-                        hintStyle: TextStyleHelper.headline6(
-                            color: controller.setTitleError!.value == true
-                                ? Get.theme.colors().colorError
-                                : Get.theme.colors().onSurface.withOpacity(0.5)),
-                        border: InputBorder.none)))
+                    hintText: tr('taskTitle'),
+                    cupertino: (_, __) => CupertinoTextFieldData(
+                      padding: EdgeInsets.zero,
+                      placeholderStyle: TextStyleHelper.headline6(
+                          color: setTitleError
+                              ? Get.theme.colors().colorError
+                              : Get.theme.colors().onSurface.withOpacity(0.5)),
+                    ),
+                    material: (_, __) => MaterialTextFieldData(
+                      decoration: InputDecoration(
+                          hintText: tr('taskTitle'),
+                          contentPadding: EdgeInsets.zero,
+                          hintStyle: TextStyleHelper.headline6(
+                              color: setTitleError
+                                  ? Get.theme.colors().colorError
+                                  : Get.theme.colors().onSurface.withOpacity(0.5)),
+                          border: InputBorder.none),
+                    ),
+                  );
+                })
               ],
             ),
           ),
