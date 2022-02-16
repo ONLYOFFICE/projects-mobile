@@ -56,7 +56,7 @@ class DiscussionsService {
     String? creationDateFilter,
     String? otherFilter,
   }) async {
-    final projects = await _api.getDiscussionsByParams(
+    final discussions = await _api.getDiscussionsByParams(
       startIndex: startIndex,
       query: query,
       sortBy: sortBy,
@@ -69,12 +69,12 @@ class DiscussionsService {
       projectId: projectId,
     );
 
-    final success = projects.response != null;
+    final success = discussions.response != null;
 
     if (success) {
-      return projects;
+      return discussions;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error!.message);
+      await Get.find<ErrorDialog>().show(discussions.error!.message);
       return null;
     }
   }

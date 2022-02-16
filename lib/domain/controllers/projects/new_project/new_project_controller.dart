@@ -102,7 +102,8 @@ class NewProjectController extends BaseProjectEditorController {
         participants: participants,
         private: isPrivate.value,
         notify: notificationEnabled.value,
-        notifyResponsibles: responsiblesNotificationEnabled);
+        notifyResponsibles: responsiblesNotificationEnabled,
+        tags: tagsText.value);
 
     final result = await _api.createProject(project: newProject);
     if (result != null) {

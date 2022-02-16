@@ -29,15 +29,14 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-
-import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/base/base_sort_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 
 abstract class BaseDiscussionsController extends BaseController {
   BaseSortController get sortController;
   BaseFilterController get filterController;
 
-  void toDetailed(Discussion discussion) {}
+  void toDetailed(DiscussionItemController discussionItemController) {}
 }

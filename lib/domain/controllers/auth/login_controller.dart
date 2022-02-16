@@ -250,6 +250,7 @@ class LoginController extends GetxController {
           .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
 
       locator<EventHub>().fire('loginSuccess');
+      return true;
     } else if (result.response!.tfa!) {
       setState(ViewState.Idle);
       await Get.to(CodeView.new);

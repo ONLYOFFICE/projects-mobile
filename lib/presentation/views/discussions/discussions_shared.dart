@@ -38,6 +38,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/domain/controllers/discussions/base_discussions_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
@@ -98,9 +99,12 @@ class DiscussionsContent extends StatelessWidget {
                   return const SizedBox(height: 12);
                 },
                 itemBuilder: (BuildContext context, int index) {
+                  final discussion = controller.paginationController.data[index] as Discussion;
+                  final discussionItemController = Get.find<DiscussionItemController>();
+                  discussionItemController.setup(discussion);
                   return DiscussionTile(
-                    discussion: controller.itemList[index] as Discussion,
-                    onTap: () => controller.toDetailed(controller.itemList[index] as Discussion),
+                    controller: discussionItemController,
+                    onTap: () => controller.toDetailed(discussionItemController),
                   );
                 },
               );

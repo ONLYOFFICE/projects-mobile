@@ -83,9 +83,12 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
               ? Icon(PlatformIcons(context).back)
               : Icon(PlatformIcons(context).clear),
           actions: [
-            PlatformIconButton(
-              onPressed: onConfirm ?? controller.confirmSubscribersSelection,
-              icon: Icon(PlatformIcons(context).checkMark),
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: PlatformIconButton(
+                onPressed: onConfirm ?? controller.confirmSubscribersSelection,
+                icon: Icon(PlatformIcons(context).checkMark),
+              ),
             )
           ],
           // bottom: CustomSearchBar(controller: controller),

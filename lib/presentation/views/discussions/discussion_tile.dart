@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -43,32 +44,29 @@ import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 
 class DiscussionTile extends StatelessWidget {
-  final Discussion discussion;
   final Function()? onTap;
+  final DiscussionItemController controller;
 
   const DiscussionTile({
     Key? key,
-    required this.discussion,
+    required this.controller,
     this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final discussion = controller.discussion;
     return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
           children: [
-            _Image(
-              image: discussion.createdBy!.avatar ??
-                  discussion.createdBy!.avatarMedium ??
-                  discussion.createdBy!.avatarSmall,
-            ),
+            _Image(avatarUrl: controller.avatarUrl),
             const SizedBox(width: 16),
-            _DiscussionInfo(discussion: discussion),
+            _DiscussionInfo(discussion: discussion.value),
             const SizedBox(width: 11.33),
-            _CommentsCount(commentsCount: discussion.commentsCount),
+            _CommentsCount(commentsCount: discussion.value.commentsCount),
           ],
         ),
       ),
@@ -77,10 +75,10 @@ class DiscussionTile extends StatelessWidget {
 }
 
 class _Image extends StatelessWidget {
-  final String? image;
+  final Rx<String> avatarUrl;
   const _Image({
     Key? key,
-    required this.image,
+    required this.avatarUrl,
   }) : super(key: key);
 
   @override
@@ -89,10 +87,12 @@ class _Image extends StatelessWidget {
       width: 40,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(30),
-        child: CustomNetworkImage(
-          image: image,
-          defaultImage: const DefaultAvatar(),
-          fit: BoxFit.cover,
+        child: Obx(
+          () => CustomNetworkImage(
+            image: avatarUrl.value,
+            defaultImage: const DefaultAvatar(),
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

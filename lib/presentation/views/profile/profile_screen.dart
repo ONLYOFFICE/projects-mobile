@@ -34,11 +34,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_status.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -192,7 +192,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final portalUser = Get.arguments['portalUser'] as PortalUser;
+    final controller = Get.arguments['controller'] as PortalUserItemController;
+    final portalUser = controller.portalUser;
     final portalInfoController = Get.find<PortalInfoController>();
     portalInfoController.setup();
 
@@ -217,8 +218,7 @@ class ProfileScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(80),
                       child: CustomNetworkImage(
-                        image:
-                            portalUser.avatar ?? portalUser.avatarMedium ?? portalUser.avatarSmall,
+                        image: controller.profileAvatar.value,
                         defaultImage: const DefaultAvatar(),
                         fit: BoxFit.contain,
                       ),

@@ -37,7 +37,11 @@ import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
+
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
+
 import 'package:projects/domain/controllers/discussions/base_discussions_controller.dart';
+
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -151,8 +155,9 @@ class DiscussionsController extends BaseDiscussionsController {
   }
 
   @override
-  void toDetailed(Discussion discussion) => Get.find<NavigationController>()
-      .to(DiscussionDetailed(), arguments: {'discussion': discussion});
+  void toDetailed(DiscussionItemController discussionItemController) =>
+      Get.find<NavigationController>()
+          .to(DiscussionDetailed(), arguments: {'controller': discussionItemController});
 
   void toNewDiscussionScreen() => Get.find<NavigationController>().to(const NewDiscussionScreen(),
       transition: Transition.cupertinoDialog, fullscreenDialog: true);

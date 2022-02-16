@@ -35,10 +35,11 @@ import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/data/services/user_photo_service.dart';
 import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
 import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
 import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
@@ -61,9 +62,11 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class DiscussionItemController extends GetxController {
   final DiscussionItemService _api = locator<DiscussionItemService>();
+  final _userPhotoService = locator<UserPhotoService>();
   final portalUri = Get.find<PortalInfoController>().portalUri;
 
   final discussion = Discussion().obs;
+  Rx<String> avatarUrl = ''.obs;
   final status = 0.obs;
 
   final loaded = true.obs;
@@ -79,14 +82,16 @@ class DiscussionItemController extends GetxController {
 
   final fabIsVisible = false.obs;
 
-  DiscussionItemController(Discussion discussion) {
+  final commentsListController = ScrollController();
+
+  void setup(Discussion discussion) {
     this.discussion.value = discussion;
     status.value = discussion.status!;
 
     fabIsVisible.value = discussion.canEdit! && discussion.status == 0;
-  }
 
-  final commentsListController = ScrollController();
+    _getUserAvatarUrl();
+  }
 
   @override
   Future<void> onInit() async {
@@ -270,5 +275,27 @@ class DiscussionItemController extends GetxController {
         arguments: {'projectDetailed': project},
       );
     }
+  }
+
+  Future<void> _getUserAvatarUrl() async {
+    if (discussion.value.createdBy?.avatarMedium == null) {
+      final userId = discussion.value.createdBy?.id;
+      if (userId != null) {
+        final userPhoto = await _userPhotoService.getUserPhoto(userId);
+        discussion.value.createdBy?.avatar = userPhoto?.big;
+        discussion.value.createdBy?.avatarSmall = userPhoto?.small;
+        discussion.value.createdBy?.avatarMedium = userPhoto?.medium;
+        avatarUrl.value = userPhoto?.medium ?? userPhoto?.big ?? userPhoto?.small ?? '';
+      }
+    }
+  }
+
+  @override
+  void onClose() {
+    refreshController.dispose();
+    subscribersRefreshController.dispose();
+    commentsRefreshController.dispose();
+    commentsListController.dispose();
+    super.onClose();
   }
 }

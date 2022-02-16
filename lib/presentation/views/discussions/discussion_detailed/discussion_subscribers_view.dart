@@ -70,13 +70,16 @@ class DiscussionSubscribersView extends StatelessWidget {
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(height: 24);
                   },
-                  itemBuilder: (BuildContext context, int index) => PortalUserItem(
-                      userController:
-                          PortalUserItemController(portalUser: discussion.subscribers![index]),
-                      onTapFunction: (value) => {
-                            Get.find<NavigationController>().toScreen(const ProfileScreen(),
-                                arguments: {'portalUser': discussion.subscribers![index]})
-                          }),
+                  itemBuilder: (BuildContext context, int index) {
+                    final userController =
+                        PortalUserItemController(portalUser: discussion.subscribers![index]);
+                    return PortalUserItem(
+                        userController: userController,
+                        onTapFunction: (value) => {
+                              Get.find<NavigationController>().toScreen(const ProfileScreen(),
+                                  arguments: {'controller': userController})
+                            });
+                  },
                 ),
               ),
               Align(

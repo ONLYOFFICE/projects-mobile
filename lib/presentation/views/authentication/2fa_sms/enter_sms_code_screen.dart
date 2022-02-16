@@ -97,14 +97,14 @@ class EnterSMSCodeScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                            color: controller.codeError.value == true
+                            color: controller.needToShowError.value == true
                                 ? Get.theme.colors().colorError
                                 : Get.theme.colors().onSurface.withOpacity(0.3),
                           ),
                         ),
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                            color: controller.codeError.value == true
+                            color: controller.needToShowError.value
                                 ? Get.theme.colors().colorError
                                 : Get.theme.colors().onSurface.withOpacity(0.3),
                           ),
@@ -115,7 +115,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
                   Obx(
                     () => SizedBox(
                       height: h(24),
-                      child: controller.codeError.value == true
+                      child: controller.needToShowError.value
                           ? Align(
                               alignment: Alignment.topLeft,
                               child: Text(

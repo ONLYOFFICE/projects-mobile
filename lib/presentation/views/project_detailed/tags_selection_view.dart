@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -55,7 +56,7 @@ class TagsSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final projController = Get.arguments['controller'];
+    final projController = Get.arguments['controller'] as BaseProjectEditorController;
 
     final controller = Get.put(ProjectTagsController());
     controller.setup(projController);
