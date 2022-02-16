@@ -72,7 +72,7 @@ class _UserTile extends StatelessWidget {
                 children: [
                   Text(
                     user.displayName!,
-                    style: TextStyleHelper.projectTitle,
+                    style: TextStyleHelper.subtitle1(),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),

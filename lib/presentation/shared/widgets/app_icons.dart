@@ -64,6 +64,7 @@ class SvgIcons {
   static const String logout = 'lib/assets/images/icons/logout.svg';
   static const String message = 'lib/assets/images/icons/message.svg';
   static const String password_recovery = 'lib/assets/images/icons/password_recovery.svg';
+  static const String ios_sort = 'lib/assets/images/icons/ios_sortbutton_icon.svg';
   static const String preferences = 'lib/assets/images/icons/preferences.svg';
   static const String preferences_active = 'lib/assets/images/icons/preferences_active.svg';
   static const String preferences_active_dark_theme =
@@ -122,7 +123,9 @@ class SvgIcons {
   static const String doc = 'lib/assets/images/icons/folders/doc.svg';
   static const String image = 'lib/assets/images/icons/folders/image.svg';
   static const String table = 'lib/assets/images/icons/folders/table.svg';
+
   static const String presentation = 'lib/assets/images/icons/folders/presentation.svg';
+
   static const String archived_status = 'lib/assets/images/icons/discussion_statuses/archived.svg';
   static const String open_status = 'lib/assets/images/icons/discussion_statuses/open.svg';
 

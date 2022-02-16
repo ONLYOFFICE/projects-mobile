@@ -40,6 +40,9 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -72,14 +75,13 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 4),
-            child: IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: controller.confirmResponsiblesSelection as Function()),
-          )
+              padding: const EdgeInsets.only(right: 4),
+              child: PlatformIconButton(
+                  icon: Icon(PlatformIcons(context).checkMark),
+                  onPressed: controller.confirmResponsiblesSelection as Function()))
         ],
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+        leading: PlatformIconButton(
+          icon: Icon(PlatformIcons(context).back),
           onPressed: controller.leaveResponsiblesSelectionView as Function(),
         ),
       ),
@@ -88,7 +90,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
           if (controller.teamController.loaded.value == true &&
               controller.teamController.usersList.isNotEmpty as bool &&
               controller.teamController.isSearchResult.value == false) {
-            return SmartRefresher(
+            return StyledSmartRefresher(
               enablePullDown: false,
               enablePullUp: controller.teamController.pullUpEnabled as bool,
               controller: controller.teamController.refreshController as RefreshController,
@@ -117,7 +119,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
           if (controller.teamController.loaded.value == true &&
               controller.teamController.searchResult.isNotEmpty as bool &&
               controller.teamController.isSearchResult.value == true) {
-            return SmartRefresher(
+            return StyledSmartRefresher(
               enablePullDown: false,
               enablePullUp: controller.teamController.pullUpEnabled as bool,
               controller: controller.teamController.refreshController as RefreshController,

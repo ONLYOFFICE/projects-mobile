@@ -40,6 +40,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:readmore/readmore.dart';
 
@@ -118,8 +119,9 @@ class ProjectOverview extends StatelessWidget {
                       tabController!.animateTo(5);
                     },
                     caption: tr('team'),
-                    iconData: Icons.navigate_next,
-                    subtitle: plural('members', projectController.teamMembersCount.value),
+                    iconData: PlatformIcons(context).rightChevron,
+                    subtitle: plural(
+                        'members', projectController.projectTeamDataSource!.usersList.length),
                     subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                   ),
                 ),
@@ -130,10 +132,14 @@ class ProjectOverview extends StatelessWidget {
                   caption: tr('creationDate'),
                   subtitle: projectController.creationDateText.value)),
               const SizedBox(height: 20),
-              Obx(() => InfoTile(
-                  icon: const AppIcon(icon: SvgIcons.tag, color: Color(0xff707070)),
-                  caption: tr('tags'),
-                  subtitle: projectController.tagsText.value)),
+              Obx(() {
+                if (projectController.tagsText.value.isNotEmpty)
+                  return InfoTile(
+                      icon: const AppIcon(icon: SvgIcons.tag, color: Color(0xff707070)),
+                      caption: tr('tags'),
+                      subtitle: projectController.tagsText.value);
+                return const SizedBox();
+              })
             ],
           );
         } else {
@@ -193,7 +199,7 @@ class ProjectStatusButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Icon(
-                Icons.keyboard_arrow_down_rounded,
+                PlatformIcons(context).downChevron,
                 color: Get.theme.colors().primary,
                 size: 19,
               ),

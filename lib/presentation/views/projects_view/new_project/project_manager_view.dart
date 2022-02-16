@@ -35,16 +35,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectManagerSelectionView extends StatelessWidget {
   const ProjectManagerSelectionView({
@@ -69,8 +70,8 @@ class ProjectManagerSelectionView extends StatelessWidget {
         titleText: tr('selectPM'),
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
         bottom: SearchField(
           controller: usersDataSource.searchInputController,
           hintText: tr('usersSearch'),
@@ -132,7 +133,7 @@ class UsersSearchResult extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
-          child: SmartRefresher(
+          child: StyledSmartRefresher(
             enablePullDown: false,
             enablePullUp: usersDataSource.pullUpEnabled,
             controller: usersDataSource.refreshController,
@@ -168,7 +169,7 @@ class UsersDefault extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final users = withoutGuests ? usersDataSource.usersWithoutVisitors : usersDataSource.usersList;
-    return SmartRefresher(
+    return StyledSmartRefresher(
       enablePullDown: false,
       enablePullUp: usersDataSource.pullUpEnabled,
       controller: usersDataSource.refreshController,

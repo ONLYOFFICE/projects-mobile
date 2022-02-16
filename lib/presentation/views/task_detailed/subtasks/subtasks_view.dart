@@ -36,17 +36,18 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_cell.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class SubtasksView extends StatelessWidget {
   final TaskItemController controller;
+
   const SubtasksView({
     Key? key,
     required this.controller,
@@ -54,17 +55,16 @@ class SubtasksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _task = controller.task.value;
     return Obx(
       () {
         if (controller.loaded.value == true) {
           return Stack(
             children: [
-              SmartRefresher(
+              StyledSmartRefresher(
                 controller: controller.subtaskRefreshController,
                 onRefresh: () => controller.reloadTask(showLoading: true),
                 child: () {
-                  if (_task.subtasks!.isEmpty)
+                  if (controller.task.value.subtasks!.isEmpty)
                     return Center(
                       child: EmptyScreen(
                         icon: SvgIcons.task_not_created,
@@ -72,14 +72,14 @@ class SubtasksView extends StatelessWidget {
                       ),
                     );
 
-                  if (_task.subtasks!.isNotEmpty)
+                  if (controller.task.value.subtasks!.isNotEmpty)
                     return ListView.builder(
-                      itemCount: _task.subtasks!.length,
+                      itemCount: controller.task.value.subtasks!.length,
                       padding: const EdgeInsets.only(top: 6, bottom: 50),
                       itemBuilder: (BuildContext context, int index) {
                         return SubtaskCell(
-                          subtask: _task.subtasks![index],
-                          parentTask: _task,
+                          subtask: controller.task.value.subtasks![index],
+                          parentTask: controller.task.value,
                         );
                       },
                     );
@@ -87,7 +87,7 @@ class SubtasksView extends StatelessWidget {
               ),
               if (controller.task.value.canCreateSubtask == true &&
                   controller.task.value.status != 2)
-                _FAB(task: _task),
+                _FAB(task: controller.task.value),
             ],
           );
         } else {
@@ -101,11 +101,11 @@ class SubtasksView extends StatelessWidget {
 class _FAB extends StatelessWidget {
   const _FAB({
     Key? key,
-    required PortalTask? task,
+    required PortalTask task,
   })  : _task = task,
         super(key: key);
 
-  final PortalTask? _task;
+  final PortalTask _task;
 
   @override
   Widget build(BuildContext context) {
@@ -113,12 +113,14 @@ class _FAB extends StatelessWidget {
       right: 16,
       bottom: 24,
       child: StyledFloatingActionButton(
-        onPressed: () =>
-            Get.find<NavigationController>().to(const CreatingAndEditingSubtaskView(), arguments: {
-          'taskId': _task!.id,
-          'projectId': _task!.projectOwner!.id,
-          'forEditing': false,
-        }),
+        onPressed: () => Get.find<NavigationController>().to(const CreatingAndEditingSubtaskView(),
+            arguments: {
+              'taskId': _task.id,
+              'projectId': _task.projectOwner!.id,
+              'forEditing': false,
+            },
+            transition: Transition.cupertinoDialog,
+            fullscreenDialog: true),
         child: AppIcon(
           icon: SvgIcons.add_fab,
           color: Get.theme.colors().onPrimarySurface,

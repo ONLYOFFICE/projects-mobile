@@ -31,8 +31,6 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 
@@ -40,41 +38,25 @@ class TasksWithPresets {
   TasksController? _myTasksController;
   TasksController? _upcomingTaskscontroller;
 
-  TasksController? get myTasksController {
+  TasksController get myTasksController {
     _myTasksController ?? setupMyTasks();
-    return _myTasksController;
+    return _myTasksController!;
   }
 
-  TasksController? get upcomingTasksController {
+  TasksController get upcomingTasksController {
     _upcomingTaskscontroller ?? setupUpcomingTasks();
-    return _upcomingTaskscontroller;
+    return _upcomingTaskscontroller!;
   }
 
   void setupMyTasks() {
-    _myTasksController = Get.put(
-        TasksController(
-          Get.find<TaskFilterController>(),
-          Get.put<PaginationController<PortalTask>>(
-            PaginationController<PortalTask>(),
-            tag: '_myTasksPaginationController',
-          ),
-        ),
-        tag: '_myTasksController')!
+    _myTasksController = Get.put(TasksController(), tag: '_myTasksController')!
       ..setup(PresetTaskFilters.myTasks, withFAB: false);
 
     _myTasksController!.loadTasks();
   }
 
   void setupUpcomingTasks() {
-    _upcomingTaskscontroller = Get.put(
-        TasksController(
-          Get.find<TaskFilterController>(),
-          Get.put<PaginationController<PortalTask>>(
-            PaginationController<PortalTask>(),
-            tag: '_upcomingTasksPaginationController',
-          ),
-        ),
-        tag: '_upcomingTaskscontroller')!
+    _upcomingTaskscontroller = Get.put(TasksController(), tag: '_upcomingTaskscontroller')!
       ..setup(PresetTaskFilters.upcomming, withFAB: false);
     _upcomingTaskscontroller!.loadTasks();
   }

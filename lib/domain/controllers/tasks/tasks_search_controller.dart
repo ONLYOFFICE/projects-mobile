@@ -38,24 +38,32 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class TasksSearchController extends BaseController {
-  final TaskService _api = locator<TaskService>();
+  final _api = locator<TaskService>();
 
-  RxBool loaded = true.obs;
-  RxBool nothingFound = false.obs;
+  final nothingFound = false.obs;
+
+  final _paginationController = PaginationController<PortalTask>();
+  @override
+  PaginationController<PortalTask> get paginationController => _paginationController;
+
+  final searchInputController = TextEditingController();
 
   late String _query;
 
-  final _paginationController = PaginationController<PortalTask>();
-  PaginationController<PortalTask> get paginationController => _paginationController;
-
-  TextEditingController searchInputController = TextEditingController();
-
   String _searchQuery = '';
   Timer? _searchDebounce;
+
+  final int? _projectId = Get.arguments['projectId'] as int?;
+  final BaseTaskFilterController? _filterController =
+      Get.arguments['tasksFilterController'] as BaseTaskFilterController?;
+  final TasksSortController? _sortController =
+      Get.arguments['tasksSortController'] as TasksSortController?;
 
   @override
   void onInit() {
@@ -63,6 +71,8 @@ class TasksSearchController extends BaseController {
     paginationController.startIndex = 0;
     _paginationController.loadDelegate = () => _performSearch(needToClear: false);
     paginationController.refreshDelegate = () => newSearch(_query);
+
+    loaded.value = true;
     super.onInit();
   }
 
@@ -95,7 +105,15 @@ class TasksSearchController extends BaseController {
     nothingFound.value = false;
     final result = await _api.getTasksByParams(
       startIndex: paginationController.startIndex,
+      sortBy: _sortController?.currentSortfilter,
+      sortOrder: _sortController?.currentSortOrder,
+      responsibleFilter: _filterController?.responsibleFilter,
+      creatorFilter: _filterController?.creatorFilter,
+      projectFilter: _filterController?.projectFilter,
+      milestoneFilter: _filterController?.milestoneFilter,
+      deadlineFilter: _filterController?.deadlineFilter,
       query: _query.toLowerCase(),
+      projectId: _projectId?.toString(),
     );
 
     if (result != null) {

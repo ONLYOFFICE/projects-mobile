@@ -40,6 +40,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class ColorThemeSelectionScreen extends StatelessWidget {
   const ColorThemeSelectionScreen({Key? key}) : super(key: key);
@@ -55,7 +56,6 @@ class ColorThemeSelectionScreen extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('colorTheme'),
-          backButtonIcon: const Icon(Icons.arrow_back_rounded),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,10 +105,10 @@ class _ColorThemeTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(text, style: TextStyleHelper.projectTitle),
+            Text(text, style: TextStyleHelper.subtitle1()),
             if (isSelected!)
               Icon(
-                Icons.check_rounded,
+                PlatformIcons(context).checkMark,
                 color: Get.theme.colors().onBackground.withOpacity(0.6),
               )
           ],

@@ -37,6 +37,7 @@ import 'package:projects/domain/controllers/projects/base_project_editor_control
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class ProjectTitleTile extends StatelessWidget {
   final BaseProjectEditorController controller;
@@ -79,7 +80,7 @@ class ProjectTitleTile extends StatelessWidget {
                       style: TextStyleHelper.caption(
                           color: Get.theme.colors().onBackground.withOpacity(0.75))),
                 Obx(
-                  () => TextField(
+                  () => PlatformTextField(
                       focusNode: focusOnTitle ? controller.titleFocus : null,
                       maxLines: null,
                       controller: controller.titleController,

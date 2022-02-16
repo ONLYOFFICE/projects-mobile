@@ -64,8 +64,7 @@ class RemoteConfigService {
   }
 
 // Fetch remote values
-  static Future<void> fetchAndActivate() async =>
-      _remoteConfig.fetchAndActivate();
+  static Future<void> fetchAndActivate() async => _remoteConfig.fetchAndActivate();
 
   /// Gets the value for a given key as a bool.
   static bool getBool(String key) {

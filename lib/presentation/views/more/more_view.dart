@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -46,13 +45,7 @@ class MoreView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final portalUser = Get.isRegistered<ProfileController>()
-        ? Get.find<ProfileController>()
-        : Get.put(ProfileController(), permanent: true);
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      portalUser.setup();
-    });
+    final portalUser = Get.find<ProfileController>(tag: 'SelfProfileScreen');
 
     return Container(
       height: 312,

@@ -36,25 +36,23 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:synchronized/synchronized.dart';
+
+import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
+import 'package:projects/domain/controllers/documents/conflict_resolving_dialog.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
-
-import 'package:projects/internal/locator.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
-class DocumentsMoveOrCopyController extends GetxController
-    implements BaseDocumentsController {
+class DocumentsMoveOrCopyController extends BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
-
-  RxBool hasFilters = false.obs;
-  RxBool loaded = false.obs;
-  RxBool nothingFound = false.obs;
-  RxBool searchMode = false.obs;
 
   TextEditingController searchInputController = TextEditingController();
 
@@ -62,10 +60,14 @@ class DocumentsMoveOrCopyController extends GetxController
 
   int? initialFolderId;
 
+  @override
+  int? get currentFolderID => initialFolderId;
+
   Timer? _searchDebounce;
-  int foldersCount = 0;
 
   String? mode;
+
+  int nestingCounter = 1;
 
   int? _targetId;
 
@@ -76,14 +78,13 @@ class DocumentsMoveOrCopyController extends GetxController
   @override
   PaginationController get paginationController => _paginationController;
 
+  @override
   RxList get itemList => _paginationController.data;
 
   String? _screenName;
   Folder? _currentFolder;
 
   Folder? get currentFolder => _currentFolder;
-
-  var screenName = tr('chooseSection').obs;
 
   late DocumentsSortController _sortController;
 
@@ -92,7 +93,13 @@ class DocumentsMoveOrCopyController extends GetxController
 
   late DocumentsFilterController _filterController;
 
+  @override
   DocumentsFilterController get filterController => _filterController;
+
+  @override
+  RxBool get hasFilters => _filterController.hasFilters;
+
+  final _lock = Lock();
 
   DocumentsMoveOrCopyController(
     DocumentsFilterController filterController,
@@ -110,13 +117,15 @@ class DocumentsMoveOrCopyController extends GetxController
     paginationController.refreshDelegate = () async => refreshContent();
 
     paginationController.pullDownEnabled = true;
+
+    documentsScreenName.value = tr('chooseSection');
   }
 
   Future<void> refreshContent() async {
     if (_currentFolder == null) {
       await initialSetup();
     } else
-      await setupFolder(folder: _currentFolder, folderName: screenName.value);
+      await setupFolder(folder: _currentFolder, folderName: documentsScreenName.value);
   }
 
   Future<void> initialSetup() async {
@@ -127,13 +136,19 @@ class DocumentsMoveOrCopyController extends GetxController
     loaded.value = true;
   }
 
+  void setupOptions(int? targetId, int? initial) {
+    _targetId = targetId;
+    initialFolderId = initial;
+  }
+
   Future<void> setupFolder({required String folderName, Folder? folder}) async {
     loaded.value = false;
 
     _clear();
     _currentFolder = folder;
     _filterController.folderId = _currentFolder!.id;
-    screenName.value = folderName;
+    documentsScreenName.value = folderName;
+    screenName = folderName;
     await _getDocuments();
 
     loaded.value = true;
@@ -168,7 +183,10 @@ class DocumentsMoveOrCopyController extends GetxController
     paginationController.data.addAll(result.folders!);
     paginationController.data.addAll(result.files!);
 
-    screenName.value = _screenName ?? tr('documents');
+    countFolders();
+
+    documentsScreenName.value = _screenName ?? tr('chooseSection');
+    screenName = _screenName ?? tr('chooseSection');
   }
 
   void clearSearch() {
@@ -193,10 +211,6 @@ class DocumentsMoveOrCopyController extends GetxController
     });
   }
 
-  Future<void> setupSearchMode({String? folderName, Folder? folder}) async {
-    loaded.value = true;
-  }
-
   void _performSearch() async {
     loaded.value = false;
     nothingFound.value = false;
@@ -210,66 +224,156 @@ class DocumentsMoveOrCopyController extends GetxController
     loaded.value = true;
   }
 
-  void onFilePopupMenuSelected(value, PortalFile element) {}
-
   Future moveFolder() async {
-    final result = await _api.moveDocument(
-      movingFolder: _targetId.toString(),
-      targetFolder: _currentFolder!.id.toString(),
-    );
+    await _lock.synchronized(() async {
+      final conflictsResult = await _api.checkForConflicts(
+        destFolderId: _currentFolder!.id.toString(),
+        folderIds: [_targetId.toString()],
+      );
 
-    if (result != null) {
-      Get.close(foldersCount);
+      ConflictResolveType? type = ConflictResolveType.Skip;
+      if (conflictsResult != null && conflictsResult.isNotEmpty) {
+        final titles = <String>[];
+        for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderMoved'));
-    }
-    locator<EventHub>().fire('needToRefreshDocuments');
+        type = await showConflictResolvingDialog(titles);
+      }
+
+      if (type == null) return;
+
+      final result = await _api.moveDocument(
+        movingFolder: _targetId.toString(),
+        targetFolder: _currentFolder!.id.toString(),
+        type: type,
+      );
+
+      Get.close(nestingCounter);
+      if (result != null)
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderMoved'));
+      else
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
+      locator<EventHub>().fire('needToRefreshDocuments');
+    });
   }
 
   Future copyFolder() async {
-    final result = await _api.copyDocument(
-      copyingFolder: _targetId.toString(),
-      targetFolder: _currentFolder!.id.toString(),
-    );
+    await _lock.synchronized(() async {
+      final conflictsResult = await _api.checkForConflicts(
+        destFolderId: _currentFolder!.id.toString(),
+        folderIds: [_targetId.toString()],
+      );
 
-    if (result != null) {
-      Get.close(foldersCount);
+      ConflictResolveType? type = ConflictResolveType.Skip;
+      if (conflictsResult != null && conflictsResult.isNotEmpty) {
+        final titles = <String>[];
+        for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderCopied'));
-    }
-    locator<EventHub>().fire('needToRefreshDocuments');
+        type = await showConflictResolvingDialog(titles);
+      }
+
+      if (type == null) return;
+
+      final result = await _api.copyDocument(
+        copyingFolder: _targetId.toString(),
+        targetFolder: _currentFolder!.id.toString(),
+        type: type,
+      );
+
+      Get.close(nestingCounter);
+      if (result != null)
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderCopied'));
+      else
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
+      locator<EventHub>().fire('needToRefreshDocuments');
+    });
   }
 
   Future moveFile() async {
-    final result = await _api.moveDocument(
-      movingFile: _targetId.toString(),
-      targetFolder: _currentFolder!.id.toString(),
-    );
+    await _lock.synchronized(() async {
+      final conflictsResult = await _api.checkForConflicts(
+        destFolderId: _currentFolder!.id.toString(),
+        fileIds: [_targetId.toString()],
+      );
 
-    if (result != null) {
-      Get.close(foldersCount);
+      ConflictResolveType? type = ConflictResolveType.Skip;
+      if (conflictsResult != null && conflictsResult.isNotEmpty) {
+        final titles = <String>[];
+        for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileMoved'));
-    }
-    locator<EventHub>().fire('needToRefreshDocuments');
+        type = await showConflictResolvingDialog(titles);
+      }
+
+      if (type == null) return;
+
+      final result = await _api.moveDocument(
+        movingFile: _targetId.toString(),
+        targetFolder: _currentFolder!.id.toString(),
+        type: type,
+      );
+
+      Get.close(nestingCounter);
+      if (result != null)
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileMoved'));
+      else
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
+      locator<EventHub>().fire('needToRefreshDocuments');
+    });
   }
 
   Future copyFile() async {
-    final result = await _api.copyDocument(
-      copyingFile: _targetId.toString(),
-      targetFolder: _currentFolder!.id.toString(),
-    );
+    await _lock.synchronized(() async {
+      final conflictsResult = await _api.checkForConflicts(
+        destFolderId: _currentFolder!.id.toString(),
+        fileIds: [_targetId.toString()],
+      );
 
-    if (result != null) {
-      Get.close(foldersCount);
+      ConflictResolveType? type = ConflictResolveType.Skip;
+      if (conflictsResult != null && conflictsResult.isNotEmpty) {
+        final titles = <String>[];
+        for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileCopied'));
-    }
-    locator<EventHub>().fire('needToRefreshDocuments');
+        type = await showConflictResolvingDialog(titles);
+      }
+
+      if (type == null) return;
+
+      final result = await _api.copyDocument(
+        copyingFile: _targetId.toString(),
+        targetFolder: _currentFolder!.id.toString(),
+        type: type,
+      );
+
+      Get.close(nestingCounter);
+      if (result != null)
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileCopied'));
+      else
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
+      locator<EventHub>().fire('needToRefreshDocuments');
+    });
   }
 
-  void setupOptions(int? targetId, int? initial) {
-    _targetId = targetId;
-    initialFolderId = initial;
+  @override
+  void showSearch() {
+    Get.find<NavigationController>()
+        .to(DocumentsMoveSearchView(), preventDuplicates: false, arguments: {
+      'mode': mode,
+      'folderName': documentsScreenName.value,
+      'target': target,
+      'currentFolder': currentFolder,
+      'initialFolderId': initialFolderId,
+      'nestingCounter': nestingCounter,
+    });
   }
+
+  @override
+  // TODO: implement expandedCardView
+  RxBool get expandedCardView => throw UnimplementedError();
+
+  @override
+  // TODO: implement showAll
+  RxBool get showAll => throw UnimplementedError();
 }

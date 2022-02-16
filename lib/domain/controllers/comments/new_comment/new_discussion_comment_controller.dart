@@ -39,6 +39,7 @@ import 'package:projects/domain/controllers/comments/new_comment/abstract_new_co
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class NewDiscussionCommentController extends NewCommentController {
@@ -68,16 +69,14 @@ class NewDiscussionCommentController extends NewCommentController {
       await emptyTitleError();
     } else {
       setTitleError.value = false;
-      final newComment =
-          await _api.addMessageComment(content: text, messageId: idFrom!);
+      final newComment = await _api.addMessageComment(content: text, messageId: idFrom!);
       if (newComment != null) {
         _textController.clear();
         final discussionController = Get.find<DiscussionItemController>();
         await discussionController.onRefresh(showLoading: false);
         discussionController.scrollToLastComment();
         Get.back();
-        MessagesHandler.showSnackBar(
-            context: context, text: tr('commentCreated'));
+        MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
       }
     }
   }
@@ -100,8 +99,7 @@ class NewDiscussionCommentController extends NewCommentController {
         // ignore: unawaited_futures
         discussionController.onRefresh();
         Get.back();
-        MessagesHandler.showSnackBar(
-            context: context, text: tr('commentCreated'));
+        MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
       }
     }
   }
@@ -114,6 +112,7 @@ class NewDiscussionCommentController extends NewCommentController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           _textController.clear();
           Get.back();

@@ -45,10 +45,12 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ManageDiscussionSubscribersScreen extends StatelessWidget {
   const ManageDiscussionSubscribersScreen({Key? key}) : super(key: key);
@@ -78,14 +80,15 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
           ),
           onLeadingPressed: controller.leaveSubscribersSelectionView,
           backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
+              ? Icon(PlatformIcons(context).back)
+              : Icon(PlatformIcons(context).clear),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 4),
-              child: IconButton(
-                  onPressed: onConfirm ?? controller.confirmSubscribersSelection,
-                  icon: const Icon(Icons.done, size: 24)),
+              child: PlatformIconButton(
+                onPressed: onConfirm ?? controller.confirmSubscribersSelection,
+                icon: Icon(PlatformIcons(context).checkMark),
+              ),
             )
           ],
           // bottom: CustomSearchBar(controller: controller),
@@ -97,7 +100,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
             if (usersDataSource.loaded.value == true &&
                 usersDataSource.usersList.isNotEmpty &&
                 usersDataSource.isSearchResult.value == false) {
-              return SmartRefresher(
+              return StyledSmartRefresher(
                 enablePullDown: false,
                 controller: usersDataSource.refreshController,
                 onLoading: usersDataSource.onLoading,
@@ -171,10 +174,15 @@ class _DiscussionSubscribersSearchBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          InkResponse(
-            onTap: () => Get.find<NavigationController>()
-                .to(const UsersFromGroups(), arguments: {'controller': controller}),
-            child: const AppIcon(icon: SvgIcons.preferences),
+          PlatformIconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () => Get.find<NavigationController>().to(
+              const UsersFromGroups(),
+              arguments: {'controller': controller},
+              transition: Transition.cupertinoDialog,
+              fullscreenDialog: true,
+            ),
+            icon: const AppIcon(icon: SvgIcons.preferences),
           )
         ],
       ),
@@ -200,7 +208,7 @@ class _DiscussionSubscribersSelectionHeader extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
           ),
           if (controller.subscribers.isNotEmpty)
             Text(plural('selected', controller.subscribers.length),

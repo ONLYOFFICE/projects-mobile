@@ -30,53 +30,25 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
+import 'package:projects/presentation/views/documents/documents_shared.dart';
 
-class UsersSearchBar extends StatelessWidget {
-  const UsersSearchBar({
+class ProjectDocumentsScreen extends StatelessWidget {
+  const ProjectDocumentsScreen({
     Key? key,
     required this.controller,
+    this.appBar,
   }) : super(key: key);
 
-  final UsersDataSource controller;
+  final BaseDocumentsController controller;
+  final PreferredSizeWidget? appBar;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 32,
-      padding: const EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 6,
-        bottom: 6,
-      ),
-      decoration: BoxDecoration(
-        color: Get.theme.colors().bgDescription,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(16),
-        ),
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              textInputAction: TextInputAction.search,
-              controller: controller.searchInputController,
-              decoration: InputDecoration.collapsed(hintText: tr('usersSearch')),
-              onSubmitted: controller.searchUsers,
-              onChanged: controller.searchUsers,
-            ),
-          ),
-          InkWell(
-            onTap: controller.clearSearch,
-            child: const Icon(Icons.close, color: Colors.blue),
-          )
-        ],
-      ),
+    return Scaffold(
+      appBar: appBar,
+      body: DocumentsContent(controller: controller),
     );
   }
 }

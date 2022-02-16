@@ -63,13 +63,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class TaskItemController extends GetxController {
-  final TaskItemService _api = locator<TaskItemService>();
+  final _api = locator<TaskItemService>();
 
-  Rx<PortalTask> task = PortalTask().obs;
-  Rx<Status> status = Status().obs;
+  final task = PortalTask().obs;
+  final status = Status().obs;
 
-  RxBool loaded = false.obs;
-  RxBool isStatusLoaded = false.obs;
+  final loaded = false.obs;
+  final isStatusLoaded = false.obs;
 
   RefreshController get refreshController {
     return RefreshController();
@@ -85,7 +85,7 @@ class TaskItemController extends GetxController {
 
   set setLoaded(bool value) => loaded.value = value;
 
-  final TaskStatusHandler _statusHandler = TaskStatusHandler();
+  final _statusHandler = TaskStatusHandler();
 
   bool get canEdit => task.value.canEdit! && task.value.status != 2;
 
@@ -103,7 +103,7 @@ class TaskItemController extends GetxController {
   }
 
   // to show overview screen without loading
-  RxBool firstReload = true.obs;
+  final firstReload = true.obs;
 
   final commentsListController = ScrollController();
 

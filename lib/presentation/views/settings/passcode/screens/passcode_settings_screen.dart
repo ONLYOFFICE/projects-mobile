@@ -39,6 +39,9 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
+import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 
 class PasscodeSettingsScreen extends StatelessWidget {
   const PasscodeSettingsScreen({Key? key}) : super(key: key);
@@ -59,45 +62,33 @@ class PasscodeSettingsScreen extends StatelessWidget {
           titleText: tr('passcodeLock'),
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           onLeadingPressed: controller.leavePasscodeSettingsScreen,
-          backButtonIcon: const Icon(Icons.arrow_back_rounded),
         ),
         body: Obx(
           () {
             if (controller.loaded.value == true) {
               return SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 3),
-                    Obx(
-                      () => SwitchListTile(
-                        value: controller.isPasscodeEnable.value,
-                        activeColor: Get.theme.colors().primary,
-                        onChanged: (value) async => controller.onPasscodeTilePressed(value),
-                        // controller.tryEnablingPasscode(),
-                        title: Text(
-                          tr('enablePasscode'),
-                          style: TextStyleHelper.projectTitle,
-                        ),
-                      ),
-                    ),
-                    if (controller.isPasscodeEnable.value == true)
-                      Padding(
-                        padding: const EdgeInsets.only(left: 7),
-                        child: TextButton(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 3),
+                      OptionWithSwitch(
+                          title: tr('enablePasscode'),
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                          switchOnChanged: controller.onPasscodeTilePressed,
+                          switchValue: controller.isPasscodeEnable),
+                      if (controller.isPasscodeEnable.value == true)
+                        PlatformTextButton(
                           onPressed: controller.tryChangingPasscode,
                           child: Text(
                             tr('changePasscode'),
-                            style: TextStyleHelper.projectTitle
-                                .copyWith(color: Get.theme.colors().primary),
+                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                           ),
                         ),
-                      ),
-                    const StyledDivider(leftPadding: 16, rightPadding: 16),
-                    const SizedBox(height: 17),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16, right: 12),
-                      child: RichText(
+                      const StyledDivider(),
+                      const SizedBox(height: 17),
+                      RichText(
                         text: TextSpan(
                           text: tr('passcodeLock'),
                           style: TextStyleHelper.caption().copyWith(
@@ -112,24 +103,20 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 6),
-                    if (controller.isFingerprintAvailable.value == true &&
-                        controller.isPasscodeEnable.value == true)
-                      SwitchListTile(
-                        value: controller.isFingerprintEnable.value,
-                        onChanged: controller.tryTogglingFingerprintStatus,
-                        activeColor: Get.theme.colors().primary,
-                        title: Text(
-                          tr('fingerprint'),
-                          style: TextStyleHelper.projectTitle,
-                        ),
-                      ),
-                  ],
+                      const SizedBox(height: 6),
+                      if (controller.isFingerprintAvailable.value == true &&
+                          controller.isPasscodeEnable.value == true)
+                        OptionWithSwitch(
+                            title: tr('fingerprint'),
+                            style: TextStyleHelper.subtitle1(),
+                            switchOnChanged: controller.tryTogglingFingerprintStatus,
+                            switchValue: controller.isFingerprintEnable),
+                    ],
+                  ),
                 ),
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: PlatformCircularProgressIndicator());
             }
           },
         ),

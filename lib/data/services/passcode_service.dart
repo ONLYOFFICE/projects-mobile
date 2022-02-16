@@ -36,8 +36,7 @@ import 'package:projects/internal/locator.dart';
 
 class PasscodeService {
   final SecureStorage _storage = locator<SecureStorage>();
-  final LocalAuthenticationService _biometricService =
-      locator<LocalAuthenticationService>();
+  final LocalAuthenticationService _biometricService = locator<LocalAuthenticationService>();
 
   Future<String?> get getPasscode async => await _storage.getString('passcode');
 
@@ -55,15 +54,13 @@ class PasscodeService {
   }
 
   Future<bool> get isFingerprintEnable async {
-    final isFingerprintEnable =
-        await _storage.getString('isFingerprintEnable') ?? false;
+    final isFingerprintEnable = await _storage.getString('isFingerprintEnable') ?? false;
 
-    return isFingerprintEnable == 'true' ? true : false;
+    return isFingerprintEnable == 'true';
   }
 
   Future<bool> get isFingerprintAvailable async {
-    final isFingerprintAvailable =
-        await _biometricService.isFingerprintAvailable;
+    final isFingerprintAvailable = await _biometricService.isFingerprintAvailable;
 
     return isFingerprintAvailable;
   }

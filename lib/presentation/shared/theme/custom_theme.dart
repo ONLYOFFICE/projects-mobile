@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/app_colors.dart';
@@ -103,6 +104,15 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
     // lightColors.onSurface),
     // text
   ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData().copyWith(
+    unselectedItemColor: lightColors.onNavBar.withOpacity(0.4),
+    selectedItemColor: lightColors.onNavBar,
+    showSelectedLabels: true,
+    showUnselectedLabels: true,
+    type: BottomNavigationBarType.fixed,
+    backgroundColor: lightColors.primarySurface,
+    elevation: 0,
+  ),
   navigationRailTheme: NavigationRailThemeData(backgroundColor: lightColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(
     textStyle: TextStyleHelper.subtitle1(color: lightColors.onSurface),
@@ -122,6 +132,15 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
     backgroundColor: darkColors.backgroundColor,
     titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
   ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData().copyWith(
+    unselectedItemColor: darkColors.onNavBar.withOpacity(0.4),
+    selectedItemColor: darkColors.onNavBar,
+    showSelectedLabels: true,
+    showUnselectedLabels: true,
+    type: BottomNavigationBarType.fixed,
+    backgroundColor: darkColors.primarySurface,
+    elevation: 0,
+  ),
   navigationRailTheme: NavigationRailThemeData(backgroundColor: darkColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(
     textStyle: TextStyleHelper.subtitle1(color: darkColors.onSurface),
@@ -130,4 +149,11 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
   dialogTheme: DialogTheme(
       titleTextStyle: TextStyleHelper.subtitle1(color: darkColors.onSurface),
       contentTextStyle: TextStyleHelper.body2(color: darkColors.onSurface.withOpacity(0.6))),
+);
+
+final CupertinoThemeData cupertinoTheme = CupertinoThemeData(
+  brightness: Brightness.light,
+  primaryColor: CupertinoColors.white,
+  barBackgroundColor: lightColors.backgroundColor,
+  scaffoldBackgroundColor: lightColors.backgroundColor,
 );

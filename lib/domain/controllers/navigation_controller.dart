@@ -112,12 +112,18 @@ class NavigationController extends GetxController {
     Widget widget, {
     bool? preventDuplicates,
     Map<String, dynamic>? arguments,
+    Transition? transition,
+    bool? popGesture,
+    bool fullscreenDialog = false,
   }) async {
     if (Get.find<PlatformController>().isMobile) {
       return await Get.to(
         () => widget,
         preventDuplicates: preventDuplicates ?? false,
+        fullscreenDialog: fullscreenDialog,
         arguments: arguments,
+        transition: transition,
+        popGesture: popGesture,
       );
     } else {
       //TODO modal dialog also overlap dimmed background, fix if possible
@@ -129,12 +135,22 @@ class NavigationController extends GetxController {
     }
   }
 
-  Future to(Widget widget, {bool? preventDuplicates, Map<String, dynamic>? arguments}) async {
+  Future to(
+    Widget widget, {
+    bool? preventDuplicates,
+    Map<String, dynamic>? arguments,
+    Transition? transition,
+    bool? popGesture,
+    bool fullscreenDialog = false,
+  }) async {
     if (Get.find<PlatformController>().isMobile) {
       await Get.to(
         () => widget,
+        popGesture: popGesture,
+        fullscreenDialog: fullscreenDialog,
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
+        transition: transition,
       );
     } else {
       treeLength++;

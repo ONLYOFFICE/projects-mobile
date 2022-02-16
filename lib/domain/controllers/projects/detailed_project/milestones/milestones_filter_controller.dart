@@ -62,8 +62,6 @@ class MilestonesFilterController extends BaseFilterController {
   String? get deadlineFilter => _deadlineFilter;
 
   var _selfId;
-  String? _projectId;
-  set projectId(String value) => _projectId = value;
 
   bool get _hasFilters =>
       _milestoneResponsibleFilter!.isNotEmpty ||
@@ -96,12 +94,7 @@ class MilestonesFilterController extends BaseFilterController {
 
   MilestonesFilterController() {
     suitableResultCount = (-1).obs;
-  }
-
-  @override
-  void onInit() async {
-    await loadFilters();
-    super.onInit();
+    loadFilters();
   }
 
   Future<void> changeResponsible(String filter, [newValue = '']) async {
@@ -230,7 +223,7 @@ class MilestonesFilterController extends BaseFilterController {
     final result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
-      projectId: _projectId.toString(),
+      projectId: projectId,
       milestoneResponsibleFilter: milestoneResponsibleFilter,
       taskResponsibleFilter: taskResponsibleFilter,
       statusFilter: statusFilter,

@@ -76,7 +76,6 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
   String get deadlineFilter => _deadlineFilter;
 
   var _selfId;
-  String? _projectId;
 
   bool get _hasFilters =>
       _responsibleFilter.isNotEmpty ||
@@ -114,8 +113,6 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
   ProjectTaskFilterController() {
     suitableResultCount = (-1).obs;
   }
-
-  set projectId(String value) => _projectId = value;
 
   @override
   void changeResponsible(String filter, [newValue = '']) async {
@@ -348,7 +345,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       milestoneFilter: milestoneFilter,
       statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,
-      projectId: _projectId,
+      projectId: projectId,
     );
 
     if (result == null) return;

@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/projects/new_project/portal_user_ite
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class PortalUserItem extends StatelessWidget {
   const PortalUserItem({
@@ -149,17 +150,18 @@ class PortalUserItem extends StatelessWidget {
               child: Obx(() {
                 if (userController!.selectionMode.value == UserSelectionMode.Multiple) {
                   if (userController!.isSelected.value == true) {
-                    return Icon(Icons.check_box, color: Get.theme.colors().primary);
+                    return Icon(PlatformIcons(context).checkBoxCheckedOutlineRounded,
+                        color: Get.theme.colors().primary);
                   } else {
                     return Icon(
-                      Icons.check_box_outline_blank,
+                      PlatformIcons(context).checkBoxBlankOutlineRounded,
                       color: Get.theme.colors().inactiveGrey,
                     );
                   }
                 } else {
                   if (userController!.isSelected.value == true) {
                     return Icon(
-                      Icons.check,
+                      PlatformIcons(context).checkMark,
                       color: Get.theme.colors().primary,
                     );
                   } else {

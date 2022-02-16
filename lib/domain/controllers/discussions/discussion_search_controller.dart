@@ -38,27 +38,33 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class DiscussionSearchController extends BaseController {
-  final DiscussionsService _api = locator<DiscussionsService>();
+  final _api = locator<DiscussionsService>();
 
-  RxBool loaded = true.obs;
-  RxBool nothingFound = false.obs;
-
-  String? _query;
+  final nothingFound = false.obs;
 
   final _paginationController = PaginationController<Discussion>();
-
+  @override
   PaginationController<Discussion> get paginationController => _paginationController;
+  @override
+  RxList get itemList => _paginationController.data;
+
+  String? _query;
   String? _searchQuery;
   Timer? _searchDebounce;
 
-  TextEditingController searchInputController = TextEditingController();
+  final int? _projectId = Get.arguments['projectId'] as int?;
+  final DiscussionsFilterController? _filterController =
+      Get.arguments['discussionsFilterController'] as DiscussionsFilterController?;
+  final DiscussionsSortController? _sortController =
+      Get.arguments['discussionsSortController'] as DiscussionsSortController?;
 
-  @override
-  RxList get itemList => _paginationController.data;
+  final searchInputController = TextEditingController();
 
   @override
   void onInit() {
@@ -66,6 +72,8 @@ class DiscussionSearchController extends BaseController {
     paginationController.startIndex = 0;
     _paginationController.loadDelegate = () => _performSearch(needToClear: false);
     paginationController.refreshDelegate = () => newSearch(_query!);
+
+    loaded.value = true;
     super.onInit();
   }
 
@@ -95,6 +103,14 @@ class DiscussionSearchController extends BaseController {
     nothingFound.value = false;
     final result = await _api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
+      sortBy: _sortController?.currentSortfilter,
+      sortOrder: _sortController?.currentSortOrder,
+      authorFilter: _filterController?.authorFilter,
+      statusFilter: _filterController?.statusFilter,
+      creationDateFilter: _filterController?.creationDateFilter,
+      projectFilter: _filterController?.projectFilter,
+      otherFilter: _filterController?.otherFilter,
+      projectId: _projectId?.toString(),
       query: _query,
     );
 

@@ -77,7 +77,7 @@ class PortalComment {
         timeStampStr: json['timeStampStr'] as String?,
         commentList: (json['commentList'] != null)
             ? ((json['commentList'] as List).cast<Map<String, dynamic>>())
-                .map((e) => PortalComment.fromJson(e))
+                .map(PortalComment.fromJson)
                 .toList()
             : null,
         attachments: json['attachments'] as dynamic,

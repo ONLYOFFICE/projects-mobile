@@ -46,37 +46,36 @@ class ProjectsWithPresets {
 
   Lock lock = Lock();
 
-  ProjectsController? get myProjectsController {
+  ProjectsController get myProjectsController {
     _myProjectsController ?? _setupMyProjects();
-    return _myProjectsController;
+    return _myProjectsController!;
   }
 
-  ProjectsController? get folowedProjectsController {
+  ProjectsController get folowedProjectsController {
     _folowedProjectsController ?? _setupMyFolowedProjects();
-    return _folowedProjectsController;
+    return _folowedProjectsController!;
   }
 
-  ProjectsController? get activeProjectsController {
+  ProjectsController get activeProjectsController {
     _activeProjectsController ?? _setupActiveProjects();
-    return _activeProjectsController;
+    return _activeProjectsController!;
   }
 
-  ProjectsController? get myMembershipProjectController {
+  ProjectsController get myMembershipProjectController {
     _myMembershipProjectController ?? _setupMyMembershipProjects();
-    return _myMembershipProjectController;
+    return _myMembershipProjectController!;
   }
 
-  ProjectsController? get myManagedProjectController {
+  ProjectsController get myManagedProjectController {
     _myManagedProjectController ?? _setupMyManagedProjects();
-    return _myManagedProjectController;
+    return _myManagedProjectController!;
   }
 
   Future<void> _setupMyProjects() async {
     _myProjectsController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
+          Get.put<PaginationController<ProjectDetailed>>(PaginationController<ProjectDetailed>(),
               tag: '_myProjectPaginationController'),
         ),
         tag: '_myProjectsController')!
@@ -88,8 +87,7 @@ class ProjectsWithPresets {
     _folowedProjectsController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
+          Get.put<PaginationController<ProjectDetailed>>(PaginationController<ProjectDetailed>(),
               tag: '_folowedProjectPaginationController'),
           // Get.find<PaginationController<ProjectDetailed>>(
           //     tag: '_folowedProjectPaginationController'),
@@ -106,8 +104,7 @@ class ProjectsWithPresets {
     _activeProjectsController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
+          Get.put<PaginationController<ProjectDetailed>>(PaginationController<ProjectDetailed>(),
               tag: '_activeProjectPaginationController'),
           // Get.put<PaginationController<ProjectDetailed>>(
           //     PaginationController<ProjectDetailed>()),
@@ -124,8 +121,7 @@ class ProjectsWithPresets {
     _myMembershipProjectController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
+          Get.put<PaginationController<ProjectDetailed>>(PaginationController<ProjectDetailed>(),
               tag: '_myMembershipProjectPaginationController'),
         ),
         tag: '_myMembershipProjectController')!
@@ -137,8 +133,7 @@ class ProjectsWithPresets {
     _myManagedProjectController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
+          Get.put<PaginationController<ProjectDetailed>>(PaginationController<ProjectDetailed>(),
               tag: '_myManagedProjectPaginationController'),
         ),
         tag: '_myManagedProjectController')!

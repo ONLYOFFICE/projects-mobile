@@ -43,9 +43,9 @@ import 'package:projects/internal/utils/image_decoder.dart';
 class TaskStatusesController extends GetxController {
   final TaskService _api = locator<TaskService>();
 
-  RxList<Status> statuses = <Status>[].obs;
-  RxList<String> statusImagesDecoded = <String>[].obs;
-  RxBool loaded = false.obs;
+  final statuses = <Status>[].obs;
+  final statusImagesDecoded = <String>[].obs;
+  final loaded = false.obs;
 
   Future getStatuses() async {
     if (statuses.isNotEmpty) return;
@@ -78,6 +78,8 @@ class TaskStatusesController extends GetxController {
       }
       return status;
     }
+
+    return null;
   }
 
   Status? _findStatus(PortalTask task) {

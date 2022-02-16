@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_lambdas
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -94,18 +96,17 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
@@ -194,20 +195,17 @@ void setupGetX() {
   //     fenix: true, tag: '_myTasksPaginationController');
 
   Get.create<DiscussionItemController>(() => DiscussionItemController());
-  Get.create(
-    () => DiscussionsController(
-      Get.find<DiscussionsFilterController>(),
-      Get.find<PaginationController>(),
-    ),
-  );
+  Get.create(() => DiscussionsController());
+
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
 
   Get.create<TaskFilterController>(() => TaskFilterController());
+  Get.create<TasksSortController>(() => TasksSortController());
+
   Get.lazyPut<ProjectTaskFilterController>(() => ProjectTaskFilterController(), fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
 
-  Get.lazyPut(() => TasksSortController(), fenix: true);
   Get.lazyPut(
     () => UserController(),
     fenix: true,
@@ -218,9 +216,11 @@ void setupGetX() {
   Get.lazyPut(() => GroupsDataSource(), fenix: true);
 
   Get.lazyPut(() => ProjectStatusesController(), fenix: true);
-  Get.lazyPut(() => ProjectTasksController(), fenix: true);
+  Get.create<ProjectTasksController>(() => ProjectTasksController());
 
   Get.lazyPut(() => MilestonesDataSource(), fenix: true);
+  //Get.create<MilestonesDataSource>(() => MilestonesDataSource());
+  Get.lazyPut(() => ProjectDiscussionsController(), fenix: true);
 
   Get.lazyPut(() => MilestonesSortController(), fenix: true);
   Get.lazyPut(() => MilestonesFilterController(), fenix: true);
@@ -234,11 +234,7 @@ void setupGetX() {
   Get.create<ProjectsSortController>(() => ProjectsSortController());
   Get.create<DocumentsSortController>(() => DocumentsSortController());
 
-  Get.create<DocumentsController>(() => DocumentsController(
-        Get.find<DocumentsFilterController>(),
-        Get.find<PaginationController>(),
-        Get.find<DocumentsSortController>(),
-      ));
+  Get.create<DocumentsController>(() => DocumentsController());
   Get.create<DocumentsMoveOrCopyController>(() => DocumentsMoveOrCopyController(
         Get.find<DocumentsFilterController>(),
         Get.find<PaginationController>(),
@@ -252,13 +248,11 @@ void setupGetX() {
       ));
 
   Get.create<NewProjectController>(() => NewProjectController());
-  Get.create<ProjectCellController>(() => ProjectCellController());
   Get.create<NewTaskController>(() => NewTaskController());
   Get.create<ProjectEditController>(() => ProjectEditController());
   Get.create<ProjectsFilterController>(() => ProjectsFilterController());
 
   Get.create<ProjectTeamController>(() => ProjectTeamController());
-  Get.create<ProjectDetailsController>(() => ProjectDetailsController());
 
   Get.lazyPut(() => ErrorDialog(), fenix: true);
   Get.put(LoginController(), permanent: true);

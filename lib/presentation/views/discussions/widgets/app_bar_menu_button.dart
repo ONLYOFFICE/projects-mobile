@@ -31,10 +31,14 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 
 class AppBarMenuButton extends StatelessWidget {
   final DiscussionItemController? controller;
@@ -45,32 +49,44 @@ class AppBarMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      icon: const Icon(Icons.more_vert, size: 26),
+    return PlatformPopupMenuButton(
+      icon: PlatformIconButton(
+        padding: EdgeInsets.zero,
+        cupertinoIcon: Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Get.theme.colors().primary,
+        ),
+        materialIcon: Icon(
+          Icons.more_vert,
+          color: Get.theme.colors().primary,
+        ),
+        cupertino: (_, __) => CupertinoIconButtonData(minSize: 38),
+      ),
       offset: const Offset(0, 25),
-      // onSelected: (value) => _onSelected(value, controller),
-      onSelected: (String value) => _onSelected(context, controller, value),
+      onSelected: (String value) => _onSelected(controller, value),
       itemBuilder: (context) {
         return [
           if (controller!.discussion.value.canEdit!)
-            PopupMenuItem(value: 'Edit', child: Text(tr('editDiscussion'))),
+            PlatformPopupMenuItem(
+              value: 'Edit',
+              child: Text(tr('editDiscussion')),
+            ),
           // TODO realize
           // const PopupMenuItem(
           //     value: 'Create task', child: Text('Create task on discussion')),
-          PopupMenuItem(
+          PlatformPopupMenuItem(
             value: 'Subscribe',
             child: Text(
               controller!.isSubscribed ? tr('unsubscribeFromComments') : tr('subscribeToComments'),
             ),
           ),
           if (controller!.discussion.value.canEdit!)
-            PopupMenuItem(
+            PlatformPopupMenuItem(
               value: 'Delete',
+              isDestructiveAction: true,
               textStyle: Get.theme.popupMenuTheme.textStyle
                   ?.copyWith(color: Get.theme.colors().colorError),
-              child: Text(
-                tr('deleteDiscussion'),
-              ),
+              child: Text(tr('deleteDiscussion')),
             ),
         ];
       },
@@ -78,7 +94,7 @@ class AppBarMenuButton extends StatelessWidget {
   }
 }
 
-void _onSelected(BuildContext context, DiscussionItemController? controller, String value) async {
+void _onSelected(DiscussionItemController? controller, String value) async {
   switch (value) {
     case 'Edit':
       await controller!.toDiscussionEditingScreen();
@@ -87,7 +103,7 @@ void _onSelected(BuildContext context, DiscussionItemController? controller, Str
       await controller!.subscribeToMessageAction();
       break;
     case 'Delete':
-      await controller!.deleteMessage(context);
+      await controller!.deleteMessage();
       break;
     default:
   }

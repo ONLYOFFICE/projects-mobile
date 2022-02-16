@@ -40,6 +40,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class EnterSMSCodeScreen extends StatelessWidget {
@@ -68,7 +70,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Center(
             child: Container(
-              color: Get.theme.backgroundColor,
+              //color: Get.theme.backgroundColor,
               constraints: const BoxConstraints(maxWidth: 480),
               child: Column(
                 children: [
@@ -85,7 +87,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
                           .copyWith(fontWeight: FontWeight.w500)),
                   SizedBox(height: h(100)),
                   Obx(
-                    () => TextField(
+                    () => PlatformTextField(
                       controller: codeController,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
@@ -133,7 +135,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
                       controller.onConfirmPressed(codeController.text);
                     },
                   ),
-                  TextButton(
+                  PlatformTextButton(
                     onPressed: controller.resendSms,
                     child: Text(tr('requestNewCode')),
                   )

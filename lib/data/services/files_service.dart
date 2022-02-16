@@ -33,6 +33,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
+import 'package:projects/data/models/from_api/move_folder_response.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
@@ -85,8 +86,7 @@ class FilesService {
     }
   }
 
-  Future<Folder?> renameFolder(
-      {required String folderId, required String newTitle}) async {
+  Future<Folder?> renameFolder({required String folderId, required String newTitle}) async {
     final files = await _api.renameFolder(
       folderId: folderId,
       newTitle: newTitle,
@@ -94,10 +94,8 @@ class FilesService {
     final success = files.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.folder
       });
       return files.response;
@@ -114,10 +112,8 @@ class FilesService {
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.folder
       });
       return result.response;
@@ -127,8 +123,7 @@ class FilesService {
     }
   }
 
-  Future<PortalFile?> renameFile(
-      {required String fileId, required String newTitle}) async {
+  Future<PortalFile?> renameFile({required String fileId, required String newTitle}) async {
     final files = await _api.renameFile(
       fileId: fileId,
       newTitle: newTitle,
@@ -136,10 +131,8 @@ class FilesService {
     final success = files.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.file
       });
       return files.response;
@@ -157,10 +150,8 @@ class FilesService {
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.file
       });
       return result.response;
@@ -170,15 +161,20 @@ class FilesService {
     }
   }
 
-  // TODO: Future <??>
-  Future moveDocument(
-      {String? movingFolder,
-      String? movingFile,
-      required String targetFolder}) async {
+  Future<MoveFolderResponse?> moveDocument({
+    required String targetFolder,
+    required ConflictResolveType type,
+    String? movingFolder,
+    String? movingFile,
+  }) async {
+    if (movingFolder == null && movingFile == null) return null;
+
     final result = await _api.moveDocument(
-        movingFolder: movingFolder,
-        targetFolder: targetFolder,
-        movingFile: movingFile);
+      movingFolder: movingFolder,
+      targetFolder: targetFolder,
+      movingFile: movingFile,
+      type: type,
+    );
 
     final success = result.response!.error == null;
 
@@ -190,18 +186,42 @@ class FilesService {
     }
   }
 
-  // TODO: Future <??>
-  Future copyDocument(
-      {String? copyingFolder,
-      String? copyingFile,
-      required String targetFolder}) async {
+  Future<MoveFolderResponse?> copyDocument({
+    required String targetFolder,
+    required ConflictResolveType type,
+    String? copyingFolder,
+    String? copyingFile,
+  }) async {
+    if (copyingFolder == null && copyingFile == null) return null;
+
     final result = await _api.copyDocument(
       copyingFolder: copyingFolder,
       targetFolder: targetFolder,
       copyingFile: copyingFile,
+      type: type,
     );
 
     final success = result.response!.error == null;
+
+    if (success) {
+      return result.response;
+    } else {
+      await Get.find<ErrorDialog>().show(result.error!.message);
+      return null;
+    }
+  }
+
+  Future<List<PortalFile>?> checkForConflicts({
+    required String destFolderId,
+    List<String>? folderIds,
+    List<String>? fileIds,
+  }) async {
+    if (folderIds == null && fileIds == null) return null;
+
+    final result = await _api.checkForConflicts(
+        destFolderId: destFolderId, folderIds: folderIds, fileIds: fileIds);
+
+    final success = result.error == null;
 
     if (success) {
       return result.response;

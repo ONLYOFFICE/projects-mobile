@@ -45,6 +45,7 @@ import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
 
@@ -154,6 +155,7 @@ class NewMilestoneController extends GetxController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           descriptionController.value.text = descriptionText.value;
           Get.back();
@@ -177,6 +179,7 @@ class NewMilestoneController extends GetxController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           responsible.value = _previusSelectedResponsible;
           Get.back();
@@ -256,7 +259,7 @@ class NewMilestoneController extends GetxController {
         await _api.createMilestone(projectId: _selectedProjectId!, milestone: milestone);
     if (success) {
       MessagesHandler.showSnackBar(context: context, text: tr('milestoneCreated'));
-      locator<EventHub>().fire('needToRefreshProjects', ['all']);
+      locator<EventHub>().fire('needToRefreshMilestones');
     } else
       MessagesHandler.showSnackBar(context: context, text: tr('error'));
   }
@@ -271,6 +274,7 @@ class NewMilestoneController extends GetxController {
         titleText: tr('discardMilestone'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.back();

@@ -31,11 +31,14 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/project_manager.dart';
@@ -57,17 +60,43 @@ class NewProject extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Get.theme.backgroundColor,
+        //backgroundColor: Get.theme.backgroundColor,
         appBar: StyledAppBar(
           titleText: tr('project'),
-          onLeadingPressed: controller.discardChanges,
-          elevation: 2,
+          leadingWidth: 65,
+          centerTitle: GetPlatform.isIOS,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.check_outlined),
-              onPressed: () => controller.confirm(context),
-            )
+            PlatformWidget(
+              material: (platformContext, __) => IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: () => controller.confirm(platformContext),
+              ),
+              cupertino: (platformContext, __) => CupertinoButton(
+                onPressed: () => controller.confirm(platformContext),
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  tr('Done'),
+                  style: TextStyleHelper.headline7(),
+                ),
+              ),
+            ),
           ],
+          leading: PlatformWidget(
+            cupertino: (_, __) => CupertinoButton(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+              onPressed: controller.discardChanges,
+              child: Text(
+                tr('closeLowerCase'),
+                style: TextStyleHelper.button(),
+              ),
+            ),
+            material: (_, __) => IconButton(
+              onPressed: controller.discardChanges,
+              icon: const Icon(Icons.close),
+            ),
+          ),
         ),
         body: Listener(
           onPointerDown: (_) {
@@ -76,7 +105,7 @@ class NewProject extends StatelessWidget {
           },
           child: ListView(
             children: [
-              const SizedBox(height: 10),
+              const SizedBox(height: 16),
               ProjectTitleTile(controller: controller),
               const StyledDivider(leftPadding: 72.5),
               ProjectManagerTile(controller: controller),
@@ -84,37 +113,58 @@ class NewProject extends StatelessWidget {
               ProjectDescriptionTile(controller: controller),
               TagsTile(controller: controller),
               AdvancedOptions(
-                options: <Widget>[
-                  OptionWithSwitch(
-                    title: tr('notifyPM'),
-                    switchValue: controller.notificationEnabled,
-                    switchOnChanged: (bool value) {
-                      controller.enableNotification(value);
-                    },
+                options: [
+                  const StyledDivider(
+                    leftPadding: 72,
+                    height: 1,
+                    thickness: 1,
                   ),
-                  OptionWithSwitch(
-                    title: tr('privateProject'),
-                    switchValue: controller.isPrivate,
-                    switchOnChanged: (bool value) {
-                      controller.setPrivate(value);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                    child: OptionWithSwitch(
+                      title: tr('notifyPM'),
+                      switchValue: controller.notificationEnabled,
+                      switchOnChanged: (bool value) {
+                        controller.enableNotification(value);
+                      },
+                    ),
                   ),
-                  Obx(() {
-                    if (controller.selfUserItem?.id == controller.selectedProjectManager.value?.id)
-                      return OptionWithSwitch(
+                  const StyledDivider(
+                    leftPadding: 72,
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                    child: OptionWithSwitch(
+                      title: tr('privateProject'),
+                      switchValue: controller.isPrivate,
+                      switchOnChanged: (bool value) {
+                        controller.setPrivate(value);
+                      },
+                    ),
+                  ),
+                  const StyledDivider(
+                    leftPadding: 72,
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  Obx(
+                    () => Padding(
+                      padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                      child: OptionWithSwitch(
                         title: tr('followProject'),
-                        switchValue: false.obs,
-                        switchOnChanged: (v) => {},
-                      );
-                    else
-                      return OptionWithSwitch(
-                        title: tr('followProject'),
-                        switchValue: controller.isFolowed,
-                        switchOnChanged: (bool value) {
-                          controller.folow(value);
-                        },
-                      );
-                  }),
+                        switchValue: controller.selfUserItem?.id ==
+                                controller.selectedProjectManager.value?.id
+                            ? false.obs
+                            : controller.isFolowed,
+                        switchOnChanged: controller.selfUserItem?.id ==
+                                controller.selectedProjectManager.value?.id
+                            ? (v) => {}
+                            : controller.folow,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],

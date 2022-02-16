@@ -47,7 +47,10 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class SelectProjectScreen extends StatelessWidget {
   SelectProjectScreen({Key? key}) : super(key: key);
@@ -81,11 +84,9 @@ class SelectProjectScreen extends StatelessWidget {
     const clearIconKey = Key('clr');
 
     return Scaffold(
-      backgroundColor:
-          _platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: _platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
-        backgroundColor:
-            _platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: _platformController.isMobile ? null : Get.theme.colors().surface,
         showBackButton: true,
         title: Obx(
           () => AnimatedSwitcher(
@@ -94,11 +95,10 @@ class SelectProjectScreen extends StatelessWidget {
             switchInCurve: Curves.easeOutSine,
             switchOutCurve: Curves.fastOutSlowIn,
             child: searchController.switchToSearchView.isTrue
-                ? TextField(
+                ? PlatformTextField(
                     autofocus: true,
                     controller: searchFieldController,
-                    decoration:
-                        InputDecoration.collapsed(hintText: tr('enterQuery')),
+                    decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
                     style: TextStyleHelper.headline6(
                       color: Get.theme.colors().onSurface,
                     ),
@@ -108,8 +108,7 @@ class SelectProjectScreen extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       tr('selectProject'),
-                      style: TextStyleHelper.headerStyle(
-                          color: Get.theme.colors().onSurface),
+                      style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                     ),
                   ),
           ),
@@ -122,20 +121,19 @@ class SelectProjectScreen extends StatelessWidget {
               switchInCurve: Curves.easeOutSine,
               switchOutCurve: Curves.fastOutSlowIn,
               child: searchController.switchToSearchView.isTrue
-                  ? IconButton(
+                  ? PlatformIconButton(
                       key: searchIconKey,
                       onPressed: () {
                         searchController.switchToSearchView.toggle();
                         searchFieldController.clear();
                         searchController.clearSearch();
                       },
-                      icon: const Icon(Icons.clear),
+                      icon: Icon(PlatformIcons(context).clear),
                     )
-                  : IconButton(
+                  : PlatformIconButton(
                       key: clearIconKey,
-                      onPressed: () =>
-                          searchController.switchToSearchView.toggle(),
-                      icon: const Icon(Icons.search),
+                      onPressed: () => searchController.switchToSearchView.toggle(),
+                      icon: Icon(PlatformIcons(context).search),
                     ),
             ),
           ),
@@ -145,7 +143,7 @@ class SelectProjectScreen extends StatelessWidget {
         () {
           if (searchController.switchToSearchView.value == true &&
               searchController.searchResult.isNotEmpty) {
-            return SmartRefresher(
+            return StyledSmartRefresher(
               enablePullDown: false,
               enablePullUp: searchController.pullUpEnabled,
               controller: searchController.refreshController,
@@ -162,8 +160,7 @@ class SelectProjectScreen extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return _ProjectTile(
                     project: searchController.searchResult[index],
-                    onPressed: () =>
-                        onSelect(searchController.searchResult[index]),
+                    onPressed: () => onSelect(searchController.searchResult[index]),
                   );
                 },
               ),
@@ -188,8 +185,7 @@ class SelectProjectScreen extends StatelessWidget {
                   );
                 },
                 itemBuilder: (BuildContext context, int index) {
-                  final project =
-                      _projectsController.paginationController.data[index];
+                  final project = _projectsController.paginationController.data[index];
                   return _ProjectTile(
                     project: project,
                     onPressed: () => onSelect(project),
@@ -233,7 +229,7 @@ class _ProjectTile extends StatelessWidget {
                 children: [
                   Text(
                     project.title!,
-                    style: TextStyleHelper.projectTitle,
+                    style: TextStyleHelper.subtitle1(),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),

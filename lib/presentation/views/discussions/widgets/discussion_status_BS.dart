@@ -54,17 +54,22 @@ Future<void> showsDiscussionStatusesBS({
         color: Get.theme.colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 18.5),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(tr('selectStatus'),
-                style: TextStyleHelper.h6(color: Get.theme.colors().onSurface)),
-          ),
-          const SizedBox(height: 18.5),
-        ],
+      return Container(
+        decoration: BoxDecoration(
+            color: Get.theme.colors().surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 18.5),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(tr('selectStatus'),
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+            ),
+            const SizedBox(height: 18.5),
+          ],
+        ),
       );
     },
     builder: (context, bottomSheetOffset) {
@@ -85,14 +90,14 @@ Future<void> showsDiscussionStatusesBS({
                   InkWell(
                     onTap: () async => controller!.updateMessageStatus(0),
                     child: StatusTile(
-                      title: tr('open'),
+                      title: tr('openDiscussion'),
                       selected: controller!.status.value == 0,
                     ),
                   ),
                   InkWell(
                     onTap: () async => controller.updateMessageStatus(1),
                     child: StatusTile(
-                      title: tr('archived'),
+                      title: tr('archiveDiscussion'),
                       selected: controller.status.value == 1,
                     ),
                   ),
@@ -118,7 +123,7 @@ Future<void> showsDiscussionStatusesPM({
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       onTap: () async => controller.updateMessageStatus(0),
       child: StatusTileTablet(
-        title: tr('open'),
+        title: tr('openDiscussion'),
         selected: controller.status.value == 0,
         icon: Center(
           child: AppIcon(
@@ -135,7 +140,7 @@ Future<void> showsDiscussionStatusesPM({
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       onTap: () async => controller.updateMessageStatus(1),
       child: StatusTileTablet(
-        title: tr('archived'),
+        title: tr('archiveDiscussion'),
         selected: controller.status.value == 1,
         icon: Center(
           child: AppIcon(

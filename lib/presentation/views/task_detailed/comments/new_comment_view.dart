@@ -38,6 +38,8 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class NewCommentView extends StatelessWidget {
   const NewCommentView({Key? key}) : super(key: key);
@@ -53,19 +55,17 @@ class NewCommentView extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-          backgroundColor:
-              platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('newComment'),
           backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
+              ? Icon(PlatformIcons(context).back)
+              : Icon(PlatformIcons(context).clear),
           onLeadingPressed: controller.leavePage,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.done_rounded),
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).checkMark),
               onPressed: () => controller.addComment(context),
             ),
           ],

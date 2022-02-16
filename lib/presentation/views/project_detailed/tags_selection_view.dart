@@ -44,6 +44,9 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart';
 
 class TagsSelectionView extends StatelessWidget {
@@ -71,7 +74,7 @@ class TagsSelectionView extends StatelessWidget {
             child: StyledFloatingActionButton(
               onPressed: () => showTagAddingDialog(controller),
               child: Icon(
-                Icons.add_rounded,
+                PlatformIcons(context).plus,
                 color: Get.theme.colors().onPrimarySurface,
               ),
             ),
@@ -87,7 +90,8 @@ class TagsSelectionView extends StatelessWidget {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 4),
-            child: IconButton(icon: const Icon(Icons.check_rounded), onPressed: controller.confirm),
+            child: PlatformIconButton(
+                icon: Icon(PlatformIcons(context).checkMark), onPressed: controller.confirm),
           ),
         ],
         bottom: SearchField(
@@ -172,7 +176,7 @@ class _TagTextFieldWidget extends StatelessWidget {
     final errorColor = Theme.of(context).errorColor;
     return Container(
       margin: const EdgeInsets.only(top: 10),
-      child: TextField(
+      child: PlatformTextField(
         autofocus: true,
         textInputAction: TextInputAction.done,
         controller: inputController,

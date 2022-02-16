@@ -32,7 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 
 class PaginationListView<T> extends StatelessWidget {
   const PaginationListView({
@@ -46,15 +46,7 @@ class PaginationListView<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
-        footer: CustomFooter(
-          builder: (BuildContext context, LoadStatus? mode) {
-            return const SizedBox(
-              height: 55,
-              child: Center(child: CircularProgressIndicator()),
-            );
-          },
-        ),
+    return StyledSmartRefresher(
         enablePullDown: paginationController.pullDownEnabled,
         enablePullUp: paginationController.pullUpEnabled,
         controller: paginationController.refreshController,

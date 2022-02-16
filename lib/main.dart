@@ -64,6 +64,7 @@ void main() async {
 
   await Firebase.initializeApp();
   await RemoteConfigService.initialize();
+  await RemoteConfigService.fetchAndActivate();
 
   runApp(
     EasyLocalization(
@@ -120,7 +121,7 @@ Future<bool> isAuthorized() async {
   return true;
 }
 
-class App extends GetMaterialApp {
+class App extends StatelessWidget {
   final String? initialPage;
 
   const App({Key? key, this.initialPage}) : super(key: key);
@@ -139,9 +140,15 @@ class App extends GetMaterialApp {
         supportedLocales: context.supportedLocales,
         locale: context.deviceLocale,
         title: 'ONLYOFFICE',
-        theme: lightTheme,
-        darkTheme: darkTheme,
+        theme: lightTheme.copyWith(
+          splashFactory: GetPlatform.isIOS ? NoSplash.splashFactory : null,
+        ),
+        darkTheme: darkTheme.copyWith(
+          splashFactory: GetPlatform.isIOS ? NoSplash.splashFactory : null,
+        ),
         themeMode: ThemeService().savedThemeMode(),
+        // cupertinoTheme: lightCupertinoTheme,
+        //cupertinoTheme: cupertinoTheme,
       ),
     );
   }

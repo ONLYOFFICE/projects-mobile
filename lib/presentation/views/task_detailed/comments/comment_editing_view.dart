@@ -31,12 +31,15 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/comments/comment_editing_controller.dart';
 import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
 class CommentEditingView extends StatelessWidget {
   const CommentEditingView({Key? key}) : super(key: key);
@@ -61,13 +64,40 @@ class CommentEditingView extends StatelessWidget {
       child: Scaffold(
         appBar: StyledAppBar(
           titleText: tr('commentEditing'),
-          onLeadingPressed: controller.leavePage,
+          leadingWidth: 65,
+          centerTitle: !GetPlatform.isAndroid,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.done_rounded),
-              onPressed: () async => controller.confirm(),
-            ),
+            PlatformWidget(
+              material: (_, __) => IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: controller.confirm,
+              ),
+              cupertino: (_, __) => CupertinoButton(
+                onPressed: controller.confirm,
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  tr('Done'),
+                  style: TextStyleHelper.headline7(),
+                ),
+              ),
+            )
           ],
+          leading: PlatformWidget(
+            cupertino: (_, __) => CupertinoButton(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+              onPressed: controller.leavePage,
+              child: Text(
+                tr('closeLowerCase'),
+                style: TextStyleHelper.button(),
+              ),
+            ),
+            material: (_, __) => IconButton(
+              onPressed: controller.leavePage,
+              icon: const Icon(Icons.close),
+            ),
+          ),
         ),
         body: Obx(
           () => HtmlTextEditor(

@@ -35,38 +35,52 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
+
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PortalInputView extends StatelessWidget {
-  PortalInputView({Key? key}) : super(key: key);
-  final controller = Get.find<LoginController>();
+  const PortalInputView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<LoginController>();
+    controller.checkBoxValue.value = false;
+
+    if (Get.isRegistered<AccountManagerController>()) {
+      Get.find<AccountManagerController>();
+    } else {
+      Get.put(AccountManagerController()).setup();
+    }
+
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.setState(ViewState.Idle);
       controller.setup();
     });
 
     final height = controller.accountManager.accounts.isEmpty ? Get.height : Get.height - 80;
+
     return Obx(
       () => controller.state.value == ViewState.Busy
           ? Scaffold(
               body: SizedBox(
-                  height: Get.height, child: const Center(child: CircularProgressIndicator())),
+                  height: Get.height, child: Center(child: PlatformCircularProgressIndicator())),
             )
           : Scaffold(
               appBar: controller.accountManager.accounts.isEmpty
                   ? null
                   : StyledAppBar(
-                      backButtonIcon: const Icon(Icons.close),
+                      backButtonIcon: Icon(PlatformIcons(context).clear),
                       title: Text(
                         tr('addNewAccount'),
                         style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
@@ -95,21 +109,26 @@ class PortalInputView extends StatelessWidget {
                             controller: controller.portalAdressController,
                             autofillHint: AutofillHints.url,
                             hintText: tr('portalAdress'),
-                            hasError: controller.portalFieldError.value == true,
+                            hasError: controller.portalFieldError.value,
+                            keyboardType: TextInputType.url,
+                            onSubmitted: (_) => controller.getPortalCapabilities(),
                           ),
                         ),
                         SizedBox(height: height * 0.033),
                         DecoratedBox(
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                                blurRadius: 3,
-                                offset: const Offset(0, 0.85),
-                                color: Get.theme.colors().onBackground.withOpacity(0.19)),
-                            BoxShadow(
-                                blurRadius: 3,
-                                offset: const Offset(0, 0.25),
-                                color: Get.theme.colors().onBackground.withOpacity(0.04)),
-                          ]),
+                          decoration: BoxDecoration(
+                              boxShadow: Get.isDarkMode
+                                  ? []
+                                  : [
+                                      BoxShadow(
+                                          blurRadius: 3,
+                                          offset: const Offset(0, 0.85),
+                                          color: Get.theme.colors().onBackground.withOpacity(0.19)),
+                                      BoxShadow(
+                                          blurRadius: 3,
+                                          offset: const Offset(0, 0.25),
+                                          color: Get.theme.colors().onBackground.withOpacity(0.04)),
+                                    ]),
                           child: WideButton(
                             text: tr('next'),
                             textColor: controller.needAgreement && !controller.checkBoxValue.value
@@ -125,7 +144,7 @@ class PortalInputView extends StatelessWidget {
                           PrivacyAndTermsFooter.withCheckbox()
                         else
                           const Spacer(),
-                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter()
+                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter(),
                       ],
                     ),
                   ),

@@ -40,8 +40,7 @@ import 'package:projects/internal/locator.dart';
 class GroupSearchController extends BaseSearchController {
   final GroupService _service = locator<GroupService>();
 
-  final _paginationController =
-      Get.put(PaginationController(), tag: 'GroupSearchController');
+  final _paginationController = Get.put(PaginationController(), tag: 'GroupSearchController');
 
   @override
   PaginationController get paginationController => _paginationController;

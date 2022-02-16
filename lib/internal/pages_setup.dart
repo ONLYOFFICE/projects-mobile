@@ -118,7 +118,6 @@ List<GetPage> getxPages() => [
       GetPage(name: '/ReplyCommentView', page: () => const ReplyCommentView()),
       GetPage(name: '/ProjectDetailedView', page: () => ProjectDetailedView()),
       GetPage(name: '/TeamMembersSelectionView', page: () => const TeamMembersSelectionView()),
-      GetPage(name: '/ProjectDetailedView', page: () => ProjectDetailedView()),
       GetPage(name: '/GroupMembersSelectionView', page: () => const GroupMembersSelectionView()),
       GetPage(name: '/NewDiscussionScreen', page: () => const NewDiscussionScreen()),
       GetPage(name: '/DiscussionEditingScreen', page: () => const DiscussionEditingScreen()),

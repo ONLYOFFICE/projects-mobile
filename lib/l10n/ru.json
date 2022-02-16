@@ -471,5 +471,9 @@
 	"removeAccount": "удалить",
 	"addNewAccount": "Добавить новый аккаунт",
 	"noGroups": "Здесь пока нет групп",
-	"searchTags": "Поиск тегов..."
+	"searchTags": "Поиск тегов...",
+	"discussionIsOpen": "Открыто",
+	"discussionInArchive": "В архиве",
+	"openDiscussion": "Открыть",
+	"archiveDiscussion": "В архив"
 }

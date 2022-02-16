@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class TagItem extends StatelessWidget {
@@ -65,11 +66,17 @@ class TagItem extends StatelessWidget {
             ),
             Obx(() {
               if (tagItemDTO!.isSelected!.value == true) {
-                return Icon(Icons.check_box, color: Get.theme.colors().primary);
+                return SizedBox(
+                    width: 72,
+                    child: Icon(PlatformIcons(context).checkBoxCheckedOutlineRounded,
+                        color: Get.theme.colors().primary));
               } else {
-                return Icon(
-                  Icons.check_box_outline_blank_outlined,
-                  color: Get.theme.colors().inactiveGrey,
+                return SizedBox(
+                  width: 72,
+                  child: Icon(
+                    PlatformIcons(context).checkBoxBlankOutlineRounded,
+                    color: Get.theme.colors().inactiveGrey,
+                  ),
                 );
               }
             }),

@@ -35,6 +35,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 
 class InfoTile extends StatelessWidget {
   final Widget? icon;
@@ -141,14 +142,14 @@ class InfoTileWithButton extends StatelessWidget {
             ],
           ),
         ),
-        InkResponse(
-          onTap: onTapFunction,
-          child: Icon(
+        PlatformIconButton(
+          onPressed: onTapFunction,
+          icon: Icon(
             iconData,
             color: Get.theme.colors().onBackground.withOpacity(0.6),
           ),
         ),
-        const SizedBox(width: 23),
+        // const SizedBox(width: 23),
       ],
     );
   }

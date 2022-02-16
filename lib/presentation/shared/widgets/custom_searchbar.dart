@@ -32,6 +32,11 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({
@@ -52,7 +57,8 @@ class CustomSearchBar extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: TextField(
+            child: PlatformTextField(
+              style: TextStyle(color: Get.theme.colors().onBackground),
               autofocus: true,
               textInputAction: TextInputAction.search,
               controller: controller.searchInputController as TextEditingController?,
@@ -61,9 +67,10 @@ class CustomSearchBar extends StatelessWidget {
               onChanged: searchFunction ?? controller.newSearch as Function(String)?,
             ),
           ),
-          InkResponse(
-            onTap: clearFunction ?? controller.clearSearch as Function()?,
-            child: const Icon(Icons.close, color: Colors.blue),
+          PlatformIconButton(
+            padding: EdgeInsets.zero,
+            onPressed: clearFunction ?? controller.clearSearch as Function()?,
+            icon: Icon(PlatformIcons(context).clear),
           )
         ],
       ),

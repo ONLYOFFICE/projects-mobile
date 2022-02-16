@@ -77,7 +77,6 @@ class TaskFilterController extends BaseTaskFilterController {
   String get deadlineFilter => _deadlineFilter;
 
   var _selfId;
-  String? _projectId;
 
   bool get _hasFilters =>
       _responsibleFilter.isNotEmpty ||
@@ -86,13 +85,6 @@ class TaskFilterController extends BaseTaskFilterController {
       _deadlineFilter.isNotEmpty ||
       _milestoneFilter.isNotEmpty ||
       _statusFilter.isNotEmpty;
-
-  @override
-  void onInit() async {
-    // await _storage.removeAll();
-    await loadFilters();
-    super.onInit();
-  }
 
   @override
   Future<void> restoreFilters() async {
@@ -107,9 +99,8 @@ class TaskFilterController extends BaseTaskFilterController {
 
   TaskFilterController() {
     suitableResultCount = (-1).obs;
+    loadFilters();
   }
-
-  set projectId(String value) => _projectId = value;
 
   @override
   Future<void> changeResponsible(String filter, [newValue = '']) async {
@@ -349,7 +340,7 @@ class TaskFilterController extends BaseTaskFilterController {
       milestoneFilter: milestoneFilter,
       statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,
-      projectId: _projectId,
+      projectId: projectId,
     );
 
     if (result != null) {

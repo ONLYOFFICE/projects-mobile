@@ -63,6 +63,9 @@ mixin PasscodeScreenMixin on StatelessWidget {
       width: MediaQuery.of(context).size.width,
     );
 
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    final useMobileLayout = shortestSide < 600;
+
     return WillPopScope(
       onWillPop: () async {
         if (hasBackButton) onBackPressed();
@@ -70,11 +73,11 @@ mixin PasscodeScreenMixin on StatelessWidget {
       },
       child: Scaffold(
         appBar: hasBackButton ? StyledAppBar(elevation: 0, onLeadingPressed: onBackPressed) : null,
-        body: SingleChildScrollView(
+        body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: useMobileLayout ? MainAxisAlignment.end : MainAxisAlignment.center,
             children: [
-              SizedBox(height: hasBackButton ? 114.h as double? : 170.h as double?),
               Text(title,
                   textAlign: TextAlign.center,
                   style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground)),
@@ -126,6 +129,7 @@ mixin PasscodeScreenMixin on StatelessWidget {
                     onZeroPressed: onNumberPressed,
                     onDeletePressed: onDeletePressed,
                   ),
+              if (useMobileLayout) const SizedBox(height: 13),
             ],
           ),
         ),

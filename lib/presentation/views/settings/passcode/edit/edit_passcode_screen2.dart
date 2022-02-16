@@ -39,8 +39,7 @@ import 'package:projects/presentation/shared/widgets/passcode_screen_mixin.dart'
 class EditPasscodeScreen2 extends StatelessWidget with PasscodeScreenMixin {
   EditPasscodeScreen2({Key? key}) : super(key: key);
 
-  final PasscodeEditingController passcodeController =
-      Get.find<PasscodeEditingController>();
+  final PasscodeEditingController passcodeController = Get.find<PasscodeEditingController>();
 
   @override
   String get caption => tr('reEnterPasscode');
@@ -49,8 +48,7 @@ class EditPasscodeScreen2 extends StatelessWidget with PasscodeScreenMixin {
   String get errorText => tr('passcodesNotMatch');
 
   @override
-  void onNumberPressed(int number) =>
-      passcodeController.addNumberToPasscodeCheck(number);
+  void onNumberPressed(int number) => passcodeController.addNumberToPasscodeCheck(number);
 
   @override
   void onDeletePressed() => passcodeController.deletePasscodeCheckNumber();

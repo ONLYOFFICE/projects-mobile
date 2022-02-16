@@ -42,8 +42,10 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/task_detailed/task_team.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 
 part 'task.dart';
@@ -62,10 +64,9 @@ class TaskOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (taskController!.loaded.value == true || taskController!.firstReload.value == true) {
-          taskController!.firstReload.value = false;
+        if (taskController!.loaded.value || taskController!.firstReload.value) {
           final task = taskController!.task.value;
-          return SmartRefresher(
+          return StyledSmartRefresher(
             controller: taskController!.refreshController,
             onRefresh: () => taskController!.reloadTask(showLoading: true),
             child: ListView(
@@ -138,7 +139,9 @@ class TaskOverviewScreen extends StatelessWidget {
                 InfoTile(
                     icon: AppIcon(
                         icon: SvgIcons.priority,
-                        color: Get.theme.colors().colorError.withOpacity(0.75)),
+                        color: task.priority == 1
+                            ? Get.theme.colors().colorError.withOpacity(0.75)
+                            : Get.theme.colors().onBackground.withOpacity(0.75)),
                     caption: '${tr('priority')}:',
                     subtitle: task.priority == 1 ? tr('high') : tr('normal')),
                 if (task.responsibles != null && task.responsibles!.isNotEmpty)
@@ -156,8 +159,8 @@ class TaskOverviewScreen extends StatelessWidget {
                       subtitle: task.responsibles!.length >= 2
                           ? plural('responsibles', task.responsibles!.length)
                           : task.responsibles![0]!.displayName,
-                      suffix: IconButton(
-                          icon: Icon(Icons.navigate_next,
+                      suffix: PlatformIconButton(
+                          icon: Icon(PlatformIcons(context).rightChevron,
                               size: 24, color: Get.theme.colors().onBackground.withOpacity(0.6)),
                           onPressed: () {
                             Get.find<NavigationController>()

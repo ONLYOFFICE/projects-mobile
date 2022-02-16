@@ -45,26 +45,34 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 part 'status_image.dart';
 
 class TaskCell extends StatelessWidget {
   final PortalTask task;
+
   TaskCell({Key? key, required this.task}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final itemController = TaskItemController(task);
-    Get.put(
-      itemController,
-      tag: task.id.toString(),
-    );
-    WidgetsBinding.instance!.addPostFrameCallback(
-      (_) async => await itemController.initTaskStatus(task),
-    );
+    TaskItemController itemController;
+
+    if (Get.isRegistered<TaskItemController>(tag: task.id.toString()))
+      itemController = Get.find<TaskItemController>(tag: task.id.toString());
+    else {
+      itemController = Get.put(
+        TaskItemController(task),
+        tag: task.id.toString(),
+      );
+      WidgetsBinding.instance!.addPostFrameCallback(
+        (_) async => await itemController.initTaskStatus(task),
+      );
+    }
 
     return InkWell(
+      enableFeedback: false,
       onTap: () => Get.find<NavigationController>()
           .to(const TaskDetailedView(), arguments: {'controller': itemController}),
       child: SizedBox(
@@ -157,7 +165,7 @@ class _SecondColumn extends StatelessWidget {
             children: <Widget>[
               CellAtributedTitle(
                 text: itemController!.task.value.title,
-                style: TextStyleHelper.projectTitle,
+                style: TextStyleHelper.subtitle1(),
                 atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
                 atributeIconVisible: itemController!.task.value.priority == 1,
               ),

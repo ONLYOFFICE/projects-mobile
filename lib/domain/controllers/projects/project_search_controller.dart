@@ -37,6 +37,8 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
+import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -46,6 +48,11 @@ class ProjectSearchController extends GetxController {
 
   final ProjectService _api = locator<ProjectService>();
   final bool onlyMyProjects;
+
+  final ProjectsSortController? _sortController =
+      Get.arguments['sortController'] as ProjectsSortController?;
+  final ProjectsFilterController? _filterController =
+      Get.arguments['filtersController'] as ProjectsFilterController?;
 
   ProjectSearchController({this.onlyMyProjects = false});
 
@@ -95,7 +102,7 @@ class ProjectSearchController extends GetxController {
         _query = query;
         if (onlyMyProjects) _query += '&participant=$_selfId';
         _startIndex = 0;
-       await _performSearch();
+        await _performSearch();
       }
     });
   }
@@ -106,8 +113,16 @@ class ProjectSearchController extends GetxController {
     switchToSearchView.value = true;
     searchResult.clear();
 
-    final result =
-        await _api.getProjectsByParams(startIndex: _startIndex, query: _query.toLowerCase());
+    final result = await _api.getProjectsByParams(
+      startIndex: _startIndex,
+      sortBy: _sortController?.currentSortfilter,
+      sortOrder: _sortController?.currentSortOrder,
+      projectManagerFilter: _filterController?.projectManagerFilter,
+      participantFilter: _filterController?.teamMemberFilter,
+      otherFilter: _filterController?.otherFilter,
+      statusFilter: _filterController?.statusFilter,
+      query: _query.toLowerCase(),
+    );
 
     if (result != null) {
       _totalProjects = result.total;

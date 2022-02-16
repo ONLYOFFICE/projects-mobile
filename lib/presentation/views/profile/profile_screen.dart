@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -46,6 +45,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/settings/settings_screen.dart';
 
 class SelfProfileScreen extends StatelessWidget {
@@ -53,18 +54,22 @@ class SelfProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileController = Get.find<ProfileController>();
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      profileController.setup();
-    });
+    final profileController = Get.find<ProfileController>(tag: 'SelfProfileScreen');
 
     // arguments may be null or may not contain needed parameters
     // then Get.arguments['param_name'] will return null
-    final showBackButton =
-        Get.arguments == null ? false : Get.arguments['showBackButton'] as bool? ?? false;
-    final showSettingsButton =
-        Get.arguments == null ? true : Get.arguments['showSettingsButton'] as bool? ?? true;
+    final bool showBackButton;
+    if (Get.arguments == null) {
+      showBackButton = false;
+    } else {
+      showBackButton = Get.arguments['showBackButton'] as bool? ?? false;
+    }
+    final bool showSettingsButton;
+    if (Get.arguments == null) {
+      showSettingsButton = true;
+    } else {
+      showSettingsButton = Get.arguments['showSettingsButton'] as bool? ?? true;
+    }
 
     final platformController = Get.find<PlatformController>();
 
@@ -76,13 +81,28 @@ class SelfProfileScreen extends StatelessWidget {
           showBackButton: showBackButton,
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
-          titleText: tr('profile'),
+              ? Icon(PlatformIcons(context).back)
+              : Icon(PlatformIcons(context).clear),
+          // titleText: tr('profile'),
+          title: Text(
+            tr('profile'),
+            style: TextStyle(color: Get.theme.colors().onSurface),
+          ),
+          centerTitle: !GetPlatform.isAndroid,
           actions: [
             if (showSettingsButton)
-              IconButton(
-                icon: const AppIcon(icon: SvgIcons.settings),
+              PlatformIconButton(
+                cupertino: (_, __) {
+                  return CupertinoIconButtonData(
+                    icon: AppIcon(
+                      icon: SvgIcons.settings,
+                      color: Get.theme.colors().primary,
+                    ),
+                    onPressed: () => Get.find<NavigationController>().to(const SettingsScreen()),
+                    padding: EdgeInsets.zero,
+                  );
+                },
+                materialIcon: const AppIcon(icon: SvgIcons.settings),
                 onPressed: () => Get.find<NavigationController>().to(const SettingsScreen()),
               )
           ],

@@ -46,6 +46,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 
@@ -72,8 +73,8 @@ class TeamMembersSelectionView extends StatelessWidget {
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
         title: TeamMembersSelectionHeader(
           controller: controller,
           title: tr('addTeamMembers'),
@@ -240,8 +241,12 @@ class TeamMembersSearchBar extends StatelessWidget {
             width: 24,
             child: InkWell(
               onTap: () {
-                Get.find<NavigationController>().toScreen(const GroupMembersSelectionView(),
-                    arguments: {'controller': controller});
+                Get.find<NavigationController>().toScreen(
+                  const GroupMembersSelectionView(),
+                  arguments: {'controller': controller},
+                  transition: Transition.cupertinoDialog,
+                  fullscreenDialog: true,
+                );
               },
               child: AppIcon(
                 icon: SvgIcons.preferences,

@@ -44,6 +44,7 @@ import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
+import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -63,10 +64,9 @@ class LoginController extends GetxController {
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  late TextEditingController _portalAdressController;
-
   late AccountManagerController accountManager;
 
+  late TextEditingController _portalAdressController;
   TextEditingController get portalAdressController => _portalAdressController;
 
   late TextEditingController _emailController;
@@ -75,9 +75,9 @@ class LoginController extends GetxController {
   late TextEditingController _passwordController;
   TextEditingController get passwordController => _passwordController;
 
-  RxBool portalFieldError = false.obs;
-  RxBool emailFieldError = false.obs;
-  RxBool passwordFieldError = false.obs;
+  final portalFieldError = false.obs;
+  final emailFieldError = false.obs;
+  final passwordFieldError = false.obs;
 
   Capabilities? capabilities;
   String? _pass;
@@ -104,6 +104,10 @@ class LoginController extends GetxController {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _portalAdressController = TextEditingController();
+
+    _portalAdressController.addListener(() {
+      checkBoxValue.value = false;
+    });
 
     accountManager = Get.isRegistered<AccountManagerController>()
         ? Get.find<AccountManagerController>()
@@ -133,7 +137,6 @@ class LoginController extends GetxController {
 
       if (result.response!.token != null) {
         await saveLoginData(token: result.response!.token, expires: result.response!.expires);
-
         await Get.find<AccountManagerController>()
             .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
 
@@ -145,6 +148,8 @@ class LoginController extends GetxController {
         ]);
 
         locator<EventHub>().fire('loginSuccess');
+
+        setState(ViewState.Idle);
       } else if (result.response!.tfa == true) {
         _email = email;
         _pass = password;
@@ -154,7 +159,7 @@ class LoginController extends GetxController {
           _tfaKey = result.response!.tfaKey;
           await Get.to<GetCodeViews>(() => const GetCodeViews());
         } else {
-          await Get.to<CodeView>(() => CodeView());
+          await Get.to<CodeView>(CodeView.new);
         }
       } else if (result.response!.sms == true) {
         _email = email;
@@ -248,7 +253,7 @@ class LoginController extends GetxController {
       return true;
     } else if (result.response!.tfa!) {
       setState(ViewState.Idle);
-      await Get.to(() => CodeView());
+      await Get.to(CodeView.new);
       return true;
     }
 
@@ -325,6 +330,8 @@ class LoginController extends GetxController {
     Get.find<PortalInfoController>().logout();
     Get.find<UserController>().clear();
 
+    await RemoteConfigService.fetchAndActivate();
+
     locator<EventHub>().fire('logoutSuccess');
     setState(ViewState.Idle);
   }
@@ -333,6 +340,11 @@ class LoginController extends GetxController {
   @override
   void onClose() {
     clearInputFields();
+
+    _portalAdressController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+
     super.onClose();
   }
 

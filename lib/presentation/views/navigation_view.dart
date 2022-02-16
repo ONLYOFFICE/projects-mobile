@@ -33,17 +33,27 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/dashboard_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/profile_controller.dart';
+import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_view.dart';
 import 'package:projects/presentation/views/discussions/discussions_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/more/more_view.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
-
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/settings/settings_screen.dart';
 import 'package:projects/presentation/views/tasks/tasks_view.dart';
@@ -53,12 +63,12 @@ class NavigationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    setupControllers();
+
+    final platformController = Get.find<PlatformController>();
+
     return GetBuilder<NavigationController>(
       builder: (controller) {
-        final platformController = Get.isRegistered<PlatformController>()
-            ? Get.find<PlatformController>()
-            : Get.put(PlatformController(), permanent: true);
-
         if (platformController.isMobile) {
           //TODO: navigation on more screen is brocken if return premade instance
           return MobileLayout();
@@ -67,6 +77,50 @@ class NavigationView extends StatelessWidget {
         }
       },
     );
+  }
+
+  void setupControllers() {
+    if (!Get.isRegistered<PlatformController>()) Get.put(PlatformController(), permanent: true);
+
+    if (!Get.isRegistered<DashboardController>(tag: 'DashboardController')) {
+      Get.put(
+        DashboardController(),
+        tag: 'DashboardController',
+      )
+        ..setup()
+        ..loadContent();
+    }
+
+    if (!Get.isRegistered<TasksController>(tag: 'TasksView')) {
+      Get.put(TasksController(), tag: 'TasksView')
+        ..setup(PresetTaskFilters.saved)
+        ..loadTasks();
+    }
+
+    if (!Get.isRegistered<ProjectsController>(tag: 'ProjectsView')) {
+      Get.put(
+        ProjectsController(
+          Get.find<ProjectsFilterController>(),
+          Get.find<PaginationController<ProjectDetailed>>(),
+        ),
+        tag: 'ProjectsView',
+      )
+        ..setup(PresetProjectFilters.saved)
+        ..loadProjects();
+    }
+
+    if (!Get.isRegistered<DiscussionsController>(tag: 'DiscussionsView')) {
+      Get.put(DiscussionsController(), tag: 'DiscussionsView')
+          .loadDiscussions(preset: PresetDiscussionFilters.saved);
+    }
+
+    if (!Get.isRegistered<DocumentsController>(tag: 'DocumentsView')) {
+      Get.put(DocumentsController(), tag: 'DocumentsView').initialSetup();
+    }
+
+    if (!Get.isRegistered<ProfileController>(tag: 'SelfProfileScreen')) {
+      Get.put(ProfileController(), tag: 'SelfProfileScreen').setup();
+    }
   }
 }
 
@@ -130,7 +184,9 @@ class TabletLayout extends StatelessWidget {
                                   icon: SvgIcons.tab_bar_dashboard,
                                   color: Get.theme.colors().onNavBar,
                                   height: _iconSize),
-                              label: Text(tr('dashboard'))),
+                              label: Text(
+                                tr('dashboard'),
+                              )),
                           NavigationRailDestination(
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_tasks,
@@ -181,8 +237,7 @@ class TabletLayout extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        IconButton(
-                          iconSize: 64,
+                        PlatformIconButton(
                           icon: SizedBox(
                               width: 72,
                               child: SizedBox(
@@ -201,8 +256,7 @@ class TabletLayout extends StatelessWidget {
                           onPressed: () => controller.toScreen(const SelfProfileScreen(),
                               arguments: {'showBackButton': true, 'showSettingsButton': false}),
                         ),
-                        IconButton(
-                          iconSize: 64,
+                        PlatformIconButton(
                           icon: AppIcon(
                             icon: SvgIcons.settings,
                             width: 24,
@@ -251,6 +305,9 @@ class MobileLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final navigationController = Get.find<NavigationController>();
 
+    final heightBottomNavigationBar =
+        navigationController.onMoreView.value ? 300 : 56 + MediaQuery.of(context).padding.bottom;
+
     return Obx(
       () => Scaffold(
         body: Stack(
@@ -270,23 +327,17 @@ class MobileLayout extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: SizedBox(
-          height: navigationController.onMoreView.value ? 300 : 56,
+          height: heightBottomNavigationBar.toDouble(),
           child: Column(
             children: [
               if (navigationController.onMoreView.value) const Expanded(child: MoreView()),
               BottomNavigationBar(
-                unselectedItemColor: Get.theme.colors().onNavBar.withOpacity(0.4),
-                selectedItemColor: Get.theme.colors().onNavBar,
                 onTap: navigationController.changeTabIndex,
                 currentIndex:
                     navigationController.onMoreView.value || navigationController.tabIndex.value > 3
                         ? 3
                         : navigationController.tabIndex.value,
-                showSelectedLabels: true,
-                showUnselectedLabels: true,
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: Get.theme.colors().primarySurface,
-                elevation: 0,
+                selectedFontSize: GetPlatform.isIOS ? 12 : 14,
                 items: [
                   BottomNavigationBarItem(
                     icon: AppIcon(

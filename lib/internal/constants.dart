@@ -47,12 +47,10 @@ class Const {
 class _ConstUrl {
   const _ConstUrl();
 
-  final appStoreDocuments =
-      'https://apps.apple.com/app/onlyoffice-documents/id944896972';
+  final appStoreDocuments = 'https://apps.apple.com/app/onlyoffice-documents/id944896972';
   final forumSupport = 'https://cloud.onlyoffice.org/viewforum.php?f=48';
   final userAgreement = 'https://www.onlyoffice.com/legalterms.aspx';
-  final help =
-      'https://helpcenter.onlyoffice.com/mobile-applications/androidprojects/index.aspx';
+  final help = 'https://helpcenter.onlyoffice.com/mobile-applications/androidprojects/index.aspx';
   final supportMail = 'mailto:support@onlyoffice.com';
   final openDocument = 'oodocuments://openfile?data=';
 }

@@ -50,6 +50,7 @@ import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
@@ -199,11 +200,12 @@ class DiscussionItemController extends GetxController {
     }
   }
 
-  Future<void> deleteMessage(BuildContext context) async {
+  Future<void> deleteMessage() async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteDiscussionTitle'),
       contentText: tr('deleteDiscussionAlert'),
       acceptText: tr('delete').toUpperCase(),
+      acceptColor: Get.theme.colors().colorError,
       onCancelTap: () async => Get.back(),
       onAcceptTap: () async {
         try {
@@ -211,7 +213,7 @@ class DiscussionItemController extends GetxController {
           if (result != null) {
             Get.back();
             Get.back();
-            MessagesHandler.showSnackBar(context: context, text: tr('discussionDeleted'));
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('discussionDeleted'));
 
             locator<EventHub>().fire('needToRefreshDetails', [discussion.value.project!.id]);
             locator<EventHub>().fire('needToRefreshDiscussions', ['all']);

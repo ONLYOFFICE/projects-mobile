@@ -37,10 +37,10 @@ import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/task_service.dart';
-import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
+import 'package:projects/domain/controllers/tasks/base_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
@@ -48,49 +48,40 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
-class TasksController extends BaseController {
-  final TaskService _api = locator<TaskService>();
-
-  final ProjectsWithPresets? projectsWithPresets = locator<ProjectsWithPresets>();
-
-  late PaginationController<PortalTask> _paginationController;
-  PaginationController<PortalTask> get paginationController => _paginationController;
+class TasksController extends BaseTasksController {
+  final _api = locator<TaskService>();
 
   final _userController = Get.find<UserController>();
 
+  final projectsWithPresets = locator<ProjectsWithPresets>();
   PresetTaskFilters? _preset;
 
-  final taskStatusesController = Get.find<TaskStatusesController>();
-  final _sortController = Get.find<TasksSortController>();
-  final loaded = false.obs;
+  @override
+  PaginationController<PortalTask> get paginationController => _paginationController;
+  final _paginationController = PaginationController<PortalTask>();
+
+  @override
+  TasksSortController get sortController => _sortController;
+  final _sortController = TasksSortController();
+
+  @override
+  TaskFilterController get filterController => _filterController;
+  final _filterController = TaskFilterController();
+
+  @override
+  RxBool get hasFilters => _filterController.hasFilters;
 
   final taskStatusesLoaded = false.obs;
+  final fabIsVisible = false.obs;
 
-  TasksSortController get sortController => _sortController;
-
-  late TaskFilterController _filterController;
-
-  TaskFilterController get filterController => _filterController;
-
-  RxBool fabIsVisible = false.obs;
   bool _withFAB = true;
 
   late StreamSubscription _visibilityChangedSubscription;
   late StreamSubscription _refreshTasksSubscription;
 
-  @override
-  Future<void> onInit() async {
-    await taskStatusesController.getStatuses().then((value) => taskStatusesLoaded.value = true);
-    super.onInit();
-  }
-
-  TasksController(TaskFilterController filterController,
-      PaginationController<PortalTask> paginationController) {
+  TasksController() {
     screenName = tr('tasks');
-    loaded.value = false;
-    _paginationController = paginationController;
-    expandedCardView.value = true;
-    _filterController = filterController;
+
     _filterController.applyFiltersDelegate = () async => loadTasks();
     _sortController.updateSortDelegate = () async => loadTasks();
     paginationController.loadDelegate = () async => _getTasks();
@@ -98,6 +89,10 @@ class TasksController extends BaseController {
     paginationController.pullDownEnabled = true;
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
+
+    Get.find<TaskStatusesController>()
+        .getStatuses()
+        .then((value) => taskStatusesLoaded.value = true);
 
     _userController.loaded.listen((_loaded) async =>
         {if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()});
@@ -167,16 +162,18 @@ class TasksController extends BaseController {
 
     paginationController.total.value = result.total;
     if (needToClear) paginationController.data.clear();
-    if (result.total != 0) {
-      paginationController.data.addAll(result.response ?? <PortalTask>[]);
-      expandedCardView.value = paginationController.data.isNotEmpty;
-    }
+    if (result.total != 0) paginationController.data.addAll(result.response ?? <PortalTask>[]);
+
+    expandedCardView.value = paginationController.data.isNotEmpty;
 
     return Future.value(true);
   }
 
   @override
-  void showSearch() => Get.find<NavigationController>().to(const TasksSearchScreen());
+  void showSearch() => Get.find<NavigationController>().to(const TasksSearchScreen(), arguments: {
+        'tasksFilterController': filterController,
+        'tasksSortController': sortController
+      });
 
   Future<bool> getFabVisibility() async {
     if (!_withFAB) return false;
@@ -187,15 +184,15 @@ class TasksController extends BaseController {
     if (selfUser.isAdmin! ||
         selfUser.isOwner! ||
         (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
-      if (projectsWithPresets!.activeProjectsController!.itemList.isEmpty) {
-        await projectsWithPresets!.activeProjectsController!.loadProjects();
+      if (projectsWithPresets.activeProjectsController.itemList.isEmpty) {
+        await projectsWithPresets.activeProjectsController.loadProjects();
       }
-      fabVisibility = projectsWithPresets!.activeProjectsController!.itemList.isNotEmpty;
+      fabVisibility = projectsWithPresets.activeProjectsController.itemList.isNotEmpty;
     } else {
-      if (projectsWithPresets!.myProjectsController!.itemList.isEmpty) {
-        await projectsWithPresets!.myProjectsController!.loadProjects();
+      if (projectsWithPresets.myProjectsController.itemList.isEmpty) {
+        await projectsWithPresets.myProjectsController.loadProjects();
       }
-      fabVisibility = projectsWithPresets!.myProjectsController!.itemList.isNotEmpty;
+      fabVisibility = projectsWithPresets.myProjectsController.itemList.isNotEmpty;
     }
     if (selfUser.isVisitor!) fabVisibility = false;
 

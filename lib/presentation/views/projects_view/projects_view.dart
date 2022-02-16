@@ -30,57 +30,27 @@
  *
  */
 
-import 'dart:math' as math;
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
-import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/shared/widgets/nothing_found.dart';
-import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
-import 'package:projects/presentation/views/projects_view/projects_cell.dart';
+import 'package:projects/presentation/views/projects_view/projects_shared.dart';
 
 class ProjectsView extends StatelessWidget {
   const ProjectsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ProjectsController controller;
-
-    controller = Get.isRegistered<ProjectsController>(tag: 'ProjectsView')
-        ? Get.find<ProjectsController>(tag: 'ProjectsView')
-        : Get.put(
-            ProjectsController(
-              Get.find<ProjectsFilterController>(),
-              Get.find<PaginationController<ProjectDetailed>>(),
-            ),
-            tag: 'ProjectsView');
-
-    controller.setup(PresetProjectFilters.saved);
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      controller.loadProjects();
-    });
-
-    final scrollController = ScrollController();
-    final elevation = ValueNotifier<double>(0);
-
-    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    final controller = Get.find<ProjectsController>(tag: 'ProjectsView');
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
@@ -88,7 +58,7 @@ class ProjectsView extends StatelessWidget {
         () => Visibility(
           visible: controller.fabIsVisible.value,
           child: StyledFloatingActionButton(
-            onPressed: () => controller.createNewProject(),
+            onPressed: controller.createNewProject,
             child: AppIcon(
               icon: SvgIcons.fab_project,
               width: 32,
@@ -98,204 +68,38 @@ class ProjectsView extends StatelessWidget {
           ),
         ),
       ),
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 101),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, double value, __) => StyledAppBar(
-            title: _Title(controller: controller),
-            bottom: Bottom(controller: controller),
-            showBackButton: false,
-            elevation: value,
-          ),
-        ),
-      ),
-      body: Obx(
-        () {
-          if (controller.loaded.value == false) {
-            return const ListLoadingSkeleton();
-          }
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController!.hasFilters.value) {
-            return Center(
-              child: EmptyScreen(icon: SvgIcons.project_not_created, text: tr('noProjectsCreated')),
-            );
-          }
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController!.hasFilters.value) {
-            return Center(
-              child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
-            );
-          }
-          return PaginationListView(
-            paginationController: controller.paginationController,
-            child: ListView.builder(
-              controller: scrollController,
-              itemBuilder: (c, i) => ProjectCell(item: controller.paginationController.data[i]),
-              itemCount: controller.paginationController.data.length,
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class _Title extends StatelessWidget {
-  const _Title({Key? key, required this.controller}) : super(key: key);
-  final ProjectsController controller;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: Text(
-              controller.screenName,
-              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              InkResponse(
-                onTap: controller.showSearch,
-                child: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.search,
-                  color: Get.theme.colors().primary,
-                ),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            MainAppBar(
+              materialTitle: Text(
+                controller.screenName,
+                style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
               ),
-              const SizedBox(width: 24),
-              InkResponse(
-                onTap: () async => {
-                  Get.find<NavigationController>().toScreen(const ProjectsFilterScreen(),
-                      preventDuplicates: false,
-                      arguments: {'filterController': controller.filterController})
-                },
-                child: FiltersButton(controler: controller),
+              cupertinoTitle: Text(
+                controller.screenName,
+                style: TextStyle(color: Get.theme.colors().onSurface),
               ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Bottom extends StatelessWidget {
-  const Bottom({Key? key, required this.controller}) : super(key: key);
-  final ProjectsController controller;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          _ProjectsSortButton(controller: controller),
-          Row(
-            children: <Widget>[
-              Obx(
-                () => Text(
-                  tr('total', args: [controller.paginationController.total.value.toString()]),
-                  style: TextStyleHelper.body2(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6),
+              actions: [
+                SearchButton(controller: controller),
+                PlatformIconButton(
+                  onPressed: () async => Get.find<NavigationController>().toScreen(
+                    const ProjectsFilterScreen(),
+                    preventDuplicates: false,
+                    arguments: {'filterController': controller.filterController},
+                    transition: Transition.cupertinoDialog,
+                    fullscreenDialog: true,
                   ),
+                  icon: FiltersButton(controller: controller),
+                  padding: EdgeInsets.zero,
+                  cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProjectsSortButton extends StatelessWidget with ShowPopupMenuMixin {
-  const _ProjectsSortButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final ProjectsController controller;
-
-  List<SortTile> _getSortTile() {
-    return [
-      SortTile(
-        sortParameter: 'create_on',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'title',
-        sortController: controller.sortController,
-      ),
-    ];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(right: 4),
-      child: InkWell(
-        onTap: () async {
-          if (Get.find<PlatformController>().isMobile) {
-            final options = Column(
-              children: [
-                const SizedBox(height: 14.5),
-                const Divider(height: 9, thickness: 1),
-                ..._getSortTile(),
-                const SizedBox(height: 20),
+                ProjectsMoreButtonWidget(controller: controller),
               ],
-            );
-
-            await Get.bottomSheet(
-              SortView(sortOptions: options),
-              isScrollControlled: true,
-            );
-          } else {
-            await showPopupMenu(
-              context: context,
-              options: _getSortTile(),
-              offset: const Offset(0, 40),
-            );
-          }
+            ),
+          ];
         },
-        child: Row(
-          children: <Widget>[
-            Obx(
-              () => Text(
-                controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Obx(
-              () => (controller.sortController.currentSortOrder == 'ascending')
-                  ? AppIcon(
-                      icon: SvgIcons.sorting_4_ascend,
-                      color: Get.theme.colors().primary,
-                      width: 20,
-                      height: 20,
-                    )
-                  : Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationX(math.pi),
-                      child: AppIcon(
-                        icon: SvgIcons.sorting_4_ascend,
-                        color: Get.theme.colors().primary,
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
-            ),
-          ],
-        ),
+        body: ProjectsContent(controller: controller),
       ),
     );
   }

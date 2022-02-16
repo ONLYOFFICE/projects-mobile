@@ -47,8 +47,8 @@ class SortView extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Get.theme.colors().surface,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+        borderRadius:
+            const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,8 +70,7 @@ class SortView extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.only(left: 15, right: 16, top: 18.5),
               child: Text(tr('sortBy'),
-                  style:
-                      TextStyleHelper.h6(color: Get.theme.colors().onSurface))),
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface))),
           sortOptions,
         ],
       ),
@@ -83,8 +82,7 @@ class SortTile extends StatelessWidget {
   final String sortParameter;
   final BaseSortController? sortController;
 
-  const SortTile(
-      {Key? key, required this.sortParameter, required this.sortController})
+  const SortTile({Key? key, required this.sortParameter, required this.sortController})
       : super(key: key);
 
   @override
@@ -94,8 +92,7 @@ class SortTile extends StatelessWidget {
 
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
-          color: Get.theme.colors().bgDescription,
-          borderRadius: BorderRadius.circular(6));
+          color: Get.theme.colors().bgDescription, borderRadius: BorderRadius.circular(6));
     }
 
     return InkWell(

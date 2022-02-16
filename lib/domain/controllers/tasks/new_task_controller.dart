@@ -49,6 +49,7 @@ import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
@@ -112,7 +113,6 @@ class NewTaskController extends GetxController implements TaskActionsController 
   RxBool? setTitleError = false.obs;
 
   void init(ProjectDetailed? projectDetailed) {
-    // TODO why []
     _titleFocus.requestFocus();
 
     teamController = Get.find<ProjectTeamController>();
@@ -191,6 +191,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           descriptionController.value.text = descriptionText!.value;
           Get.back();
@@ -216,6 +217,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           notifyResponsibles.value = false;
           responsibles!.value = List.of(_previusSelectedResponsibles);
@@ -330,7 +332,6 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
     final createdTask = await _api.addTask(newTask: newTask);
     if (createdTask != null) {
-      locator<EventHub>().fire('needToRefreshProjects', ['all']);
       locator<EventHub>().fire('needToRefreshTasks');
 
       MessagesHandler.showSnackBar(
@@ -362,6 +363,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
         titleText: tr('discardTask'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.back();

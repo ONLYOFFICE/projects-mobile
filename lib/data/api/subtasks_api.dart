@@ -42,9 +42,7 @@ import 'package:projects/internal/locator.dart';
 class SubtasksApi {
   Future<ApiDTO<Subtask>> acceptSubtask(
       {required int taskId, required int subtaskId, required Map data}) async {
-    final url = await locator
-        .get<CoreApi>()
-        .updateSubtask(taskId: taskId, subtaskId: subtaskId);
+    final url = await locator.get<CoreApi>().updateSubtask(taskId: taskId, subtaskId: subtaskId);
     final result = ApiDTO<Subtask>();
 
     try {
@@ -52,8 +50,7 @@ class SubtasksApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
+        result.response = Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -63,11 +60,8 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> deleteSubTask(
-      {required int taskId, required int subtaskId}) async {
-    final url = await locator
-        .get<CoreApi>()
-        .deleteSubtaskUrl(taskId: taskId, subtaskId: subtaskId);
+  Future<ApiDTO> deleteSubTask({required int taskId, required int subtaskId}) async {
+    final url = await locator.get<CoreApi>().deleteSubtaskUrl(taskId: taskId, subtaskId: subtaskId);
     final result = ApiDTO();
 
     try {
@@ -75,8 +69,7 @@ class SubtasksApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
+        result.response = Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -86,11 +79,8 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO<Subtask>> copySubtask(
-      {required int taskId, required int subtaskId}) async {
-    final url = await locator
-        .get<CoreApi>()
-        .copySubtaskUrl(taskId: taskId, subtaskId: subtaskId);
+  Future<ApiDTO<Subtask>> copySubtask({required int taskId, required int subtaskId}) async {
+    final url = await locator.get<CoreApi>().copySubtaskUrl(taskId: taskId, subtaskId: subtaskId);
     final result = ApiDTO<Subtask>();
 
     try {
@@ -98,8 +88,7 @@ class SubtasksApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
+        result.response = Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -109,8 +98,7 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO<Subtask>> createSubtask(
-      {required int taskId, required Map data}) async {
+  Future<ApiDTO<Subtask>> createSubtask({required int taskId, required Map data}) async {
     final url = await locator.get<CoreApi>().createSubtaskUrl(taskId: taskId);
     final result = ApiDTO<Subtask>();
 
@@ -119,8 +107,7 @@ class SubtasksApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
+        result.response = Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -135,9 +122,8 @@ class SubtasksApi {
     required int subtaskId,
     required Map data,
   }) async {
-    final url = await locator
-        .get<CoreApi>()
-        .updateSubtaskStatus(taskId: taskId, subtaskId: subtaskId);
+    final url =
+        await locator.get<CoreApi>().updateSubtaskStatus(taskId: taskId, subtaskId: subtaskId);
 
     final result = ApiDTO<Subtask>();
     try {
@@ -145,8 +131,7 @@ class SubtasksApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
+        result.response = Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -172,8 +157,7 @@ class SubtasksApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
+        result.response = Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }

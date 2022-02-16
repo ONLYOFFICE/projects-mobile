@@ -74,6 +74,7 @@ class StyledFloatingActionButton extends StatelessWidget {
               backgroundColor: Get.theme.colors().lightSecondary,
               onPressed: onPressed,
               elevation: 0,
+              heroTag: null,
               child: child,
             ),
           ),

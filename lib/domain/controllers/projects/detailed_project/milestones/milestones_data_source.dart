@@ -38,18 +38,26 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/milestone_service.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
 
-class MilestonesDataSource extends GetxController {
+class MilestonesDataSource extends BaseController {
   final MilestoneService _api = locator<MilestoneService>();
 
-  final paginationController =
-      Get.put(PaginationController<Milestone>(), tag: 'MilestonesDataSource');
+  int get itemCount => _paginationController.data.length;
+  @override
+  RxList<Milestone> get itemList => _paginationController.data;
+  @override
+  PaginationController get paginationController => _paginationController;
+  final _paginationController = PaginationController<Milestone>();
 
+  MilestonesSortController get sortController => _sortController;
   final _sortController = Get.find<MilestonesSortController>();
+
+  MilestonesFilterController get filterController => _filterController;
   final _filterController = Get.find<MilestonesFilterController>();
 
   final searchTextEditingController = TextEditingController();
@@ -58,36 +66,41 @@ class MilestonesDataSource extends GetxController {
 
   Timer? _searchDebounce;
 
+  ProjectDetailed get projectDetailed => _projectDetailed ?? ProjectDetailed();
   ProjectDetailed? _projectDetailed;
-
-  MilestonesSortController get sortController => _sortController;
-  MilestonesFilterController get filterController => _filterController;
-
-  int get itemCount => paginationController.data.length;
-  RxList<Milestone> get itemList => paginationController.data;
-
-  RxBool loaded = false.obs;
-
-  RxBool hasFilters = false.obs;
 
   int? _projectId;
 
-  RxBool fabIsVisible = false.obs;
+  final fabIsVisible = false.obs;
+
+  late StreamSubscription _refreshMilestonesSubscription;
 
   MilestonesDataSource() {
     _sortController.updateSortDelegate = () async => loadMilestones();
     _filterController.applyFiltersDelegate = () async => loadMilestones();
-    paginationController.loadDelegate = () async => _getMilestones();
-    paginationController.refreshDelegate = () async => loadMilestones();
-    paginationController.pullDownEnabled = true;
+    _paginationController.loadDelegate = () async => _getMilestones();
+    _paginationController.refreshDelegate = () async => loadMilestones();
+    _paginationController.pullDownEnabled = true;
+
+    _refreshMilestonesSubscription =
+        locator<EventHub>().on('needToRefreshMilestones', (dynamic data) {
+      loadMilestones();
+    });
+  }
+
+  @override
+  void onClose() {
+    _refreshMilestonesSubscription.cancel();
+    searchTextEditingController.dispose();
+    super.onClose();
   }
 
   Future loadMilestones() async {
     loaded.value = false;
 
-    paginationController.startIndex = 0;
+    _paginationController.startIndex = 0;
     await _getMilestones(needToClear: true);
-    locator<EventHub>().fire('needToRefreshMilestones', ['all']);
+    //locator<EventHub>().fire('needToRefreshMilestones', ['all']);
 
     loaded.value = true;
   }
@@ -99,15 +112,15 @@ class MilestonesDataSource extends GetxController {
       projectId: _projectId?.toString(),
       milestoneResponsibleFilter: _filterController.milestoneResponsibleFilter,
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
-      statusFilter: '&status=open',
+      statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
       query: searchQuery,
     );
     if (result == null) return Future.value(false);
 
-    paginationController.total.value = result.length;
-    if (needToClear) paginationController.data.clear();
-    paginationController.data.addAll(result);
+    _paginationController.total.value = result.length;
+    if (needToClear) _paginationController.data.clear();
+    _paginationController.data.addAll(result);
 
     return Future.value(true);
   }
@@ -141,11 +154,5 @@ class MilestonesDataSource extends GetxController {
     searchTextEditingController.clear();
     searchQuery = '';
     loadMilestones();
-  }
-
-  @override
-  void onClose() {
-    searchTextEditingController.dispose();
-    super.onClose();
   }
 }

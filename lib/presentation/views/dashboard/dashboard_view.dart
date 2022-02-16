@@ -32,72 +32,88 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/dashboard_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_more_view.dart';
 import 'package:projects/presentation/views/dashboard/tasks_dashboard_more_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 class DashboardView extends StatelessWidget {
   const DashboardView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final dashboardController = Get.put(DashboardController())..setup();
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) async {
-      dashboardController.loadContent();
-    });
+    final dashboardController = Get.find<DashboardController>(tag: 'DashboardController');
 
     return Scaffold(
       backgroundColor: Get.theme.colors().background,
-      appBar: StyledAppBar(
-        backgroundColor: Get.theme.colors().background,
-        title: Title(controller: dashboardController),
-        // titleHeight: 50,
-        elevation: 0,
-        showBackButton: false,
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            MainAppBar(
+              cupertinoTitle: Text(
+                dashboardController.screenName,
+                style: TextStyle(color: Get.theme.colors().onSurface),
+              ),
+              materialTitle: Title(
+                controller: dashboardController,
+              ),
+            ),
+          ];
+        },
+        body: _BodyDashboardWidget(dashboardController: dashboardController),
       ),
-      body: SmartRefresher(
-        controller: dashboardController.refreshController,
-        onLoading: dashboardController.onLoading,
-        onRefresh: dashboardController.onRefresh,
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-          controller: dashboardController.scrollController,
-          children: <Widget>[
-            DashboardCardView(
-              overline: tr('tasks'),
-              controller: dashboardController.myTaskController,
-            ),
-            DashboardCardView(
-              overline: tr('tasks'),
-              controller: dashboardController.upcomingTaskscontroller,
-            ),
-            DashboardCardView(
-              overline: tr('projects'),
-              controller: dashboardController.myProjectsController,
-            ),
-            DashboardCardView(
-              overline: tr('projects'),
-              controller: dashboardController.folowedProjectsController,
-            ),
-            DashboardCardView(
-              overline: tr('projects'),
-              controller: dashboardController.activeProjectsController,
-            ),
-          ],
-        ),
+    );
+  }
+}
+
+class _BodyDashboardWidget extends StatelessWidget {
+  const _BodyDashboardWidget({
+    Key? key,
+    required this.dashboardController,
+  }) : super(key: key);
+
+  final DashboardController dashboardController;
+
+  @override
+  Widget build(BuildContext context) {
+    return StyledSmartRefresher(
+      controller: dashboardController.refreshController,
+      onLoading: dashboardController.onLoading,
+      onRefresh: dashboardController.onRefresh,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        // controller: dashboardController.scrollController,
+        children: <Widget>[
+          DashboardCardView(
+            overline: GetPlatform.isIOS ? tr('tasks') : tr('tasks').toUpperCase(),
+            controller: dashboardController.myTaskController,
+          ),
+          DashboardCardView(
+            overline: GetPlatform.isIOS ? tr('tasks') : tr('tasks').toUpperCase(),
+            controller: dashboardController.upcomingTaskscontroller,
+          ),
+          DashboardCardView(
+            overline: GetPlatform.isIOS ? tr('projects') : tr('projects').toUpperCase(),
+            controller: dashboardController.myProjectsController,
+          ),
+          DashboardCardView(
+            overline: GetPlatform.isIOS ? tr('projects') : tr('projects').toUpperCase(),
+            controller: dashboardController.folowedProjectsController,
+          ),
+          DashboardCardView(
+            overline: GetPlatform.isIOS ? tr('projects') : tr('projects').toUpperCase(),
+            controller: dashboardController.activeProjectsController,
+          ),
+        ],
       ),
     );
   }
@@ -121,61 +137,61 @@ class DashboardCardView extends StatelessWidget {
       child: Card(
         elevation: 1,
         color: Get.theme.colors().surface,
-        child: Obx(
-          () => Column(
-            children: <Widget>[
-              InkWell(
-                onTap: () => {
-                  controller.expandedCardView.value = !(controller.expandedCardView.value as bool)
-                },
-                child: Container(
-                  constraints: const BoxConstraints(minHeight: 60),
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              overline.toUpperCase(),
-                              style: TextStyleHelper.overline(
-                                color: Get.theme.colors().onSurface.withOpacity(0.6),
-                              ),
-                            ),
-                            Text(
-                              controller.screenName as String,
-                              style: TextStyleHelper.headline7(),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 28,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Get.theme.colors().bgDescription,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Center(
-                          child: Obx(
-                            () => Text(
-                              controller.paginationController.total.value.toString(),
-                              textAlign: TextAlign.center,
-                              style: TextStyleHelper.subtitle2(),
+        child: Column(
+          children: <Widget>[
+            InkWell(
+              onTap: () => {
+                controller.expandedCardView.value = !(controller.expandedCardView.value as bool)
+              },
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 60),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            overline,
+                            style: TextStyleHelper.overline(
+                              color: Get.theme.colors().onSurface.withOpacity(0.6),
                             ),
                           ),
+                          Text(
+                            controller.screenName as String,
+                            style: TextStyleHelper.headline7(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 28,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Get.theme.colors().bgDescription,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(
+                        child: Obx(
+                          () => Text(
+                            controller.paginationController.total.value.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyleHelper.subtitle2(),
+                          ),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
+            ),
+            Obx(() {
               if (controller.expandedCardView.value as bool)
-                Column(
+                return Column(
                   children: <Widget>[
                     const Divider(
                       height: 1,
@@ -220,9 +236,9 @@ class DashboardCardView extends StatelessWidget {
                               ),
                             ),
                           if (!(controller.loaded.value as bool))
-                            const SizedBox(
+                            SizedBox(
                               height: 100,
-                              child: Center(child: CircularProgressIndicator()),
+                              child: Center(child: PlatformCircularProgressIndicator()),
                             ),
                         ],
                       ),
@@ -248,13 +264,17 @@ class DashboardCardView extends StatelessWidget {
                                     },
                                     child: !(controller.showAll.value as bool)
                                         ? Text(
-                                            tr('viewAll').toUpperCase(),
+                                            GetPlatform.isIOS
+                                                ? tr('viewAll')
+                                                : tr('viewAll').toUpperCase(),
                                             style: TextStyleHelper.button(
                                               color: Get.theme.colors().primary,
                                             ),
                                           )
                                         : Text(
-                                            tr('viewLess').toUpperCase(),
+                                            GetPlatform.isIOS
+                                                ? tr('viewLess')
+                                                : tr('viewLess').toUpperCase(),
                                             style: TextStyleHelper.button(
                                               color: Get.theme.colors().primary,
                                             ),
@@ -267,9 +287,10 @@ class DashboardCardView extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-            ],
-          ),
+                );
+              return const SizedBox();
+            }),
+          ],
         ),
       ),
     );
@@ -286,11 +307,9 @@ class Title extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Obx(
-              () => Text(
-                controller.screenName.value,
-                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-              ),
+            child: Text(
+              controller.screenName,
+              style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
             ),
           ),
           Row(
@@ -316,27 +335,23 @@ class ProjectCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          if (controller.loaded.value)
-            Column(children: [
-              ListView.builder(
-                padding: EdgeInsets.zero,
-                physics: const ScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (c, i) => i < 2
-                    ? ProjectCell(item: controller.paginationController.data[i])
-                    : const SizedBox(),
-                itemCount: controller.paginationController.data.length > 2
-                    ? 2
-                    : controller.paginationController.data.length,
-              ),
-            ]),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        if (controller.loaded.value)
+          ListView.builder(
+            padding: EdgeInsets.zero,
+            physics: const ScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (c, i) => i < 2
+                ? ProjectCell(projectDetails: controller.paginationController.data[i])
+                : const SizedBox(),
+            itemCount: controller.paginationController.data.length < 2
+                ? controller.paginationController.data.length
+                : 2,
+          ),
+      ],
     );
   }
 }
@@ -352,27 +367,22 @@ class TaskCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          if (controller.loaded.value)
-            Column(children: [
-              ListView.builder(
-                padding: EdgeInsets.zero,
-                physics: const ScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (c, i) => i < 2
-                    ? TaskCell(task: controller.paginationController.data[i])
-                    : const SizedBox(),
-                itemCount: controller.paginationController.data.length > 2
-                    ? 2
-                    : controller.paginationController.data.length,
-              ),
-            ]),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        if (controller.loaded.value)
+          ListView.builder(
+            padding: EdgeInsets.zero,
+            physics: const ScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (c, i) =>
+                i < 2 ? TaskCell(task: controller.paginationController.data[i]) : const SizedBox(),
+            itemCount: controller.paginationController.data.length < 2
+                ? controller.paginationController.data.length
+                : 2,
+          ),
+      ],
     );
   }
 }

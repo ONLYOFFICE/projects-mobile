@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_form_field.dart';
 
 class AuthTextField extends StatelessWidget {
   final bool obscureText;
@@ -44,49 +45,67 @@ class AuthTextField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final Function(String)? onSubmitted;
+  final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
 
-  const AuthTextField({
-    Key? key,
-    this.autofillHint,
-    this.controller,
-    this.hintText,
-    this.keyboardType,
-    this.obscureText = false,
-    this.onChanged,
-    this.validator,
-    this.hasError = false,
-  }) : super(key: key);
+  const AuthTextField(
+      {Key? key,
+      this.autofillHint,
+      this.controller,
+      this.hintText,
+      this.keyboardType,
+      this.obscureText = false,
+      this.onChanged,
+      this.validator,
+      this.hasError = false,
+      this.onSubmitted,
+      this.textInputAction,
+      this.focusNode})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return PlatformTextFormField(
+      focusNode: focusNode,
       controller: controller,
       autofillHints: [autofillHint!],
       onChanged: onChanged,
       obscureText: obscureText,
       obscuringCharacter: '*',
       keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      onFieldSubmitted: onSubmitted,
       validator: validator,
       style: TextStyleHelper.subtitle1(
-        color: hasError
-            ? Get.theme.colors().colorError
-            : Get.theme.colors().onSurface,
+        color: hasError ? Get.theme.colors().colorError : Get.theme.colors().onSurface,
       ),
-      decoration: InputDecoration(
-        contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
-        floatingLabelBehavior: FloatingLabelBehavior.auto,
-        // labelText: hintText,
-        labelStyle: TextStyleHelper.caption(
-            color: Get.theme.colors().onSurface.withOpacity(0.6)),
-        hintText: hintText,
-        hintStyle: TextStyleHelper.subtitle1(
+      material: (_, __) => MaterialTextFormFieldData(
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          labelText: hintText,
+          labelStyle: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+          hintText: hintText,
+          hintStyle: TextStyleHelper.subtitle1(
+            color: !hasError
+                ? Get.theme.colors().onSurface.withOpacity(0.6)
+                : Get.theme.colors().colorError,
+          ),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42))),
+        ),
+      ),
+      cupertino: (_, __) => CupertinoTextFormFieldData(
+        placeholder: hintText,
+        placeholderStyle: TextStyleHelper.subtitle1(
           color: !hasError
               ? Get.theme.colors().onSurface.withOpacity(0.6)
               : Get.theme.colors().colorError,
         ),
-        focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-                color: Get.theme.colors().onSurface.withOpacity(0.42))),
+        decoration: BoxDecoration(
+            border:
+                Border(bottom: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42)))),
       ),
     );
   }
