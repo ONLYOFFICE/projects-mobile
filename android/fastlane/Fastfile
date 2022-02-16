@@ -13,6 +13,10 @@ def escape_markdown2(string)
     string.gsub(pattern){|match|"\\"  + match}
 end
 
+def truncate(string, max)
+    string.length > max ? "#{string[0...max]}\n..." : string
+end
+
 platform :android do
   version_name = '1.0'
   version_code = 1
@@ -94,7 +98,7 @@ platform :android do
       merge_commit_filtering: "exclude_merges"
     )
 
-    change_log = escape_markdown2(change_log)
+    change_log = truncate(escape_markdown2(change_log), 3500)
 
     # Build artifacts and upload to store
     get_packages

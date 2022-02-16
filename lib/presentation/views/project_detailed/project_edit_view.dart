@@ -75,7 +75,7 @@ class EditProjectView extends StatelessWidget {
               onPressed: () => {
                 editProjectController.confirmChanges(),
               },
-            )
+            ),
           ],
         ),
         body: Obx(

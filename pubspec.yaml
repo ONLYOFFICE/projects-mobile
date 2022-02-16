@@ -13,7 +13,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.2.0+158
+version: 1.2.1+165
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
@@ -22,7 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0 
-  get: ^4.3.8
+  get: ^4.6.1
   get_it: ^7.2.0
   get_storage: ^2.0.3
   # for http requests
@@ -90,7 +90,7 @@ dependencies:
       url: git://github.com/ONLYOFFICE/event_hub
   connectivity_plus: ^2.0.3
   html_editor_enhanced: ^2.4.0+1
-  flutter_widget_from_html: ^0.8.2
+  flutter_widget_from_html: ^0.8.5
   collection: ^1.15.0-nullsafety.4
   webview_cookie_manager: ^2.0.6
 

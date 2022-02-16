@@ -30,53 +30,33 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/data/models/tag_item_DTO.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'dart:convert';
 
-class TagItem extends StatelessWidget {
-  final TagItemDTO? tagItemDTO;
-  final Function onTapFunction;
+import 'package:http/http.dart' as http;
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/data/models/from_api/user_photo.dart';
+import 'package:projects/internal/locator.dart';
 
-  const TagItem({
-    Key? key,
-    required this.onTapFunction,
-    required this.tagItemDTO,
-  }) : super(key: key);
+class UserPhotoApi {
+  Future<ApiDTO<UserPhoto>> getUserPhoto(String userId) async {
+    final url = await locator.get<CoreApi>().photosByProfileIdUrl(userId);
 
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTapFunction as void Function()?,
-      child: SizedBox(
-        height: 48,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                tagItemDTO!.tag!.title!.replaceAll(' ', '\u00A0'),
-                overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.subtitle1(),
-              ),
-            ),
-            Obx(() {
-              if (tagItemDTO!.isSelected!.value == true) {
-                return Icon(Icons.check_box, color: Get.theme.colors().primary);
-              } else {
-                return Icon(
-                  Icons.check_box_outline_blank_outlined,
-                  color: Get.theme.colors().inactiveGrey,
-                );
-              }
-            }),
-            const SizedBox(width: 16),
-          ],
-        ),
-      ),
-    );
+    final result = ApiDTO<UserPhoto>();
+    try {
+      final response = await locator.get<CoreApi>().getRequest(url);
+
+      if (response is http.Response) {
+        result.response =
+            UserPhoto.fromJson(json.decode(response.body)['response'] as Map<String, dynamic>);
+      } else {
+        result.error = response as CustomError;
+      }
+    } catch (e) {
+      result.error = CustomError(message: '');
+    }
+
+    return result;
   }
 }

@@ -36,11 +36,11 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class TaskTeamView extends StatelessWidget {
   final TaskItemController controller;
@@ -64,13 +64,16 @@ class TaskTeamView extends StatelessWidget {
               ListView.builder(
                 physics: const ScrollPhysics(),
                 shrinkWrap: true,
-                itemBuilder: (c, i) => PortalUserItem(
-                    userController: PortalUserItemController(
-                        portalUser: controller.task.value.responsibles![i]!),
-                    onTapFunction: (value) => {
-                          Get.find<NavigationController>().toScreen(const ProfileScreen(),
-                              arguments: {'portalUser': controller.task.value.responsibles![i]})
-                        }),
+                itemBuilder: (c, i) {
+                  final userController =
+                      PortalUserItemController(portalUser: controller.task.value.responsibles![i]!);
+                  return PortalUserItem(
+                      userController: userController,
+                      onTapFunction: (value) => {
+                            Get.find<NavigationController>().toScreen(const ProfileScreen(),
+                                arguments: {'controller': userController})
+                          });
+                },
                 itemExtent: 65,
                 itemCount: controller.task.value.responsibles!.length,
               )

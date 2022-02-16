@@ -49,39 +49,41 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
 
 class NewMilestoneController extends GetxController {
-  final MilestoneService _api = locator<MilestoneService>();
+  final _api = locator<MilestoneService>();
+
   int? _selectedProjectId;
-  DateTime? _dueDate;
-
-  RxBool remindBeforeDueDate = false.obs;
-  RxBool keyMilestone = false.obs;
-
-  RxBool notificationEnabled = false.obs;
-
-  var titleIsEmpty = true.obs;
-  final FocusNode titleFocus = FocusNode();
   int? get selectedProjectId => _selectedProjectId;
+
+  DateTime? _dueDate;
   DateTime? get dueDate => _dueDate;
+
+  final remindBeforeDueDate = false.obs;
+  final keyMilestone = false.obs;
+
+  final notificationEnabled = false.obs;
+
+  final titleIsEmpty = true.obs;
+  final titleFocus = FocusNode();
 
   late ProjectTeamController teamController;
 
-  RxString slectedProjectTitle = ''.obs;
-  RxString slectedMilestoneTitle = ''.obs;
+  final slectedProjectTitle = ''.obs;
+  final slectedMilestoneTitle = ''.obs;
 
-  RxString descriptionText = ''.obs;
-  Rx<TextEditingController> descriptionController = TextEditingController().obs;
+  final descriptionText = ''.obs;
+  final descriptionController = TextEditingController().obs;
 
-  RxString dueDateText = ''.obs;
-  RxBool needToSelectProject = false.obs;
-  RxBool needToSetTitle = false.obs;
-  RxBool needToSelectResponsible = false.obs;
-  RxBool needToSetDueDate = false.obs;
+  final dueDateText = ''.obs;
+  final needToSelectProject = false.obs;
+  final needToSetTitle = false.obs;
+  final needToSelectResponsible = false.obs;
+  final needToSetDueDate = false.obs;
 
-  TextEditingController titleController = TextEditingController();
+  final titleController = TextEditingController();
 
   PortalUserItemController? _previusSelectedResponsible;
-  Rx<PortalUserItemController?>? responsible;
-  RxList<PortalUserItemController?> teamMembers = <PortalUserItemController>[].obs;
+  final responsible = Rxn<PortalUserItemController>();
+  final teamMembers = <PortalUserItemController>[].obs;
 
   @override
   void dispose() {
@@ -113,6 +115,21 @@ class NewMilestoneController extends GetxController {
       slectedProjectTitle.value = title;
       _selectedProjectId = id;
       needToSelectProject.value = false;
+
+      teamController.setup(
+          projectDetailed: ProjectDetailed(id: id, title: title),
+          withoutVisitors: true,
+          withoutBlocked: true);
+
+      teamMembers.clear();
+      responsible.value = null;
+      _previusSelectedResponsible = null;
+
+      teamController.getTeam().then((value) {
+        for (final user in teamController.usersList) {
+          teamMembers.add(user);
+        }
+      });
     } else {
       removeProjectSelection();
     }
@@ -148,12 +165,12 @@ class NewMilestoneController extends GetxController {
   }
 
   void confirmResponsiblesSelection() {
-    _previusSelectedResponsible = responsible!.value;
+    _previusSelectedResponsible = responsible.value;
     Get.back();
   }
 
   void leaveResponsiblesSelectionView() {
-    if (_previusSelectedResponsible == null || _previusSelectedResponsible == responsible!.value) {
+    if (_previusSelectedResponsible == null || _previusSelectedResponsible == responsible.value) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -161,7 +178,7 @@ class NewMilestoneController extends GetxController {
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
-          responsible!.value = _previusSelectedResponsible;
+          responsible.value = _previusSelectedResponsible;
           Get.back();
           Get.back();
         },
@@ -180,9 +197,9 @@ class NewMilestoneController extends GetxController {
       element.selectionMode.value = UserSelectionMode.Single;
     }
 
-    if (responsible != null) {
+    if (responsible.value != null) {
       for (final user in teamController.usersList) {
-        if (responsible!.value!.id == user.portalUser.id) {
+        if (responsible.value!.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
       }
@@ -190,10 +207,7 @@ class NewMilestoneController extends GetxController {
   }
 
   void addResponsible(PortalUserItemController user) {
-    if (responsible == null)
-      responsible = user.obs;
-    else
-      responsible?.value = user;
+    responsible.value = user;
 
     needToSelectResponsible.value = false;
     Get.back();
@@ -215,8 +229,10 @@ class NewMilestoneController extends GetxController {
 
   void confirm(BuildContext context) async {
     needToSelectProject.value = _selectedProjectId == null;
+
+    titleController.text = titleController.text.trim();
     needToSetTitle.value = titleController.text.isEmpty;
-    needToSelectResponsible.value = responsible?.value == null;
+    needToSelectResponsible.value = responsible.value == null;
     needToSetDueDate.value = dueDate == null;
 
     if (needToSelectProject.value ||
@@ -231,7 +247,7 @@ class NewMilestoneController extends GetxController {
       description: descriptionController.value.text,
       deadline: dueDate,
       isKey: keyMilestone.value,
-      responsible: responsible!.value!.id,
+      responsible: responsible.value!.id,
       isNotify: remindBeforeDueDate.value,
       notifyResponsible: notificationEnabled.value,
     );
@@ -248,7 +264,7 @@ class NewMilestoneController extends GetxController {
   void discard() {
     if (_selectedProjectId != null ||
         titleController.text.isNotEmpty ||
-        responsible != null ||
+        responsible.value != null ||
         descriptionText.isNotEmpty ||
         _dueDate != null) {
       Get.dialog(StyledAlertDialog(

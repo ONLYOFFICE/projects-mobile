@@ -56,6 +56,7 @@ class AppColors {
   final Color tabbarBackground;
   final Color colorError;
   final Color backgroundSecond;
+  final Color inactiveGrey;
 
   const AppColors({
     required this.background,
@@ -78,5 +79,6 @@ class AppColors {
     required this.tabbarBackground,
     required this.colorError,
     required this.backgroundSecond,
+    required this.inactiveGrey,
   });
 }

@@ -36,13 +36,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
-
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
@@ -71,6 +69,7 @@ class NewProjectController extends BaseProjectEditorController {
   }
 
   Future<void> confirm(BuildContext context) async {
+    titleController.text = titleController.text.trim();
     needToFillTitle.value = titleController.text.isEmpty;
 
     needToFillManager.value =
@@ -101,7 +100,8 @@ class NewProjectController extends BaseProjectEditorController {
         participants: participants,
         private: isPrivate.value,
         notify: notificationEnabled.value,
-        notifyResponsibles: responsiblesNotificationEnabled);
+        notifyResponsibles: responsiblesNotificationEnabled,
+        tags: tagsText.value);
 
     final result = await _api.createProject(project: newProject);
     if (result != null) {

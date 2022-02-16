@@ -36,7 +36,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
@@ -64,14 +63,17 @@ class NewTaskController extends GetxController implements TaskActionsController 
   DateTime? _dueDate;
 
   int? get selectedProjectId => _selectedProjectId;
+
   int? get selectedMilestoneId => newMilestoneId;
+
   @override
   DateTime? get startDate => _startDate;
+
   @override
   DateTime? get dueDate => _dueDate;
 
   @override
-  RxString? title = ''.obs;
+  RxString title = ''.obs;
   @override
   RxString? selectedProjectTitle = ''.obs;
   @override
@@ -102,7 +104,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
   List _previusSelectedResponsibles = [];
   @override
   RxBool? highPriority = false.obs;
-  RxBool notifyResponsibles = false.obs;
+  RxBool notifyResponsibles = true.obs;
 
   @override
   dynamic needToSelectProject = false.obs; //RxBool
@@ -125,7 +127,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
   }
 
   @override
-  void changeTitle(String newText) => title!.value = newText;
+  void changeTitle(String newText) => title.value = newText;
 
   void changeProjectSelection({int? id, String? title}) {
     if (id != null && title != null) {
@@ -302,8 +304,10 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
   Future<void> confirm(BuildContext context) async {
     if (_selectedProjectId == null) needToSelectProject.value = true;
-    if (title!.isEmpty) setTitleError!.value = true;
-    if (_selectedProjectId == null || title!.isEmpty) return;
+    title.value = title.string.trim();
+    titleController.text = title.value;
+    if (title.isEmpty) setTitleError!.value = true;
+    if (_selectedProjectId == null || title.isEmpty) return;
 
     Get.back();
 
@@ -321,7 +325,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
         priority: priority,
         notify: notifyResponsibles.value,
         description: descriptionText!.value,
-        title: title!.value,
+        title: title.value,
         milestoneid: newMilestoneId);
 
     final createdTask = await _api.addTask(newTask: newTask);
@@ -349,7 +353,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
   void discardTask() {
     if (_selectedProjectId != null ||
-        title!.isNotEmpty ||
+        title.isNotEmpty ||
         responsibles!.isNotEmpty ||
         descriptionText!.isNotEmpty ||
         _startDate != null ||

@@ -90,8 +90,11 @@ class SelectDiscussionSubscribers extends StatelessWidget {
           ),
           onLeadingPressed: controller.leaveSubscribersSelectionView,
           actions: [
-            IconButton(
-                onPressed: controller.confirmSubscribersSelection, icon: const Icon(Icons.done))
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: IconButton(
+                  onPressed: controller.confirmSubscribersSelection, icon: const Icon(Icons.done)),
+            )
           ],
           // bottom: CustomSearchBar(controller: controller),
           bottom: Row(

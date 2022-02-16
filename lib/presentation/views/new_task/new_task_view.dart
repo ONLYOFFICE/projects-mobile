@@ -86,7 +86,7 @@ class NewTaskView extends StatelessWidget {
                 // unfocus title
                 Listener(
                   onPointerDown: (_) {
-                    if (controller.title!.isNotEmpty && controller.titleFocus.hasFocus)
+                    if (controller.title.isNotEmpty && controller.titleFocus.hasFocus)
                       controller.titleFocus.unfocus();
                   },
                   child: Column(

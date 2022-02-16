@@ -34,14 +34,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
-
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
@@ -141,6 +140,7 @@ class ProjectEditController extends BaseProjectEditorController {
       .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed!);
 
   Future<void> confirmChanges() async {
+    titleController.text = titleController.text.trim();
     needToFillTitle.value = titleController.text.isEmpty;
 
     needToFillManager.value =

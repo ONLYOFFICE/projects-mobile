@@ -48,7 +48,7 @@ class TFASmsController extends GetxController {
 
   RxBool loaded = false.obs;
   RxBool searching = false.obs;
-  RxBool codeError = false.obs;
+  RxBool needToShowError = false.obs;
 
   late String _userName;
   late String _password;
@@ -112,12 +112,12 @@ class TFASmsController extends GetxController {
   }
 
   Future<void> onConfirmPressed(String code) async {
-    codeError.value = false;
+    needToShowError.value = false;
     final loginController = Get.find<LoginController>();
-    final resp = await loginController.sendCode(code.removeAllWhitespace,
+    final success = await loginController.sendCode(code.removeAllWhitespace,
         userName: _userName, password: _password);
 
-    if (resp == false) codeError.value = true;
+    needToShowError.value = !success;
   }
 
   Future<void> resendSms() async {

@@ -69,6 +69,7 @@ class ProjectOverview extends StatelessWidget {
                   subtitleStyle: TextStyleHelper.headline7(
                     color: Get.theme.colors().onBackground,
                   ),
+                  privateIconVisible: projectController.isPrivate.value,
                 ),
               ),
               const SizedBox(height: 20),

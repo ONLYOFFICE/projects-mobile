@@ -30,53 +30,16 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/data/models/tag_item_DTO.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/data/api/user_photo_api.dart';
+import 'package:projects/data/models/from_api/user_photo.dart';
+import 'package:projects/internal/locator.dart';
 
-class TagItem extends StatelessWidget {
-  final TagItemDTO? tagItemDTO;
-  final Function onTapFunction;
+class UserPhotoService {
+  final UserPhotoApi _api = locator<UserPhotoApi>();
 
-  const TagItem({
-    Key? key,
-    required this.onTapFunction,
-    required this.tagItemDTO,
-  }) : super(key: key);
+  Future<UserPhoto?> getUserPhoto(String userId) async {
+    final userPhoto = await _api.getUserPhoto(userId);
 
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTapFunction as void Function()?,
-      child: SizedBox(
-        height: 48,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                tagItemDTO!.tag!.title!.replaceAll(' ', '\u00A0'),
-                overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.subtitle1(),
-              ),
-            ),
-            Obx(() {
-              if (tagItemDTO!.isSelected!.value == true) {
-                return Icon(Icons.check_box, color: Get.theme.colors().primary);
-              } else {
-                return Icon(
-                  Icons.check_box_outline_blank_outlined,
-                  color: Get.theme.colors().inactiveGrey,
-                );
-              }
-            }),
-            const SizedBox(width: 16),
-          ],
-        ),
-      ),
-    );
+    return userPhoto.response;
   }
 }

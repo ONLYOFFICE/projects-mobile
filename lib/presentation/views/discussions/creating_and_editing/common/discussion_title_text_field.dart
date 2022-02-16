@@ -68,9 +68,7 @@ class DiscussionTitleTextField extends StatelessWidget {
           Expanded(
             child: Obx(
               () => TextField(
-                onChanged: (value) {
-                  controller.changeTitle(value);
-                },
+                onChanged: controller.changeTitle,
                 focusNode: controller.titleFocus,
                 maxLines: null,
                 controller: controller.titleController,

@@ -79,11 +79,9 @@ class EnterSMSCodeScreen extends StatelessWidget {
                   ),
                   SizedBox(height: h(20.74)),
                   Text(tr('enterSendedCode'),
-                      style: TextStyleHelper.subtitle1(
-                          color: Get.theme.colors().onSurface)),
+                      style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface)),
                   Text(controller.phoneNoise!,
-                      style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().onSurface)
+                      style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface)
                           .copyWith(fontWeight: FontWeight.w500)),
                   SizedBox(height: h(100)),
                   Obx(
@@ -97,14 +95,14 @@ class EnterSMSCodeScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                            color: controller.codeError.value == true
+                            color: controller.needToShowError.value == true
                                 ? Get.theme.colors().colorError
                                 : Get.theme.colors().onSurface.withOpacity(0.3),
                           ),
                         ),
                         focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                            color: controller.codeError.value == true
+                            color: controller.needToShowError.value
                                 ? Get.theme.colors().colorError
                                 : Get.theme.colors().onSurface.withOpacity(0.3),
                           ),
@@ -115,13 +113,13 @@ class EnterSMSCodeScreen extends StatelessWidget {
                   Obx(
                     () => SizedBox(
                       height: h(24),
-                      child: controller.codeError.value == true
+                      child: controller.needToShowError.value
                           ? Align(
                               alignment: Alignment.topLeft,
                               child: Text(
                                 tr('incorrectCode'),
-                                style: TextStyleHelper.caption(
-                                    color: Get.theme.colors().colorError),
+                                style:
+                                    TextStyleHelper.caption(color: Get.theme.colors().colorError),
                               ),
                             )
                           : null,

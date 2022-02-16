@@ -245,6 +245,7 @@ class LoginController extends GetxController {
           .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
 
       locator<EventHub>().fire('loginSuccess');
+      return true;
     } else if (result.response!.tfa!) {
       setState(ViewState.Idle);
       await Get.to(() => CodeView());
@@ -352,5 +353,19 @@ class LoginController extends GetxController {
     portalFieldError.value = false;
     emailFieldError.value = false;
     passwordFieldError.value = false;
+  }
+
+  void leaveLoginScreen() {
+    _emailController.clear();
+    _passwordController.clear();
+
+    capabilities = null;
+    _pass = null;
+    _email = null;
+    _tfaKey = null;
+
+    clearErrors();
+
+    Get.back();
   }
 }

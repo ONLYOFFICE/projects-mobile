@@ -35,7 +35,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -283,33 +282,90 @@ void _renameFolder(DocumentsController controller, Folder element, BuildContext 
   final inputController = TextEditingController();
   inputController.text = element.title!;
 
+  final isErrorInputText = ValueNotifier<bool>(false);
+
   Get.dialog(
     StyledAlertDialog(
       titleText: tr('renameFolder'),
-      content: TextField(
-        autofocus: true,
-        textInputAction: TextInputAction.search,
-        controller: inputController,
-        decoration: InputDecoration.collapsed(
-          hintText: tr('enterFolderName'),
+      content: ValueListenableBuilder<bool>(
+        valueListenable: isErrorInputText,
+        builder: (_, __, ___) => _NameFolderTextFieldWidget(
+          inputController: inputController,
+          controller: controller,
+          element: element,
+          isErrorInputText: isErrorInputText,
         ),
-        onSubmitted: (value) {
-          controller.newSearch(value);
-        },
       ),
       acceptText: tr('confirm'),
       cancelText: tr('cancel'),
       onAcceptTap: () async {
-        if (inputController.text != element.title) {
-          final success = await controller.renameFolder(element, inputController.text);
-          if (success) {
-            MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
+        inputController.text = inputController.text.trim();
+        if (inputController.text.isEmpty) {
+          isErrorInputText.value = true;
+        } else {
+          if (inputController.text != element.title) {
+            final success = await controller.renameFolder(element, inputController.text);
+            if (success) {
+              MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
+              Get.back();
+            }
+          } else
             Get.back();
-          }
-        } else
-          Get.back();
+        }
       },
       onCancelTap: Get.back,
     ),
   );
+}
+
+class _NameFolderTextFieldWidget extends StatelessWidget {
+  const _NameFolderTextFieldWidget({
+    Key? key,
+    required this.inputController,
+    required this.controller,
+    required this.element,
+    required this.isErrorInputText,
+  }) : super(key: key);
+
+  final TextEditingController inputController;
+  final DocumentsController controller;
+  final Folder element;
+  final ValueNotifier<bool> isErrorInputText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      autofocus: true,
+      textInputAction: TextInputAction.done,
+      controller: inputController,
+      decoration: InputDecoration.collapsed(
+        hintText: tr('enterFolderName'),
+        hintStyle: TextStyleHelper.body2(
+          color: isErrorInputText.value
+              ? Get.theme.colors().colorError
+              : Get.theme.colors().onSurface.withOpacity(0.5),
+        ),
+      ),
+      onChanged: (_) {
+        if (isErrorInputText.value) {
+          isErrorInputText.value = false;
+        }
+      },
+      onSubmitted: (_) async {
+        inputController.text = inputController.text.trim();
+        if (inputController.text.isEmpty) {
+          isErrorInputText.value = true;
+        } else {
+          if (inputController.text != element.title) {
+            final success = await controller.renameFolder(element, inputController.text);
+            if (success) {
+              MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
+              Get.back();
+            }
+          } else
+            Get.back();
+        }
+      },
+    );
+  }
 }

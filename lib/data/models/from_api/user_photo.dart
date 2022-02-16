@@ -30,53 +30,42 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/data/models/tag_item_DTO.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
+class UserPhoto {
+  final String? original;
+  final String? retina;
+  final String? max;
+  final String? big;
+  final String? medium;
+  final String? small;
 
-class TagItem extends StatelessWidget {
-  final TagItemDTO? tagItemDTO;
-  final Function onTapFunction;
+  UserPhoto({
+    this.original,
+    this.retina,
+    this.max,
+    this.big,
+    this.medium,
+    this.small,
+  });
 
-  const TagItem({
-    Key? key,
-    required this.onTapFunction,
-    required this.tagItemDTO,
-  }) : super(key: key);
+  Map<String, dynamic> toJson() {
+    return {
+      'original': original,
+      'retina': retina,
+      'max': max,
+      'big': big,
+      'medium': medium,
+      'small': small,
+    };
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTapFunction as void Function()?,
-      child: SizedBox(
-        height: 48,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                tagItemDTO!.tag!.title!.replaceAll(' ', '\u00A0'),
-                overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.subtitle1(),
-              ),
-            ),
-            Obx(() {
-              if (tagItemDTO!.isSelected!.value == true) {
-                return Icon(Icons.check_box, color: Get.theme.colors().primary);
-              } else {
-                return Icon(
-                  Icons.check_box_outline_blank_outlined,
-                  color: Get.theme.colors().inactiveGrey,
-                );
-              }
-            }),
-            const SizedBox(width: 16),
-          ],
-        ),
-      ),
+  factory UserPhoto.fromJson(Map<String, dynamic> json) {
+    return UserPhoto(
+      original: json['original'] as String?,
+      retina: json['retina'] as String?,
+      max: json['max'] as String?,
+      big: json['big'] as String?,
+      medium: json['medium'] as String?,
+      small: json['small'] as String?,
     );
   }
 }
