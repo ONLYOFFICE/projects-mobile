@@ -6,20 +6,11 @@
 
 import 'package:flutter/cupertino.dart' show CupertinoDialogAction;
 import 'package:flutter/material.dart'
-    show
-        Brightness,
-        ButtonStyle,
-        ButtonTextTheme,
-        // ignore: deprecated_member_use
-        FlatButton,
-        MaterialTapTargetSize,
-        TextButton,
-        VisualDensity;
+    show Brightness, ButtonStyle, ButtonTextTheme, MaterialTapTargetSize, TextButton, VisualDensity;
 import 'package:flutter/widgets.dart';
 
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 import 'package:projects/presentation/shared/wrappers/widget_base.dart';
-import 'package:projects/presentation/shared/wrappers/platform_provider.dart';
 
 abstract class _BaseData {
   _BaseData({
@@ -44,6 +35,8 @@ class MaterialDialogActionData extends _BaseData {
     this.autofocus,
     this.clipBehavior,
     this.icon,
+    this.onHover,
+    this.onFocusChange,
   }) : super(
           widgetKey: widgetKey,
           child: child,
@@ -56,6 +49,8 @@ class MaterialDialogActionData extends _BaseData {
   final bool? autofocus;
   final Clip? clipBehavior;
   final Widget? icon;
+  final ValueChanged<bool>? onHover;
+  final ValueChanged<bool>? onFocusChange;
 }
 
 class MaterialDialogFlatActionData extends _BaseData {
@@ -141,7 +136,6 @@ class PlatformDialogAction extends PlatformWidgetBase<CupertinoDialogAction, Wid
 
   final PlatformBuilder<MaterialDialogActionData>? material;
 
-  final PlatformBuilder<MaterialDialogFlatActionData>? materialFlat;
   final PlatformBuilder<CupertinoDialogActionData>? cupertino;
 
   PlatformDialogAction({
@@ -150,78 +144,42 @@ class PlatformDialogAction extends PlatformWidgetBase<CupertinoDialogAction, Wid
     this.child,
     this.onPressed,
     this.material,
-    @Deprecated('materialFlat is deprecated. Use material') this.materialFlat,
     this.cupertino,
   }) : super(key: key);
   @override
   Widget createMaterialWidget(BuildContext context) {
-    final settings = PlatformProvider.of(context)?.settings;
+    final data = material?.call(context, platform(context));
 
-    if (settings?.legacyMaterialDialogActionButtons ?? false) {
-      final data = materialFlat?.call(context, platform(context));
+    assert(data?.child != null || child != null);
 
-      assert(data?.child != null || child != null);
+    final icon = data?.icon;
 
-      // ignore: deprecated_member_use
-      return FlatButton(
+    if (icon != null) {
+      return TextButton.icon(
         key: data?.widgetKey ?? widgetKey,
-        child: data?.child ?? child!,
-        onPressed: data?.onPressed ?? onPressed,
-        color: data?.color,
-        colorBrightness: data?.colorBrightness,
-        disabledColor: data?.disabledColor,
-        disabledTextColor: data?.disabledTextColor,
-        highlightColor: data?.highlightColor,
-        onHighlightChanged: data?.onHighlightChanged,
-        padding: data?.padding,
-        shape: data?.shape,
-        splashColor: data?.splashColor,
-        textColor: data?.textColor,
-        textTheme: data?.textTheme,
-        clipBehavior: data?.clipBehavior ?? Clip.none,
-        materialTapTargetSize: data?.materialTapTargetSize,
-        focusColor: data?.focusColor,
-        focusNode: data?.focusNode,
-        hoverColor: data?.hoverColor,
-        autofocus: data?.autofocus ?? false,
-        visualDensity: data?.visualDensity,
-        onLongPress: data?.onLongPress,
-        mouseCursor: data?.mouseCursor,
-        height: data?.height,
-        minWidth: data?.minWidth,
-      );
-    } else {
-      final data = material?.call(context, platform(context));
-
-      assert(data?.child != null || child != null);
-
-      final icon = data?.icon;
-
-      if (icon != null) {
-        return TextButton.icon(
-          key: data?.widgetKey ?? widgetKey,
-          label: data?.child ?? child!,
-          icon: icon,
-          onPressed: data?.onPressed ?? onPressed,
-          onLongPress: data?.onLongPress,
-          autofocus: data?.autofocus ?? false,
-          clipBehavior: data?.clipBehavior ?? Clip.none,
-          focusNode: data?.focusNode,
-          style: data?.style,
-        );
-      }
-
-      return TextButton(
-        key: data?.widgetKey ?? widgetKey,
-        child: data?.child ?? child!,
+        label: data?.child ?? child!,
+        icon: icon,
         onPressed: data?.onPressed ?? onPressed,
         onLongPress: data?.onLongPress,
         autofocus: data?.autofocus ?? false,
         clipBehavior: data?.clipBehavior ?? Clip.none,
         focusNode: data?.focusNode,
         style: data?.style,
+        onHover: data?.onHover,
+        onFocusChange: data?.onFocusChange,
       );
     }
+
+    return TextButton(
+      key: data?.widgetKey ?? widgetKey,
+      onPressed: data?.onPressed ?? onPressed,
+      onLongPress: data?.onLongPress,
+      autofocus: data?.autofocus ?? false,
+      clipBehavior: data?.clipBehavior ?? Clip.none,
+      focusNode: data?.focusNode,
+      style: data?.style,
+      child: data?.child ?? child!,
+    );
   }
 
   @override
@@ -232,11 +190,11 @@ class PlatformDialogAction extends PlatformWidgetBase<CupertinoDialogAction, Wid
 
     return CupertinoDialogAction(
       key: data?.widgetKey ?? widgetKey,
-      child: data?.child ?? child!,
       isDefaultAction: data?.isDefaultAction ?? false,
       isDestructiveAction: data?.isDestructiveAction ?? false,
       onPressed: data?.onPressed ?? onPressed,
       textStyle: data?.textStyle,
+      child: data?.child ?? child!,
     );
   }
 }

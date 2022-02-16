@@ -115,7 +115,7 @@ class TaskApi {
         final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .cast<Map<String, dynamic>>()
-            .map((i) => Status.fromJson(i))
+            .map(Status.fromJson)
             .toList();
       } else {
         result.error = response as CustomError;
@@ -251,7 +251,7 @@ class TaskApi {
 
         result.response = (responseJson['response'] as List)
             .cast<Map<String, dynamic>>()
-            .map((i) => PortalTask.fromJson(i))
+            .map(PortalTask.fromJson)
             .toList();
       } else {
         result.error = response as CustomError;

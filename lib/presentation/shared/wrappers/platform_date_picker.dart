@@ -177,7 +177,7 @@ Widget _renderManagedCupertinoDatePicker({
   required DateTime firstDate,
   required DateTime lastDate,
 }) {
-  DateTime selectedDate = data?.initialDate ?? initialDate;
+  var selectedDate = data?.initialDate ?? initialDate;
 
   return StatefulBuilder(
     builder: (BuildContext context, StateSetter setState) {

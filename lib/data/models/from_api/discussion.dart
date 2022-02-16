@@ -85,17 +85,17 @@ class Discussion {
         canReadFiles: json['canReadFiles'] as bool?,
         subscribers: json['subscribers'] != null
             ? ((json['subscribers'] as List).cast<Map<String, dynamic>>())
-                .map((e) => PortalUser.fromJson(e))
+                .map(PortalUser.fromJson)
                 .toList()
             : null,
         files: json['files'] != null
             ? ((json['files'] as List).cast<Map<String, dynamic>>())
-                .map((e) => PortalFile.fromJson(e))
+                .map(PortalFile.fromJson)
                 .toList()
             : null,
         comments: json['comments'] != null
             ? ((json['comments'] as List).cast<Map<String, dynamic>>())
-                .map((e) => PortalComment.fromJson(e))
+                .map(PortalComment.fromJson)
                 .toList()
             : null,
         project: json['project'] != null

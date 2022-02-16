@@ -101,15 +101,13 @@ class PortalTask {
     canReadFiles = json['canReadFiles'] as bool?;
     comments = json['comments'] != null
         ? ((json['comments'] as List).cast<Map<String, dynamic>>())
-            .map((e) => PortalComment.fromJson(e))
+            .map(PortalComment.fromJson)
             .toList()
         : null;
     customTaskStatus = json['customTaskStatus'] as int?;
     startDate = json['startDate'] as String?;
     files = json['files'] != null
-        ? ((json['files'] as List).cast<Map<String, dynamic>>())
-            .map((e) => PortalFile.fromJson(e))
-            .toList()
+        ? ((json['files'] as List).cast<Map<String, dynamic>>()).map(PortalFile.fromJson).toList()
         : null;
     id = json['id'] as int?;
     isSubscribed = json['isSubscribed'] as bool?;
@@ -138,14 +136,12 @@ class PortalTask {
     updated = json['updated'] as String?;
 
     subtasks = json['subtasks'] != null
-        ? ((json['subtasks'] as List).cast<Map<String, dynamic>>())
-            .map((e) => Subtask.fromJson(e))
-            .toList()
+        ? ((json['subtasks'] as List).cast<Map<String, dynamic>>()).map(Subtask.fromJson).toList()
         : null;
 
     responsibles = json['responsibles'] != null
         ? ((json['responsibles'] as List).cast<Map<String, dynamic>>())
-            .map((i) => PortalUser.fromJson(i))
+            .map(PortalUser.fromJson)
             .toList()
         : null;
   }

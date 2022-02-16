@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/wrappers/platform_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_dialog_action.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class StyledAlertDialog extends StatelessWidget {
@@ -48,7 +49,7 @@ class StyledAlertDialog extends StatelessWidget {
   final Color? acceptColor;
   final Function()? onCancelTap;
   final Function()? onAcceptTap;
-  final List<Widget>? actions;
+  final List<PlatformDialogAction>? actions;
 
   const StyledAlertDialog({
     Key? key,
@@ -94,8 +95,7 @@ class StyledAlertDialog extends StatelessWidget {
           : null,
       actions: actions ??
           [
-            PlatformTextButton(
-              padding: EdgeInsets.zero,
+            PlatformDialogAction(
               onPressed: onCancelTap ?? Get.back,
               child: Text(
                 platformCancelText ?? defaultCancelText,
@@ -103,8 +103,7 @@ class StyledAlertDialog extends StatelessWidget {
                 softWrap: false,
               ),
             ),
-            PlatformTextButton(
-              padding: EdgeInsets.zero,
+            PlatformDialogAction(
               onPressed: onAcceptTap,
               child: Text(platformAcceptText ?? defaultAcceptText,
                   style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().primary),

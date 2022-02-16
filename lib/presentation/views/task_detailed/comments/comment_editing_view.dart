@@ -65,7 +65,7 @@ class CommentEditingView extends StatelessWidget {
         appBar: StyledAppBar(
           titleText: tr('commentEditing'),
           leadingWidth: 65,
-          centerTitle: GetPlatform.isAndroid ? false : true,
+          centerTitle: !GetPlatform.isAndroid,
           actions: [
             PlatformWidget(
               material: (_, __) => IconButton(

@@ -39,7 +39,7 @@ import 'package:projects/data/api/files_api.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_dialog_action.dart';
 
 Future<ConflictResolveType?> showConflictResolvingDialog(List<String> titles) async {
   if (GetPlatform.isIOS) return await _showForIOS(titles);
@@ -65,7 +65,7 @@ Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
       ),
     ),
     actions: [
-      PlatformTextButton(
+      PlatformDialogAction(
         onPressed: () {
           Get.back(result: ConflictResolveType.Overwrite);
         },
@@ -74,7 +74,7 @@ Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
           textAlign: TextAlign.center,
         ),
       ),
-      PlatformTextButton(
+      PlatformDialogAction(
         onPressed: () {
           Get.back(result: ConflictResolveType.Duplicate);
         },
@@ -84,7 +84,7 @@ Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
           textAlign: TextAlign.center,
         ),
       ),
-      PlatformTextButton(
+      PlatformDialogAction(
         onPressed: () {
           Get.back(result: ConflictResolveType.Skip);
         },
@@ -94,7 +94,7 @@ Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
           textAlign: TextAlign.center,
         ),
       ),
-      PlatformTextButton(
+      PlatformDialogAction(
         onPressed: Get.back,
         child: Text(
           tr('cancel').toLowerCase().capitalizeFirst!,

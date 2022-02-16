@@ -113,7 +113,6 @@ class NewTaskController extends GetxController implements TaskActionsController 
   RxBool? setTitleError = false.obs;
 
   void init(ProjectDetailed? projectDetailed) {
-    // TODO why []
     _titleFocus.requestFocus();
 
     teamController = Get.find<ProjectTeamController>();

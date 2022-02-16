@@ -34,7 +34,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/wrappers/platform_elevated_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_form_field.dart';
 
 class AuthTextField extends StatelessWidget {

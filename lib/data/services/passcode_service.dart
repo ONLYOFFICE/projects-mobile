@@ -56,7 +56,7 @@ class PasscodeService {
   Future<bool> get isFingerprintEnable async {
     final isFingerprintEnable = await _storage.getString('isFingerprintEnable') ?? false;
 
-    return isFingerprintEnable == 'true' ? true : false;
+    return isFingerprintEnable == 'true';
   }
 
   Future<bool> get isFingerprintAvailable async {

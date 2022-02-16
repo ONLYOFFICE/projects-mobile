@@ -11,7 +11,6 @@ import 'package:flutter/material.dart'
         BottomNavigationBar,
         BottomNavigationBarType,
         BottomNavigationBarLandscapeLayout;
-import 'package:flutter/rendering.dart' show MouseCursor;
 import 'package:flutter/widgets.dart';
 
 import 'package:projects/presentation/shared/wrappers/platform.dart';
@@ -148,7 +147,7 @@ class PlatformNavBar extends PlatformWidgetBase<CupertinoTabBar, BottomAppBar> {
   BottomAppBar createMaterialWidget(BuildContext context) {
     final data = material?.call(context, platform(context));
 
-    var bar = BottomNavigationBar(
+    final bar = BottomNavigationBar(
       items: data?.items ?? items ?? const <BottomNavigationBarItem>[],
       currentIndex: data?.currentIndex ?? currentIndex ?? 0,
       onTap: data?.itemChanged ?? itemChanged,
@@ -174,13 +173,13 @@ class PlatformNavBar extends PlatformWidgetBase<CupertinoTabBar, BottomAppBar> {
     );
 
     return BottomAppBar(
-      child: bar,
       color: data?.backgroundColor ?? backgroundColor,
       elevation: data?.elevation,
       key: data?.widgetKey ?? widgetKey,
       shape: data?.shape,
       clipBehavior: data?.clipBehavior ?? Clip.none,
       notchMargin: data?.notchMargin ?? 4.0,
+      child: bar,
     );
   }
 
@@ -201,7 +200,7 @@ class PlatformNavBar extends PlatformWidgetBase<CupertinoTabBar, BottomAppBar> {
           const Border(
             top: BorderSide(
               color: _kDefaultTabBarBorderColor,
-              width: 0.0, // One physical pixel.
+              width: 0, // One physical pixel.
               style: BorderStyle.solid,
             ),
           ),

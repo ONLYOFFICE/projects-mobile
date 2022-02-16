@@ -51,7 +51,7 @@ class UserApi {
         final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .cast<Map<String, dynamic>>()
-            .map((i) => PortalUser.fromJson(i))
+            .map(PortalUser.fromJson)
             .toList();
       } else {
         result.error = response as CustomError;
@@ -91,7 +91,7 @@ class UserApi {
         {
           result.response = (responseJson['response'] as List)
               .cast<Map<String, dynamic>>()
-              .map((i) => PortalUser.fromJson(i))
+              .map(PortalUser.fromJson)
               .toList();
         }
       } else {
