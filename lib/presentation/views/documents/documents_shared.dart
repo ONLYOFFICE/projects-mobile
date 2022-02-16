@@ -158,10 +158,7 @@ class DocumentsSortButton extends StatelessWidget {
     return Row(
       children: <Widget>[
         Obx(
-          () => Text(
-            controller.sortController.currentSortTitle.value,
-            style: TextStyleHelper.body2(color: color ?? Get.theme.colors().onBackground),
-          ),
+          () => Text(controller.sortController.currentSortTitle.value),
         ),
         const SizedBox(width: 8),
         Obx(
