@@ -30,6 +30,7 @@
  *
  */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -62,6 +63,7 @@ class SettingsController extends GetxController {
 
   RxBool loaded = false.obs;
   RxString currentTheme = ''.obs;
+  RxString cacheSize = ''.obs;
   late RxBool isPasscodeEnable;
   RxBool shareAnalytics = true.obs;
 
@@ -95,6 +97,9 @@ class SettingsController extends GetxController {
     }
 
     currentTheme.value = themeMode as String;
+
+    unawaited(setupCacheDirectorySize());
+
     loaded.value = true;
 
     super.onInit();
@@ -143,13 +148,39 @@ class SettingsController extends GetxController {
   }
 
   Future<void> onClearCachePressed() async {
-    final appDir = (await getTemporaryDirectory()).path;
+    final cacheDir = await getTemporaryDirectory();
     await DefaultCacheManager().emptyCache();
-    await Directory(appDir).delete(recursive: true);
+    await Directory(cacheDir.path).delete(recursive: true);
+    await setupCacheDirectorySize();
+  }
+
+  Future<void> setupCacheDirectorySize() async {
+    final cacheDir = (await getTemporaryDirectory()).path;
+
+    var totalSize = 0;
+    final dir = Directory(cacheDir);
+
+    try {
+      if (dir.existsSync()) {
+        dir.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
+          if (entity is File) {
+            totalSize += entity.lengthSync();
+          }
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+
+    if (totalSize < 1024 * 100) {
+      cacheSize.value = '${(totalSize / 1024).toStringAsFixed(2)} Kb';
+    } else {
+      cacheSize.value = '${(totalSize / 1024 / 1024).toStringAsFixed(2)} Mb';
+    }
   }
 
   Future<void> onHelpPressed() async {
-    await launch(Const.Urls.help);
+    GetPlatform.isAndroid ? await launch(Const.Urls.help) : await launch(Const.Urls.helpIOS);
   }
 
   Future<void> onSupportPressed() async {
@@ -161,10 +192,24 @@ class SettingsController extends GetxController {
     body += '____________________';
     body += '\nApp version: $versionAndBuildNumber';
     body += '\nDevice model: $device';
-    body += '\nAndroid version: $os';
+    switch (_deviceInfoService.deviceType) {
+      case DeviceType.ios:
+        body += '\niOS version: $os';
+        break;
+      case DeviceType.android:
+        body += '\nAndroid version: $os';
+        break;
+    }
 
-    // TODO change to ONLYOFFICE Projects IOS Feedback on ios
-    final url = '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
+    String url;
+    switch (_deviceInfoService.deviceType) {
+      case DeviceType.ios:
+        url = '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects iOS Feedback&body=$body';
+        break;
+      case DeviceType.android:
+        url = '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
+        break;
+    }
 
     await _service.openEmailApp(url, Get.context!);
   }

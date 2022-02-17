@@ -92,7 +92,8 @@ class SettingTile extends StatelessWidget {
                             color: Get.theme
                                 .colors()
                                 .onBackground
-                                .withOpacity(enableIconOpacity ? 0.6 : 1))
+                                .withOpacity(enableIconOpacity ? 0.6 : 1),
+                          )
                         : null,
                   ),
                   Expanded(
@@ -102,18 +103,20 @@ class SettingTile extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(text,
-                              overflow: textOverflow,
-                              style: textStyle ??
-                                  TextStyleHelper.subtitle1(
-                                      // ignore: prefer_if_null_operators
-                                      color: textColor != null
-                                          ? textColor
-                                          : Get.theme.colors().onBackground)),
+                          Text(
+                            text,
+                            overflow: textOverflow,
+                            style: textStyle ??
+                                TextStyleHelper.subtitle1(
+                                    color: textColor ?? Get.theme.colors().onBackground),
+                          ),
                           if (loverText != null && loverText!.isNotEmpty)
-                            Text(loverText!,
-                                style: TextStyleHelper.body2(
-                                    color: Get.theme.colors().onBackground.withOpacity(0.75))),
+                            Text(
+                              loverText!,
+                              style: TextStyleHelper.body2(
+                                color: Get.theme.colors().onBackground.withOpacity(0.75),
+                              ),
+                            ),
                         ],
                       ),
                     ),
