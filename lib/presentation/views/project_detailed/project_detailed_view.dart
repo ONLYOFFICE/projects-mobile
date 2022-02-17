@@ -92,9 +92,9 @@ class ProjectDetailedView extends StatefulWidget {
 
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  late final TabController _tabController;
 
-  final _activeIndex = 0.obs;
+  final _activeIndex = ProjectDetailedTabs.tasks.obs;
 
   late final ProjectDetailsController projectController;
 
@@ -115,7 +115,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     projectController.setup();
 
     _tabController = TabController(
-      initialIndex: ProjectDetailedTabs.overview,
+      initialIndex: _activeIndex.value,
       vsync: this,
       length: ProjectDetailedTabs.length,
     );
