@@ -101,8 +101,10 @@ class PortalInputView extends StatelessWidget {
                           SizedBox(height: height * 0.1),
                         const AppIcon(icon: SvgIcons.app_logo),
                         SizedBox(height: height * 0.01),
-                        Text(tr('appName'),
-                            textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
+                        AppIcon(
+                          icon: SvgIcons.app_title,
+                          color: Get.theme.colors().onSurface,
+                        ),
                         SizedBox(height: height * 0.111),
                         Obx(
                           () => AuthTextField(
