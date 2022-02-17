@@ -46,6 +46,7 @@ import 'package:projects/domain/controllers/projects/project_filter_controller.d
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
@@ -80,6 +81,10 @@ class NavigationView extends StatelessWidget {
   }
 
   void setupControllers() {
+    Get.find<UserController>()
+      ..getUserInfo()
+      ..getSecurityInfo();
+
     if (!Get.isRegistered<PlatformController>()) Get.put(PlatformController(), permanent: true);
 
     if (!Get.isRegistered<DashboardController>(tag: 'DashboardController')) {

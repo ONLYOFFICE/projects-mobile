@@ -82,8 +82,6 @@ dependencies:
   
   # app localization
   easy_localization: ^3.0.0
-  # to restart the application correctly
-  restart_app: ^1.1.0  
 
 
   #  event_hub: ^0.1.1

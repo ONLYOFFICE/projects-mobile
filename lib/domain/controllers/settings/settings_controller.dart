@@ -33,7 +33,6 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
@@ -50,7 +49,6 @@ import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
@@ -105,9 +103,6 @@ class SettingsController extends GetxController {
   void leave() => Get.back(); //offNamed('NavigationView');
 
   Future setTheme(String themeMode) async {
-    currentTheme.value = themeMode;
-    await _storage.write('themeMode', themeMode);
-
     await Get.dialog(StyledAlertDialog(
       titleText: tr('reloadDialogTitle'),
       acceptText: tr('reload').toUpperCase(),
@@ -129,15 +124,10 @@ class SettingsController extends GetxController {
             Get.changeThemeMode(ThemeMode.system);
         }
 
-        if (kDebugMode) {
-          // this method, unfortunately, restarts the application,
-          // saving the initial route. This leads to the fact that, for example,
-          // after removing the passcode and restarting the application,
-          // we will still get to the passcode entry page.
-          Get.rootController.restartApp();
-        } else {
-          await Restart.restartApp();
-        }
+        currentTheme.value = themeMode;
+        await _storage.write('themeMode', themeMode);
+
+        Get.rootController.restartApp();
       },
       onCancelTap: Get.back,
     ));
