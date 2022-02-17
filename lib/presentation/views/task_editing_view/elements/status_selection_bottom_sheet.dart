@@ -63,14 +63,13 @@ Future<void> statusSelectionBS(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 18.5),
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Text(tr('selectStatus'),
                   style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
             ),
-            const SizedBox(height: 18.5),
           ],
         ),
       );
