@@ -105,7 +105,7 @@ class DocumentsContent extends StatelessWidget {
                           )
                         : FileCell(
                             cellController: FileCellController(portalFile: element as PortalFile),
-                            documentsController: controller as DocumentsController,
+                            documentsController: controller,
                           );
                   },
                 );
