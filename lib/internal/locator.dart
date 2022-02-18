@@ -256,7 +256,6 @@ void setupGetX() {
 
   Get.lazyPut(() => ErrorDialog(), fenix: true);
   Get.put(LoginController(), permanent: true);
-  Get.put(MainController(), permanent: true);
   Get.lazyPut(() => PasscodeCheckingController(), fenix: true);
   Get.lazyPut(() => NavigationController(), fenix: true);
 

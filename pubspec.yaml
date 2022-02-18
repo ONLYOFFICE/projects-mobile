@@ -88,7 +88,7 @@ dependencies:
   event_hub:
     git:
       url: git://github.com/ONLYOFFICE/event_hub
-  connectivity_plus: ^2.0.3
+  connectivity_plus: ^2.2.1
   html_editor_enhanced: ^2.4.0+1
   flutter_widget_from_html: ^0.8.5
   collection: ^1.15.0-nullsafety.4

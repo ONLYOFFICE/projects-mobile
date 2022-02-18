@@ -35,6 +35,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/internal/utils/debug_print.dart';
+import 'package:projects/main_controller.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -96,7 +97,11 @@ class NoInternetScreen extends StatelessWidget {
                     height: 48,
                     child: PlatformTextButton(
                       onPressed: () async {
-                        await Connectivity().checkConnectivity();
+                        if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
+                          if (Get.find<MainController>().isSessionStarted)
+                            Get.back();
+                          else {} // TODO refactor UserController
+                        }
                       },
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
                       material: (context, platform) => MaterialTextButtonData(

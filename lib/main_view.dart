@@ -41,6 +41,8 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(MainController(), permanent: true);
+
     return GetBuilder<MainController>(builder: (controller) {
       SchedulerBinding.instance!.addPostFrameCallback((_) {
         controller.setupMainPage();
