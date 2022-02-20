@@ -218,8 +218,7 @@ void setupGetX() {
   Get.lazyPut(() => ProjectStatusesController(), fenix: true);
   Get.create<ProjectTasksController>(() => ProjectTasksController());
 
-  Get.lazyPut(() => MilestonesDataSource(), fenix: true);
-  //Get.create<MilestonesDataSource>(() => MilestonesDataSource());
+  Get.create<MilestonesDataSource>(() => MilestonesDataSource());
   Get.lazyPut(() => ProjectDiscussionsController(), fenix: true);
 
   Get.lazyPut(() => MilestonesSortController(), fenix: true);

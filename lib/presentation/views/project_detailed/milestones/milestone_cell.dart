@@ -50,19 +50,14 @@ class MilestoneCell extends StatelessWidget {
     final itemController =
         Get.put(MilestoneCellController(milestone), tag: milestone!.id.toString());
 
-    return Container(
-      height: 72,
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _MilestoneIcon(
-            itemController: itemController,
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: InkWell(
-              onTap: () => {},
+    return InkWell(
+      onTap: () => {},
+      child: SizedBox(
+        height: 72,
+        child: Row(
+          children: [
+            _MilestoneIcon(itemController: itemController),
+            Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -85,8 +80,9 @@ class MilestoneCell extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ],
+            const SizedBox(width: 16),
+          ],
+        ),
       ),
     );
   }
@@ -228,7 +224,7 @@ class _MilestoneIcon extends StatelessWidget {
               ? Get.theme.colors().primary
               : Get.theme.colors().onBackground;
           return SizedBox(
-            width: 48,
+            width: 72,
             child: Stack(
               alignment: Alignment.center,
               children: <Widget>[
@@ -242,7 +238,7 @@ class _MilestoneIcon extends StatelessWidget {
                 ),
                 Positioned(
                   bottom: 0,
-                  right: 0,
+                  right: 10,
                   child: Container(
                     width: 20,
                     height: 20,
