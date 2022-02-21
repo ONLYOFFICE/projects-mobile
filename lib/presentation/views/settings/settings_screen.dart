@@ -145,10 +145,11 @@ class SettingsScreen extends StatelessWidget {
                 );
               } else {
                 return SettingsList(
+                  applicationType: ApplicationType.cupertino,
                   sections: [
                     SettingsSection(
                       tiles: [
-                        SettingsTile(
+                        SettingsTile.navigation(
                           onPressed: (_) => Get.find<NavigationController>().toScreen(
                             const PasscodeSettingsScreen(),
                           ),
@@ -180,7 +181,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     SettingsSection(
                       tiles: [
-                        SettingsTile(
+                        SettingsTile.navigation(
                           onPressed: (_) => Get.find<NavigationController>().toScreen(
                             const ColorThemeSelectionScreen(),
                           ),

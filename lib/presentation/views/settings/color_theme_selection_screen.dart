@@ -35,12 +35,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:settings_ui/settings_ui.dart';
 
 class ColorThemeSelectionScreen extends StatelessWidget {
   const ColorThemeSelectionScreen({Key? key}) : super(key: key);
@@ -57,29 +57,86 @@ class ColorThemeSelectionScreen extends StatelessWidget {
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('colorTheme'),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 10),
-            _ColorThemeTile(
-              text: tr('sameAsSystem'),
-              isSelected: controller.currentTheme.value == 'sameAsSystem',
-              onTap: () async => await controller.setTheme('sameAsSystem'),
-            ),
-            const StyledDivider(leftPadding: 16, rightPadding: 16),
-            _ColorThemeTile(
-              text: tr('lightTheme'),
-              isSelected: controller.currentTheme.value == 'lightTheme',
-              onTap: () async => await controller.setTheme('lightTheme'),
-            ),
-            const StyledDivider(leftPadding: 16, rightPadding: 16),
-            _ColorThemeTile(
-              text: tr('darkTheme'),
-              onTap: () async => await controller.setTheme('darkTheme'),
-              isSelected: controller.currentTheme.value == 'darkTheme',
-            ),
-          ],
-        ),
+        body: GetPlatform.isAndroid
+            ? ListView.custom(
+                childrenDelegate: SliverChildListDelegate(
+                  [
+                    const SizedBox(height: 10),
+                    _ColorThemeTile(
+                      text: tr('sameAsSystem'),
+                      isSelected: controller.currentTheme.value == 'sameAsSystem',
+                      onTap: () async => await controller.setTheme('sameAsSystem'),
+                    ),
+                    const StyledDivider(leftPadding: 16, rightPadding: 16),
+                    _ColorThemeTile(
+                      text: tr('lightTheme'),
+                      isSelected: controller.currentTheme.value == 'lightTheme',
+                      onTap: () async => await controller.setTheme('lightTheme'),
+                    ),
+                    const StyledDivider(leftPadding: 16, rightPadding: 16),
+                    _ColorThemeTile(
+                      text: tr('darkTheme'),
+                      onTap: () async => await controller.setTheme('darkTheme'),
+                      isSelected: controller.currentTheme.value == 'darkTheme',
+                    ),
+                  ],
+                  addAutomaticKeepAlives: false,
+                ),
+              )
+            : SettingsList(
+                applicationType: ApplicationType.cupertino,
+                sections: [
+                  SettingsSection(
+                    tiles: [
+                      SettingsTile(
+                        onPressed: (_) async => await controller.setTheme('sameAsSystem'),
+                        title: Text(
+                          tr('sameAsSystem'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                        trailing: controller.currentTheme.value == 'sameAsSystem'
+                            ? Icon(
+                                PlatformIcons(context).checkMark,
+                                size: 20,
+                                color: Get.theme.colors().primary,
+                              )
+                            : null,
+                      ),
+                      SettingsTile(
+                        onPressed: (_) async => await controller.setTheme('lightTheme'),
+                        title: Text(
+                          tr('lightTheme'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                        trailing: controller.currentTheme.value == 'lightTheme'
+                            ? Icon(
+                                PlatformIcons(context).checkMark,
+                                size: 20,
+                                color: Get.theme.colors().primary,
+                              )
+                            : null,
+                      ),
+                      SettingsTile(
+                        onPressed: (_) async => await controller.setTheme('darkTheme'),
+                        title: Text(
+                          tr('darkTheme'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                        trailing: controller.currentTheme.value == 'darkTheme'
+                            ? Icon(
+                                PlatformIcons(context).checkMark,
+                                size: 20,
+                                color: Get.theme.colors().primary,
+                              )
+                            : null,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
       ),
     );
   }

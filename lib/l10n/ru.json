@@ -475,5 +475,6 @@
 	"discussionIsOpen": "Открыто",
 	"discussionInArchive": "В архиве",
 	"openDiscussion": "Открыть",
-	"archiveDiscussion": "В архив"
+	"archiveDiscussion": "В архив",
+	"disablePasscode": "Выключить код доступа"
 }
