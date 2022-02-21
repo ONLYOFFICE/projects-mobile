@@ -130,15 +130,15 @@ class ProjectTasksController extends BaseTasksController {
     return Future.value(true);
   }
 
-  Future<void> setup(ProjectDetailed projectDetailed) async {
+  void setup(ProjectDetailed projectDetailed) {
     loaded.value = false;
 
     _projectDetailed = projectDetailed;
     _filterController.projectId = projectDetailed.id.toString();
     fabIsVisible.value = _canCreate();
 
-    await loadTasks();
+    loadTasks();
   }
 
-  bool _canCreate() => _projectDetailed.security!['canCreateTask'] ?? false;
+  bool _canCreate() => _projectDetailed.security?['canCreateTask'] ?? false;
 }

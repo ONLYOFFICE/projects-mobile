@@ -100,7 +100,6 @@ class MilestonesDataSource extends BaseController {
 
     _paginationController.startIndex = 0;
     await _getMilestones(needToClear: true);
-    //locator<EventHub>().fire('needToRefreshMilestones', ['all']);
 
     loaded.value = true;
   }
@@ -125,20 +124,18 @@ class MilestonesDataSource extends BaseController {
     return Future.value(true);
   }
 
-  Future<void> setup({ProjectDetailed? projectDetailed, int? projectId}) async {
+  void setup({ProjectDetailed? projectDetailed, int? projectId}) {
     loaded.value = false;
+
     _projectDetailed = projectDetailed;
     _projectId = projectId ?? projectDetailed!.id;
     _filterController.projectId = _projectId.toString();
+    fabIsVisible.value = _canCreate();
 
-    // ignore: unawaited_futures
     loadMilestones();
-
-    fabIsVisible.value = _canCreate()!;
   }
 
-  bool? _canCreate() =>
-      _projectDetailed == null ? false : _projectDetailed!.security!['canCreateMilestone'] as bool;
+  bool _canCreate() => _projectDetailed?.security?['canCreateMilestone'] ?? false;
 
   void loadMilestonesWithFilterByName(String searchText) {
     _searchDebounce?.cancel();
