@@ -96,7 +96,7 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
 
   bool get canRename => false;
 
-  bool get canDelete => !_userController.user!.isVisitor!;
+  bool get canDelete => !_userController.user.value!.isVisitor!;
 
   DiscussionsDocumentsController(
     DocumentsFilterController filterController,
@@ -164,8 +164,8 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
 
     await userController.getUserInfo();
     final body = <String, dynamic>{
-      'portal': '${portalInfoController.portalName}',
-      'email': '${userController.user!.email}',
+      'portal': portalInfoController.portalName,
+      'email': userController.user.value!.email,
       'file': <String, int?>{'id': selectedFile.id},
       'folder': {
         'id': selectedFile.folderId,

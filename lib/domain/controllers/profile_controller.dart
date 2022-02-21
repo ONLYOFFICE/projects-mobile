@@ -48,19 +48,18 @@ class ProfileController extends GetxController {
   final DownloadService _downloadService = locator<DownloadService>();
   final UserPhotoService _photoService = locator<UserPhotoService>();
 
-  var portalInfoController = Get.find<PortalInfoController>();
-  var userController = Get.find<UserController>();
+  final portalInfoController = Get.find<PortalInfoController>();
+  final userController = Get.find<UserController>();
 
-  Rx<PortalUser?> user = PortalUser().obs;
-  RxBool loaded = false.obs;
-  var username = ''.obs;
-  var portalName = ''.obs;
-  var displayName = ''.obs;
-  var email = ''.obs;
-  var status = (-1).obs;
-  RxBool isVisitor = false.obs;
-  RxBool isOwner = false.obs;
-  RxBool isAdmin = false.obs;
+  final user = PortalUser().obs;
+  final username = ''.obs;
+  final portalName = ''.obs;
+  final displayName = ''.obs;
+  final email = ''.obs;
+  final status = (-1).obs;
+  final isVisitor = false.obs;
+  final isOwner = false.obs;
+  final isAdmin = false.obs;
 
   // ignore: unnecessary_cast
   Rx<Widget> avatar = (AppIcon(
@@ -72,21 +71,18 @@ class ProfileController extends GetxController {
       .obs;
 
   Future<void> setup() async {
-    var response = await userController.getUserInfo();
-    if (response) {
-      user.value = userController.user;
-      username.value = userController.user!.displayName!;
-      status.value = userController.user!.status!;
-      isVisitor.value = userController.user!.isVisitor!;
-      isOwner.value = userController.user!.isOwner!;
-      isAdmin.value = userController.user!.isAdmin!;
-      email.value = userController.user!.email!;
-    }
+    await userController.getUserInfo();
 
-    response = await portalInfoController.setup();
-    if (response) {
-      portalName.value = portalInfoController.portalName!;
-    }
+    user.value = userController.user.value!;
+    username.value = userController.user.value!.displayName!;
+    status.value = userController.user.value!.status!;
+    isVisitor.value = userController.user.value!.isVisitor!;
+    isOwner.value = userController.user.value!.isOwner!;
+    isAdmin.value = userController.user.value!.isAdmin!;
+    email.value = userController.user.value!.email!;
+
+    await portalInfoController.setup();
+    portalName.value = portalInfoController.portalName!;
 
     await loadAvatar();
   }
@@ -103,12 +99,10 @@ class ProfileController extends GetxController {
   }
 
   Future<void> loadAvatar() async {
-    final photoUrl = await _photoService.getUserPhoto(userController.user!.id!);
+    final photoUrl = await _photoService.getUserPhoto(user.value.id!);
     try {
-      final avatarBytes = await _downloadService.downloadImage((photoUrl?.max ??
-          user.value?.avatar ??
-          user.value?.avatarMedium ??
-          user.value?.avatarSmall!)!);
+      final avatarBytes = await _downloadService.downloadImage(
+          photoUrl?.max ?? user.value.avatar ?? user.value.avatarMedium ?? user.value.avatarSmall!);
       if (avatarBytes == null) return;
 
       // ignore: unnecessary_cast

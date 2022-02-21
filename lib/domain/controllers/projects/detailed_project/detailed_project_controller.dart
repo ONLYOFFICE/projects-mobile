@@ -120,7 +120,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     );
 
     _userController.getUserInfo().then((res) {
-      selfUserItem = PortalUserItemController(portalUser: _userController.user!);
+      selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
     });
 
     refreshData(hidden: true);

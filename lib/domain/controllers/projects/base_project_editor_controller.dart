@@ -95,7 +95,7 @@ abstract class BaseProjectEditorController extends GetxController {
   @override
   void onInit() {
     _userController.getUserInfo().then((value) => {
-          selfUserItem = PortalUserItemController(portalUser: _userController.user!),
+          selfUserItem = PortalUserItemController(portalUser: _userController.user.value!),
         });
 
     titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
@@ -244,7 +244,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
     await _userController.getUserInfo();
 
-    selfUserItem = PortalUserItemController(portalUser: _userController.user!);
+    selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
     selfUserItem!.selectionMode.value = selectionMode;
     usersDataSourse.selfUserItem = selfUserItem;
     usersDataSourse.selectionMode = selectionMode;

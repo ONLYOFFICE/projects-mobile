@@ -68,7 +68,7 @@ class ProjectTasksController extends BaseTasksController {
   ProjectDetailed get projectDetailed => _projectDetailed;
   ProjectDetailed _projectDetailed = ProjectDetailed();
 
-  RxBool fabIsVisible = false.obs;
+  final fabIsVisible = false.obs;
 
   StreamSubscription? _refreshTasksSubscription;
 

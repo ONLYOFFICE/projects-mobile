@@ -66,11 +66,11 @@ class SelectProjectView extends StatelessWidget {
 
     final userController = Get.find<UserController>();
 
-    if (userController.user != null &&
-        (userController.user!.isAdmin! ||
-            userController.user!.isOwner! ||
-            (userController.user!.listAdminModules != null &&
-                userController.user!.listAdminModules!.contains('projects')))) {
+    if (userController.user.value != null &&
+        (userController.user.value!.isAdmin! ||
+            userController.user.value!.isOwner! ||
+            (userController.user.value!.listAdminModules != null &&
+                userController.user.value!.listAdminModules!.contains('projects')))) {
       projectsController = projectsWithPresets.activeProjectsController;
     } else if (controller is NewTaskController || controller is DiscussionActionsController) {
       projectsController = projectsWithPresets.myMembershipProjectController;

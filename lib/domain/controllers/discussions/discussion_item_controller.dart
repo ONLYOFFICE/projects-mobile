@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,12 +63,12 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class DiscussionItemController extends GetxController {
-  final DiscussionItemService _api = locator<DiscussionItemService>();
+  final _api = locator<DiscussionItemService>();
   final _userPhotoService = locator<UserPhotoService>();
   final portalUri = Get.find<PortalInfoController>().portalUri;
 
   final discussion = Discussion().obs;
-  Rx<String> avatarUrl = ''.obs;
+  final avatarUrl = ''.obs;
   final status = 0.obs;
 
   final loaded = true.obs;
@@ -84,6 +86,8 @@ class DiscussionItemController extends GetxController {
 
   final commentsListController = ScrollController();
 
+  StreamSubscription? _ss;
+
   void setup(Discussion discussion) {
     this.discussion.value = discussion;
     status.value = discussion.status!;
@@ -91,6 +95,11 @@ class DiscussionItemController extends GetxController {
     fabIsVisible.value = discussion.canEdit! && discussion.status == 0;
 
     _getUserAvatarUrl();
+
+    _ss?.cancel();
+    _ss = locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
+      if (data.any((elem) => elem == 'all') as bool) await getDiscussionDetailed();
+    });
   }
 
   @override
@@ -100,7 +109,7 @@ class DiscussionItemController extends GetxController {
   }
 
   void scrollToLastComment() {
-    commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
+    //commentsListController.jumpTo(commentsListController.position.maxScrollExtent); TODO
   }
 
   bool get isSubscribed {
@@ -112,14 +121,6 @@ class DiscussionItemController extends GetxController {
 
   Future<void> onRefresh({bool showLoading = true}) async {
     await getDiscussionDetailed(showLoading: showLoading);
-
-    // update the user data in case of changing user rights on the server side
-    Get.find<UserController>()
-      ..clear()
-      // ignore: unawaited_futures
-      ..getUserInfo()
-      // ignore: unawaited_futures
-      ..getSecurityInfo();
 
     refreshController.refreshCompleted();
     subscribersRefreshController.refreshCompleted();
@@ -296,6 +297,9 @@ class DiscussionItemController extends GetxController {
     subscribersRefreshController.dispose();
     commentsRefreshController.dispose();
     commentsListController.dispose();
+
+    _ss?.cancel();
+
     super.onClose();
   }
 }

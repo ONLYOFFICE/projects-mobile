@@ -31,12 +31,11 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PaginationController<T> extends GetxController {
   static const PAGINATION_LENGTH = 25;
-  RxList<T> data = <T>[].obs;
+  final data = <T>[].obs;
 
   RefreshController _refreshController = RefreshController();
 
@@ -47,7 +46,7 @@ class PaginationController<T> extends GetxController {
   }
 
   int startIndex = 0;
-  RxInt total = 0.obs;
+  final total = 0.obs;
 
   late Function refreshDelegate;
   late Function loadDelegate;
@@ -60,14 +59,6 @@ class PaginationController<T> extends GetxController {
     startIndex = 0;
     await refreshDelegate();
     refreshController.refreshCompleted();
-
-    // update the user data in case of changing user rights on the server side
-    Get.find<UserController>()
-      ..clear()
-      // ignore: unawaited_futures
-      ..getUserInfo()
-      // ignore: unawaited_futures
-      ..getSecurityInfo();
   }
 
   Future<void> onLoading() async {

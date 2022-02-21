@@ -53,7 +53,7 @@ class ProjectsController extends BaseController {
 
   final tags = <ProjectTag>[].obs;
 
-  late final PaginationController<ProjectDetailed> _paginationController;
+  final _paginationController = PaginationController<ProjectDetailed>();
   @override
   PaginationController<ProjectDetailed> get paginationController => _paginationController;
 
@@ -65,65 +65,53 @@ class ProjectsController extends BaseController {
   final _sortController = Get.find<ProjectsSortController>();
   ProjectsSortController get sortController => _sortController;
 
-  late final ProjectsFilterController _filterController;
+  final _filterController = Get.find<ProjectsFilterController>();
   ProjectsFilterController get filterController => _filterController;
-
-  final _userController = Get.find<UserController>();
 
   final fabIsVisible = false.obs;
 
   var _withFAB = true;
 
-  StreamSubscription? fabSubscription;
-  late StreamSubscription _refreshProjectsSubscription;
+  final _ss = <StreamSubscription>[];
 
-  ProjectsController(
-    ProjectsFilterController filterController,
-    PaginationController<ProjectDetailed> paginationController,
-  ) {
+  ProjectsController() {
     screenName = tr('projects');
-    _paginationController = paginationController;
+
     _sortController.updateSortDelegate = updateSort;
-    _filterController = filterController;
     _filterController.applyFiltersDelegate = () async => await loadProjects();
 
     paginationController.loadDelegate = () async => await _getProjects();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
-    _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+    if (_withFAB) {
+      getFabVisibility(false);
+      _ss.add(Get.find<UserController>().dataUpdated.listen(getFabVisibility));
+
+      _ss.add(Get.find<NavigationController>().onMoreView.listen((moreOpen) {
+        if (moreOpen) {
+          fabIsVisible.value = false;
+          return;
+        }
+
+        getFabVisibility(false);
+      }));
+    }
+
+    _ss.add(locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       if (data.any((elem) => elem == 'all') as bool) {
         loadProjects();
         return;
       }
-    });
-
-    _userController.loaded.listen((_loaded) async =>
-        {if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()});
-
-    getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
-    fabSubscription ??= locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
-      fabIsVisible.value = data as bool ? false : await getFabVisibility();
-    });
+    }));
   }
 
   @override
   void onClose() {
-    fabSubscription?.cancel();
-    _refreshProjectsSubscription.cancel();
+    for (final element in _ss) {
+      element.cancel();
+    }
     super.onClose();
-  }
-
-  Future<bool> getFabVisibility() async {
-    if (!_withFAB) return false;
-    await _userController.getUserInfo();
-    await _userController.getSecurityInfo();
-    if (_userController.user == null) return Future.value(false);
-    return _userController.user!.isAdmin! ||
-        _userController.user!.isOwner! ||
-        (_userController.user!.listAdminModules != null &&
-            _userController.user!.listAdminModules!.contains('projects')) ||
-        _userController.securityInfo!.canCreateProject!;
   }
 
   @override
@@ -138,7 +126,10 @@ class ProjectsController extends BaseController {
 
   Future<void> refreshData() async {
     loaded.value = false;
+
+    unawaited(Get.find<UserController>().updateData());
     await _getProjects(needToClear: true);
+
     loaded.value = true;
   }
 
@@ -189,5 +180,25 @@ class ProjectsController extends BaseController {
   void createNewProject() {
     Get.find<NavigationController>()
         .to(const NewProject(), transition: Transition.cupertinoDialog, fullscreenDialog: true);
+  }
+
+  void getFabVisibility(bool _) {
+    if (Get.find<NavigationController>().onMoreView.value) {
+      fabIsVisible.value = false;
+      return;
+    }
+
+    final user = Get.find<UserController>().user.value;
+    final info = Get.find<UserController>().securityInfo.value;
+
+    if (user == null || info == null) return;
+
+    if ((user.isAdmin ?? false) ||
+        (user.isOwner ?? false) ||
+        (user.listAdminModules != null && user.listAdminModules!.contains('projects')) ||
+        (info.canCreateProject ?? false))
+      fabIsVisible.value = true;
+    else
+      fabIsVisible.value = false;
   }
 }

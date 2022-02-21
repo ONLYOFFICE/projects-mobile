@@ -109,8 +109,7 @@ class MainController extends GetxController {
     subscriptions.add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
       mainPage.value = navigationView;
       Get.offAll(() => const MainView());
-      Get.find<UserController>().getUserInfo();
-      Get.find<UserController>().getSecurityInfo();
+      Get.find<UserController>().updateData();
 
       Get.find<PortalInfoController>().setup();
 

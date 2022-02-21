@@ -46,22 +46,17 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 
 class PortalUserItemController extends GetxController {
-  final DownloadService _downloadService = locator<DownloadService>();
+  final _downloadService = locator<DownloadService>();
   final _userPhotoService = locator<UserPhotoService>();
 
-  RxString userTitle = ''.obs;
-
-  PortalUserItemController({required this.portalUser, bool isSelected = false}) {
-    setupUser();
-    this.isSelected.value = isSelected;
-  }
+  final userTitle = ''.obs;
 
   final PortalUser portalUser;
   final profileAvatar = ''.obs;
-  RxBool isSelected = false.obs;
-  Rx<UserSelectionMode> selectionMode = UserSelectionMode.None.obs;
+  final isSelected = false.obs;
+  final selectionMode = UserSelectionMode.None.obs;
 
-  Rx<Uint8List> avatarData = Uint8List.fromList([]).obs;
+  final avatarData = Uint8List.fromList([]).obs;
 
   // ignore: unnecessary_cast
   Rx<Widget> avatar = (AppIcon(
@@ -74,6 +69,11 @@ class PortalUserItemController extends GetxController {
 
   String? get displayName => portalUser.displayName;
   String? get id => portalUser.id;
+
+  PortalUserItemController({required this.portalUser, bool isSelected = false}) {
+    setupUser();
+    this.isSelected.value = isSelected;
+  }
 
   Future<void> loadAvatar() async {
     try {
