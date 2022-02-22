@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/discussions_service.dart';
+import 'package:projects/data/services/project_service.dart';
 
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 
@@ -76,6 +77,7 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
   final fabIsVisible = false.obs;
 
   late StreamSubscription _refreshDiscussionsSubscription;
+  late StreamSubscription _refreshDetailesSubscription;
 
   ProjectDiscussionsController() {
     _sortController.updateSortDelegate = () async => await loadProjectDiscussions();
@@ -89,11 +91,19 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
         locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
       await loadProjectDiscussions();
     });
+
+    _refreshDetailesSubscription = locator<EventHub>().on('needToRefreshDetailes', (dynamic data) {
+      if ((data['detailes'] as ProjectDetailed).id != _projectDetailed.id) return;
+
+      _projectDetailed = data['detailes'] as ProjectDetailed;
+      fabIsVisible.value = _canCreate();
+    });
   }
 
   @override
   void onClose() {
     _refreshDiscussionsSubscription.cancel();
+    _refreshDetailesSubscription.cancel();
     super.onClose();
   }
 
@@ -112,14 +122,11 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
   Future loadProjectDiscussions({PresetDiscussionFilters? preset}) async {
     loaded.value = false;
 
+    unawaited(updateDetails());
     _paginationController.startIndex = 0;
-    if (preset != null) {
-      await _filterController
-          .setupPreset(preset)
-          .then((value) => _getDiscussions(needToClear: true));
-    } else {
-      await _getDiscussions(needToClear: true);
-    }
+    if (preset != null) await _filterController.setupPreset(preset);
+
+    await _getDiscussions(needToClear: true);
 
     loaded.value = true;
   }
@@ -162,4 +169,15 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
         'discussionsFilterController': filterController,
         'discussionsSortController': sortController
       });
+
+  Future<void> updateDetails() async {
+    final response =
+        await locator<ProjectService>().getProjectById(projectId: _projectDetailed.id!);
+    if (response == null) return;
+
+    _projectDetailed = response;
+    fabIsVisible.value = _canCreate();
+
+    locator<EventHub>().fire('needToRefreshDetailes', {'detailes': response});
+  }
 }

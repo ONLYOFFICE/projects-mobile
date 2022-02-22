@@ -117,13 +117,9 @@ class DiscussionsController extends BaseDiscussionsController {
     loaded.value = false;
 
     paginationController.startIndex = 0;
-    if (preset != null) {
-      await _filterController
-          .setupPreset(preset)
-          .then((value) => _getDiscussions(needToClear: true));
-    } else {
-      await _getDiscussions(needToClear: true);
-    }
+    if (preset != null) await _filterController.setupPreset(preset);
+
+    await _getDiscussions(needToClear: true);
 
     loaded.value = true;
   }

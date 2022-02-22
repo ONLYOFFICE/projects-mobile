@@ -58,6 +58,7 @@ class TasksSearchScreen extends StatelessWidget {
             return PaginationListView(
               paginationController: controller.paginationController,
               child: ListView.builder(
+                itemExtent: 72,
                 itemCount: controller.paginationController.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return TaskCell(task: controller.paginationController.data[index]);

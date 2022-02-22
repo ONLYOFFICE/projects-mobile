@@ -136,9 +136,8 @@ class TasksController extends BaseTasksController {
     loaded.value = false;
 
     paginationController.startIndex = 0;
-    if (_preset != null) {
-      await _filterController.setupPreset(_preset!);
-    }
+    if (_preset != null) await _filterController.setupPreset(_preset!);
+
     await _getTasks(needToClear: true);
 
     loaded.value = true;

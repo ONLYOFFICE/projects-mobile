@@ -38,6 +38,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/milestone_service.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
@@ -74,6 +75,7 @@ class MilestonesDataSource extends BaseController {
   final fabIsVisible = false.obs;
 
   late StreamSubscription _refreshMilestonesSubscription;
+  late StreamSubscription _refreshDetailesSubscription;
 
   MilestonesDataSource() {
     _sortController.updateSortDelegate = () async => loadMilestones();
@@ -86,11 +88,19 @@ class MilestonesDataSource extends BaseController {
         locator<EventHub>().on('needToRefreshMilestones', (dynamic data) {
       loadMilestones();
     });
+
+    _refreshDetailesSubscription = locator<EventHub>().on('needToRefreshDetailes', (dynamic data) {
+      if ((data['detailes'] as ProjectDetailed).id != _projectDetailed?.id) return;
+
+      _projectDetailed = data['detailes'] as ProjectDetailed;
+      fabIsVisible.value = _canCreate();
+    });
   }
 
   @override
   void onClose() {
     _refreshMilestonesSubscription.cancel();
+    _refreshDetailesSubscription.cancel();
     searchTextEditingController.dispose();
     super.onClose();
   }
@@ -98,6 +108,7 @@ class MilestonesDataSource extends BaseController {
   Future loadMilestones() async {
     loaded.value = false;
 
+    unawaited(updateDetails());
     _paginationController.startIndex = 0;
     await _getMilestones(needToClear: true);
 
@@ -125,6 +136,8 @@ class MilestonesDataSource extends BaseController {
   }
 
   void setup({ProjectDetailed? projectDetailed, int? projectId}) {
+    assert(projectDetailed != null || projectId != null);
+
     loaded.value = false;
 
     _projectDetailed = projectDetailed;
@@ -151,5 +164,16 @@ class MilestonesDataSource extends BaseController {
     searchTextEditingController.clear();
     searchQuery = '';
     loadMilestones();
+  }
+
+  Future<void> updateDetails() async {
+    final response = await locator<ProjectService>()
+        .getProjectById(projectId: _projectDetailed?.id ?? _projectId!);
+    if (response == null) return;
+
+    _projectDetailed = response;
+    fabIsVisible.value = _canCreate();
+
+    locator<EventHub>().fire('needToRefreshDetailes', {'detailes': response});
   }
 }

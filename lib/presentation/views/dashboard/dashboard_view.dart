@@ -342,6 +342,7 @@ class ProjectCardContent extends StatelessWidget {
         if (controller.loaded.value)
           ListView.builder(
             padding: EdgeInsets.zero,
+            itemExtent: 72,
             physics: const ScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (c, i) => i < 2
@@ -373,6 +374,7 @@ class TaskCardContent extends StatelessWidget {
       children: <Widget>[
         if (controller.loaded.value)
           ListView.builder(
+            itemExtent: 72,
             padding: EdgeInsets.zero,
             physics: const ScrollPhysics(),
             shrinkWrap: true,

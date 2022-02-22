@@ -63,6 +63,7 @@ class ProjectSearchView extends StatelessWidget {
                   controller: controller.refreshController,
                   onLoading: controller.onLoading,
                   child: ListView.builder(
+                    itemExtent: 72,
                     itemBuilder: (c, i) => ProjectCell(projectDetails: controller.searchResult[i]),
                     itemCount: controller.searchResult.length,
                   ),

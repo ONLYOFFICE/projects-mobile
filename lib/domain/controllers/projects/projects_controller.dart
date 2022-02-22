@@ -140,12 +140,12 @@ class ProjectsController extends BaseController {
 
   Future<void> loadProjects() async {
     loaded.value = false;
+
     paginationController.startIndex = 0;
-    if (_preset != null) {
-      await _filterController.setupPreset(_preset).then((value) => _getProjects(needToClear: true));
-    } else {
-      await _getProjects(needToClear: true);
-    }
+    if (_preset != null) await _filterController.setupPreset(_preset);
+
+    await _getProjects(needToClear: true);
+
     loaded.value = true;
   }
 

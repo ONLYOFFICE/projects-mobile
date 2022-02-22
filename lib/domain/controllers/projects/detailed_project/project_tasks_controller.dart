@@ -36,6 +36,7 @@ import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
@@ -70,23 +71,33 @@ class ProjectTasksController extends BaseTasksController {
 
   final fabIsVisible = false.obs;
 
-  StreamSubscription? _refreshTasksSubscription;
+  late StreamSubscription _refreshTasksSubscription;
+  late StreamSubscription _refreshDetailesSubscription;
 
   ProjectTasksController() {
     _sortController.updateSortDelegate = () async => await loadTasks();
     _filterController.applyFiltersDelegate = () async => loadTasks();
+
     _paginationController.loadDelegate = () async => await _getTasks();
     _paginationController.refreshDelegate = () async => await loadTasks();
     _paginationController.pullDownEnabled = true;
 
-    _refreshTasksSubscription ??= locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+    _refreshTasksSubscription = locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
       loadTasks();
+    });
+
+    _refreshDetailesSubscription = locator<EventHub>().on('needToRefreshDetailes', (dynamic data) {
+      if ((data['detailes'] as ProjectDetailed).id != _projectDetailed.id) return;
+
+      _projectDetailed = data['detailes'] as ProjectDetailed;
+      fabIsVisible.value = _canCreate();
     });
   }
 
   @override
   void onClose() {
-    _refreshTasksSubscription?.cancel();
+    _refreshTasksSubscription.cancel();
+    _refreshDetailesSubscription.cancel();
     super.dispose();
   }
 
@@ -99,6 +110,8 @@ class ProjectTasksController extends BaseTasksController {
 
   Future<void> loadTasks() async {
     loaded.value = false;
+
+    unawaited(updateDetails());
 
     _paginationController.startIndex = 0;
     await _getTasks(needToClear: true);
@@ -141,4 +154,15 @@ class ProjectTasksController extends BaseTasksController {
   }
 
   bool _canCreate() => _projectDetailed.security?['canCreateTask'] ?? false;
+
+  Future<void> updateDetails() async {
+    final response =
+        await locator<ProjectService>().getProjectById(projectId: _projectDetailed.id!);
+    if (response == null) return;
+
+    _projectDetailed = response;
+    fabIsVisible.value = _canCreate();
+
+    locator<EventHub>().fire('needToRefreshDetailes', {'detailes': response});
+  }
 }

@@ -51,9 +51,9 @@ import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:synchronized/synchronized.dart';
 
 class DocumentsController extends BaseDocumentsController {
-  final FilesService _api = locator<FilesService>();
+  final _api = locator<FilesService>();
 
-  TextEditingController searchInputController = TextEditingController();
+  final searchInputController = TextEditingController();
 
   String? _query;
 

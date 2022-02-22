@@ -56,7 +56,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 
 class ProjectDetailsController extends BaseProjectEditorController {
-  final ProjectService _projectService = locator<ProjectService>();
+  final _projectService = locator<ProjectService>();
 
   ProjectTasksController? projectTasksController;
   MilestonesDataSource? projectMilestonesController;
@@ -64,11 +64,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
   DocumentsController? projectDocumentsController;
   ProjectTeamController? projectTeamDataSource;
 
-  RxBool loaded = false.obs;
+  final loaded = false.obs;
 
-  RxString projectTitleText = ''.obs;
-  RxString managerText = ''.obs;
-  RxString creationDateText = ''.obs;
+  final projectTitleText = ''.obs;
+  final managerText = ''.obs;
+  final creationDateText = ''.obs;
 
   bool markedToDelete = false;
 
@@ -161,12 +161,10 @@ class ProjectDetailsController extends BaseProjectEditorController {
     projectTasksController!.setup(_projectDetailed);
     projectMilestonesController!.setup(projectDetailed: _projectDetailed);
     projectDiscussionsController!.setup(_projectDetailed);
-    unawaited(
-      projectDocumentsController!.setupFolder(
-        folderName: _projectDetailed.title!,
-        folderId: _projectDetailed.projectFolder,
-      ),
-    );
+    unawaited(projectDocumentsController!.setupFolder(
+      folderName: _projectDetailed.title!,
+      folderId: _projectDetailed.projectFolder,
+    ));
     projectTeamDataSource!.setup(projectDetailed: _projectDetailed);
     unawaited(projectTeamDataSource!.getTeam());
 
