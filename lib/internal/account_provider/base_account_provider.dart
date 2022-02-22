@@ -31,32 +31,25 @@
  */
 
 import 'dart:async';
+
 import 'package:flutter/services.dart';
 
-class AccountProvider {
-  static const MethodChannel _channel = MethodChannel('accountProvider');
+abstract class BaseAccountProvider {
+  MethodChannel channel = const MethodChannel('accountProvider');
 
-  static Future<bool?> addAccount({String accountData = '', String accountId = ''}) async {
-    return await _channel
+  Future<bool?> addAccount({String accountData = '', String accountId = ''}) async {
+    return await channel
         .invokeMethod('addAccount', {'accountData': accountData, 'accountId': accountId});
   }
 
-  static Future<List<String>> getAccounts() async {
-    final accounts = <String>[];
-    final result = await _channel.invokeMethod('getAccounts');
-    for (final item in result) {
-      accounts.add(item['account'] as String);
-    }
-    return accounts;
+  Future<List<String>> getAccounts();
+
+  Future<bool?> deleteAccount({String accountId = '', String accountData = ''}) async {
+    return await channel.invokeMethod('deleteAccount', {'accountData': accountData});
   }
 
-  static Future<bool?> deleteAccount({String accountId = '', String accountData = ''}) async {
-    return await _channel
-        .invokeMethod('deleteAccount', {'accountId': accountId, 'accountData': accountData});
-  }
-
-  static Future<bool?> updateAccount({String accountData = '', String accountId = ''}) async {
-    return await _channel
+  Future<bool?> updateAccount({String accountData = '', String accountId = ''}) async {
+    return await channel
         .invokeMethod('updateAccount', {'accountData': accountData, 'accountId': accountId});
   }
 }

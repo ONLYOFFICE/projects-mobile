@@ -42,7 +42,7 @@ import 'package:projects/data/models/account_data.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -105,8 +105,7 @@ class AccountTileController extends GetxController {
       if (accountData!.token!.isNotEmpty) {
         final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
 
-        if (!isAuthValid)
-          await Get.find<AccountManagerController>().clearTokenForAccount(accountData!);
+        if (!isAuthValid) await Get.find<AccountManager>().clearTokenForAccount(accountData!);
       }
     }
 
@@ -116,7 +115,7 @@ class AccountTileController extends GetxController {
   Future<void> loginToSavedAccount() async {
     final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
     if (!isAuthValid) {
-      await Get.find<AccountManagerController>().clearTokenForAccount(accountData!);
+      await Get.find<AccountManager>().clearTokenForAccount(accountData!);
     }
 
     if (accountData?.token == '') {
@@ -153,8 +152,9 @@ class AccountTileController extends GetxController {
           acceptText: tr('removeAccount').toUpperCase(),
           cancelText: tr('cancel').toUpperCase(),
           onAcceptTap: () async => {
-            await Get.find<AccountManagerController>().deleteAccounts(
-                accountId: accountData!.id!, accountData: jsonEncode(accountData!.toJson())),
+            await Get.find<AccountManager>().deleteAccounts(accountData: accountData!
+                // accountId: accountData!.id!, accountData: jsonEncode(accountData!.toJson())
+                ),
             Get.back(),
           },
           onCancelTap: Get.back,

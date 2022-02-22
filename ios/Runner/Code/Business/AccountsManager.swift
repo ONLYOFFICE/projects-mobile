@@ -47,7 +47,7 @@ class AccountsManager {
     }
     
     private func index(of account: ASCAccount) -> Int? {
-        return accounts.firstIndex(where: { ($0.email == account.email) && ($0.portal == account.portal) })
+        return accounts.firstIndex(where: { ($0.email == account.email) && (URL(string: $0.portal!)?.host == URL(string: account.portal!)?.host) })
     }
     
     // MARK: - Public
@@ -158,6 +158,11 @@ class AccountsManager {
     /// Export accounts to json string
     /// - Returns: json string
     func exportAccounts() -> String? {
+        if(accounts.isEmpty)
+        {
+            return ""
+        }
+        
         return accounts.toJSONString()
     }
 }

@@ -57,14 +57,14 @@ import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  late AccountManagerController accountManager;
+  late AccountManager accountManager;
 
   late TextEditingController _portalAdressController;
   TextEditingController get portalAdressController => _portalAdressController;
@@ -109,9 +109,8 @@ class LoginController extends GetxController {
       checkBoxValue.value = false;
     });
 
-    accountManager = Get.isRegistered<AccountManagerController>()
-        ? Get.find<AccountManagerController>()
-        : Get.put(AccountManagerController());
+    accountManager =
+        Get.isRegistered<AccountManager>() ? Get.find<AccountManager>() : Get.put(AccountManager());
 
     super.onInit();
   }
@@ -137,7 +136,7 @@ class LoginController extends GetxController {
 
       if (result.response!.token != null) {
         await saveLoginData(token: result.response!.token, expires: result.response!.expires);
-        await Get.find<AccountManagerController>()
+        await Get.find<AccountManager>()
             .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
 
         await cookieManager.setCookies([
@@ -246,7 +245,7 @@ class LoginController extends GetxController {
 
     if (result.response!.token != null) {
       await saveLoginData(token: result.response!.token, expires: result.response!.expires);
-      await Get.find<AccountManagerController>()
+      await Get.find<AccountManager>()
           .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
 
       locator<EventHub>().fire('loginSuccess');

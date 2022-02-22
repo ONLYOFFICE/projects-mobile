@@ -44,7 +44,7 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -145,9 +145,8 @@ class MainController extends GetxController {
     if (connection == ConnectivityResult.none) return;
 
     isSessionStarted = true;
-    final accountManager = Get.isRegistered<AccountManagerController>()
-        ? Get.find<AccountManagerController>()
-        : Get.put(AccountManagerController());
+    final accountManager =
+        Get.isRegistered<AccountManager>() ? Get.find<AccountManager>() : Get.put(AccountManager());
 
     isAuthorized().then((isAuthorized) async {
       return {
@@ -202,8 +201,7 @@ class MainController extends GetxController {
           ..httpOnly = false
       ]);
 
-      await Get.find<AccountManagerController>()
-          .addAccount(tokenString: token, expires: expirationDate);
+      await Get.find<AccountManager>().addAccount(tokenString: token, expires: expirationDate);
     }
 
     return isAuthValid;
@@ -222,7 +220,7 @@ class MainController extends GetxController {
 
     await cookieManager.clearCookies();
 
-    await Get.put(AccountManagerController()).clearToken();
+    await Get.put(AccountManager()).clearToken();
 
     Get.find<PortalInfoController>().logout();
   }

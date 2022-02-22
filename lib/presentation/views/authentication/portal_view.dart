@@ -35,7 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -57,10 +57,10 @@ class PortalInputView extends StatelessWidget {
     final controller = Get.find<LoginController>();
     controller.checkBoxValue.value = false;
 
-    if (Get.isRegistered<AccountManagerController>()) {
-      Get.find<AccountManagerController>();
+    if (Get.isRegistered<AccountManager>()) {
+      Get.find<AccountManager>();
     } else {
-      Get.put(AccountManagerController()).setup();
+      Get.put(AccountManager()).setup();
     }
 
     SchedulerBinding.instance!.addPostFrameCallback((_) {

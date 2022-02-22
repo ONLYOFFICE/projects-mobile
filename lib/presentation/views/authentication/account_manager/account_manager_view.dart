@@ -31,7 +31,7 @@
  */
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/account_tile_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -50,9 +50,8 @@ class AccountManagerView extends StatelessWidget {
 
   final loginController = Get.find<LoginController>();
 
-  final accountController = Get.isRegistered<AccountManagerController>()
-      ? Get.find<AccountManagerController>()
-      : Get.put(AccountManagerController());
+  final accountController =
+      Get.isRegistered<AccountManager>() ? Get.find<AccountManager>() : Get.put(AccountManager());
 
   @override
   Widget build(BuildContext context) {
