@@ -81,12 +81,12 @@ class UserController extends GetxController {
   }
 
   void clear() {
-    user.close();
+    //user.close();
     user.value = null;
 
-    securityInfo.close();
+    //securityInfo.close();
     securityInfo.value = null;
 
-    dataUpdated.close();
+    //dataUpdated.close();
   }
 }
