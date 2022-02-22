@@ -413,7 +413,7 @@ class TaskEditingController extends GetxController implements TaskActionsControl
       title: title.value,
       milestoneid: newMilestoneId,
       projectId: task.projectOwner!.id!,
-      responsibles: [Get.find<UserController>().user!.id],
+      responsibles: [Get.find<UserController>().user.value!.id],
     );
     _taskItemController.setLoaded = false;
     final updatedTask = await _api.updateTask(newTask: newTask);

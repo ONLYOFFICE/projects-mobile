@@ -64,7 +64,11 @@ void main() async {
 
   await Firebase.initializeApp();
   await RemoteConfigService.initialize();
-  await RemoteConfigService.fetchAndActivate();
+  try {
+    await RemoteConfigService.fetchAndActivate();
+  } catch (e) {
+    debugPrint(e.toString());
+  }
 
   runApp(
     EasyLocalization(

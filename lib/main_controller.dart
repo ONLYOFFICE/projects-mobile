@@ -68,7 +68,6 @@ class MainController extends GetxController {
   // ignore: unnecessary_cast
   Widget portalInputView = AccountManagerView() as Widget;
 
-  bool noInternet = false;
   bool isSessionStarted = false;
   bool correctPasscodeChecked = false;
 
@@ -78,11 +77,6 @@ class MainController extends GetxController {
 
   @override
   void onInit() {
-    Connectivity().checkConnectivity().then((result) => {
-          noInternet = result == ConnectivityResult.none,
-          if (result == ConnectivityResult.none) Get.to(const NoInternetScreen())
-        });
-
     _setupSubscriptions();
 
     super.onInit();
@@ -98,28 +92,24 @@ class MainController extends GetxController {
     if (subscriptions.isNotEmpty) cancelAllSubscriptions();
 
     subscriptions.add(Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (noInternet == (result == ConnectivityResult.none)) return;
       if (result == ConnectivityResult.none) {
-        Get.to(const NoInternetScreen());
+        Get.to(() => const NoInternetScreen());
 
         locator.get<CoreApi>().cancellationToken.cancel();
       } else {
-        GetIt.instance.resetLazySingleton<CoreApi>();
+        locator.resetLazySingleton<CoreApi>();
+
         if (isSessionStarted)
           Get.back();
         else
           Get.offAll(() => const MainView());
       }
-      noInternet = result == ConnectivityResult.none;
-
-      setupMainPage();
     }));
 
     subscriptions.add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
       mainPage.value = navigationView;
       Get.offAll(() => const MainView());
-      Get.find<UserController>().getUserInfo();
-      Get.find<UserController>().getSecurityInfo();
+      Get.find<UserController>().updateData();
 
       Get.find<PortalInfoController>().setup();
 
@@ -141,8 +131,12 @@ class MainController extends GetxController {
   }
 
   Future<void> setupMainPage() async {
-    final connection = await Connectivity().checkConnectivity();
-    if (connection == ConnectivityResult.none) return;
+    if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      Get.to(() => const NoInternetScreen());
+
+      locator.get<CoreApi>().cancellationToken.cancel();
+      return;
+    }
 
     isSessionStarted = true;
     final accountManager =

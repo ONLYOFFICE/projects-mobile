@@ -49,7 +49,7 @@ class _UserList extends StatelessWidget {
           itemCount: usersController.paginationController.data.length,
           itemBuilder: (BuildContext context, int index) {
             final user = usersController.paginationController.data[index];
-            if (currentUser.user!.id == user.id) return const SizedBox();
+            if (currentUser.user.value!.id == user.id) return const SizedBox();
             return _UserTile(user: user);
           },
         ),

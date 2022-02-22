@@ -36,6 +36,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/discussions_service.dart';
 
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
@@ -63,8 +65,6 @@ class DiscussionsController extends BaseDiscussionsController {
   @override
   PaginationController get paginationController => _paginationController;
 
-  final _userController = Get.find<UserController>();
-
   final _sortController = DiscussionsSortController();
   @override
   DiscussionsSortController get sortController => _sortController;
@@ -75,8 +75,7 @@ class DiscussionsController extends BaseDiscussionsController {
 
   final fabIsVisible = false.obs;
 
-  late StreamSubscription _visibilityChangedSubscription;
-  late StreamSubscription _refreshDiscussionsSubscription;
+  final _ss = <StreamSubscription>[];
 
   DiscussionsController() {
     screenName = tr('discussions');
@@ -88,26 +87,29 @@ class DiscussionsController extends BaseDiscussionsController {
     paginationController.refreshDelegate = () async => refreshData();
     paginationController.pullDownEnabled = true;
 
-    getFabVisibility().then((value) => fabIsVisible.value = value);
+    getFabVisibility(false);
+    _ss.add(Get.find<UserController>().dataUpdated.listen(getFabVisibility));
 
-    _userController.loaded
-        .listen((_loaded) async => {if (_loaded) fabIsVisible.value = await getFabVisibility()});
+    _ss.add(Get.find<NavigationController>().onMoreView.listen((moreOpen) {
+      if (moreOpen) {
+        fabIsVisible.value = false;
+        return;
+      }
 
-    _visibilityChangedSubscription =
-        locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
-      fabIsVisible.value = data as bool ? false : await getFabVisibility();
-    });
+      getFabVisibility(false);
+    }));
 
-    _refreshDiscussionsSubscription =
-        locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
+    _ss.add(locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
       if (data.any((elem) => elem == 'all') as bool) await loadDiscussions();
-    });
+    }));
   }
 
   @override
   void onClose() {
-    _visibilityChangedSubscription.cancel();
-    _refreshDiscussionsSubscription.cancel();
+    for (final element in _ss) {
+      element.cancel();
+    }
+
     super.onClose();
   }
 
@@ -128,7 +130,10 @@ class DiscussionsController extends BaseDiscussionsController {
 
   Future<void> refreshData() async {
     loaded.value = false;
+
+    unawaited(Get.find<UserController>().updateData());
     await _getDiscussions(needToClear: true);
+
     loaded.value = true;
   }
 
@@ -169,24 +174,23 @@ class DiscussionsController extends BaseDiscussionsController {
         'discussionsSortController': sortController
       });
 
-  Future<bool> getFabVisibility() async {
-    var fabVisibility = false;
-    await _userController.getUserInfo();
-    final selfUser = _userController.user!;
-
-    if (selfUser.isAdmin! ||
-        selfUser.isOwner! ||
-        (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
-      if (projectsWithPresets.activeProjectsController.itemList.isEmpty)
-        await projectsWithPresets.activeProjectsController.loadProjects();
-      fabVisibility = projectsWithPresets.activeProjectsController.itemList.isNotEmpty;
-    } else {
-      if (projectsWithPresets.myProjectsController.itemList.isEmpty)
-        await projectsWithPresets.myProjectsController.loadProjects();
-      fabVisibility = projectsWithPresets.myProjectsController.itemList.isNotEmpty;
+  void getFabVisibility(bool _) {
+    if (Get.find<NavigationController>().onMoreView.value) {
+      fabIsVisible.value = false;
+      return;
     }
-    if (selfUser.isVisitor!) fabVisibility = false;
 
-    return fabVisibility;
+    final user = Get.find<UserController>().user.value;
+    final info = Get.find<UserController>().securityInfo.value;
+
+    if (user == null || info == null) return;
+
+    if ((user.isAdmin ?? false) ||
+        (user.isOwner ?? false) ||
+        (user.listAdminModules != null && user.listAdminModules!.contains('projects')) ||
+        (info.canCreateMessage ?? false))
+      fabIsVisible.value = true;
+    else
+      fabIsVisible.value = false;
   }
 }

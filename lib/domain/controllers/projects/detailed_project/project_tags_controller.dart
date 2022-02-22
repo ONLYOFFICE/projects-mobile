@@ -30,8 +30,11 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
@@ -40,7 +43,6 @@ import 'package:projects/internal/locator.dart';
 
 class ProjectTagsController extends GetxController {
   final _api = locator<ProjectService>();
-  final _userController = Get.find<UserController>()..getUserInfo();
 
   final searchInputController = TextEditingController();
 
@@ -59,6 +61,8 @@ class ProjectTagsController extends GetxController {
   final fabIsVisible = false.obs;
 
   void onLoading() async {}
+
+  late final StreamSubscription _ss;
 
   Future<void> setup(BaseProjectEditorController projController) async {
     _projController = projController;
@@ -81,12 +85,17 @@ class ProjectTagsController extends GetxController {
       }
     }
 
-    fabIsVisible.value = _userController.user!.isAdmin! ||
-        _userController.user!.isOwner! ||
-        (_userController.user!.listAdminModules != null &&
-            _userController.user!.listAdminModules!.contains('projects'));
+    getFabVisibility(Get.find<UserController>().user.value);
+    _ss = Get.find<UserController>().user.listen(getFabVisibility);
 
     loaded.value = true;
+  }
+
+  @override
+  void onClose() {
+    _ss.cancel();
+
+    super.onClose();
   }
 
   Future<void> confirm() async {
@@ -132,5 +141,16 @@ class ProjectTagsController extends GetxController {
     for (final tag in tags) {
       filteredTags.add(tag);
     }
+  }
+
+  void getFabVisibility(PortalUser? user) {
+    if (user == null) return;
+
+    if ((user.isAdmin ?? false) ||
+        (user.isOwner ?? false) ||
+        (user.listAdminModules != null && user.listAdminModules!.contains('projects')))
+      fabIsVisible.value = true;
+    else
+      fabIsVisible.value = false;
   }
 }

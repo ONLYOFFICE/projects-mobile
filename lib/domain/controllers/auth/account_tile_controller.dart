@@ -144,21 +144,18 @@ class AccountTileController extends GetxController {
 
   Future<void> deleteAccount() async {
     await Get.dialog(
-      Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24),
-        child: StyledAlertDialog(
-          titleText: tr('removeAccountTitle'),
-          contentText: tr('removeAccountText'),
-          acceptText: tr('removeAccount').toUpperCase(),
-          cancelText: tr('cancel').toUpperCase(),
-          onAcceptTap: () async => {
-            await Get.find<AccountManager>().deleteAccounts(accountData: accountData!
-                // accountId: accountData!.id!, accountData: jsonEncode(accountData!.toJson())
-                ),
-            Get.back(),
-          },
-          onCancelTap: Get.back,
-        ),
+      StyledAlertDialog(
+        titleText: tr('removeAccountTitle'),
+        contentText: tr('removeAccountText'),
+        acceptText: tr('removeAccount').toUpperCase(),
+        cancelText: tr('cancel').toUpperCase(),
+        onAcceptTap: () async => {
+          await Get.find<AccountManager>().deleteAccounts(accountData: accountData!
+              // accountId: accountData!.id!, accountData: jsonEncode(accountData!.toJson())
+              ),
+          Get.back(),
+        },
+        onCancelTap: Get.back,
       ),
     );
   }

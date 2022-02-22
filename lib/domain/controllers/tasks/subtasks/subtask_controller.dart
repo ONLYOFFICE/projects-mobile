@@ -64,7 +64,7 @@ class SubtaskController extends GetxController {
     required int subtaskId,
   }) async {
     await _userController.getUserInfo();
-    final selfUser = _userController.user!;
+    final selfUser = _userController.user.value!;
     final data = {'responsible': selfUser.id, 'title': subtask.value!.title};
 
     final result = await _api.acceptSubtask(data: data, taskId: taskId, subtaskId: subtaskId);

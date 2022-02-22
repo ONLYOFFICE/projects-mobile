@@ -39,13 +39,11 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -105,7 +103,7 @@ class DocumentsContent extends StatelessWidget {
                           )
                         : FileCell(
                             cellController: FileCellController(portalFile: element as PortalFile),
-                            documentsController: controller as DocumentsController,
+                            documentsController: controller,
                           );
                   },
                 );
@@ -158,10 +156,7 @@ class DocumentsSortButton extends StatelessWidget {
     return Row(
       children: <Widget>[
         Obx(
-          () => Text(
-            controller.sortController.currentSortTitle.value,
-            style: TextStyleHelper.body2(color: color ?? Get.theme.colors().onBackground),
-          ),
+          () => Text(controller.sortController.currentSortTitle.value),
         ),
         const SizedBox(width: 8),
         Obx(

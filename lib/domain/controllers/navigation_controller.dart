@@ -32,43 +32,35 @@
 
 import 'dart:async';
 
-import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
-import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 
 class NavigationController extends GetxController {
-  RxInt tabIndex = 0.obs;
-  RxBool onMoreView = false.obs;
-  final _userController = Get.find<UserController>();
-  Rx<PortalUserItemController> selfUserItem =
-      Rx(PortalUserItemController(portalUser: PortalUser()));
+  final tabIndex = 0.obs;
+  final onMoreView = false.obs;
+  final selfUserItem = Rx(PortalUserItemController(portalUser: PortalUser()));
 
   int treeLength = 0;
 
   @override
   void onInit() {
-    _userController.getUserInfo().then((value) =>
-        selfUserItem.value = PortalUserItemController(portalUser: _userController.user!));
+    Get.find<UserController>().getUserInfo().then((value) => selfUserItem.value =
+        PortalUserItemController(portalUser: Get.find<UserController>().user.value!));
 
     super.onInit();
   }
 
   void showMoreView() {
-    if (onMoreView.value != true) locator<EventHub>().fire('moreViewVisibilityChanged', true);
-
     onMoreView.value = true;
   }
 
   void hideMoreView() {
-    if (onMoreView.value != false) locator<EventHub>().fire('moreViewVisibilityChanged', false);
-
     onMoreView.value = false;
   }
 

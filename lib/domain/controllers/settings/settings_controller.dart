@@ -30,10 +30,10 @@
  *
  */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
@@ -50,7 +50,6 @@ import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
-import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
@@ -64,6 +63,7 @@ class SettingsController extends GetxController {
 
   RxBool loaded = false.obs;
   RxString currentTheme = ''.obs;
+  RxString cacheSize = ''.obs;
   late RxBool isPasscodeEnable;
   RxBool shareAnalytics = true.obs;
 
@@ -97,6 +97,9 @@ class SettingsController extends GetxController {
     }
 
     currentTheme.value = themeMode as String;
+
+    unawaited(setupCacheDirectorySize());
+
     loaded.value = true;
 
     super.onInit();
@@ -105,9 +108,6 @@ class SettingsController extends GetxController {
   void leave() => Get.back(); //offNamed('NavigationView');
 
   Future setTheme(String themeMode) async {
-    currentTheme.value = themeMode;
-    await _storage.write('themeMode', themeMode);
-
     await Get.dialog(StyledAlertDialog(
       titleText: tr('reloadDialogTitle'),
       acceptText: tr('reload').toUpperCase(),
@@ -129,15 +129,10 @@ class SettingsController extends GetxController {
             Get.changeThemeMode(ThemeMode.system);
         }
 
-        if (kDebugMode) {
-          // this method, unfortunately, restarts the application,
-          // saving the initial route. This leads to the fact that, for example,
-          // after removing the passcode and restarting the application,
-          // we will still get to the passcode entry page.
-          Get.rootController.restartApp();
-        } else {
-          await Restart.restartApp();
-        }
+        currentTheme.value = themeMode;
+        await _storage.write('themeMode', themeMode);
+
+        Get.rootController.restartApp();
       },
       onCancelTap: Get.back,
     ));
@@ -153,13 +148,39 @@ class SettingsController extends GetxController {
   }
 
   Future<void> onClearCachePressed() async {
-    final appDir = (await getTemporaryDirectory()).path;
+    final cacheDir = await getTemporaryDirectory();
     await DefaultCacheManager().emptyCache();
-    await Directory(appDir).delete(recursive: true);
+    await Directory(cacheDir.path).delete(recursive: true);
+    await setupCacheDirectorySize();
+  }
+
+  Future<void> setupCacheDirectorySize() async {
+    final cacheDir = (await getTemporaryDirectory()).path;
+
+    var totalSize = 0;
+    final dir = Directory(cacheDir);
+
+    try {
+      if (dir.existsSync()) {
+        dir.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
+          if (entity is File) {
+            totalSize += entity.lengthSync();
+          }
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+
+    if (totalSize < 1024 * 100) {
+      cacheSize.value = '${(totalSize / 1024).toStringAsFixed(2)} Kb';
+    } else {
+      cacheSize.value = '${(totalSize / 1024 / 1024).toStringAsFixed(2)} Mb';
+    }
   }
 
   Future<void> onHelpPressed() async {
-    await launch(Const.Urls.help);
+    GetPlatform.isAndroid ? await launch(Const.Urls.help) : await launch(Const.Urls.helpIOS);
   }
 
   Future<void> onSupportPressed() async {
@@ -171,10 +192,24 @@ class SettingsController extends GetxController {
     body += '____________________';
     body += '\nApp version: $versionAndBuildNumber';
     body += '\nDevice model: $device';
-    body += '\nAndroid version: $os';
+    switch (_deviceInfoService.deviceType) {
+      case DeviceType.ios:
+        body += '\niOS version: $os';
+        break;
+      case DeviceType.android:
+        body += '\nAndroid version: $os';
+        break;
+    }
 
-    // TODO change to ONLYOFFICE Projects IOS Feedback on ios
-    final url = '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
+    String url;
+    switch (_deviceInfoService.deviceType) {
+      case DeviceType.ios:
+        url = '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects iOS Feedback&body=$body';
+        break;
+      case DeviceType.android:
+        url = '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
+        break;
+    }
 
     await _service.openEmailApp(url, Get.context!);
   }

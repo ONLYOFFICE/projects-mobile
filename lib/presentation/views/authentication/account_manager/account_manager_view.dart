@@ -73,8 +73,10 @@ class AccountManagerView extends StatelessWidget {
                       SizedBox(height: Get.height * 0.1),
                       const AppIcon(icon: SvgIcons.app_logo),
                       SizedBox(height: Get.height * 0.01),
-                      Text(tr('appName'),
-                          textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
+                      AppIcon(
+                        icon: SvgIcons.app_title,
+                        color: Get.theme.colors().onSurface,
+                      ),
                       SizedBox(height: Get.height * 0.06),
                       Expanded(
                         child: Obx(

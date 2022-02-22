@@ -176,7 +176,7 @@ class TaskItemController extends GetxController {
     controller.addResponsible(
       PortalUserItemController(
         isSelected: true,
-        portalUser: Get.find<UserController>().user!,
+        portalUser: Get.find<UserController>().user.value!,
       ),
     );
     await controller.acceptTask();

@@ -133,25 +133,22 @@ class TagsSelectionView extends StatelessWidget {
       ValueListenableBuilder<bool>(
         valueListenable: validate,
         builder: (context, value, child) {
-          return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 24),
-            child: StyledAlertDialog(
-              titleText: tr('enterTag'),
-              content: _TagTextFieldWidget(
-                inputController: inputController,
-                onSubmited: onSubmited,
-                validate: validate,
-              ),
-              acceptText: tr('confirm').toUpperCase(),
-              onAcceptTap: () {
-                if (inputController.text.isNotEmpty) {
-                  onSubmited(inputController.text);
-                } else {
-                  validate.value = false;
-                }
-              },
-              onCancelTap: Get.back,
+          return StyledAlertDialog(
+            titleText: tr('enterTag'),
+            content: _TagTextFieldWidget(
+              inputController: inputController,
+              onSubmited: onSubmited,
+              validate: validate,
             ),
+            acceptText: tr('confirm').toUpperCase(),
+            onAcceptTap: () {
+              if (inputController.text.isNotEmpty) {
+                onSubmited(inputController.text);
+              } else {
+                validate.value = false;
+              }
+            },
+            onCancelTap: Get.back,
           );
         },
       ),

@@ -97,17 +97,17 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
     super.onClose();
   }
 
-  Future<void> setup(ProjectDetailed projectDetailed) async {
+  void setup(ProjectDetailed projectDetailed) {
     _projectDetailed = projectDetailed;
     projectId = projectDetailed.id;
     _filterController.projectId = projectId!.toString();
     projectTitle = projectDetailed.title;
     fabIsVisible.value = _canCreate();
 
-    await loadProjectDiscussions();
+    loadProjectDiscussions();
   }
 
-  bool _canCreate() => _projectDetailed.security!['canCreateMessage'] ?? false;
+  bool _canCreate() => _projectDetailed.security?['canCreateMessage'] ?? false;
 
   Future loadProjectDiscussions({PresetDiscussionFilters? preset}) async {
     loaded.value = false;

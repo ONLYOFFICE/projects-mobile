@@ -31,16 +31,19 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 
 abstract class BaseDocumentsController extends BaseController {
   DocumentsSortController get sortController;
   DocumentsFilterController get filterController;
+
+  final portalInfoController = Get.find<PortalInfoController>();
 
   final documentsScreenName = tr('documents').obs;
 

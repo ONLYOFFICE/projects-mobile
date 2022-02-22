@@ -206,8 +206,8 @@ class FileCellController extends GetxController {
 
     await userController.getUserInfo();
     final body = <String, dynamic>{
-      'portal': '${portalInfoController.portalName}',
-      'email': '${userController.user!.email}',
+      'portal': portalInfoController.portalName,
+      'email': userController.user.value!.email,
       'file': <String, int?>{'id': selectedFile.id},
       'folder': {
         'id': selectedFile.folderId,

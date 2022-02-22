@@ -51,14 +51,14 @@ import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 class TasksController extends BaseTasksController {
   final _api = locator<TaskService>();
 
-  final _userController = Get.find<UserController>();
-
   final projectsWithPresets = locator<ProjectsWithPresets>();
   PresetTaskFilters? _preset;
 
   @override
   PaginationController<PortalTask> get paginationController => _paginationController;
   final _paginationController = PaginationController<PortalTask>();
+  @override
+  RxList get itemList => paginationController.data;
 
   @override
   TasksSortController get sortController => _sortController;
@@ -76,8 +76,7 @@ class TasksController extends BaseTasksController {
 
   bool _withFAB = true;
 
-  late StreamSubscription _visibilityChangedSubscription;
-  late StreamSubscription _refreshTasksSubscription;
+  final _ss = <StreamSubscription>[];
 
   TasksController() {
     screenName = tr('tasks');
@@ -88,40 +87,41 @@ class TasksController extends BaseTasksController {
     paginationController.refreshDelegate = () async => refreshData();
     paginationController.pullDownEnabled = true;
 
-    getFabVisibility().then((value) => fabIsVisible.value = value);
+    if (_withFAB) {
+      getFabVisibility(false);
+      _ss.add(Get.find<UserController>().dataUpdated.listen(getFabVisibility));
+
+      _ss.add(Get.find<NavigationController>().onMoreView.listen((moreOpen) {
+        if (moreOpen) {
+          fabIsVisible.value = false;
+          return;
+        }
+
+        getFabVisibility(false);
+      }));
+    }
 
     Get.find<TaskStatusesController>()
         .getStatuses()
         .then((value) => taskStatusesLoaded.value = true);
 
-    _userController.loaded.listen((_loaded) async =>
-        {if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()});
-
-    _visibilityChangedSubscription =
-        locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
-      fabIsVisible.value = data as bool ? false : await getFabVisibility();
-    });
-
-    _refreshTasksSubscription = locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+    _ss.add(locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
       refreshData();
-    });
-
-    loaded.value = true;
+    }));
   }
 
   @override
   void onClose() {
-    _visibilityChangedSubscription.cancel();
-    _refreshTasksSubscription.cancel();
+    for (final element in _ss) {
+      element.cancel();
+    }
     super.onClose();
   }
-
-  @override
-  RxList get itemList => paginationController.data;
 
   Future<void> refreshData() async {
     loaded.value = false;
 
+    unawaited(Get.find<UserController>().updateData());
     await _getTasks(needToClear: true);
 
     loaded.value = true;
@@ -175,27 +175,23 @@ class TasksController extends BaseTasksController {
         'tasksSortController': sortController
       });
 
-  Future<bool> getFabVisibility() async {
-    if (!_withFAB) return false;
-    var fabVisibility = false;
-    await _userController.getUserInfo();
-    if (_userController.user == null) return false;
-    final selfUser = _userController.user!;
-    if (selfUser.isAdmin! ||
-        selfUser.isOwner! ||
-        (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
-      if (projectsWithPresets.activeProjectsController.itemList.isEmpty) {
-        await projectsWithPresets.activeProjectsController.loadProjects();
-      }
-      fabVisibility = projectsWithPresets.activeProjectsController.itemList.isNotEmpty;
-    } else {
-      if (projectsWithPresets.myProjectsController.itemList.isEmpty) {
-        await projectsWithPresets.myProjectsController.loadProjects();
-      }
-      fabVisibility = projectsWithPresets.myProjectsController.itemList.isNotEmpty;
+  void getFabVisibility(bool _) {
+    if (Get.find<NavigationController>().onMoreView.value) {
+      fabIsVisible.value = false;
+      return;
     }
-    if (selfUser.isVisitor!) fabVisibility = false;
 
-    return fabVisibility;
+    final user = Get.find<UserController>().user.value;
+    final info = Get.find<UserController>().securityInfo.value;
+
+    if (user == null || info == null) return;
+
+    if ((user.isAdmin ?? false) ||
+        (user.isOwner ?? false) ||
+        (user.listAdminModules != null && user.listAdminModules!.contains('projects')) ||
+        (info.canCreateTask ?? false))
+      fabIsVisible.value = true;
+    else
+      fabIsVisible.value = false;
   }
 }

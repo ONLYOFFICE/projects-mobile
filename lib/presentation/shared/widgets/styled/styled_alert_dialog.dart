@@ -37,7 +37,6 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/wrappers/platform_alert_dialog.dart';
 import 'package:projects/presentation/shared/wrappers/platform_dialog_action.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class StyledAlertDialog extends StatelessWidget {
   final Widget? title;
@@ -91,37 +90,40 @@ class StyledAlertDialog extends StatelessWidget {
               )
             : null);
 
-    return PlatformAlertDialog(
-      title: _title,
-      content: _content != null
-          ? Container(
-              padding: GetPlatform.isIOS
-                  ? const EdgeInsets.only(top: 8)
-                  : const EdgeInsets.symmetric(vertical: 8),
-              child: _content,
-            )
-          : null,
-      actions: actions ??
-          [
-            PlatformDialogAction(
-              onPressed: onCancelTap ?? Get.back,
-              child: Text(
-                platformCancelText ?? defaultCancelText,
-                style: TextStyleHelper.button(color: Get.theme.colors().primary),
-                softWrap: false,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: PlatformAlertDialog(
+        title: _title,
+        content: _content != null
+            ? Container(
+                padding: GetPlatform.isIOS
+                    ? const EdgeInsets.only(top: 8)
+                    : const EdgeInsets.symmetric(vertical: 8),
+                child: _content,
+              )
+            : null,
+        actions: actions ??
+            [
+              PlatformDialogAction(
+                onPressed: onCancelTap ?? Get.back,
+                child: Text(
+                  platformCancelText ?? defaultCancelText,
+                  style: TextStyleHelper.button(color: Get.theme.colors().primary),
+                  softWrap: false,
+                ),
               ),
-            ),
-            PlatformDialogAction(
-              onPressed: onAcceptTap,
-              child: Text(platformAcceptText ?? defaultAcceptText,
-                  style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().primary),
-                  softWrap: false),
-            ),
-          ],
-      material: (_, __) => MaterialAlertDialogData(
-        contentPadding: const EdgeInsets.only(left: 24, right: 24),
-        insetPadding: EdgeInsets.zero,
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+              PlatformDialogAction(
+                onPressed: onAcceptTap,
+                child: Text(platformAcceptText ?? defaultAcceptText,
+                    style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().primary),
+                    softWrap: false),
+              ),
+            ],
+        material: (_, __) => MaterialAlertDialogData(
+          contentPadding: const EdgeInsets.only(left: 24, right: 24),
+          insetPadding: EdgeInsets.zero,
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+        ),
       ),
     );
   }
@@ -157,26 +159,46 @@ class SingleButtonDialog extends StatelessWidget {
     final platformAcceptText =
         GetPlatform.isIOS ? acceptText?.toLowerCase().capitalizeFirst : acceptText;
 
-    final _title = title ?? Text(titleText!);
-    final _content = content ?? (contentText != null ? Text(contentText!) : null);
+    final _title = title ??
+        Text(
+          titleText!,
+          style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
+        );
+    final _content = content ??
+        (contentText != null
+            ? Text(
+                contentText!,
+                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+              )
+            : null);
 
-    return PlatformAlertDialog(
-      title: _title,
-      content: _content != null
-          ? Container(
-              padding: GetPlatform.isIOS ? const EdgeInsets.only(top: 18) : null,
-              child: _content,
-            )
-          : null,
-      actions: [
-        PlatformTextButton(
-          onPressed: onAcceptTap,
-          child: Text(
-            platformAcceptText ?? defaultAcceptText,
-            style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().links),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: PlatformAlertDialog(
+        title: _title,
+        content: _content != null
+            ? Container(
+                padding: GetPlatform.isIOS
+                    ? const EdgeInsets.only(top: 8)
+                    : const EdgeInsets.symmetric(vertical: 8),
+                child: _content,
+              )
+            : null,
+        actions: [
+          PlatformDialogAction(
+            onPressed: onAcceptTap,
+            child: Text(
+              platformAcceptText ?? defaultAcceptText,
+              style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().primary),
+            ),
           ),
+        ],
+        material: (_, __) => MaterialAlertDialogData(
+          contentPadding: const EdgeInsets.only(left: 24, right: 24),
+          insetPadding: EdgeInsets.zero,
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
         ),
-      ],
+      ),
     );
   }
 }

@@ -94,13 +94,7 @@ class DashboardController extends GetxController {
     refreshData();
     refreshProjectsData();
 
-    // update the user data in case of changing user rights on the server side
-    Get.find<UserController>()
-      ..clear()
-      // ignore: unawaited_futures
-      ..getUserInfo()
-      // ignore: unawaited_futures
-      ..getSecurityInfo();
+    Get.find<UserController>().updateData();
 
     _refreshController.refreshCompleted();
   }

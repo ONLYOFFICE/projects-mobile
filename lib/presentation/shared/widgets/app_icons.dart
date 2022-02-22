@@ -38,7 +38,7 @@ class SvgIcons {
   SvgIcons._();
 
   static const String app_logo = 'lib/assets/images/app_logo.svg';
-  static const String title = 'lib/assets/images/icons/title.svg';
+  static const String app_title = 'lib/assets/images/app_title.svg';
 
   static const String tab_bar_dashboard = 'lib/assets/images/icons/tab_bar/dashboard.svg';
   static const String tab_bar_tasks = 'lib/assets/images/icons/tab_bar/tasks.svg';

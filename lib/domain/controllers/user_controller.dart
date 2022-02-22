@@ -40,44 +40,53 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/internal/locator.dart';
 
 class UserController extends GetxController {
-  final AuthService _api = locator<AuthService>();
   final _lock = Lock();
 
-  PortalUser? user;
-  SecurityInfo? securityInfo;
-  RxBool loaded = false.obs;
+  final user = Rxn<PortalUser>();
+  final securityInfo = Rxn<SecurityInfo>();
+
+  final dataUpdated = false.obs;
+
+  Future<void> updateData() async {
+    var loaded = await getUserInfo();
+    loaded = await getSecurityInfo();
+    if (loaded) dataUpdated.value = !dataUpdated.value;
+  }
 
   Future<bool> getUserInfo() async {
     final response = await _lock.synchronized(() async {
-      if (user != null) return true;
-      final data = await _api.getSelfInfo();
-      if (data.response == null) return Future.value(false);
-      user = data.response;
-      loaded.value = securityInfo != null;
-      return Future.value(loaded.value);
+      final response = await locator<AuthService>().getSelfInfo();
+      if (response.response == null) return false;
+      user.value = response.response;
+      return true;
     });
-    return Future.value(response);
+    return response;
   }
 
-  Future getSecurityInfo() async {
+  Future<bool> getSecurityInfo() async {
     final response = await _lock.synchronized(() async {
-      securityInfo ??= await locator<ProjectService>().getProjectSecurityinfo();
-      loaded.value = user != null;
-      return Future.value(loaded.value);
+      final response = await locator<ProjectService>().getProjectSecurityinfo();
+      if (response == null) return false;
+      securityInfo.value = response;
+      return true;
     });
-    return Future.value(response);
+    return response;
   }
 
   Future<String?> getUserId() async {
-    if (user == null || user!.id == null) {
+    if (user.value == null || user.value?.id == null) {
       if (!await getUserInfo()) return null;
     }
-    return user!.id;
+    return user.value!.id;
   }
 
   void clear() {
-    user = null;
-    securityInfo = null;
-    loaded.value = false;
+    user.close();
+    user.value = null;
+
+    securityInfo.close();
+    securityInfo.value = null;
+
+    dataUpdated.close();
   }
 }

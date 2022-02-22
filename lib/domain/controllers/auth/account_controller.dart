@@ -67,8 +67,8 @@ class AccountManager extends GetxController {
     try {
       final portalInfo = Get.find<PortalInfoController>();
       await portalInfo.setup();
-      await Get.find<UserController>().getUserInfo();
-      final user = Get.find<UserController>().user;
+      await Get.find<UserController>().updateData();
+      final user = Get.find<UserController>().user.value;
 
       final portalUri = Uri.parse(Get.find<PortalInfoController>().portalUri!);
       final avatarUrl = user!.avatar!.contains('http') ? user.avatar : '$portalUri${user.avatar}';
@@ -99,10 +99,10 @@ class AccountManager extends GetxController {
       final portalInfo = Get.find<PortalInfoController>();
       await portalInfo.setup();
       await Get.find<UserController>().getUserInfo();
-      final user = Get.find<UserController>().user;
+      final user = Get.find<UserController>().user.value!;
 
       final portalUri = Uri.parse(Get.find<PortalInfoController>().portalUri!);
-      final avatarUrl = user!.avatar!.contains('http') ? user.avatar : '$portalUri${user.avatar}';
+      final avatarUrl = user.avatar!.contains('http') ? user.avatar : '$portalUri${user.avatar}';
 
       final accountData = AccountData(
           token: tokenString,

@@ -46,7 +46,6 @@ import 'package:projects/domain/controllers/documents/base_documents_controller.
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
@@ -54,7 +53,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 class DiscussionsDocumentsController extends BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
-  PortalInfoController portalInfoController = Get.find<PortalInfoController>();
 
   final _userController = Get.find<UserController>();
 
@@ -98,7 +96,7 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
 
   bool get canRename => false;
 
-  bool get canDelete => !_userController.user!.isVisitor!;
+  bool get canDelete => !_userController.user.value!.isVisitor!;
 
   DiscussionsDocumentsController(
     DocumentsFilterController filterController,
@@ -166,8 +164,8 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
 
     await userController.getUserInfo();
     final body = <String, dynamic>{
-      'portal': '${portalInfoController.portalName}',
-      'email': '${userController.user!.email}',
+      'portal': portalInfoController.portalName,
+      'email': userController.user.value!.email,
       'file': <String, int?>{'id': selectedFile.id},
       'folder': {
         'id': selectedFile.folderId,

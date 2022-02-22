@@ -34,8 +34,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
 
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -53,7 +53,7 @@ import 'package:projects/presentation/views/documents/documents_move_or_copy_vie
 
 class FileCell extends StatelessWidget {
   final FileCellController cellController;
-  final DocumentsController documentsController;
+  final BaseDocumentsController documentsController;
 
   const FileCell({Key? key, required this.documentsController, required this.cellController})
       : super(key: key);
@@ -152,7 +152,7 @@ class FileCell extends StatelessWidget {
 }
 
 Future<void> _onFilePopupMenuSelected(value, BuildContext context,
-    DocumentsController documentsController, FileCellController cellController) async {
+    BaseDocumentsController documentsController, FileCellController cellController) async {
   switch (value) {
     case 'copyLink':
       final portalDomain = documentsController.portalInfoController.portalUri;
@@ -180,7 +180,6 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
         'mode': 'copyFile',
         'target': cellController.file.id,
         'initialFolderId': documentsController.currentFolderID,
-        'refreshCalback': documentsController.refreshContent
       });
       break;
     case 'move':
@@ -189,7 +188,6 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
         'mode': 'moveFile',
         'target': cellController.file.id,
         'initialFolderId': documentsController.currentFolderID,
-        'refreshCalback': documentsController.refreshContent
       });
       break;
     case 'rename':
@@ -208,7 +206,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
 }
 
 void _renameFile(
-  DocumentsController docController,
+  BaseDocumentsController docController,
   FileCellController cellController,
   BuildContext context,
 ) {
@@ -267,7 +265,7 @@ class _NewFileTextFieldWidget extends StatelessWidget {
   }) : super(key: key);
 
   final TextEditingController inputController;
-  final DocumentsController docController;
+  final BaseDocumentsController docController;
   final ValueNotifier<bool> isErrorInputText;
   final FileCellController cellController;
 

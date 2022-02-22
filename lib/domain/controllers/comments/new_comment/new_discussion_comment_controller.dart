@@ -31,9 +31,11 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
@@ -65,42 +67,43 @@ class NewDiscussionCommentController extends NewCommentController {
   @override
   Future addComment(BuildContext context) async {
     final text = await _textController.getText();
-    if (text.isEmpty) {
+    if (text.isEmpty)
       await emptyTitleError();
-    } else {
+    else {
       setTitleError.value = false;
       final newComment = await _api.addMessageComment(content: text, messageId: idFrom!);
       if (newComment != null) {
-        _textController.clear();
-        final discussionController = Get.find<DiscussionItemController>();
-        await discussionController.onRefresh(showLoading: false);
-        discussionController.scrollToLastComment();
-        Get.back();
-        MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
-      }
+        MessagesHandler.showSnackBar(
+            context: context, text: tr('commentCreated')); // TODO scroll down to comment
+        locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
+      } else
+        MessagesHandler.showSnackBar(context: context, text: tr('error'));
+
+      Get.back();
     }
   }
 
   @override
   Future addReplyComment(BuildContext context) async {
     final text = await _textController.getText();
-    if (text.isEmpty) {
+    if (text.isEmpty)
       await emptyTitleError();
-    } else {
+    else {
       setTitleError.value = false;
+
       final newComment = await _api.addMessageReplyComment(
         content: text,
         messageId: idFrom!,
         parentId: parentId!,
       );
+
       if (newComment != null) {
-        _textController.clear();
-        final discussionController = Get.find<DiscussionItemController>();
-        // ignore: unawaited_futures
-        discussionController.onRefresh();
-        Get.back();
         MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
-      }
+        locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
+      } else
+        MessagesHandler.showSnackBar(context: context, text: tr('error'));
+
+      Get.back();
     }
   }
 

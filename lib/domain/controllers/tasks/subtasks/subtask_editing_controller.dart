@@ -165,19 +165,16 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
       responsible = null;
 
     if (responsible != _previousResponsibleId || _titleController.text != _previousTitle) {
-      Get.dialog(Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24),
-        child: StyledAlertDialog(
-          titleText: tr('discardChanges'),
-          contentText: tr('lostOnLeaveWarning'),
-          acceptText: tr('delete').toUpperCase(),
-          acceptColor: Get.theme.colors().colorError,
-          onAcceptTap: () {
-            Get.back();
-            Get.back();
-          },
-          onCancelTap: Get.back,
-        ),
+      Get.dialog(StyledAlertDialog(
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
+        onAcceptTap: () {
+          Get.back();
+          Get.back();
+        },
+        onCancelTap: Get.back,
       ));
     } else {
       Get.back();

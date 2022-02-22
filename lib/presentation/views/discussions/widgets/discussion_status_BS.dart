@@ -60,14 +60,13 @@ Future<void> showsDiscussionStatusesBS({
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 18.5),
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Text(tr('selectStatus'),
                   style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
             ),
-            const SizedBox(height: 18.5),
           ],
         ),
       );
@@ -75,8 +74,6 @@ Future<void> showsDiscussionStatusesBS({
     builder: (context, bottomSheetOffset) {
       return SliverChildListDelegate(
         [
-          // Obx(
-          //   () =>
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
@@ -92,6 +89,14 @@ Future<void> showsDiscussionStatusesBS({
                     child: StatusTile(
                       title: tr('openDiscussion'),
                       selected: controller!.status.value == 0,
+                      icon: Center(
+                        child: AppIcon(
+                          icon: SvgIcons.open_status,
+                          color: Get.theme.colors().primary,
+                          height: 16,
+                          width: 16,
+                        ),
+                      ),
                     ),
                   ),
                   InkWell(
@@ -99,6 +104,14 @@ Future<void> showsDiscussionStatusesBS({
                     child: StatusTile(
                       title: tr('archiveDiscussion'),
                       selected: controller.status.value == 1,
+                      icon: Center(
+                        child: AppIcon(
+                          icon: SvgIcons.archived_status,
+                          color: Get.theme.colors().primary,
+                          height: 16,
+                          width: 16,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),

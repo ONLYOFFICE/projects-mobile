@@ -120,7 +120,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     );
 
     _userController.getUserInfo().then((res) {
-      selfUserItem = PortalUserItemController(portalUser: _userController.user!);
+      selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
     });
 
     refreshData(hidden: true);
@@ -158,9 +158,9 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     fillProjectInfo(_projectDetailed);
 
-    unawaited(projectTasksController!.setup(_projectDetailed));
-    unawaited(projectMilestonesController!.setup(projectDetailed: _projectDetailed));
-    unawaited(projectDiscussionsController!.setup(_projectDetailed));
+    projectTasksController!.setup(_projectDetailed);
+    projectMilestonesController!.setup(projectDetailed: _projectDetailed);
+    projectDiscussionsController!.setup(_projectDetailed);
     unawaited(
       projectDocumentsController!.setupFolder(
         folderName: _projectDetailed.title!,

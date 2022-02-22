@@ -54,12 +54,12 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
       Get.isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300;
   static const double _kButtonHeight = 44;
   static final TextStyle _kActionSheetActionStyle = TextStyle(
-    //fontFamily: '.SF Pro Display',
-    inherit: false,
-    fontSize: 16,
+    fontFamily: '.SF Pro Text',
+    fontSize: 17,
+    color: Get.theme.colors().onSurface,
     fontWeight: FontWeight.w400,
-    color: Get.theme.colors().onBackground,
-    textBaseline: TextBaseline.alphabetic,
+    height: 1.3,
+    letterSpacing: -0.41,
   );
 
   final GlobalKey _globalKey = GlobalKey();
@@ -116,22 +116,17 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
       onTap: handleTap,
       behavior: HitTestBehavior.opaque,
       child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxHeight: _kButtonHeight,
-        ),
+        constraints: const BoxConstraints.tightFor(height: _kButtonHeight),
         child: Semantics(
           button: true,
           child: Container(
             decoration: BoxDecoration(
-              color: _isPressed ? _kBackgroundColorPressed : _kBackgroundColor,
+              color: _isPressed ? _kBackgroundColorPressed : _kBackgroundColor.withOpacity(0.4),
               border: Border(
                 bottom: BorderSide(color: _kBackgroundColorPressed),
               ),
             ),
-            padding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 10,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
             child: DefaultTextStyle(
               style: _textStyle,
               child: Row(

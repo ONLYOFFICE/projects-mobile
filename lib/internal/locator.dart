@@ -119,7 +119,6 @@ import 'package:projects/domain/controllers/tasks/tasks_with_presets.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/users/users_controller.dart';
 import 'package:projects/domain/dialogs.dart';
-import 'package:projects/main_controller.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -179,21 +178,6 @@ void setupGetX() {
   Get.create<PaginationController<PortalTask>>(() => PaginationController<PortalTask>());
   Get.create<PaginationController<ProjectDetailed>>(() => PaginationController<ProjectDetailed>());
 
-  // Get.lazyPut(() => PaginationController<ProjectDetailed>(),
-  //     fenix: true, tag: '_myProjectPaginationController');
-  // Get.lazyPut(() => PaginationController<ProjectDetailed>(),
-  //     fenix: true, tag: '_folowedProjectPaginationController');
-  // Get.lazyPut(() => PaginationController<ProjectDetailed>(),
-  //     fenix: true, tag: '_activeProjectPaginationController');
-  // Get.lazyPut(() => PaginationController<ProjectDetailed>(),
-  //     fenix: true, tag: '_myMembershipProjectPaginationController');
-  // Get.lazyPut(() => PaginationController<ProjectDetailed>(),
-  //     fenix: true, tag: '_myManagedProjectPaginationController');
-  // Get.lazyPut(() => PaginationController<PortalTask>(),
-  //     fenix: true, tag: '_upcomingTasksPaginationController');
-  // Get.lazyPut(() => PaginationController<PortalTask>(),
-  //     fenix: true, tag: '_myTasksPaginationController');
-
   Get.create<DiscussionItemController>(() => DiscussionItemController());
   Get.create(() => DiscussionsController());
 
@@ -206,10 +190,7 @@ void setupGetX() {
   Get.lazyPut<ProjectTaskFilterController>(() => ProjectTaskFilterController(), fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
 
-  Get.lazyPut(
-    () => UserController(),
-    fenix: true,
-  );
+  Get.lazyPut(() => UserController(), fenix: true);
   Get.lazyPut(() => UsersController(), fenix: true);
 
   Get.lazyPut(() => UsersDataSource(), fenix: true);
@@ -218,8 +199,7 @@ void setupGetX() {
   Get.lazyPut(() => ProjectStatusesController(), fenix: true);
   Get.create<ProjectTasksController>(() => ProjectTasksController());
 
-  Get.lazyPut(() => MilestonesDataSource(), fenix: true);
-  //Get.create<MilestonesDataSource>(() => MilestonesDataSource());
+  Get.create<MilestonesDataSource>(() => MilestonesDataSource());
   Get.lazyPut(() => ProjectDiscussionsController(), fenix: true);
 
   Get.lazyPut(() => MilestonesSortController(), fenix: true);
@@ -256,7 +236,6 @@ void setupGetX() {
 
   Get.lazyPut(() => ErrorDialog(), fenix: true);
   Get.put(LoginController(), permanent: true);
-  Get.put(MainController(), permanent: true);
   Get.lazyPut(() => PasscodeCheckingController(), fenix: true);
   Get.lazyPut(() => NavigationController(), fenix: true);
 
