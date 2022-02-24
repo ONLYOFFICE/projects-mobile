@@ -188,8 +188,10 @@ class PasscodeSettingsController extends GetxController {
   }
 
   Future<void> tryChangingPasscode() async {
-    await Get.to(() => EnterCurrentPasscodeScreen(onPass: () => Get.to(EditPasscodeScreen1.new)),
-        preventDuplicates: false);
+    await Get.to(
+      () => EnterCurrentPasscodeScreen(onPass: () => Get.to(EditPasscodeScreen1.new)),
+      preventDuplicates: false,
+    );
   }
 
   void onPasscodeTilePressed(bool value) {
