@@ -60,7 +60,11 @@ class _Task extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(tr('task').toUpperCase(), style: TextStyleHelper.overline()),
+                    Text(
+                      tr('task'),
+                      style: TextStyleHelper.overline(
+                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
+                    ),
                     Obx(
                       () => Text(
                         taskController!.task.value.title!,

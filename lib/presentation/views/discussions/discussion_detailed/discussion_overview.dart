@@ -84,9 +84,11 @@ class DiscussionOverview extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(tr('discussion').toUpperCase(),
-                                style: TextStyleHelper.overline(
-                                    color: Get.theme.colors().onBackground.withOpacity(0.6))),
+                            Text(
+                              tr('discussion'),
+                              style: TextStyleHelper.overline(
+                                  color: Get.theme.colors().onBackground.withOpacity(0.6)),
+                            ),
                             Text(discussion.title!,
                                 style:
                                     TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
@@ -101,6 +103,8 @@ class DiscussionOverview extends StatelessWidget {
                 const SizedBox(height: 16),
                 InfoTile(
                   caption: '${tr('description')}:',
+                  captionStyle: TextStyleHelper.caption(
+                      color: Get.theme.colors().onBackground.withOpacity(0.6)),
                   icon: AppIcon(
                       icon: SvgIcons.description,
                       color: Get.theme.colors().onBackground.withOpacity(0.75)),
@@ -123,6 +127,8 @@ class DiscussionOverview extends StatelessWidget {
                       icon: SvgIcons.project,
                       color: Get.theme.colors().onBackground.withOpacity(0.75)),
                   caption: '${tr('project')}:',
+                  captionStyle: TextStyleHelper.caption(
+                      color: Get.theme.colors().onBackground.withOpacity(0.6)),
                   subtitle: discussion.project!.title,
                   subtitleStyle: TextStyleHelper.subtitle1(
                     color: Get.theme.colors().links,
@@ -136,6 +142,8 @@ class DiscussionOverview extends StatelessWidget {
                         icon: SvgIcons.calendar,
                         color: Get.theme.colors().onBackground.withOpacity(0.75)),
                     caption: '${tr('creationDate')}:',
+                    captionStyle: TextStyleHelper.caption(
+                        color: Get.theme.colors().onBackground.withOpacity(0.6)),
                     subtitle: formatedDate(discussion.created!),
                   ),
                 if (discussion.createdBy != null) const SizedBox(height: 20),
@@ -145,6 +153,8 @@ class DiscussionOverview extends StatelessWidget {
                         icon: SvgIcons.user,
                         color: Get.theme.colors().onBackground.withOpacity(0.75)),
                     caption: '${tr('createdBy')}:',
+                    captionStyle: TextStyleHelper.caption(
+                        color: Get.theme.colors().onBackground.withOpacity(0.6)),
                     subtitle: discussion.createdBy!.displayName,
                   ),
                 const SizedBox(height: 100),

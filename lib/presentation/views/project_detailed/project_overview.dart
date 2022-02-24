@@ -69,7 +69,9 @@ class ProjectOverview extends StatelessWidget {
                 const SizedBox(height: 20),
                 Obx(
                   () => InfoTile(
-                    caption: tr('project').toUpperCase(),
+                    caption: tr('project'),
+                    captionStyle: TextStyleHelper.overline(
+                        color: Get.theme.colors().onBackground.withOpacity(0.6)),
                     icon: const AppIcon(icon: SvgIcons.project, color: Color(0xff707070)),
                     subtitle: projectController.projectTitleText.value,
                     subtitleStyle: TextStyleHelper.headline7(
@@ -91,6 +93,8 @@ class ProjectOverview extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: InfoTile(
                       caption: tr('description'),
+                      captionStyle: TextStyleHelper.caption(
+                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
                       icon: const AppIcon(icon: SvgIcons.description, color: Color(0xff707070)),
                       subtitleWidget: ReadMoreText(
                         projectController.descriptionText.value,
@@ -109,6 +113,8 @@ class ProjectOverview extends StatelessWidget {
                 Obx(() => InfoTile(
                       icon: const AppIcon(icon: SvgIcons.user, color: Color(0xff707070)),
                       caption: tr('projectManager'),
+                      captionStyle: TextStyleHelper.caption(
+                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
                       subtitle: projectController.managerText.value,
                       subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                     )),
@@ -124,6 +130,8 @@ class ProjectOverview extends StatelessWidget {
                         tabController!.animateTo(5);
                       },
                       caption: tr('team'),
+                      captionStyle: TextStyleHelper.caption(
+                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
                       iconData: PlatformIcons(context).rightChevron,
                       subtitle: plural(
                           'members', projectController.projectTeamDataSource!.usersList.length),
@@ -135,6 +143,8 @@ class ProjectOverview extends StatelessWidget {
                 Obx(() => InfoTile(
                     icon: const AppIcon(icon: SvgIcons.calendar, color: Color(0xff707070)),
                     caption: tr('creationDate'),
+                    captionStyle: TextStyleHelper.caption(
+                        color: Get.theme.colors().onBackground.withOpacity(0.6)),
                     subtitle: projectController.creationDateText.value)),
                 const SizedBox(height: 20),
                 Obx(() {
@@ -142,6 +152,8 @@ class ProjectOverview extends StatelessWidget {
                     return InfoTile(
                         icon: const AppIcon(icon: SvgIcons.tag, color: Color(0xff707070)),
                         caption: tr('tags'),
+                        captionStyle: TextStyleHelper.caption(
+                            color: Get.theme.colors().onBackground.withOpacity(0.6)),
                         subtitle: projectController.tagsText.value);
                   return const SizedBox();
                 })

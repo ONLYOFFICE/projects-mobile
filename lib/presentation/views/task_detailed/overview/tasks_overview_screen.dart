@@ -77,6 +77,8 @@ class TaskOverviewScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 21),
                     child: InfoTile(
                       caption: '${tr('description')}:',
+                      captionStyle: TextStyleHelper.caption(
+                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
                       icon: AppIcon(
                           icon: SvgIcons.description,
                           color: Get.theme.colors().onBackground.withOpacity(0.75)),
@@ -99,6 +101,8 @@ class TaskOverviewScreen extends StatelessWidget {
                       icon: SvgIcons.project,
                       color: Get.theme.colors().onBackground.withOpacity(0.75)),
                   caption: '${tr('project')}:',
+                  captionStyle: TextStyleHelper.caption(
+                      color: Get.theme.colors().onBackground.withOpacity(0.6)),
                   subtitle: task.projectOwner!.title,
                   subtitleStyle: TextStyleHelper.subtitle1(
                     color: Get.theme.colors().links,
@@ -112,6 +116,8 @@ class TaskOverviewScreen extends StatelessWidget {
                           icon: SvgIcons.milestone,
                           color: Get.theme.colors().onBackground.withOpacity(0.75)),
                       caption: '${tr('milestone')}:',
+                      captionStyle: TextStyleHelper.caption(
+                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
                       subtitle: task.milestone!.title,
                       subtitleStyle: TextStyleHelper.subtitle1()),
                 if (task.startDate != null) const SizedBox(height: 20),
@@ -121,6 +127,8 @@ class TaskOverviewScreen extends StatelessWidget {
                         icon: SvgIcons.start_date,
                         color: Get.theme.colors().onBackground.withOpacity(0.75)),
                     caption: '${tr('startDate')}:',
+                    captionStyle: TextStyleHelper.caption(
+                        color: Get.theme.colors().onBackground.withOpacity(0.6)),
                     subtitle: formatedDateFromString(
                       now: DateTime.now(),
                       stringDate: task.startDate!,
@@ -133,6 +141,8 @@ class TaskOverviewScreen extends StatelessWidget {
                           icon: SvgIcons.due_date,
                           color: Get.theme.colors().onBackground.withOpacity(0.75)),
                       caption: '${tr('dueDate')}:',
+                      captionStyle: TextStyleHelper.caption(
+                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
                       subtitle:
                           formatedDateFromString(now: DateTime.now(), stringDate: task.deadline!)),
                 const SizedBox(height: 20),
@@ -143,6 +153,8 @@ class TaskOverviewScreen extends StatelessWidget {
                             ? Get.theme.colors().colorError.withOpacity(0.75)
                             : Get.theme.colors().onBackground.withOpacity(0.75)),
                     caption: '${tr('priority')}:',
+                    captionStyle: TextStyleHelper.caption(
+                        color: Get.theme.colors().onBackground.withOpacity(0.6)),
                     subtitle: task.priority == 1 ? tr('high') : tr('normal')),
                 if (task.responsibles != null && task.responsibles!.isNotEmpty)
                   const SizedBox(height: 20),
@@ -156,6 +168,8 @@ class TaskOverviewScreen extends StatelessWidget {
                           icon: SvgIcons.person,
                           color: Get.theme.colors().onBackground.withOpacity(0.75)),
                       caption: '${tr('assignedTo')}:',
+                      captionStyle: TextStyleHelper.caption(
+                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
                       subtitle: task.responsibles!.length >= 2
                           ? plural('responsibles', task.responsibles!.length)
                           : task.responsibles![0]!.displayName,
@@ -172,6 +186,8 @@ class TaskOverviewScreen extends StatelessWidget {
                       icon: SvgIcons.calendar,
                       color: Get.theme.colors().onBackground.withOpacity(0.75)),
                   caption: '${tr('creationDate')}:',
+                  captionStyle: TextStyleHelper.caption(
+                      color: Get.theme.colors().onBackground.withOpacity(0.6)),
                   subtitle: formatedDateFromString(
                     now: DateTime.now(),
                     stringDate: task.created!,
@@ -183,6 +199,8 @@ class TaskOverviewScreen extends StatelessWidget {
                       icon: SvgIcons.person,
                       color: Get.theme.colors().onBackground.withOpacity(0.75)),
                   caption: '${tr('createdBy')}:',
+                  captionStyle: TextStyleHelper.caption(
+                      color: Get.theme.colors().onBackground.withOpacity(0.6)),
                   subtitle: task.createdBy!.displayName,
                 ),
                 const SizedBox(height: 110)
