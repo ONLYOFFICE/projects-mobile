@@ -30,7 +30,6 @@
  *
  */
 
-import 'package:event_hub/event_hub.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/local_authentication_service.dart';
@@ -45,21 +44,26 @@ class PasscodeCheckingController extends GetxController {
 
   bool _canUseFingerprint = false;
 
-  final PasscodeService _service = locator<PasscodeService>();
-  final LocalAuthenticationService _authService = locator<LocalAuthenticationService>();
+  final _service = locator<PasscodeService>();
+  final _authService = locator<LocalAuthenticationService>();
 
-  RxBool passcodeCheckFailed = false.obs;
-  RxInt passcodeLen = 0.obs;
-  RxBool loaded = false.obs;
+  final passcodeCheckFailed = false.obs;
+  final passcodeLen = 0.obs;
+  final loaded = false.obs;
 
-  late bool isFingerprintEnable;
-  bool? isFingerprintAvailable;
+  bool isFingerprintEnable = false;
+  bool isFingerprintAvailable = false;
 
   String _enteredPasscode = '';
   String? _correctPasscode;
 
   @override
   void onInit() async {
+    if (!await locator<PasscodeService>().isPasscodeEnable) {
+      Get.offAll(() => const MainView());
+      return;
+    }
+
     _correctPasscode = await _service.getPasscode;
     await _getFingerprintAvailability();
     super.onInit();
@@ -80,7 +84,6 @@ class PasscodeCheckingController extends GetxController {
       if (!didAuthenticate) {
         await _getFingerprintAvailability();
       } else {
-        locator<EventHub>().fire('correctPasscodeChecked');
         await Get.offAll(() => const MainView());
       }
     } catch (_) {
@@ -113,7 +116,6 @@ class PasscodeCheckingController extends GetxController {
         if (onPass != null) {
           await onPass();
         } else {
-          locator<EventHub>().fire('correctPasscodeChecked');
           await Get.offAll(() => const MainView());
         }
       }

@@ -61,11 +61,11 @@ class SettingsController extends GetxController {
   String? appVersion;
   String? buildNumber;
 
-  RxBool loaded = false.obs;
-  RxString currentTheme = ''.obs;
-  RxString cacheSize = ''.obs;
-  late RxBool isPasscodeEnable;
-  RxBool shareAnalytics = true.obs;
+  final loaded = false.obs;
+  final currentTheme = ''.obs;
+  final cacheSize = ''.obs;
+  final isPasscodeEnable = false.obs;
+  final shareAnalytics = true.obs;
 
   String get versionAndBuildNumber => '$appVersion ($buildNumber)';
 
@@ -76,7 +76,7 @@ class SettingsController extends GetxController {
     // ignore: unawaited_futures
     RemoteConfigService.fetchAndActivate();
     final isPassEnable = await _service.isPasscodeEnable;
-    isPasscodeEnable = isPassEnable.obs;
+    isPasscodeEnable.value = isPassEnable;
 
     appVersion = await _packageInfoService.version;
     buildNumber = await _packageInfoService.buildNumber;

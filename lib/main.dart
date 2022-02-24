@@ -39,6 +39,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/internal/dev_http_overrides.dart';
@@ -96,12 +97,10 @@ List<Locale> supportedLocales() => [
 Future<String> _getInitPage() async {
   await FlutterDownloader.initialize(debug: true);
 
-  final storage = locator<SecureStorage>();
-  final passcode = await storage.getString('passcode');
-
+  final passcode = await locator<PasscodeService>().isPasscodeEnable;
   final _isLoggedIn = await isAuthorized();
 
-  if (passcode != null && _isLoggedIn) return '/PasscodeScreen';
+  if (passcode && _isLoggedIn) return '/PasscodeScreen';
 
   return '/MainView';
 }
@@ -151,8 +150,6 @@ class App extends StatelessWidget {
           splashFactory: GetPlatform.isIOS ? NoSplash.splashFactory : null,
         ),
         themeMode: ThemeService().savedThemeMode(),
-        // cupertinoTheme: lightCupertinoTheme,
-        //cupertinoTheme: cupertinoTheme,
       ),
     );
   }

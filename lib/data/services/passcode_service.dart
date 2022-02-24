@@ -66,8 +66,6 @@ class PasscodeService {
   }
 
   Future<bool> get isPasscodeEnable async {
-    final isPasscodeEnable = await _storage.getString('passcode') ?? false;
-    if (isPasscodeEnable != false) return true;
-    return false;
+    return (await _storage.getString('passcode'))?.isNotEmpty ?? false;
   }
 }

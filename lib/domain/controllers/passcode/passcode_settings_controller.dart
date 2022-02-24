@@ -43,14 +43,15 @@ import 'package:projects/presentation/views/settings/passcode/new/new_passcode_s
 
 class PasscodeSettingsController extends GetxController {
   final PasscodeService _service = locator<PasscodeService>();
+
   String _passcode = '';
   String _passcodeCheck = '';
 
-  RxBool loaded = false.obs;
-  RxBool passcodeCheckFailed = false.obs;
-  late RxBool isPasscodeEnable;
-  late RxBool isFingerprintEnable;
-  late RxBool isFingerprintAvailable;
+  final loaded = false.obs;
+  final passcodeCheckFailed = false.obs;
+  final isPasscodeEnable = false.obs;
+  final isFingerprintEnable = false.obs;
+  final isFingerprintAvailable = false.obs;
 
   RxInt enteredPasscodeLen = 0.obs;
   RxInt passcodeCheckLen = 0.obs;
@@ -58,18 +59,22 @@ class PasscodeSettingsController extends GetxController {
   @override
   Future<void> onInit() async {
     loaded.value = false;
-    final isPassEnable = await _service.isPasscodeEnable;
+
+    isPasscodeEnable.value = await _service.isPasscodeEnable;
+
     final isFinEnable = await _service.isFingerprintEnable;
     final isFinAvailable = await _service.isFingerprintAvailable;
-    isPasscodeEnable = isPassEnable.obs;
+
     if (isFinAvailable) {
-      isFingerprintEnable = isFinEnable.obs;
-      isFingerprintAvailable = true.obs;
+      isFingerprintEnable.value = isFinEnable;
+      isFingerprintAvailable.value = true;
     } else {
-      isFingerprintEnable = false.obs;
-      isFingerprintAvailable = false.obs;
+      isFingerprintEnable.value = false;
+      isFingerprintAvailable.value = false;
     }
+
     loaded.value = true;
+
     super.onInit();
   }
 
@@ -129,6 +134,7 @@ class PasscodeSettingsController extends GetxController {
 
   Future<void> _disablePasscode() async {
     await _service.deletePasscode();
+    isPasscodeEnable.value = false;
     if (isFingerprintEnable.value == true) {
       await _service.setFingerprintStatus(false);
       isFingerprintEnable.value = false;
@@ -175,15 +181,8 @@ class PasscodeSettingsController extends GetxController {
   }
 
   void tryDisablingPasscode() async {
-    isPasscodeEnable.value = false;
     await Get.to(
-      () => EnterCurrentPasscodeScreen(
-        onPass: _disablePasscode,
-        onBack: () {
-          isPasscodeEnable.value = true;
-          Get.back();
-        },
-      ),
+      () => EnterCurrentPasscodeScreen(onPass: _disablePasscode, onBack: Get.back),
       preventDuplicates: false,
     );
   }
