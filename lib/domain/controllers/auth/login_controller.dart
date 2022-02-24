@@ -39,7 +39,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/authentication_service.dart';
@@ -51,6 +50,7 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/loading_hud.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 import 'package:projects/presentation/views/authentication/code_view.dart';
@@ -93,11 +93,8 @@ class LoginController extends GetxController {
   final checkBoxValue = false.obs;
   final needAgreement = Get.deviceLocale!.languageCode == 'zh';
 
-  final _state = ViewState.Idle.obs;
-  Rx<ViewState> get state => _state;
-  void setState(ViewState viewState) {
-    if (state.value != viewState) state.value = viewState;
-  }
+  final loaded = true.obs;
+  final loadingHud = LoadingHUD();
 
   @override
   void onInit() {
@@ -112,12 +109,15 @@ class LoginController extends GetxController {
     accountManager =
         Get.isRegistered<AccountManager>() ? Get.find<AccountManager>() : Get.put(AccountManager());
 
+    loaded.listen(loadingHud.showLoadingHUD);
+
     super.onInit();
   }
 
   void setup() {
-    portalAdressController.text = '';
-    emailController.text = '';
+    _portalAdressController.text = '';
+    _emailController.text = '';
+    _passwordController.text = '';
   }
 
   Future<void> loginByPassword() async {
@@ -125,12 +125,12 @@ class LoginController extends GetxController {
       final email = _emailController.text;
       final password = _passwordController.text;
 
-      setState(ViewState.Busy);
+      loaded.value = false;
 
       final result = await _authService.login(pass: password, email: email);
 
       if (result.response == null) {
-        setState(ViewState.Idle);
+        loaded.value = true;
         return;
       }
 
@@ -148,11 +148,11 @@ class LoginController extends GetxController {
 
         locator<EventHub>().fire('loginSuccess');
 
-        setState(ViewState.Idle);
+        loaded.value = true;
       } else if (result.response!.tfa == true) {
         _email = email;
         _pass = password;
-        setState(ViewState.Idle);
+        loaded.value = true;
 
         if (result.response!.tfaKey != null) {
           _tfaKey = result.response!.tfaKey;
@@ -163,7 +163,7 @@ class LoginController extends GetxController {
       } else if (result.response!.sms == true) {
         _email = email;
         _pass = password;
-        setState(ViewState.Idle);
+        loaded.value = true;
         if (result.response!.phoneNoise != null) {
           await Get.to<EnterSMSCodeScreen>(
             () => const EnterSMSCodeScreen(),
@@ -174,6 +174,7 @@ class LoginController extends GetxController {
             },
           );
         } else {
+          loaded.value = true;
           await Get.to<TFASmsScreen>(
             () => const TFASmsScreen(),
             arguments: {'login': _email, 'password': _pass},
@@ -230,7 +231,7 @@ class LoginController extends GetxController {
   }
 
   Future<bool> sendCode(String code, {String? userName, String? password}) async {
-    setState(ViewState.Busy);
+    loaded.value = false;
 
     _email ??= userName;
     _pass ??= password;
@@ -239,7 +240,7 @@ class LoginController extends GetxController {
         email: _email!, pass: _pass!, code: code.removeAllWhitespace);
 
     if (result.response == null) {
-      setState(ViewState.Idle);
+      loaded.value = true;
       return false;
     }
 
@@ -248,10 +249,11 @@ class LoginController extends GetxController {
       await Get.find<AccountManager>()
           .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
 
+      loaded.value = true;
       locator<EventHub>().fire('loginSuccess');
       return true;
     } else if (result.response!.tfa!) {
-      setState(ViewState.Idle);
+      loaded.value = true;
       await Get.to(CodeView.new);
       return true;
     }
@@ -272,7 +274,7 @@ class LoginController extends GetxController {
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
     } else {
-      setState(ViewState.Busy);
+      loaded.value = false;
 
       locator.get<CoreApi>().setPortalName(portalString);
 
@@ -281,11 +283,11 @@ class LoginController extends GetxController {
       if (_capabilities != null) {
         capabilities = _capabilities;
         checkBoxValue.value = false;
+        loaded.value = true;
         await Get.to(() => const LoginView());
-        return;
       }
 
-      setState(ViewState.Idle);
+      loaded.value = true;
     }
   }
 
@@ -332,7 +334,7 @@ class LoginController extends GetxController {
     await RemoteConfigService.fetchAndActivate();
 
     locator<EventHub>().fire('logoutSuccess');
-    setState(ViewState.Idle);
+    loaded.value = true;
   }
 
   // TODO: check dispose textControllers
@@ -343,6 +345,8 @@ class LoginController extends GetxController {
     _portalAdressController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+
+    loaded.close();
 
     super.onClose();
   }

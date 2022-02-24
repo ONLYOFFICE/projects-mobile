@@ -485,5 +485,6 @@
 	},
 	"overwriteConfirmation": "Overwrite",
 	"duplicateConfirmation": "Keep Both",
-	"skipConfirmation": "Skip"
+	"skipConfirmation": "Skip",
+	"loading": "Loading"
 }

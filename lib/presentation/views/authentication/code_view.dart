@@ -51,7 +51,7 @@ class CodeView extends StatefulWidget {
 
 class _CodeViewState extends State<CodeView> {
   // TODO make Stateless?
-  LoginController controller = Get.find<LoginController>();
+  final controller = Get.find<LoginController>();
   TextEditingController codeController = TextEditingController();
 
   @override

@@ -36,12 +36,10 @@ import 'package:projects/domain/controllers/auth/account_tile_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/views/authentication/account_manager/account_tile.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
@@ -60,47 +58,42 @@ class AccountManagerView extends StatelessWidget {
     return Scaffold(
       //TODO fix background colors for tablet
       // backgroundColor: Get.theme.colors().backgroundSecond,
-      body: Obx(
-        () => loginController.state.value == ViewState.Busy
-            ? SizedBox(
-                height: Get.height, child: Center(child: PlatformCircularProgressIndicator()))
-            : Center(
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      SizedBox(height: Get.height * 0.1),
-                      const AppIcon(icon: SvgIcons.app_logo),
-                      SizedBox(height: Get.height * 0.01),
-                      AppIcon(
-                        icon: SvgIcons.app_title,
-                        color: Get.theme.colors().onSurface,
-                      ),
-                      SizedBox(height: Get.height * 0.06),
-                      Expanded(
-                        child: Obx(
-                          () => ListView.separated(
-                            physics: const ScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (c, i) {
-                              if (i == accountController.accounts.length) {
-                                return const _NewAccountButton();
-                              } else
-                                return AccountTile(
-                                  userController: AccountTileController(
-                                      accountData: accountController.accounts[i]),
-                                );
-                            },
-                            separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
-                            itemCount: accountController.accounts.length + 1,
-                          ),
-                        ),
-                      ),
-                    ],
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              SizedBox(height: Get.height * 0.1),
+              const AppIcon(icon: SvgIcons.app_logo),
+              SizedBox(height: Get.height * 0.01),
+              AppIcon(
+                icon: SvgIcons.app_title,
+                color: Get.theme.colors().onSurface,
+              ),
+              SizedBox(height: Get.height * 0.06),
+              Expanded(
+                child: Obx(
+                  () => ListView.separated(
+                    physics: const ScrollPhysics(),
+                    shrinkWrap: true,
+                    itemBuilder: (c, i) {
+                      if (i == accountController.accounts.length) {
+                        return const _NewAccountButton();
+                      } else
+                        return AccountTile(
+                          userController:
+                              AccountTileController(accountData: accountController.accounts[i]),
+                        );
+                    },
+                    separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
+                    itemCount: accountController.accounts.length + 1,
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
       ),
     );
   }

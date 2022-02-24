@@ -30,5 +30,47 @@
  *
  */
 
-// ignore: constant_identifier_names
-enum ViewState { Idle, Busy }
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_alert_dialog.dart';
+import 'package:get/get.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
+
+class LoadingHUD {
+  String text = tr('loading');
+
+  Widget? _dialog;
+
+  void showLoadingHUD(bool value) {
+    if (!value) {
+      _dialog = PlatformAlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            PlatformCircularProgressIndicator(
+              cupertino: (_, __) => CupertinoProgressIndicatorData(radius: 20),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Text(
+              text,
+              style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+            ),
+          ],
+        ),
+      );
+
+      Get.dialog(_dialog!);
+
+      return;
+    }
+    if (value && _dialog != null) {
+      Get.back();
+      _dialog = null;
+    }
+  }
+}
