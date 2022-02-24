@@ -57,257 +57,241 @@ class SettingsScreen extends StatelessWidget {
 
     controller.setupCacheDirectorySize();
 
-    return WillPopScope(
-      onWillPop: () async {
-        controller.leave();
-        return true;
-      },
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-          titleText: tr('settings'),
-          onLeadingPressed: controller.leave,
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? Icon(PlatformIcons(context).back)
-              : Icon(PlatformIcons(context).clear),
-        ),
-        body: Obx(
-          () {
-            if (controller.loaded.value == true) {
-              if (GetPlatform.isAndroid) {
-                return ListView.custom(
-                  childrenDelegate: SliverChildListDelegate(
-                    [
-                      const SizedBox(height: 10),
-                      SettingTile(
-                        text: tr('passcodeLock'),
-                        loverText: controller.isPasscodeEnable.value == true
-                            ? tr('enabled')
-                            : tr('disabled'),
-                        enableIconOpacity: true,
-                        icon: SvgIcons.passcode,
-                        onTap: () => Get.find<NavigationController>().toScreen(
-                          const PasscodeSettingsScreen(),
-                        ),
+        titleText: tr('settings'),
+        onLeadingPressed: controller.leave,
+        backButtonIcon: Get.put(PlatformController()).isMobile
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
+      ),
+      body: Obx(
+        () {
+          if (controller.loaded.value == true) {
+            if (GetPlatform.isAndroid) {
+              return ListView.custom(
+                childrenDelegate: SliverChildListDelegate(
+                  [
+                    const SizedBox(height: 10),
+                    SettingTile(
+                      text: tr('passcodeLock'),
+                      loverText: controller.isPasscodeEnable.value == true
+                          ? tr('enabled')
+                          : tr('disabled'),
+                      enableIconOpacity: true,
+                      icon: SvgIcons.passcode,
+                      onTap: () => Get.find<NavigationController>().toScreen(
+                        const PasscodeSettingsScreen(),
                       ),
-                      SettingTile(
-                        text: tr('colorTheme'),
-                        loverText: tr(controller.currentTheme.value),
-                        enableIconOpacity: true,
-                        icon: SvgIcons.color_scheme,
-                        enableUnderline: true,
-                        onTap: () => Get.find<NavigationController>().toScreen(
-                          const ColorThemeSelectionScreen(),
-                        ),
-                      ),
-                      SettingTile(
-                        text: tr('help'),
-                        enableIconOpacity: true,
-                        icon: SvgIcons.help,
-                        onTap: controller.onHelpPressed,
-                      ),
-                      SettingTile(
-                        text: tr('support'),
-                        icon: SvgIcons.support,
-                        enableUnderline: true,
-                        onTap: controller.onSupportPressed,
-                      ),
-                      SettingTile(
-                        text: tr('rateApp'),
-                        icon: SvgIcons.rate_app,
-                        enableUnderline: true,
-                        onTap: controller.onRateAppPressed,
-                      ),
-                      SettingTile(
-                        text: tr('privacyAndTermsFooter.privacyPolicyWithLink'),
-                        icon: SvgIcons.privacy_policy,
-                        onTap: controller.onPrivacyPolicyPressed,
-                      ),
-                      SettingTile(
-                        text: tr('privacyAndTermsFooter.termsOfServiceWithLink'),
-                        icon: SvgIcons.terms_of_service,
-                        onTap: controller.onTermsOfServicePressed,
-                      ),
-                      SettingTile(
-                        text: tr('analytics'),
-                        icon: SvgIcons.analytics,
-                        onTap: controller.onAnalyticsPressed,
-                      ),
-                      SettingTile(
-                        text: tr('version'),
-                        icon: SvgIcons.version,
-                        suffixText: controller.versionAndBuildNumber,
-                      ),
-                    ],
-                    addAutomaticKeepAlives: false,
-                  ),
-                );
-              } else {
-                return SettingsList(
-                  applicationType: ApplicationType.cupertino,
-                  sections: [
-                    SettingsSection(
-                      tiles: [
-                        SettingsTile.navigation(
-                          onPressed: (_) => Get.find<NavigationController>().toScreen(
-                            const PasscodeSettingsScreen(),
-                          ),
-                          title: Text(
-                            tr('passcodeLock'),
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                          ),
-                          trailing: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                controller.isPasscodeEnable.value == true
-                                    ? tr('enabled')
-                                    : tr('disabled'),
-                                style: TextStyleHelper.body2(
-                                  color: Get.theme.colors().onBackground.withOpacity(0.75),
-                                ),
-                              ),
-                              Icon(
-                                Icons.chevron_right,
-                                color: Get.theme.colors().onBackground.withOpacity(0.6),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
                     ),
-                    SettingsSection(
-                      tiles: [
-                        SettingsTile.navigation(
-                          onPressed: (_) => Get.find<NavigationController>().toScreen(
-                            const ColorThemeSelectionScreen(),
-                          ),
-                          title: Text(
-                            tr('colorTheme'),
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                          ),
-                          trailing: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                tr(controller.currentTheme.value),
-                                style: TextStyleHelper.body2(
-                                  color: Get.theme.colors().onBackground.withOpacity(0.75),
-                                ),
-                              ),
-                              Icon(
-                                Icons.chevron_right,
-                                color: Get.theme.colors().onBackground.withOpacity(0.6),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    SettingTile(
+                      text: tr('colorTheme'),
+                      loverText: tr(controller.currentTheme.value),
+                      enableIconOpacity: true,
+                      icon: SvgIcons.color_scheme,
+                      enableUnderline: true,
+                      onTap: () => Get.find<NavigationController>().toScreen(
+                        const ColorThemeSelectionScreen(),
+                      ),
                     ),
-                    SettingsSection(
-                      tiles: [
-                        SettingsTile(
-                          onPressed: (_) => controller.onClearCachePressed(),
-                          title: Text(
-                            tr('clearCache'),
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                          ),
-                          trailing: Obx(
-                            () => Text(
-                              controller.cacheSize.value,
-                              style:
-                                  TextStyleHelper.body1.copyWith(color: CupertinoColors.activeBlue),
-                            ),
-                          ),
-                        ),
-                      ],
+                    SettingTile(
+                      text: tr('help'),
+                      enableIconOpacity: true,
+                      icon: SvgIcons.help,
+                      onTap: controller.onHelpPressed,
                     ),
-                    SettingsSection(
-                      tiles: [
-                        SettingsTile(
-                          onPressed: (_) => controller.onHelpPressed(),
-                          title: Text(
-                            tr('help'),
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                          ),
-                        ),
-                        SettingsTile(
-                          onPressed: (_) => controller.onSupportPressed(),
-                          title: Text(
-                            tr('support'),
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                          ),
-                        ),
-                        SettingsTile(
-                          onPressed: (_) => controller.onRateAppPressed(),
-                          title: Text(
-                            tr('rateApp'),
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                          ),
-                        ),
-                        SettingsTile(
-                          onPressed: (_) => controller.onPrivacyPolicyPressed(),
-                          title: Text(
-                            tr('privacyAndTermsFooter.privacyPolicyWithLink'),
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                          ),
-                        ),
-                        SettingsTile(
-                          onPressed: (_) => controller.onTermsOfServicePressed(),
-                          title: Text(
-                            tr('privacyAndTermsFooter.termsOfServiceWithLink'),
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                          ),
-                        ),
-                        SettingsTile(
-                          onPressed: (_) => controller.onAnalyticsPressed(),
-                          title: Text(
-                            tr('analytics'),
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                          ),
-                        ),
-                        SettingsTile(
-                          title: Text(
-                            tr('version'),
-                            overflow: TextOverflow.ellipsis,
-                            style:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                          ),
-                          trailing: Text(
-                            controller.versionAndBuildNumber,
-                            style: TextStyleHelper.body2(
-                                color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
-                          ),
-                        ),
-                      ],
+                    SettingTile(
+                      text: tr('support'),
+                      icon: SvgIcons.support,
+                      enableUnderline: true,
+                      onTap: controller.onSupportPressed,
+                    ),
+                    SettingTile(
+                      text: tr('rateApp'),
+                      icon: SvgIcons.rate_app,
+                      enableUnderline: true,
+                      onTap: controller.onRateAppPressed,
+                    ),
+                    SettingTile(
+                      text: tr('privacyAndTermsFooter.privacyPolicyWithLink'),
+                      icon: SvgIcons.privacy_policy,
+                      onTap: controller.onPrivacyPolicyPressed,
+                    ),
+                    SettingTile(
+                      text: tr('privacyAndTermsFooter.termsOfServiceWithLink'),
+                      icon: SvgIcons.terms_of_service,
+                      onTap: controller.onTermsOfServicePressed,
+                    ),
+                    SettingTile(
+                      text: tr('analytics'),
+                      icon: SvgIcons.analytics,
+                      onTap: controller.onAnalyticsPressed,
+                    ),
+                    SettingTile(
+                      text: tr('version'),
+                      icon: SvgIcons.version,
+                      suffixText: controller.versionAndBuildNumber,
                     ),
                   ],
-                );
-              }
+                  addAutomaticKeepAlives: false,
+                ),
+              );
             } else {
-              return Container();
+              return SettingsList(
+                applicationType: ApplicationType.cupertino,
+                sections: [
+                  SettingsSection(
+                    tiles: [
+                      SettingsTile.navigation(
+                        onPressed: (_) => Get.find<NavigationController>().toScreen(
+                          const PasscodeSettingsScreen(),
+                        ),
+                        title: Text(
+                          tr('passcodeLock'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                        trailing: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              controller.isPasscodeEnable.value == true
+                                  ? tr('enabled')
+                                  : tr('disabled'),
+                              style: TextStyleHelper.body2(
+                                color: Get.theme.colors().onBackground.withOpacity(0.75),
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              color: Get.theme.colors().onBackground.withOpacity(0.6),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    tiles: [
+                      SettingsTile.navigation(
+                        onPressed: (_) => Get.find<NavigationController>().toScreen(
+                          const ColorThemeSelectionScreen(),
+                        ),
+                        title: Text(
+                          tr('colorTheme'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                        trailing: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              tr(controller.currentTheme.value),
+                              style: TextStyleHelper.body2(
+                                color: Get.theme.colors().onBackground.withOpacity(0.75),
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              color: Get.theme.colors().onBackground.withOpacity(0.6),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    tiles: [
+                      SettingsTile(
+                        onPressed: (_) => controller.onClearCachePressed(),
+                        title: Text(
+                          tr('clearCache'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                        trailing: Obx(
+                          () => Text(
+                            controller.cacheSize.value,
+                            style:
+                                TextStyleHelper.body1.copyWith(color: CupertinoColors.activeBlue),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    tiles: [
+                      SettingsTile(
+                        onPressed: (_) => controller.onHelpPressed(),
+                        title: Text(
+                          tr('help'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        onPressed: (_) => controller.onSupportPressed(),
+                        title: Text(
+                          tr('support'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        onPressed: (_) => controller.onRateAppPressed(),
+                        title: Text(
+                          tr('rateApp'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        onPressed: (_) => controller.onPrivacyPolicyPressed(),
+                        title: Text(
+                          tr('privacyAndTermsFooter.privacyPolicyWithLink'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        onPressed: (_) => controller.onTermsOfServicePressed(),
+                        title: Text(
+                          tr('privacyAndTermsFooter.termsOfServiceWithLink'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        onPressed: (_) => controller.onAnalyticsPressed(),
+                        title: Text(
+                          tr('analytics'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        title: Text(
+                          tr('version'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                        ),
+                        trailing: Text(
+                          controller.versionAndBuildNumber,
+                          style: TextStyleHelper.body2(
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
             }
-          },
-        ),
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }

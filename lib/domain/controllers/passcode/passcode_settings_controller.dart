@@ -228,4 +228,11 @@ class PasscodeSettingsController extends GetxController {
     Get.back();
     Get.back();
   }
+
+  @override
+  void onClose() {
+    clear();
+    Get.find<SettingsController>().onInit();
+    super.onClose();
+  }
 }

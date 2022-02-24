@@ -56,125 +56,46 @@ class PasscodeSettingsScreen extends StatelessWidget {
     final backgroundColor =
         GetPlatform.isAndroid ? Get.theme.colors().surface : CupertinoColors.systemGrey6;
 
-    return WillPopScope(
-      onWillPop: () async {
-        controller.leavePasscodeSettingsScreen();
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: platformController.isMobile ? backgroundColor : backgroundColor,
-        appBar: StyledAppBar(
-          titleText: tr('passcodeLock'),
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-          onLeadingPressed: controller.leavePasscodeSettingsScreen,
-        ),
-        body: Obx(
-          () {
-            if (controller.loaded.value == true) {
-              if (GetPlatform.isAndroid) {
-                return ListView.custom(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  childrenDelegate: SliverChildListDelegate([
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 3),
+    return Scaffold(
+      backgroundColor: platformController.isMobile ? backgroundColor : backgroundColor,
+      appBar: StyledAppBar(
+        titleText: tr('passcodeLock'),
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        onLeadingPressed: controller.leavePasscodeSettingsScreen,
+      ),
+      body: Obx(
+        () {
+          if (controller.loaded.value == true) {
+            if (GetPlatform.isAndroid) {
+              return ListView.custom(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                childrenDelegate: SliverChildListDelegate([
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 3),
+                      PlatformTextButton(
+                        onPressed: () =>
+                            controller.onPasscodeTilePressed(!controller.isPasscodeEnable.value),
+                        child: Text(
+                          controller.isPasscodeEnable.value
+                              ? tr('disablePasscode')
+                              : tr('enablePasscode'),
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                        ),
+                      ),
+                      if (controller.isPasscodeEnable.value == true)
                         PlatformTextButton(
-                          onPressed: () =>
-                              controller.onPasscodeTilePressed(!controller.isPasscodeEnable.value),
+                          onPressed: controller.tryChangingPasscode,
                           child: Text(
-                            controller.isPasscodeEnable.value
-                                ? tr('disablePasscode')
-                                : tr('enablePasscode'),
+                            tr('changePasscode'),
                             style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                           ),
                         ),
-                        if (controller.isPasscodeEnable.value == true)
-                          PlatformTextButton(
-                            onPressed: controller.tryChangingPasscode,
-                            child: Text(
-                              tr('changePasscode'),
-                              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
-                            ),
-                          ),
-                        const StyledDivider(),
-                        const SizedBox(height: 17),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 7),
-                          child: RichText(
-                            text: TextSpan(
-                              text: tr('passcodeLock'),
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                color: Get.theme.colors().onSurface,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: " - ${tr('passcodeLockDescription')}",
-                                  // style: const TextStyle(fontWeight: FontWeight.w400),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        if (controller.isFingerprintAvailable.value == true &&
-                            controller.isPasscodeEnable.value == true)
-                          OptionWithSwitch(
-                              title: tr('fingerprint'),
-                              style: TextStyleHelper.subtitle1(),
-                              switchOnChanged: controller.tryTogglingFingerprintStatus,
-                              switchValue: controller.isFingerprintEnable),
-                      ],
-                    ),
-                  ]),
-                );
-              } else {
-                final scaleFactor = MediaQuery.of(context).textScaleFactor;
-                return ListView.custom(
-                  childrenDelegate: SliverChildListDelegate(
-                    [
-                      SettingsList(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        applicationType: ApplicationType.cupertino,
-                        sections: [
-                          SettingsSection(
-                            margin: EdgeInsetsDirectional.only(
-                              top: 14.0 * scaleFactor,
-                              bottom: 10 * scaleFactor,
-                              start: 16,
-                              end: 16,
-                            ),
-                            tiles: [
-                              SettingsTile(
-                                onPressed: (_) => controller
-                                    .onPasscodeTilePressed(!controller.isPasscodeEnable.value),
-                                title: Text(
-                                  controller.isPasscodeEnable.value
-                                      ? tr('disablePasscode')
-                                      : tr('enablePasscode'),
-                                  overflow: TextOverflow.ellipsis,
-                                  style:
-                                      TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
-                                ),
-                              ),
-                              if (controller.isPasscodeEnable.value == true)
-                                SettingsTile(
-                                  onPressed: (_) => controller.tryChangingPasscode(),
-                                  title: Text(
-                                    tr('changePasscode'),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyleHelper.subtitle1(
-                                        color: Get.theme.colors().primary),
-                                  ),
-                                ),
-                            ],
-                          ),
-                        ],
-                      ),
+                      const StyledDivider(),
+                      const SizedBox(height: 17),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 27.5),
+                        padding: const EdgeInsets.symmetric(horizontal: 7),
                         child: RichText(
                           text: TextSpan(
                             text: tr('passcodeLock'),
@@ -191,38 +112,110 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 6),
                       if (controller.isFingerprintAvailable.value == true &&
                           controller.isPasscodeEnable.value == true)
-                        SettingsList(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          applicationType: ApplicationType.cupertino,
-                          sections: [
-                            SettingsSection(
-                              tiles: [
-                                SettingsTile.switchTile(
-                                  initialValue: controller.isFingerprintEnable.value,
-                                  onToggle: controller.tryTogglingFingerprintStatus,
-                                  title: Text(
-                                    tr('fingerprint'),
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyleHelper.subtitle1(
-                                        color: Get.theme.colors().primary),
-                                  ),
-                                )
-                              ],
+                        OptionWithSwitch(
+                            title: tr('fingerprint'),
+                            style: TextStyleHelper.subtitle1(),
+                            switchOnChanged: controller.tryTogglingFingerprintStatus,
+                            switchValue: controller.isFingerprintEnable),
+                    ],
+                  ),
+                ]),
+              );
+            } else {
+              final scaleFactor = MediaQuery.of(context).textScaleFactor;
+              return ListView.custom(
+                childrenDelegate: SliverChildListDelegate(
+                  [
+                    SettingsList(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      applicationType: ApplicationType.cupertino,
+                      sections: [
+                        SettingsSection(
+                          margin: EdgeInsetsDirectional.only(
+                            top: 14.0 * scaleFactor,
+                            bottom: 10 * scaleFactor,
+                            start: 16,
+                            end: 16,
+                          ),
+                          tiles: [
+                            SettingsTile(
+                              onPressed: (_) => controller
+                                  .onPasscodeTilePressed(!controller.isPasscodeEnable.value),
+                              title: Text(
+                                controller.isPasscodeEnable.value
+                                    ? tr('disablePasscode')
+                                    : tr('enablePasscode'),
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                              ),
+                            ),
+                            if (controller.isPasscodeEnable.value == true)
+                              SettingsTile(
+                                onPressed: (_) => controller.tryChangingPasscode(),
+                                title: Text(
+                                  tr('changePasscode'),
+                                  overflow: TextOverflow.ellipsis,
+                                  style:
+                                      TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 27.5),
+                      child: RichText(
+                        text: TextSpan(
+                          text: tr('passcodeLock'),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: Get.theme.colors().onSurface,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: " - ${tr('passcodeLockDescription')}",
+                              // style: const TextStyle(fontWeight: FontWeight.w400),
                             ),
                           ],
                         ),
-                    ],
-                  ),
-                );
-              }
-            } else {
-              return Center(child: PlatformCircularProgressIndicator());
+                      ),
+                    ),
+                    if (controller.isFingerprintAvailable.value == true &&
+                        controller.isPasscodeEnable.value == true)
+                      SettingsList(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        applicationType: ApplicationType.cupertino,
+                        sections: [
+                          SettingsSection(
+                            tiles: [
+                              SettingsTile.switchTile(
+                                initialValue: controller.isFingerprintEnable.value,
+                                onToggle: controller.tryTogglingFingerprintStatus,
+                                title: Text(
+                                  tr('fingerprint'),
+                                  overflow: TextOverflow.ellipsis,
+                                  style:
+                                      TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              );
             }
-          },
-        ),
+          } else {
+            return Center(child: PlatformCircularProgressIndicator());
+          }
+        },
       ),
     );
   }
