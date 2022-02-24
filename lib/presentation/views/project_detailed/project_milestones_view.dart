@@ -162,6 +162,7 @@ class ProjectMilestonesFilterButton extends StatelessWidget {
             transition: Transition.cupertinoDialog,
             fullscreenDialog: true,
           ),
+          cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
         );
       return const SizedBox();
     });
