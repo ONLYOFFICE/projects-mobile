@@ -38,8 +38,8 @@ import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class TagItem extends StatelessWidget {
-  final TagItemDTO? tagItemDTO;
-  final Function onTapFunction;
+  final TagItemDTO tagItemDTO;
+  final void Function() onTapFunction;
 
   const TagItem({
     Key? key,
@@ -50,7 +50,7 @@ class TagItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTapFunction as void Function()?,
+      onTap: onTapFunction,
       child: SizedBox(
         height: 48,
         child: Row(
@@ -59,24 +59,19 @@ class TagItem extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                tagItemDTO!.tag!.title!.replaceAll(' ', '\u00A0'),
+                tagItemDTO.tag!.title!.replaceAll(' ', '\u00A0'),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyleHelper.subtitle1(),
               ),
             ),
             Obx(() {
-              if (tagItemDTO!.isSelected!.value == true) {
-                return SizedBox(
-                    width: 72,
-                    child: Icon(PlatformIcons(context).checkBoxCheckedOutlineRounded,
-                        color: Get.theme.colors().primary));
+              if (tagItemDTO.isSelected!.value == true) {
+                return Icon(PlatformIcons(context).checkBoxCheckedOutlineRounded,
+                    color: Get.theme.colors().primary);
               } else {
-                return SizedBox(
-                  width: 72,
-                  child: Icon(
-                    PlatformIcons(context).checkBoxBlankOutlineRounded,
-                    color: Get.theme.colors().inactiveGrey,
-                  ),
+                return Icon(
+                  PlatformIcons(context).checkBoxBlankOutlineRounded,
+                  color: Get.theme.colors().inactiveGrey,
                 );
               }
             }),

@@ -177,8 +177,8 @@ class _TagTextFieldWidget extends StatelessWidget {
         autofocus: true,
         textInputAction: TextInputAction.done,
         controller: inputController,
-        onChanged: (_) {
-          validate.value = true;
+        onChanged: (str) {
+          if (str.isNotEmpty) validate.value = true;
         },
         hintText: '',
         material: (_, __) => MaterialTextFieldData(
@@ -196,6 +196,7 @@ class _TagTextFieldWidget extends StatelessWidget {
                 : null,
           ),
         ),
+        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
         onSubmitted: (value) {
           if (inputController.text.isNotEmpty) {
             onSubmited(value);
@@ -220,7 +221,7 @@ class _TagsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
           child: ListView.builder(
