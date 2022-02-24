@@ -329,7 +329,7 @@ class MobileLayout extends StatelessWidget {
                     navigationController.onMoreView.value || navigationController.tabIndex.value > 3
                         ? 3
                         : navigationController.tabIndex.value,
-                selectedFontSize: GetPlatform.isIOS ? 12 : 14,
+                selectedFontSize: 12,
                 items: [
                   BottomNavigationBarItem(
                     icon: AppIcon(
