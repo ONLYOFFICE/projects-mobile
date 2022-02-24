@@ -35,6 +35,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -108,7 +109,8 @@ class _Content extends StatelessWidget {
                   onTapFunction: (value) => {
                         Get.find<NavigationController>().toScreen(const ProfileScreen(),
                             arguments: {
-                              'portalUser': projectTeamDataSource.usersList[i].portalUser
+                              'controller': PortalUserItemController(
+                                  portalUser: projectTeamDataSource.usersList[i].portalUser)
                             })
                       }),
               itemExtent: 65,

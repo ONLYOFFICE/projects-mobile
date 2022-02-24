@@ -217,11 +217,11 @@ class ProfileScreen extends StatelessWidget {
                     width: 120,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(80),
-                      child: CustomNetworkImage(
-                        image: controller.profileAvatar.value,
-                        defaultImage: const DefaultAvatar(),
-                        fit: BoxFit.contain,
-                      ),
+                      child: Obx(() => CustomNetworkImage(
+                            image: controller.profileAvatar.value,
+                            defaultImage: const DefaultAvatar(),
+                            fit: BoxFit.contain,
+                          )),
                     ),
                   ),
                   if (portalUser.status == UserStatus.Terminated)
