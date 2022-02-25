@@ -35,7 +35,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/wrappers/platform_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 
@@ -46,7 +46,8 @@ class LoadingHUD {
 
   void showLoadingHUD(bool value) {
     if (!value) {
-      _dialog = PlatformAlertDialog(
+      _dialog = StyledAlertDialog(
+        actions: const [],
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -58,7 +59,7 @@ class LoadingHUD {
             ),
             Text(
               text,
-              style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
             ),
           ],
         ),

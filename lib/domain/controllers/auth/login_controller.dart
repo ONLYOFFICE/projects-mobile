@@ -269,7 +269,7 @@ class LoginController extends GetxController {
 
     final portalString = setupPortalUri();
 
-    if (!portalURI.hasAuthority) {
+    if (!portalURI.hasAuthority || portalString.isEmpty) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
@@ -299,12 +299,15 @@ class LoginController extends GetxController {
 
     var portalString = _portalAdressController.text;
 
-    if (portalString[portalString.length - 1] == '.')
-      portalString = portalString.substring(0, portalString.length - 1);
+    if (portalString.isNotEmpty) {
+      if (portalString[portalString.length - 1] == '.')
+        portalString = portalString.substring(0, portalString.length - 1);
 
-    if (!portalString.contains('http')) portalString = 'https://$portalString';
+      if (!portalString.contains('http')) portalString = 'https://$portalString';
 
-    portalURI = Uri.parse(portalString);
+      portalURI = Uri.parse(portalString);
+    }
+
     return portalString;
   }
 

@@ -62,7 +62,7 @@ class StyledAlertDialog extends StatelessWidget {
     this.onAcceptTap,
     this.onCancelTap,
     this.actions,
-  })  : assert(titleText != null || title != null, content != null || contentText != null),
+  })  : assert(titleText != null || title != null || content != null || contentText != null),
         super(key: key);
 
   @override
@@ -78,10 +78,12 @@ class StyledAlertDialog extends StatelessWidget {
         GetPlatform.isIOS ? acceptText?.toLowerCase().capitalizeFirst : acceptText;
 
     final _title = title ??
-        Text(
-          titleText!,
-          style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
-        );
+        (titleText != null
+            ? Text(
+                titleText!,
+                style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
+              )
+            : null);
     final _content = content ??
         (contentText != null
             ? Text(
