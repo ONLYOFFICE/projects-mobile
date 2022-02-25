@@ -143,6 +143,7 @@ class TabletLayout extends StatelessWidget {
       body: Row(
         children: [
           SafeArea(
+            bottom: false,
             child: Container(
               color: Get.theme.colors().primarySurface,
               width: 80,
