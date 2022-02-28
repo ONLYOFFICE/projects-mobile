@@ -486,5 +486,8 @@
 	"overwriteConfirmation": "Overwrite",
 	"duplicateConfirmation": "Keep Both",
 	"skipConfirmation": "Skip",
-	"loading": "Loading"
+	"loading": "Loading",
+	"downloadComplete": "Download complete",
+	"downloadError": "Download error",
+	"noPermission": "No permission"
 }

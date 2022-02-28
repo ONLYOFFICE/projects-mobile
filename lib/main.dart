@@ -50,17 +50,18 @@ import 'package:projects/presentation/shared/theme/theme_service.dart';
 
 void main() async {
   HttpOverrides.global = DevHttpOverrides();
+
   WidgetsFlutterBinding.ensureInitialized();
-  setupLocator();
-  setupGetX();
+
   await GetStorage.init();
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarIconBrightness: Brightness.light,
   ));
-  final page = await _getInitPage();
 
-  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true);
+
   await EasyLocalization.ensureInitialized();
 
   await Firebase.initializeApp();
@@ -70,6 +71,10 @@ void main() async {
   } catch (e) {
     debugPrint(e.toString());
   }
+
+  setupLocator();
+  setupGetX();
+  final page = await _getInitPage();
 
   runApp(
     EasyLocalization(
@@ -95,8 +100,6 @@ List<Locale> supportedLocales() => [
     ];
 
 Future<String> _getInitPage() async {
-  await FlutterDownloader.initialize(debug: true);
-
   final passcode = await locator<PasscodeService>().isPasscodeEnable;
   final _isLoggedIn = await isAuthorized();
 

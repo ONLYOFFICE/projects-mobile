@@ -155,8 +155,7 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
   }
 
   Future<void> downloadFile(String viewUrl) async {
-    final _downloadService = locator<DownloadService>();
-    await _downloadService.downloadDocument(viewUrl);
+    await locator<DocumentsDownloadService>().downloadDocument(viewUrl);
   }
 
   Future openFile(PortalFile selectedFile) async {

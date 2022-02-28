@@ -32,16 +32,25 @@
 
 import 'dart:async';
 import 'dart:io' show Platform;
+import 'dart:isolate';
 import 'dart:typed_data';
+import 'dart:ui';
 
+import 'package:android_path_provider/android_path_provider.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/api/download_api.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
 
 class DownloadService {
-  final DownloadApi _api = locator<DownloadApi>();
+  final _api = locator<DownloadApi>();
 
   Future<Uint8List?> downloadImage(String url) async {
     final projects = await _api.downloadImage(url);
@@ -66,44 +75,90 @@ class DownloadService {
       return null;
     }
   }
+}
+
+class DocumentsDownloadService {
+  DocumentsDownloadService() {
+    IsolateNameServer.registerPortWithName(_port.sendPort, _portName);
+    _port.listen((dynamic data) {
+      final id = data[0] as String;
+      final status = data[1] as DownloadTaskStatus;
+      //final progress = data[2] as int;
+
+      if (id == taskId) {
+        if (status == DownloadTaskStatus.complete)
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
+        else if (status == DownloadTaskStatus.failed)
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
+      }
+    });
+
+    FlutterDownloader.registerCallback(downloadCallback);
+  }
+
+  final _port = ReceivePort();
+  static const _portName = 'downloader_send_port';
+  String? taskId;
 
   Future<void> downloadDocument(String url) async {
-    var dir;
-    if (Platform.isAndroid) {
-      dir = await getExternalStorageDirectory();
-    } else {
-      dir = await getApplicationDocumentsDirectory();
+    final path = await getPath();
+    if (path == null || path.isEmpty) {
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+      return;
     }
 
-    final path = dir.path as String;
-    // TODO: check
-    print(path);
+    if (!(await _checkPermission())) {
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('noPermission'));
+      return;
+    }
 
     final headers = await locator.get<CoreApi>().getHeaders();
-    FlutterDownloader.registerCallback(downloadCallback);
+    headers.removeWhere((key, value) => !key.startsWith('Auth'));
 
-    final taskId = await (FlutterDownloader.enqueue(
+    taskId = await FlutterDownloader.enqueue(
       url: url,
       headers: headers,
       savedDir: path,
-      showNotification: true,
-      openFileFromNotification: true,
-    ) as FutureOr<String>);
+      saveInPublicStorage: true,
+    );
 
-    var waitTask = true;
-    while (waitTask) {
-      final query = "SELECT * FROM task WHERE task_id='$taskId'";
-      final _tasks = await (FlutterDownloader.loadTasksWithRawQuery(query: query)
-          as FutureOr<List<DownloadTask>>);
-      final taskStatus = _tasks[0].status.toString();
-      final taskProgress = _tasks[0].progress;
-      if (taskStatus == 'DownloadTaskStatus(3)' && taskProgress == 100) {
-        waitTask = false;
+    if (taskId == null || taskId!.isEmpty) {
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+      return;
+    }
+
+    await FlutterDownloader.loadTasks();
+  }
+
+  Future<String?> getPath() async {
+    String? path;
+    if (Platform.isAndroid) {
+      try {
+        path = await AndroidPathProvider.downloadsPath;
+      } catch (e) {
+        path = (await getExternalStorageDirectory())?.path;
+      }
+    } else {
+      path = (await getApplicationDocumentsDirectory()).absolute.path;
+    }
+    return path;
+  }
+
+  Future<bool> _checkPermission() async {
+    if (Platform.isIOS) return true;
+
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+    if (androidInfo.version.sdkInt! <= 28) {
+      if (await Permission.storage.status != PermissionStatus.granted) {
+        if (await Permission.storage.request() != PermissionStatus.granted) return false;
       }
     }
 
-    await FlutterDownloader.open(taskId: taskId);
+    return true;
   }
 
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {}
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+    final send = IsolateNameServer.lookupPortByName(_portName);
+    send?.send([id, status, progress]);
+  }
 }
