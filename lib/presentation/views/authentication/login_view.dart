@@ -30,7 +30,10 @@
  *
  */
 
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
@@ -38,6 +41,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
@@ -51,13 +55,26 @@ class LoginView extends StatelessWidget {
     final controller = Get.find<LoginController>();
 
     final styledAppBar = StyledAppBar(
-      title: Text(
-        tr('addNewAccount'),
-        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-      ),
-      titleHeight: GetPlatform.isIOS ? 50 : 56,
-      centerTitle: GetPlatform.isIOS,
-      elevation: 0,
+      backButtonIcon: Platform.isAndroid ? Icon(PlatformIcons(context).clear) : null,
+      leading: Platform.isIOS
+          ? Align(
+              alignment: Alignment.centerLeft,
+              child: CupertinoNavigationBarBackButton(
+                onPressed: Get.back,
+                previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
+              ),
+            )
+          : null,
+      leadingWidth: Platform.isIOS ? 150 : null,
+      elevation: Platform.isAndroid ? 1 : 0,
+      title: Platform.isAndroid
+          ? Text(
+              tr('addNewAccount'),
+              style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+            )
+          : null,
+      titleHeight: Platform.isIOS ? 50 : 56,
+      centerTitle: Platform.isIOS,
     );
 
     final passwordFocusNode = FocusNode();
@@ -69,76 +86,82 @@ class LoginView extends StatelessWidget {
       },
       child: Scaffold(
         appBar: styledAppBar,
-        body: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              constraints: BoxConstraints(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                constraints: BoxConstraints(
                   maxWidth: 480,
-                  maxHeight: Get.height - styledAppBar.titleHeight - styledAppBar.bottomHeight),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  SizedBox(height: Get.height * 0.1),
-                  Text('${tr('portalAdress')}:',
-                      style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
-                  SizedBox(height: Get.height * 0.01),
-                  Text(controller.portalAdress,
-                      style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
-                  SizedBox(height: Get.height * 0.111),
-                  Obx(
-                    () => Form(
-                      child: Column(
-                        children: [
-                          AuthTextField(
-                            hintText: tr('email'),
-                            controller: controller.emailController,
-                            autofillHint: AutofillHints.email,
-                            hasError: controller.emailFieldError.value,
-                            keyboardType: TextInputType.emailAddress,
-                            textInputAction: TextInputAction.next,
-                            onSubmitted: (_) {
-                              FocusScope.of(context).requestFocus(passwordFocusNode);
-                            },
-                          ),
-                          SizedBox(height: Get.height * 0.0444),
-                          AuthTextField(
-                            hintText: tr('password'),
-                            focusNode: passwordFocusNode,
-                            controller: controller.passwordController,
-                            hasError: controller.passwordFieldError.value,
-                            autofillHint: AutofillHints.password,
-                            textInputAction: TextInputAction.done,
-                            obscureText: true,
-                            keyboardType: TextInputType.visiblePassword,
-                            onSubmitted: (_) async => await controller.loginByPassword(),
-                          ),
-                        ],
+                  maxHeight: Get.height -
+                      styledAppBar.titleHeight -
+                      styledAppBar.bottomHeight -
+                      MediaQuery.of(context).padding.bottom,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    SizedBox(height: Get.height * 0.1),
+                    Text('${tr('portalAdress')}:',
+                        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
+                    SizedBox(height: Get.height * 0.01),
+                    Text(controller.portalAdress,
+                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+                    SizedBox(height: Get.height * 0.111),
+                    Obx(
+                      () => Form(
+                        child: Column(
+                          children: [
+                            AuthTextField(
+                              hintText: tr('email'),
+                              controller: controller.emailController,
+                              autofillHint: AutofillHints.email,
+                              hasError: controller.emailFieldError.value,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              onSubmitted: (_) {
+                                FocusScope.of(context).requestFocus(passwordFocusNode);
+                              },
+                            ),
+                            SizedBox(height: Get.height * 0.0444),
+                            AuthTextField(
+                              hintText: tr('password'),
+                              focusNode: passwordFocusNode,
+                              controller: controller.passwordController,
+                              hasError: controller.passwordFieldError.value,
+                              autofillHint: AutofillHints.password,
+                              textInputAction: TextInputAction.done,
+                              obscureText: true,
+                              keyboardType: TextInputType.visiblePassword,
+                              onSubmitted: (_) async => await controller.loginByPassword(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: Get.height * 0.0333),
-                  WideButton(
-                    text: tr('next'),
-                    onPressed: controller.loginByPassword,
-                  ),
-                  const SizedBox(height: 4),
-                  PlatformTextButton(
-                    onPressed: () async => Get.to<PasswordRecoveryScreen1>(
-                      () => const PasswordRecoveryScreen1(),
-                      arguments: {'email': controller.emailController.text},
+                    SizedBox(height: Get.height * 0.0333),
+                    WideButton(
+                      text: tr('next'),
+                      onPressed: controller.loginByPassword,
                     ),
-                    child: Text(
-                      tr('forgotPassword'),
-                      style: TextStyleHelper.subtitle2(
-                        color: Get.theme.colors().primary,
+                    const SizedBox(height: 4),
+                    PlatformTextButton(
+                      onPressed: () async => Get.to<PasswordRecoveryScreen1>(
+                        () => const PasswordRecoveryScreen1(),
+                        arguments: {'email': controller.emailController.text},
+                      ),
+                      child: Text(
+                        tr('forgotPassword'),
+                        style: TextStyleHelper.subtitle2(
+                          color: Get.theme.colors().primary,
+                        ),
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  PrivacyAndTermsFooter(),
-                ],
+                    const Spacer(),
+                    PrivacyAndTermsFooter(),
+                  ],
+                ),
               ),
             ),
           ),

@@ -30,7 +30,10 @@
  *
  */
 
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/account_controller.dart';
@@ -39,10 +42,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
-
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -67,59 +68,75 @@ class PortalInputView extends StatelessWidget {
       appBar: controller.accountManager.accounts.isEmpty
           ? null
           : StyledAppBar(
-              backButtonIcon: Icon(PlatformIcons(context).clear),
-              title: Text(
-                tr('addNewAccount'),
-                style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-              ),
+              backButtonIcon: Platform.isAndroid ? Icon(PlatformIcons(context).clear) : null,
+              leading: Platform.isIOS
+                  ? Align(
+                      alignment: Alignment.centerLeft,
+                      child: CupertinoNavigationBarBackButton(
+                        onPressed: Get.back,
+                        previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
+                      ),
+                    )
+                  : null,
+              leadingWidth: Platform.isIOS ? 150 : null,
+              elevation: Platform.isAndroid ? 1 : 0,
+              title: Platform.isAndroid
+                  ? Text(
+                      tr('addNewAccount'),
+                      style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                    )
+                  : null,
             ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 40),
-            constraints: BoxConstraints(maxWidth: 480, maxHeight: height),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: <Widget>[
-                if (controller.accountManager.accounts.isEmpty)
-                  SizedBox(height: height * 0.2)
-                else
-                  SizedBox(height: height * 0.1),
-                const AppIcon(icon: SvgIcons.app_logo),
-                SizedBox(height: height * 0.01),
-                AppIcon(
-                  icon: SvgIcons.app_title,
-                  color: Get.theme.colors().onSurface,
-                ),
-                SizedBox(height: height * 0.111),
-                Obx(
-                  () => AuthTextField(
-                    controller: controller.portalAdressController,
-                    autofillHint: AutofillHints.url,
-                    hintText: tr('portalAdress'),
-                    hasError: controller.portalFieldError.value,
-                    keyboardType: TextInputType.url,
-                    onSubmitted: (_) => controller.getPortalCapabilities(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              constraints: BoxConstraints(
+                  maxWidth: 480, maxHeight: height - MediaQuery.of(context).padding.bottom),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  if (controller.accountManager.accounts.isEmpty)
+                    SizedBox(height: height * 0.2)
+                  else
+                    SizedBox(height: height * 0.1),
+                  const AppIcon(icon: SvgIcons.app_logo),
+                  SizedBox(height: height * 0.01),
+                  AppIcon(
+                    icon: SvgIcons.app_title,
+                    color: Get.theme.colors().onSurface,
                   ),
-                ),
-                SizedBox(height: height * 0.033),
-                WideButton(
-                  text: tr('next'),
-                  textColor: controller.needAgreement && !controller.checkBoxValue.value
-                      ? Get.theme.colors().onBackground.withOpacity(0.5)
-                      : null,
-                  color: controller.needAgreement && !controller.checkBoxValue.value
-                      ? Get.theme.colors().bgDescription
-                      : null,
-                  onPressed: controller.getPortalCapabilities,
-                ),
-                if (controller.needAgreement)
-                  PrivacyAndTermsFooter.withCheckbox()
-                else
-                  const Spacer(),
-                if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter(),
-              ],
+                  SizedBox(height: height * 0.111),
+                  Obx(
+                    () => AuthTextField(
+                      controller: controller.portalAdressController,
+                      autofillHint: AutofillHints.url,
+                      hintText: tr('portalAdress'),
+                      hasError: controller.portalFieldError.value,
+                      keyboardType: TextInputType.url,
+                      onSubmitted: (_) => controller.getPortalCapabilities(),
+                    ),
+                  ),
+                  SizedBox(height: height * 0.033),
+                  WideButton(
+                    text: tr('next'),
+                    textColor: controller.needAgreement && !controller.checkBoxValue.value
+                        ? Get.theme.colors().onBackground.withOpacity(0.5)
+                        : null,
+                    color: controller.needAgreement && !controller.checkBoxValue.value
+                        ? Get.theme.colors().bgDescription
+                        : null,
+                    onPressed: controller.getPortalCapabilities,
+                  ),
+                  if (controller.needAgreement)
+                    PrivacyAndTermsFooter.withCheckbox()
+                  else
+                    const Spacer(),
+                  if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter(),
+                ],
+              ),
             ),
           ),
         ),
