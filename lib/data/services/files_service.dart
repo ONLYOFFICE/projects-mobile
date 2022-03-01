@@ -168,6 +168,7 @@ class FilesService {
     String? movingFile,
   }) async {
     if (movingFolder == null && movingFile == null) return null;
+    if (movingFolder != null && movingFile != null) return null;
 
     final result = await _api.moveDocument(
       movingFolder: movingFolder,
@@ -193,6 +194,7 @@ class FilesService {
     String? copyingFile,
   }) async {
     if (copyingFolder == null && copyingFile == null) return null;
+    if (copyingFolder != null && copyingFile != null) return null;
 
     final result = await _api.copyDocument(
       copyingFolder: copyingFolder,
@@ -217,6 +219,7 @@ class FilesService {
     List<String>? fileIds,
   }) async {
     if (folderIds == null && fileIds == null) return null;
+    if (folderIds != null && fileIds != null) return null;
 
     final result = await _api.checkForConflicts(
         destFolderId: destFolderId, folderIds: folderIds, fileIds: fileIds);

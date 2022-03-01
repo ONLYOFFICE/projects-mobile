@@ -216,11 +216,7 @@ void setupGetX() {
   Get.create<DocumentsSortController>(() => DocumentsSortController());
 
   Get.create<DocumentsController>(() => DocumentsController());
-  Get.create<DocumentsMoveOrCopyController>(() => DocumentsMoveOrCopyController(
-        Get.find<DocumentsFilterController>(),
-        Get.find<PaginationController>(),
-        Get.find<DocumentsSortController>(),
-      ));
+  Get.create<DocumentsMoveOrCopyController>(() => DocumentsMoveOrCopyController());
 
   Get.create<DiscussionsDocumentsController>(() => DiscussionsDocumentsController(
         Get.find<DocumentsFilterController>(),

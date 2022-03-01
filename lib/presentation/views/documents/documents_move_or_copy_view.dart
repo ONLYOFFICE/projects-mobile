@@ -61,7 +61,7 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
   Widget build(BuildContext context) {
     final target = Get.arguments['target'] as int;
     final initialFolderId = Get.arguments['initialFolderId'] as int?;
-    final mode = Get.arguments['mode'] as String;
+    final mode = Get.arguments['mode'] as MoveOrCopyMode;
 
     final currentFolder = Get.arguments['currentFolder'] as Folder?;
     final nestingCounter = Get.arguments['nestingCounter'] as int?;
@@ -103,9 +103,9 @@ class DocumentsMoveSearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final target = Get.arguments['target'] as int?;
+    final target = Get.arguments['target'] as int;
     final initialFolderId = Get.arguments['initialFolderId'] as int?;
-    final mode = Get.arguments['mode'] as String?;
+    final mode = Get.arguments['mode'] as MoveOrCopyMode;
 
     final currentFolder = Get.arguments['currentFolder'] as Folder?;
     final nestingCounter = Get.arguments['nestingCounter'] as int;
@@ -157,34 +157,26 @@ class MoveDocumentsScreen extends StatelessWidget {
               child: SafeArea(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
+                  children: [
                     PlatformTextButton(
                       onPressed: controller.cancelCopying,
                       child: Text(tr('cancel').toUpperCase(), style: TextStyleHelper.button()),
                     ),
-                    if (controller.mode == 'moveFolder' && controller.currentFolderID != null)
+                    if (controller.currentFolderID != null && controller.currentFolder != null)
                       PlatformTextButton(
-                        onPressed: controller.moveFolder,
-                        child: Text(tr('moveFolderHere').toUpperCase(),
-                            style: TextStyleHelper.button()),
-                      ),
-                    if (controller.mode == 'copyFolder' && controller.currentFolder != null)
-                      PlatformTextButton(
-                        onPressed: controller.copyFolder,
-                        child: Text(tr('copyFolderHere').toUpperCase(),
-                            style: TextStyleHelper.button()),
-                      ),
-                    if (controller.mode == 'moveFile' && controller.currentFolder != null)
-                      PlatformTextButton(
-                        onPressed: controller.moveFile,
-                        child:
-                            Text(tr('moveFileHere').toUpperCase(), style: TextStyleHelper.button()),
-                      ),
-                    if (controller.mode == 'copyFile' && controller.currentFolder != null)
-                      PlatformTextButton(
-                        onPressed: controller.copyFile,
-                        child:
-                            Text(tr('copyFileHere').toUpperCase(), style: TextStyleHelper.button()),
+                        onPressed: controller.processMoveOrCopy,
+                        child: Text(() {
+                          switch (controller.mode) {
+                            case MoveOrCopyMode.CopyDocument:
+                              return tr('copyFileHere').toUpperCase();
+                            case MoveOrCopyMode.CopyFolder:
+                              return tr('copyFolderHere').toUpperCase();
+                            case MoveOrCopyMode.MoveDocument:
+                              return tr('moveFileHere').toUpperCase();
+                            case MoveOrCopyMode.MoveFolder:
+                              return tr('moveFolderHere').toUpperCase();
+                          }
+                        }(), style: TextStyleHelper.button()),
                       ),
                   ],
                 ),

@@ -57,7 +57,7 @@ Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
         children: [
           TextSpan(text: tr('overwriteDialogContent.beforeText')),
           TextSpan(
-              text: '"${titles.join(', ')}"',
+              text: ' "${titles.join(', ')}" ',
               style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)
                   .copyWith(fontWeight: FontWeight.w700)),
           TextSpan(text: tr('overwriteDialogContent.afterText')),
@@ -122,7 +122,7 @@ Future<ConflictResolveType?> _showForAndroid(List<String> titles) async {
             children: [
               TextSpan(text: tr('overwriteDialogContent.beforeText')),
               TextSpan(
-                  text: '"${titles.join(', ')}"',
+                  text: ' "${titles.join(', ')}" ',
                   style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)
                       .copyWith(fontWeight: FontWeight.w700)),
               TextSpan(text: tr('overwriteDialogContent.afterText')),

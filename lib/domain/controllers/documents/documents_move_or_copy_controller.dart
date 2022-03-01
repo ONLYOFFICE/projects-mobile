@@ -36,6 +36,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/move_folder_response.dart';
 import 'package:synchronized/synchronized.dart';
 
 import 'package:projects/data/api/files_api.dart';
@@ -51,6 +52,8 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
+enum MoveOrCopyMode { CopyDocument, CopyFolder, MoveDocument, MoveFolder }
+
 class DocumentsMoveOrCopyController extends BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
 
@@ -65,7 +68,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
 
   Timer? _searchDebounce;
 
-  String? mode;
+  late MoveOrCopyMode mode;
 
   int nestingCounter = 1;
 
@@ -73,26 +76,22 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
 
   int? get target => _targetId;
 
-  late PaginationController _paginationController;
-
-  @override
-  PaginationController get paginationController => _paginationController;
-
-  @override
-  RxList get itemList => _paginationController.data;
-
   String? _screenName;
   Folder? _currentFolder;
 
   Folder? get currentFolder => _currentFolder;
 
-  late DocumentsSortController _sortController;
+  final _paginationController = Get.find<PaginationController>();
+  @override
+  PaginationController get paginationController => _paginationController;
+  @override
+  RxList get itemList => _paginationController.data;
 
+  final _sortController = Get.find<DocumentsSortController>();
   @override
   DocumentsSortController get sortController => _sortController;
 
-  late DocumentsFilterController _filterController;
-
+  final _filterController = Get.find<DocumentsFilterController>();
   @override
   DocumentsFilterController get filterController => _filterController;
 
@@ -101,15 +100,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
 
   final _lock = Lock();
 
-  DocumentsMoveOrCopyController(
-    DocumentsFilterController filterController,
-    PaginationController paginationController,
-    DocumentsSortController sortController,
-  ) {
-    _sortController = sortController;
-    _paginationController = paginationController;
-
-    _filterController = filterController;
+  DocumentsMoveOrCopyController() {
     _filterController.applyFiltersDelegate = () async => refreshContent();
 
     sortController.updateSortDelegate = () async => refreshContent();
@@ -224,13 +215,18 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     loaded.value = true;
   }
 
-  Future moveFolder() async {
+  void processMoveOrCopy() {
     if (_lock.locked) return;
 
     unawaited(_lock.synchronized(() async {
       final conflictsResult = await _api.checkForConflicts(
         destFolderId: _currentFolder!.id.toString(),
-        folderIds: [_targetId.toString()],
+        folderIds: mode == MoveOrCopyMode.CopyFolder || mode == MoveOrCopyMode.MoveFolder
+            ? [_targetId.toString()]
+            : null,
+        fileIds: mode == MoveOrCopyMode.CopyDocument || mode == MoveOrCopyMode.MoveDocument
+            ? [_targetId.toString()]
+            : null,
       );
       if (conflictsResult == null) {
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
@@ -246,132 +242,43 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       }
 
       if (type == null) return;
-
-      final result = await _api.moveDocument(
-        movingFolder: _targetId.toString(),
-        targetFolder: _currentFolder!.id.toString(),
-        type: type,
-      );
-
-      Get.close(nestingCounter);
-      if (result != null)
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderMoved'));
-      else
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-
-      locator<EventHub>().fire('needToRefreshDocuments');
-    }));
-  }
-
-  Future copyFolder() async {
-    if (_lock.locked) return;
-
-    unawaited(_lock.synchronized(() async {
-      final conflictsResult = await _api.checkForConflicts(
-        destFolderId: _currentFolder!.id.toString(),
-        folderIds: [_targetId.toString()],
-      );
-      if (conflictsResult == null) {
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+      if (type == ConflictResolveType.Skip) {
+        Get.close(nestingCounter);
         return;
       }
 
-      ConflictResolveType? type = ConflictResolveType.Skip;
-      if (conflictsResult.isNotEmpty) {
-        final titles = <String>[];
-        for (final portalFile in conflictsResult) titles.add(portalFile.title!);
-
-        type = await showConflictResolvingDialog(titles);
-      }
-
-      if (type == null) return;
-
-      final result = await _api.copyDocument(
-        copyingFolder: _targetId.toString(),
-        targetFolder: _currentFolder!.id.toString(),
-        type: type,
-      );
-
-      Get.close(nestingCounter);
-      if (result != null)
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderCopied'));
-      else
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-
-      locator<EventHub>().fire('needToRefreshDocuments');
-    }));
-  }
-
-  Future moveFile() async {
-    if (_lock.locked) return;
-
-    unawaited(_lock.synchronized(() async {
-      final conflictsResult = await _api.checkForConflicts(
-        destFolderId: _currentFolder!.id.toString(),
-        fileIds: [_targetId.toString()],
-      );
-      if (conflictsResult == null) {
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-        return;
-      }
-
-      ConflictResolveType? type = ConflictResolveType.Skip;
-      if (conflictsResult.isNotEmpty) {
-        final titles = <String>[];
-        for (final portalFile in conflictsResult) titles.add(portalFile.title!);
-
-        type = await showConflictResolvingDialog(titles);
-      }
-
-      if (type == null) return;
-
-      final result = await _api.moveDocument(
-        movingFile: _targetId.toString(),
-        targetFolder: _currentFolder!.id.toString(),
-        type: type,
-      );
+      MoveFolderResponse? result;
+      if (mode == MoveOrCopyMode.CopyFolder || mode == MoveOrCopyMode.CopyDocument)
+        result = await _api.copyDocument(
+          copyingFile: mode == MoveOrCopyMode.CopyDocument ? _targetId.toString() : null,
+          copyingFolder: mode == MoveOrCopyMode.CopyFolder ? _targetId.toString() : null,
+          targetFolder: _currentFolder!.id.toString(),
+          type: type,
+        );
+      if (mode == MoveOrCopyMode.MoveDocument || mode == MoveOrCopyMode.MoveFolder)
+        result = await _api.moveDocument(
+          movingFile: mode == MoveOrCopyMode.MoveDocument ? _targetId.toString() : null,
+          movingFolder: mode == MoveOrCopyMode.MoveFolder ? _targetId.toString() : null,
+          targetFolder: _currentFolder!.id.toString(),
+          type: type,
+        );
 
       Get.close(nestingCounter);
       if (result != null)
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileMoved'));
-      else
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-
-      locator<EventHub>().fire('needToRefreshDocuments');
-    }));
-  }
-
-  Future copyFile() async {
-    if (_lock.locked) return;
-
-    unawaited(_lock.synchronized(() async {
-      final conflictsResult = await _api.checkForConflicts(
-        destFolderId: _currentFolder!.id.toString(),
-        fileIds: [_targetId.toString()],
-      );
-      if (conflictsResult == null) {
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-        return;
-      }
-
-      ConflictResolveType? type = ConflictResolveType.Skip;
-      if (conflictsResult.isNotEmpty) {
-        final titles = <String>[];
-        for (final portalFile in conflictsResult) titles.add(portalFile.title!);
-
-        type = await showConflictResolvingDialog(titles);
-      }
-      if (type == null) return;
-
-      final result = await _api.copyDocument(
-        copyingFile: _targetId.toString(),
-        targetFolder: _currentFolder!.id.toString(),
-        type: type,
-      );
-
-      Get.close(nestingCounter);
-      if (result != null)
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileCopied'));
+        switch (mode) {
+          case MoveOrCopyMode.CopyDocument:
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileCopied'));
+            break;
+          case MoveOrCopyMode.CopyFolder:
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderCopied'));
+            break;
+          case MoveOrCopyMode.MoveDocument:
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileMoved'));
+            break;
+          case MoveOrCopyMode.MoveFolder:
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderMoved'));
+            break;
+        }
       else
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
 

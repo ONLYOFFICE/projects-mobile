@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
+import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 
 import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
 
@@ -177,7 +178,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
     case 'copy':
       await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': 'copyFile',
+        'mode': MoveOrCopyMode.CopyDocument,
         'target': cellController.file.id,
         'initialFolderId': documentsController.currentFolderID,
       });
@@ -185,7 +186,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
     case 'move':
       await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': 'moveFile',
+        'mode': MoveOrCopyMode.MoveDocument,
         'target': cellController.file.id,
         'initialFolderId': documentsController.currentFolderID,
       });

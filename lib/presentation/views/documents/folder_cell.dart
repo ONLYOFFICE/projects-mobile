@@ -254,7 +254,7 @@ Future<void> _onFolderPopupMenuSelected(
     case 'copy':
       await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': 'copyFolder',
+        'mode': MoveOrCopyMode.CopyFolder,
         'target': selectedFolder.id,
         'initialFolderId': controller.currentFolderID,
       });
@@ -262,7 +262,7 @@ Future<void> _onFolderPopupMenuSelected(
     case 'move':
       await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': 'moveFolder',
+        'mode': MoveOrCopyMode.MoveFolder,
         'target': selectedFolder.id,
         'initialFolderId': controller.currentFolderID,
       });
