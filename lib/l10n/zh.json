@@ -471,5 +471,22 @@
 	"removeAccount": "移除",
 	"addNewAccount": "添加新帐户",
 	"noGroups": "在此还没有群组",
-	"searchTags": "搜索标签..."
+	"searchTags": "搜索标签...",
+	"done": "已完成",
+	"closeLowerCase": "关闭",
+	"discussionIsOpen": "已打开",
+	"discussionInArchive": "已归档",
+	"openDiscussion": "打开",
+	"archiveDiscussion": "到档案",
+	"overwriteDialogTitle": "重复名称",
+	"overwriteDialogContent": {
+		"beforeText": "名称为",
+		"afterText": "的文件已经存在于目标文件夹中。"
+	},
+	"overwriteConfirmation": "覆盖",
+	"duplicateConfirmation": "保留两个",
+	"skipConfirmation": "跳过",
+	"loading": "正在加载",
+	"disablePasscode": "停用密码"
+
 }

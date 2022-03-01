@@ -472,9 +472,20 @@
 	"addNewAccount": "Добавить новый аккаунт",
 	"noGroups": "Здесь пока нет групп",
 	"searchTags": "Поиск тегов...",
-	"discussionIsOpen": "Открыто",
-	"discussionInArchive": "В архиве",
-	"openDiscussion": "Открыть",
-	"archiveDiscussion": "В архив",
-	"disablePasscode": "Выключить код доступа"
+	"done": "Готово",
+    "closeLowerCase": "Закрыть",
+    "discussionIsOpen": "Открыто",
+    "discussionInArchive": "В архиве",
+    "openDiscussion": "Открыть",
+    "archiveDiscussion": "В архив",
+    "overwriteDialogTitle": "Повторяющееся имя",
+    "overwriteDialogContent": {
+        "beforeText": "Файл с именем",
+        "afterText": "уже существует в папке назначения."
+    },
+    "overwriteConfirmation": "Перезаписать",
+    "duplicateConfirmation": "Сохранить оба",
+    "skipConfirmation": "Пропустить",
+    "loading": "Загрузка",
+    "disablePasscode": "Выключить код доступа"
 }

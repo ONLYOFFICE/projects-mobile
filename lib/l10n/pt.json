@@ -471,5 +471,21 @@
 	"removeAccount": "remover",
 	"addNewAccount": "Adicionar nova conta",
 	"noGroups": "Nenhum grupo aqui ainda",
-	"searchTags": "Pesquisar por tags..."
+	"searchTags": "Pesquisar por tags...",
+	"done": "Concluído",
+    "closeLowerCase": "Encerrar",
+    "discussionIsOpen": "Aberta",
+    "discussionInArchive": "Arquivada",
+    "openDiscussion": "Abrir",
+    "archiveDiscussion": "Arquivar",
+    "overwriteDialogTitle": "Nome duplicado",
+    "overwriteDialogContent": {
+        "beforeText": "O arquivo com o nome",
+        "afterText": "já existe na pasta de destino."
+    },
+    "overwriteConfirmation": "Substituir",
+    "duplicateConfirmation": "Manter os dois",
+    "skipConfirmation": "Pular",
+    "loading": "Carregamento",
+    "disablePasscode": "Desabilitar o código de acesso"
 }

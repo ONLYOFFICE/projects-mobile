@@ -471,5 +471,21 @@
 	"removeAccount": "supprimer",
 	"addNewAccount": "Ajouter un nouveau compte",
 	"noGroups": "Aucun groupe ici pour le moment",
-	"searchTags": "Rechercher des tags..."
+	"searchTags": "Rechercher des tags...",
+	"done": "Terminé",
+    "closeLowerCase": "Fermer",
+    "discussionIsOpen": "Ouverte",
+    "discussionInArchive": "Archivée",
+    "openDiscussion": "Ouvrir",
+    "archiveDiscussion": "Dans l'archive",
+    "overwriteDialogTitle": "Nom en double",
+    "overwriteDialogContent": {
+        "beforeText": "Le fichier portant le nom",
+        "afterText": "existe déjà dans le dossier de destination."
+    },
+    "overwriteConfirmation": "Remplacer",
+    "duplicateConfirmation": "Conserver les deux",
+    "skipConfirmation": "Ignorer",
+    "loading": "Chargement en cours",
+    "disablePasscode": "Désactiver le mot de passe"
 }

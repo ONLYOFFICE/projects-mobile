@@ -484,7 +484,8 @@
 		"afterText": " already exists in the destination folder."
 	},
 	"overwriteConfirmation": "Overwrite",
-	"duplicateConfirmation": "Keep Both",
+	"duplicateConfirmation": "Keep both",
 	"skipConfirmation": "Skip",
-	"loading": "Loading"
+	"loading": "Loading",
+	"disablePasscode": "Disable the passcode"
 }
