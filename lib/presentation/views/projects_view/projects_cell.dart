@@ -49,6 +49,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
 class ProjectCell extends StatelessWidget {
@@ -80,24 +82,20 @@ class ProjectCell extends StatelessWidget {
       projectController.fillProjectInfo(projectDetails);
     }
 
-    return SizedBox(
-      height: 72,
-      child: InkWell(
-        onTap: () {
-          Get.find<NavigationController>()
-              .to(ProjectDetailedView(), arguments: {'projectController': projectController});
-        },
+    return InkWell(
+      onTap: () {
+        Get.find<NavigationController>()
+            .to(ProjectDetailedView(), arguments: {'projectController': projectController});
+      },
+      child: SizedBox(
+        height: 72,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (projectDetails.canEdit!)
-              InkWell(
-                onTap: () async =>
-                    showsStatusesBS(context: context, itemController: itemController),
-                child: ProjectIcon(itemController: itemController),
-              )
-            else
-              ProjectIcon(itemController: itemController),
+            ProjectIcon(
+              itemController: itemController,
+              canEdit: projectDetails.canEdit!,
+            ),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -131,63 +129,68 @@ class ProjectIcon extends StatelessWidget {
   const ProjectIcon({
     Key? key,
     required this.itemController,
+    this.canEdit = false,
   }) : super(key: key);
 
   final ProjectCellController itemController;
+  final bool canEdit;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(width: 16),
-        Obx(() {
-          final color = itemController.canEdit.value == true
-              ? Get.theme.colors().primary
-              : Get.theme.colors().onBackground;
-          return Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  width: 20,
-                  height: 20,
+    return GestureDetector(
+      onTap: canEdit ? () => showStatuses(context: context, itemController: itemController) : null,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(width: 16),
+          Obx(() {
+            final color = itemController.canEdit.value == true
+                ? Get.theme.colors().primary
+                : Get.theme.colors().onBackground;
+            return Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Container(
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1,
-                      color: Get.theme.colors().primary.withOpacity(0.1),
-                    ),
-                    color: Get.theme.colors().background,
+                    color: color.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(4),
-                    child: AppIcon(
-                      icon: SvgIcons.project_icon,
-                      color: Color(0xff666666),
-                      width: 12,
-                      height: 12,
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Get.theme.colors().primary.withOpacity(0.1),
+                      ),
+                      color: Get.theme.colors().background,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(4),
+                      child: AppIcon(
+                        icon: SvgIcons.project_icon,
+                        color: Color(0xff666666),
+                        width: 12,
+                        height: 12,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              AppIcon(icon: itemController.statusImage, color: color),
-            ],
-          );
-        }),
-        const SizedBox(width: 16),
-      ],
+                AppIcon(icon: itemController.statusImage, color: color),
+              ],
+            );
+          }),
+          const SizedBox(width: 16),
+        ],
+      ),
     );
   }
 }
@@ -300,7 +303,7 @@ class _Suffix extends StatelessWidget {
   }
 }
 
-void showsStatusesBS({required BuildContext context, dynamic itemController}) async {
+void showsStatusesBS({required BuildContext context, dynamic itemController}) {
   final _statusesController = Get.find<ProjectStatusesController>();
   showCustomBottomSheet(
     context: context,
@@ -375,61 +378,46 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
 void showStatuses(
     {required BuildContext context, required BaseProjectEditorController itemController}) async {
   if (itemController.projectData!.canEdit!) {
-    if (Get.find<PlatformController>().isMobile) {
+    if (Get.find<PlatformController>().isMobile)
       showsStatusesBS(context: context, itemController: itemController);
-    } else {
+    else
       showsStatusesPM(context: context, itemController: itemController);
-    }
   }
 }
 
 void showsStatusesPM(
-    {required BuildContext context, required BaseProjectEditorController itemController}) async {
+    {required BuildContext context, required BaseProjectEditorController itemController}) {
   final _statusesController = Get.find<ProjectStatusesController>();
-  final items = <PopupMenuEntry<dynamic>>[
-    for (var i = 0; i < _statusesController.statuses.length; i++)
-      PopupMenuItem(
-        height: 36,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-        onTap: () async {
-          final success = await itemController.updateStatus(
-            newStatusId: _statusesController.statuses[i],
-          );
-          if (success) {
-            locator<EventHub>().fire('needToRefreshProjects', ['all']);
-          }
-          Get.back();
-        },
-        child: StatusTileTablet(
-            title: _statusesController.getStatusName(i),
-            icon: AppIcon(
-                icon: _statusesController.getStatusImageString(i),
-                color: itemController.projectData!.canEdit!
-                    ? Get.theme.colors().primary
-                    : Get.theme.colors().onBackground),
-            selected: _statusesController.statuses[i] == itemController.projectData!.status),
-      ),
-  ];
 
-// calculate the menu position, ofsset dy: 50
-  const offset = Offset(0, 50);
-  final button = context.findRenderObject() as RenderBox;
-  final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
-  final position = RelativeRect.fromRect(
-    Rect.fromPoints(
-      button.localToGlobal(
-        offset,
-        ancestor: overlay,
-      ),
-      button.localToGlobal(
-        button.size.bottomRight(Offset.zero) + offset,
-        ancestor: overlay,
-      ),
-    ),
-    Offset.zero & overlay.size,
-  );
-
-  await showMenu(context: context, position: position, items: items);
+  showButtonMenu(
+      context: context,
+      offset: const Offset(25, 50),
+      itemBuilder: (_) {
+        return [
+          for (var i = 0; i < _statusesController.statuses.length; i++)
+            PlatformPopupMenuItem(
+              height: 36,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+              onTap: () async {
+                final success = await itemController.updateStatus(
+                  newStatusId: _statusesController.statuses[i],
+                );
+                if (success) {
+                  locator<EventHub>().fire('needToRefreshProjects', ['all']);
+                }
+                Get.back();
+              },
+              child: StatusTileTablet(
+                  title: _statusesController.getStatusName(i),
+                  icon: AppIcon(
+                      icon: _statusesController.getStatusImageString(i),
+                      color: itemController.projectData!.canEdit!
+                          ? Get.theme.colors().primary
+                          : Get.theme.colors().onBackground),
+                  selected: _statusesController.statuses[i] == itemController.projectData!.status),
+            ),
+        ];
+      });
 }
 
 double _getInitialSize({required int statusCount}) {

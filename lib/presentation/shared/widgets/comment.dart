@@ -202,7 +202,7 @@ class _CommentAuthor extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 35),
               child: PlatformPopupMenuButton(
-                onSelected: (String value) => _onSelected(value, controller),
+                onSelected: (value) => _onSelected(value as String, controller),
                 icon: Icon(PlatformIcons(context).ellipsis,
                     size: 25, color: Get.theme.colors().onSurface.withOpacity(0.5)),
                 itemBuilder: (context) {

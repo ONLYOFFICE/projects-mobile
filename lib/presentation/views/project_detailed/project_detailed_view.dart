@@ -281,8 +281,7 @@ class _ProjectContextMenu extends StatelessWidget {
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
-      //offset: const Offset(0, 25),
-      onSelected: (String value) => _onSelected(value, controller, context),
+      onSelected: (value) => _onSelected(value as String, controller, context),
       itemBuilder: (context) {
         return [
           if (index == ProjectDetailedTabs.tasks &&

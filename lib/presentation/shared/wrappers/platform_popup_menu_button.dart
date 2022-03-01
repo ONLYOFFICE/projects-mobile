@@ -18,7 +18,6 @@ class PlatformPopupMenuButton<T> extends StatefulWidget {
   PlatformPopupMenuButton({
     Key? key,
     required this.itemBuilder,
-    this.initialValue,
     this.onSelected,
     this.onCanceled,
     this.tooltip,
@@ -27,7 +26,7 @@ class PlatformPopupMenuButton<T> extends StatefulWidget {
     this.child,
     this.icon,
     this.iconSize,
-    this.offset = Offset.zero,
+    this.offset,
     this.enabled = true,
     this.shape,
     this.color,
@@ -40,9 +39,7 @@ class PlatformPopupMenuButton<T> extends StatefulWidget {
 
   final PopupMenuItemBuilder<T> itemBuilder;
 
-  final T? initialValue;
-
-  final PopupMenuItemSelected<T>? onSelected;
+  final PopupMenuItemSelected? onSelected;
 
   final PopupMenuCanceled? onCanceled;
 
@@ -56,7 +53,7 @@ class PlatformPopupMenuButton<T> extends StatefulWidget {
 
   final Widget? icon;
 
-  final Offset offset;
+  final Offset? offset;
 
   final bool enabled;
 
@@ -77,87 +74,74 @@ class PlatformPopupMenuButtonState<T> extends State<PlatformPopupMenuButton<T>> 
   late Offset _offset;
 
   @override
-  void initState() {
-    _shape = widget.shape;
-    _offset = widget.offset;
-
-    super.initState();
-  }
-
-  void showButtonMenu() {
-    final popupMenuTheme = PopupMenuTheme.of(context);
-    final button = context.findRenderObject()! as RenderBox;
-    final overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
-    final position = RelativeRect.fromRect(
-      Rect.fromPoints(
-        button.localToGlobal(_offset, ancestor: overlay),
-        button.localToGlobal(button.size.bottomRight(Offset.zero) + _offset, ancestor: overlay),
-      ),
-      Offset.zero & overlay.size,
-    );
-    final items = widget.itemBuilder(context);
-    if (items.isNotEmpty) {
-      showMenu<T?>(
-        context: context,
-        elevation: widget.elevation ?? popupMenuTheme.elevation,
-        items: items,
-        initialValue: widget.initialValue,
-        position: position,
-        shape: _shape ?? popupMenuTheme.shape,
-        color: widget.color ?? popupMenuTheme.color,
-      ).then<void>((T? newValue) {
-        if (!mounted) return null;
-        if (newValue == null) {
-          widget.onCanceled?.call();
-          return null;
-        }
-        widget.onSelected?.call(newValue);
-      });
-    }
-  }
-
-  bool get _canRequestFocus {
-    final mode = MediaQuery.maybeOf(context)?.navigationMode ?? NavigationMode.traditional;
-    switch (mode) {
-      case NavigationMode.traditional:
-        return widget.enabled;
-      case NavigationMode.directional:
-        return true;
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final enableFeedback =
-        widget.enableFeedback ?? PopupMenuTheme.of(context).enableFeedback ?? true;
-
     assert(debugCheckHasMaterialLocalizations(context));
 
-    if (widget.child != null)
-      return Tooltip(
-        message: widget.tooltip ?? MaterialLocalizations.of(context).showMenuTooltip,
-        child: InkWell(
-          onTap: widget.enabled ? showButtonMenu : null,
-          canRequestFocus: _canRequestFocus,
-          enableFeedback: enableFeedback,
-          child: widget.child,
-        ),
-      );
-
     if (isMaterial(context)) {
-      _offset = const Offset(0, 25);
+      _offset = widget.offset ?? const Offset(0, 50);
+      _shape = widget.shape;
     } else {
-      _offset = const Offset(0, 50);
+      _offset = widget.offset ?? const Offset(0, 50);
       _shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(_kMenuBorderRadius));
     }
 
     return PlatformIconButton(
-      icon: widget.icon ?? Icon(Icons.adaptive.more),
+      icon: widget.child ?? widget.icon ?? Icon(Icons.adaptive.more),
       padding: widget.padding,
-      //tooltip: widget.tooltip ?? MaterialLocalizations.of(context).showMenuTooltip,
-      onPressed: widget.enabled ? showButtonMenu : null,
-      //enableFeedback: enableFeedback,
+      onPressed: widget.enabled
+          ? () => showButtonMenu(
+              context: context,
+              offset: _offset,
+              itemBuilder: widget.itemBuilder,
+              elevation: widget.elevation,
+              shape: _shape,
+              color: widget.color,
+              onSelected: widget.onSelected,
+              onCanceled: widget.onCanceled)
+          : null,
     );
+  }
+}
+
+void showButtonMenu({
+  required BuildContext context,
+  Offset offset = Offset.zero,
+  required PopupMenuItemBuilder itemBuilder,
+  double? elevation,
+  ShapeBorder? shape,
+  Color? color,
+  PopupMenuItemSelected? onSelected,
+  PopupMenuCanceled? onCanceled,
+}) {
+  if (!isMaterial(context))
+    shape ??= RoundedRectangleBorder(borderRadius: BorderRadius.circular(_kMenuBorderRadius));
+
+  final popupMenuTheme = PopupMenuTheme.of(context);
+  final button = context.findRenderObject()! as RenderBox;
+  final overlay = Navigator.of(context).overlay!.context.findRenderObject()! as RenderBox;
+  final position = RelativeRect.fromRect(
+    Rect.fromPoints(
+      button.localToGlobal(offset, ancestor: overlay),
+      button.localToGlobal(button.size.bottomRight(Offset.zero) + offset, ancestor: overlay),
+    ),
+    Offset.zero & overlay.size,
+  );
+  final items = itemBuilder(context);
+  if (items.isNotEmpty) {
+    showMenu(
+      context: context,
+      elevation: elevation ?? popupMenuTheme.elevation,
+      items: items,
+      position: position,
+      shape: shape ?? popupMenuTheme.shape,
+      color: color ?? popupMenuTheme.color,
+    ).then((newValue) {
+      if (newValue == null) {
+        onCanceled?.call();
+        return null;
+      }
+      onSelected?.call(newValue);
+    });
   }
 }
 

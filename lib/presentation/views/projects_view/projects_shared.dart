@@ -118,7 +118,7 @@ class ProjectsMoreButtonWidget extends StatelessWidget {
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
-      onSelected: (String value) => _onSelected(value, controller, context),
+      onSelected: (value) => _onSelected(value as String, controller, context),
       itemBuilder: (context) {
         return [
           PlatformPopupMenuItem(

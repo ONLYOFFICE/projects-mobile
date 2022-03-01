@@ -48,6 +48,8 @@ class ProjectStatusesController extends GetxController {
   String getStatusImageString(int value) => ProjectStatus.toImageString(value);
 
   Future<bool> updateStatus({int? newStatusId, required ProjectDetailed projectData}) async {
+    if (newStatusId == projectData.status) return false;
+
     if (projectData.taskCount! > 0 && newStatusId == ProjectStatusCode.closed.index) {
       MessagesHandler.showSnackBar(
         context: Get.context!,
