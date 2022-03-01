@@ -143,7 +143,7 @@ Future<ConflictResolveType?> _showForAndroid(List<String> titles) async {
       Get.back();
     },
     onAcceptTap: () {
-      Get.back(result: type ?? ConflictResolveType.Skip);
+      Get.back(result: type ?? ConflictResolveType.Overwrite);
     },
   ));
 }
