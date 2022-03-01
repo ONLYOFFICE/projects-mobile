@@ -113,12 +113,14 @@ class DocumentsController extends BaseDocumentsController {
   }
 
   Future<void> refreshContent() async {
-    await _lock.synchronized(() async {
+    if (_lock.locked) return;
+
+    unawaited(_lock.synchronized(() async {
       if (_currentFolderId == null) {
         await initialSetup();
       } else
         await setupFolder(folderId: _currentFolderId, folderName: documentsScreenName.value);
-    });
+    }));
   }
 
   Future<void> initialSetup() async {

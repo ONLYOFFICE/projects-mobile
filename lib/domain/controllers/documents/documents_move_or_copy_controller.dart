@@ -225,14 +225,20 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
   }
 
   Future moveFolder() async {
-    await _lock.synchronized(() async {
+    if (_lock.locked) return;
+
+    unawaited(_lock.synchronized(() async {
       final conflictsResult = await _api.checkForConflicts(
         destFolderId: _currentFolder!.id.toString(),
         folderIds: [_targetId.toString()],
       );
+      if (conflictsResult == null) {
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+        return;
+      }
 
       ConflictResolveType? type = ConflictResolveType.Skip;
-      if (conflictsResult != null && conflictsResult.isNotEmpty) {
+      if (conflictsResult.isNotEmpty) {
         final titles = <String>[];
         for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
@@ -254,18 +260,24 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
 
       locator<EventHub>().fire('needToRefreshDocuments');
-    });
+    }));
   }
 
   Future copyFolder() async {
-    await _lock.synchronized(() async {
+    if (_lock.locked) return;
+
+    unawaited(_lock.synchronized(() async {
       final conflictsResult = await _api.checkForConflicts(
         destFolderId: _currentFolder!.id.toString(),
         folderIds: [_targetId.toString()],
       );
+      if (conflictsResult == null) {
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+        return;
+      }
 
       ConflictResolveType? type = ConflictResolveType.Skip;
-      if (conflictsResult != null && conflictsResult.isNotEmpty) {
+      if (conflictsResult.isNotEmpty) {
         final titles = <String>[];
         for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
@@ -287,18 +299,24 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
 
       locator<EventHub>().fire('needToRefreshDocuments');
-    });
+    }));
   }
 
   Future moveFile() async {
-    await _lock.synchronized(() async {
+    if (_lock.locked) return;
+
+    unawaited(_lock.synchronized(() async {
       final conflictsResult = await _api.checkForConflicts(
         destFolderId: _currentFolder!.id.toString(),
         fileIds: [_targetId.toString()],
       );
+      if (conflictsResult == null) {
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+        return;
+      }
 
       ConflictResolveType? type = ConflictResolveType.Skip;
-      if (conflictsResult != null && conflictsResult.isNotEmpty) {
+      if (conflictsResult.isNotEmpty) {
         final titles = <String>[];
         for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
@@ -320,24 +338,29 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
 
       locator<EventHub>().fire('needToRefreshDocuments');
-    });
+    }));
   }
 
   Future copyFile() async {
-    await _lock.synchronized(() async {
+    if (_lock.locked) return;
+
+    unawaited(_lock.synchronized(() async {
       final conflictsResult = await _api.checkForConflicts(
         destFolderId: _currentFolder!.id.toString(),
         fileIds: [_targetId.toString()],
       );
+      if (conflictsResult == null) {
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+        return;
+      }
 
       ConflictResolveType? type = ConflictResolveType.Skip;
-      if (conflictsResult != null && conflictsResult.isNotEmpty) {
+      if (conflictsResult.isNotEmpty) {
         final titles = <String>[];
         for (final portalFile in conflictsResult) titles.add(portalFile.title!);
 
         type = await showConflictResolvingDialog(titles);
       }
-
       if (type == null) return;
 
       final result = await _api.copyDocument(
@@ -353,7 +376,13 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
 
       locator<EventHub>().fire('needToRefreshDocuments');
-    });
+    }));
+  }
+
+  void cancelCopying() {
+    if (_lock.locked) return;
+
+    _lock.synchronized(() => Get.close(nestingCounter));
   }
 
   @override

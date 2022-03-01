@@ -159,7 +159,7 @@ class MoveDocumentsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     PlatformTextButton(
-                      onPressed: () => Get.close(controller.nestingCounter),
+                      onPressed: controller.cancelCopying,
                       child: Text(tr('cancel').toUpperCase(), style: TextStyleHelper.button()),
                     ),
                     if (controller.mode == 'moveFolder' && controller.currentFolderID != null)

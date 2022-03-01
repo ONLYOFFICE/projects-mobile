@@ -136,6 +136,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => DiscussionsService());
   locator.registerLazySingleton(() => DownloadApi());
   locator.registerLazySingleton(() => DownloadService());
+  locator.registerLazySingleton(() => DocumentsDownloadService());
   locator.registerLazySingleton(() => FilesApi());
   locator.registerLazySingleton(() => FilesService());
   locator.registerLazySingleton(() => GroupApi());

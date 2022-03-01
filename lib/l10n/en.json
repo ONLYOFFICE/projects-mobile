@@ -487,5 +487,9 @@
 	"duplicateConfirmation": "Keep both",
 	"skipConfirmation": "Skip",
 	"loading": "Loading",
-	"disablePasscode": "Disable the passcode"
+	"disablePasscode": "Disable the passcode",
+
+	"downloadComplete": "Download complete",
+	"downloadError": "Download error",
+	"noPermission": "No permission"
 }
