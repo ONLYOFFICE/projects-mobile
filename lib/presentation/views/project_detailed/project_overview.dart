@@ -42,6 +42,7 @@ import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
@@ -66,7 +67,7 @@ class ProjectOverview extends StatelessWidget {
             onRefresh: projectController.refreshData,
             child: ListView(
               children: [
-                const SizedBox(height: 20),
+                const SizedBox(height: 26),
                 Obx(
                   () => InfoTile(
                     caption: tr('project'),
@@ -80,14 +81,14 @@ class ProjectOverview extends StatelessWidget {
                     privateIconVisible: projectController.isPrivate.value,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
                 Padding(
                   padding: const EdgeInsets.only(left: 72),
                   child: Align(
                       alignment: Alignment.centerLeft,
                       child: ProjectStatusButton(projectController: projectController)),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 25),
                 if (projectController.descriptionText.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20),
@@ -175,39 +176,34 @@ class ProjectStatusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: omit_local_variable_types
-    final bool canEdit = projectController.projectData!.canEdit!;
-    return OutlinedButton(
-      onPressed: canEdit
-          ? () => {
-                showStatuses(context: context, itemController: projectController),
-              }
-          : null,
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-          if (canEdit)
-            return const Color(0xff81C4FF).withOpacity(0.2);
-          else
-            return Get.theme.colors().bgDescription;
-        }),
-        side: MaterialStateProperty.resolveWith((_) {
-          return const BorderSide(color: Colors.transparent, width: 0);
-        }),
-      ),
+    final canEdit = projectController.projectData!.canEdit!;
+    return PlatformTextButton(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      onPressed:
+          canEdit ? () => showStatuses(context: context, itemController: projectController) : null,
+      material: (_, __) => MaterialTextButtonData(
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
+        return canEdit
+            ? const Color(0xff81C4FF).withOpacity(0.2)
+            : Get.theme.colors().bgDescription;
+      }), side: MaterialStateProperty.resolveWith((_) {
+        return const BorderSide(color: Colors.transparent, width: 0);
+      }))),
+      cupertino: (_, __) => CupertinoTextButtonData(
+          color: canEdit
+              ? const Color(0xff81C4FF).withOpacity(0.2)
+              : Get.theme.colors().bgDescription),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
-              child: Obx(
-                () => Text(
-                  projectController.statusText.value,
-                  style: TextStyleHelper.subtitle2(
-                    color: canEdit
-                        ? Get.theme.colors().primary
-                        : Get.theme.colors().onBackground.withOpacity(0.75),
-                  ),
+            child: Obx(
+              () => Text(
+                projectController.statusText.value,
+                style: TextStyleHelper.subtitle2(
+                  color: canEdit
+                      ? Get.theme.colors().primary
+                      : Get.theme.colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),

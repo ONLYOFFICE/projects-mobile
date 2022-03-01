@@ -45,7 +45,7 @@ class _Task extends StatelessWidget {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 15),
               child: SizedBox(
                 width: 72,
                 child: AppIcon(
@@ -56,7 +56,7 @@ class _Task extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(top: 20, right: 16, bottom: 22),
+                padding: const EdgeInsets.only(top: 26, right: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -82,10 +82,10 @@ class _Task extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 72, bottom: 16),
+          padding: const EdgeInsets.only(left: 72, bottom: 25, top: 15),
           child: Obx(
             () => StatusButton(
-              canEdit: taskController!.task.value.canEdit,
+              canEdit: taskController!.task.value.canEdit!,
               text: taskController?.status.value.title ?? '',
               onPressed: taskController!.openStatuses,
             ),

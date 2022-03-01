@@ -35,9 +35,10 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class StatusButton extends StatelessWidget {
-  final bool? canEdit;
+  final bool canEdit;
   final String text;
   final void Function(BuildContext) onPressed;
 
@@ -50,36 +51,36 @@ class StatusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      onPressed: canEdit! ? () => onPressed.call(context) : null,
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-          return canEdit!
+    return PlatformTextButton(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      onPressed: canEdit ? () => onPressed.call(context) : null,
+      material: (_, __) => MaterialTextButtonData(
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
+        return canEdit
+            ? const Color(0xff81C4FF).withOpacity(0.2)
+            : Get.theme.colors().bgDescription;
+      }), side: MaterialStateProperty.resolveWith((_) {
+        return const BorderSide(color: Colors.transparent, width: 0);
+      }))),
+      cupertino: (_, __) => CupertinoTextButtonData(
+          color: canEdit
               ? const Color(0xff81C4FF).withOpacity(0.2)
-              : Get.theme.colors().bgDescription;
-        }),
-        side: MaterialStateProperty.resolveWith((_) {
-          return const BorderSide(color: Colors.transparent, width: 0);
-        }),
-      ),
+              : Get.theme.colors().bgDescription),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
-              child: Text(
-                text,
-                style: TextStyleHelper.subtitle2(
-                  color: canEdit!
-                      ? Get.theme.colors().primary
-                      : Get.theme.colors().onBackground.withOpacity(0.75),
-                ),
+            child: Text(
+              text,
+              style: TextStyleHelper.subtitle2(
+                color: canEdit
+                    ? Get.theme.colors().primary
+                    : Get.theme.colors().onBackground.withOpacity(0.75),
               ),
             ),
           ),
           const SizedBox(width: 5),
-          if (canEdit!)
+          if (canEdit)
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Icon(
