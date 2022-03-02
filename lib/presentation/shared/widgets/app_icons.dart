@@ -43,6 +43,8 @@ class SvgIcons {
   static const String tab_bar_dashboard = 'lib/assets/images/icons/tab_bar/dashboard.svg';
   static const String tab_bar_tasks = 'lib/assets/images/icons/tab_bar/tasks.svg';
   static const String tab_bar_projects = 'lib/assets/images/icons/tab_bar/projects.svg';
+  static const String tab_bar_discussions = 'lib/assets/images/icons/tab_bar/discussions.svg';
+  static const String tab_bar_documents = 'lib/assets/images/icons/tab_bar/documents.svg';
   static const String tab_bar_more = 'lib/assets/images/icons/tab_bar/more.svg';
 
   static const String add_button = 'lib/assets/images/icons/add_button.svg';

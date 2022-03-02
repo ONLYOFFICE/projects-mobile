@@ -121,7 +121,7 @@ class TabletLayout extends StatelessWidget {
 
   TabletLayout({Key? key, this.contentView}) : super(key: key);
 
-  final double _iconSize = 34;
+  final double _iconSize = 24;
 
   final _tabletPages = [
     const DashboardView(),
@@ -148,12 +148,9 @@ class TabletLayout extends StatelessWidget {
               color: Get.theme.colors().primarySurface,
               width: 80,
               child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const SizedBox(height: 10),
                   Obx(
-                    () => Flexible(
+                    () => Expanded(
                       child: NavigationRail(
                         selectedIndex: controller.tabIndex.value,
                         onDestinationSelected: (value) => {
@@ -167,8 +164,13 @@ class TabletLayout extends StatelessWidget {
                             },
                           controller.changeTabletIndex(value),
                         },
+                        minWidth: 30,
                         destinations: [
                           NavigationRailDestination(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 24,
+                              ),
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_dashboard,
                                   color: Get.theme.colors().onNavBar.withOpacity(0.4),
@@ -177,10 +179,12 @@ class TabletLayout extends StatelessWidget {
                                   icon: SvgIcons.tab_bar_dashboard,
                                   color: Get.theme.colors().onNavBar,
                                   height: _iconSize),
-                              label: Text(
-                                tr('dashboard'),
-                              )),
+                              label: Text(tr('dashboard'))),
                           NavigationRailDestination(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 24,
+                              ),
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_tasks,
                                   color: Get.theme.colors().onNavBar.withOpacity(0.4),
@@ -191,6 +195,10 @@ class TabletLayout extends StatelessWidget {
                                   height: _iconSize),
                               label: Text(tr('tasks'))),
                           NavigationRailDestination(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 24,
+                              ),
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_projects,
                                   color: Get.theme.colors().onNavBar.withOpacity(0.4),
@@ -201,22 +209,30 @@ class TabletLayout extends StatelessWidget {
                                   height: _iconSize),
                               label: Text(tr('projects'))),
                           NavigationRailDestination(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 24,
+                              ),
                               icon: AppIcon(
-                                  icon: SvgIcons.discussions,
+                                  icon: SvgIcons.tab_bar_discussions,
                                   color: Get.theme.colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
-                                  icon: SvgIcons.discussions,
+                                  icon: SvgIcons.tab_bar_discussions,
                                   color: Get.theme.colors().onNavBar,
                                   height: _iconSize),
                               label: Text(tr('discussions'))),
                           NavigationRailDestination(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 24,
+                              ),
                               icon: AppIcon(
-                                  icon: SvgIcons.documents,
+                                  icon: SvgIcons.tab_bar_documents,
                                   color: Get.theme.colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
-                                  icon: SvgIcons.documents,
+                                  icon: SvgIcons.tab_bar_documents,
                                   color: Get.theme.colors().onNavBar,
                                   height: _iconSize),
                               label: Text(tr('documents'))),
@@ -224,46 +240,32 @@ class TabletLayout extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(
-                    width: 80,
-                    color: Get.theme.colors().primarySurface,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        PlatformIconButton(
-                          icon: SizedBox(
-                              width: 72,
-                              child: SizedBox(
-                                height: 40,
-                                width: 40,
-                                child: CircleAvatar(
-                                  radius: 40,
-                                  backgroundColor: Get.theme.colors().bgDescription,
-                                  child: ClipOval(
-                                    child: Obx(() {
-                                      return controller.selfUserItem.value.avatar.value;
-                                    }),
-                                  ),
-                                ),
-                              )),
-                          onPressed: () => controller.toScreen(const SelfProfileScreen(),
-                              arguments: {'showBackButton': true, 'showSettingsButton': false}),
-                        ),
-                        PlatformIconButton(
-                          icon: AppIcon(
-                            icon: SvgIcons.settings,
-                            width: 24,
-                            height: 24,
-                            color: Get.theme.colors().onNavBar.withOpacity(0.4),
-                          ),
-                          onPressed: () => controller.toScreen(const SettingsScreen()),
-                        ),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                      ],
+                  SizedBox(
+                    height: 60,
+                    width: 60,
+                    child: PlatformIconButton(
+                      padding: EdgeInsets.zero,
+                      icon: ClipOval(
+                        child: Obx(() {
+                          return controller.selfUserItem.value.avatar.value;
+                        }),
+                      ),
+                      onPressed: () => controller.toScreen(const SelfProfileScreen(),
+                          arguments: {'showBackButton': true, 'showSettingsButton': false}),
                     ),
-                  )
+                  ),
+                  const SizedBox(height: 32),
+                  PlatformIconButton(
+                    padding: EdgeInsets.zero,
+                    icon: AppIcon(
+                      icon: SvgIcons.settings,
+                      width: 24,
+                      height: 24,
+                      color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                    ),
+                    onPressed: () => controller.toScreen(const SettingsScreen()),
+                  ),
+                  const SizedBox(height: 60)
                 ],
               ),
             ),
