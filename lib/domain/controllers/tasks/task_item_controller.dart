@@ -129,6 +129,10 @@ class TaskItemController extends GetxController {
     });
   }
 
+  void setup(PortalTask portalTask) {
+    task.value = portalTask;
+  }
+
   @override
   void onClose() {
     _refreshParentTaskSubscription.cancel();
@@ -278,9 +282,8 @@ class TaskItemController extends GetxController {
           Get.back();
         },
       ));
-    } else {
+    } else
       await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
-    }
   }
 
   Future _changeTaskStatus(

@@ -98,7 +98,7 @@ void showsStatusesBS({
                       child: StatusTile(
                           title: _statusesController.statuses[i].title,
                           icon: StatusIcon(
-                            canEditTask: taskItemController!.task.value.canEdit,
+                            canEditTask: taskItemController!.task.value.canEdit!,
                             status: _statusesController.statuses[i],
                           ),
                           selected: _statusesController.statuses[i].title ==
@@ -128,8 +128,6 @@ void showsStatusesPM({
         return [
           for (var i = 0; i < _statusesController.statuses.length; i++)
             PlatformPopupMenuItem(
-              height: 36,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
               onTap: () async {
                 await taskItemController.tryChangingStatus(
                     id: taskItemController.task.value.id!,
@@ -140,7 +138,7 @@ void showsStatusesPM({
               child: StatusTileTablet(
                   title: _statusesController.statuses[i].title!,
                   icon: StatusIcon(
-                    canEditTask: taskItemController.task.value.canEdit,
+                    canEditTask: taskItemController.task.value.canEdit!,
                     status: _statusesController.statuses[i],
                   ),
                   selected: _statusesController.statuses[i].title ==

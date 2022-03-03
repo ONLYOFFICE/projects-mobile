@@ -66,10 +66,11 @@ class TaskCell extends StatelessWidget {
         TaskItemController(task),
         tag: task.id.toString(),
       );
-      WidgetsBinding.instance!.addPostFrameCallback(
-        (_) async => await itemController.initTaskStatus(task),
-      );
     }
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      itemController.setup(task);
+      itemController.initTaskStatus(task);
+    });
 
     return InkWell(
       enableFeedback: false,

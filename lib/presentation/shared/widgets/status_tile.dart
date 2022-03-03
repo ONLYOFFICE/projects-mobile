@@ -95,31 +95,31 @@ class StatusTileTablet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BoxDecoration _selectedDecoration() {
+      // TODO delete if not needed
       return BoxDecoration(
           color: Get.theme.colors().bgDescription, borderRadius: BorderRadius.circular(6));
     }
 
-    return Container(
-      height: 36,
-      decoration: selected ? _selectedDecoration() : null,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Flexible(
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(width: 48, child: icon),
-                Flexible(
-                    child: Text(title,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                        style: TextStyleHelper.body2())),
-              ],
-            ),
+    return Row(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(right: 17),
+          child: icon,
+        ),
+        Expanded(
+          child: Text(
+            title,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: TextStyleHelper.body2(),
           ),
-        ],
-      ),
+        ),
+        if (selected)
+          Icon(
+            PlatformIcons(context).checkMark,
+            color: Get.theme.colors().primary,
+          )
+      ],
     );
   }
 }

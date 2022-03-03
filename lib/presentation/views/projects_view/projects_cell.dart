@@ -396,8 +396,6 @@ void showsStatusesPM(
         return [
           for (var i = 0; i < _statusesController.statuses.length; i++)
             PlatformPopupMenuItem(
-              height: 36,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
               onTap: () async {
                 final success = await itemController.updateStatus(
                   newStatusId: _statusesController.statuses[i],

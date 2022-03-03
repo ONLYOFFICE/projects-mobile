@@ -59,7 +59,7 @@ class _StatusImage extends StatelessWidget {
                   color: controller!.getStatusBGColor,
                 ),
                 child: StatusIcon(
-                  canEditTask: controller!.task.value.canEdit,
+                  canEditTask: controller!.task.value.canEdit!,
                   status: controller!.status.value,
                 ),
               ),
@@ -78,7 +78,7 @@ class StatusIcon extends StatelessWidget {
     required this.status,
   }) : super(key: key);
 
-  final bool? canEditTask;
+  final bool canEditTask;
   final Status status;
 
   @override
@@ -89,7 +89,7 @@ class StatusIcon extends StatelessWidget {
               decodeImageString(status.image!),
               16,
               16,
-              canEditTask!
+              canEditTask
                   ? status.color?.toColor() ?? Get.theme.colors().primary
                   : Get.theme.colors().onBackground.withOpacity(0.6)));
     }
@@ -97,7 +97,7 @@ class StatusIcon extends StatelessWidget {
       return Center(
           child: AppIcon(
               icon: Const.standartTaskStatuses[status.id!],
-              color: canEditTask!
+              color: canEditTask
                   ? Get.theme.colors().primary
                   : Get.theme.colors().onBackground.withOpacity(0.6)));
     }

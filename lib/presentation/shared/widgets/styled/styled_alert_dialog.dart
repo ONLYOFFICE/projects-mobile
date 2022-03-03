@@ -63,6 +63,7 @@ class StyledAlertDialog extends StatelessWidget {
     this.onCancelTap,
     this.actions,
   })  : assert(titleText != null || title != null || content != null || contentText != null),
+        assert(!(actions != null && (onCancelTap != null || onAcceptTap != null))),
         super(key: key);
 
   @override
