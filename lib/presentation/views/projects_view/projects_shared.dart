@@ -45,6 +45,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
@@ -61,6 +62,8 @@ class ProjectsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platformController = Get.find<PlatformController>();
+
     return Obx(
       () {
         if (!controller.loaded.value) return const ListLoadingSkeleton();
@@ -89,9 +92,12 @@ class ProjectsContent extends StatelessWidget {
               );
             }
             if (controller.loaded.value && controller.itemList.isNotEmpty)
-              return ListView.builder(
+              return ListView.separated(
                 itemBuilder: (c, i) => ProjectCell(projectDetails: controller.itemList[i]),
-                itemExtent: 72,
+                separatorBuilder: (_, i) => !platformController.isMobile
+                    ? const StyledDivider(leftPadding: 72)
+                    : const SizedBox(),
+                //itemExtent: 72,
                 itemCount: controller.itemList.length,
               );
           }() as Widget,

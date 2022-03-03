@@ -46,23 +46,27 @@ class _StatusImage extends StatelessWidget {
       if (controller!.isStatusLoaded.isFalse) return const _StatusLoadingIcon();
       return GestureDetector(
         onTap: () async => controller!.openStatuses(context),
-        child: SizedBox(
-          width: 72,
-          child: SizedBox(
-            height: 44,
-            width: 44,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: controller!.getStatusBGColor,
+        child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(width: 16),
+              SizedBox(
+                height: 44,
+                width: 44,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: controller!.getStatusBGColor,
+                  ),
+                  child: StatusIcon(
+                    canEditTask: controller!.task.value.canEdit!,
+                    status: controller!.status.value,
+                  ),
+                ),
               ),
-              child: StatusIcon(
-                canEditTask: controller!.task.value.canEdit!,
-                status: controller!.status.value,
-              ),
-            ),
-          ),
-        ),
+              const SizedBox(width: 16),
+            ]),
       );
     });
   }

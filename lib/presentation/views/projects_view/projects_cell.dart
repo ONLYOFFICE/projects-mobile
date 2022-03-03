@@ -87,7 +87,8 @@ class ProjectCell extends StatelessWidget {
         Get.find<NavigationController>()
             .to(ProjectDetailedView(), arguments: {'projectController': projectController});
       },
-      child: SizedBox(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
         height: 72,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -152,8 +153,8 @@ class ProjectIcon extends StatelessWidget {
               alignment: Alignment.center,
               children: <Widget>[
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 44,
+                  height: 44,
                   decoration: BoxDecoration(
                     color: color.withOpacity(0.1),
                     shape: BoxShape.circle,
