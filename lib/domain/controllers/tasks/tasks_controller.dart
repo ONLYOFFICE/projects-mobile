@@ -58,7 +58,7 @@ class TasksController extends BaseTasksController {
   PaginationController<PortalTask> get paginationController => _paginationController;
   final _paginationController = PaginationController<PortalTask>();
   @override
-  RxList<PortalTask> get itemList => paginationController.data;
+  RxList<PortalTask> get itemList => _paginationController.data;
 
   @override
   TasksSortController get sortController => _sortController;
@@ -84,9 +84,9 @@ class TasksController extends BaseTasksController {
     _sortController.updateSortDelegate = loadTasks;
     _filterController.applyFiltersDelegate = loadTasks;
 
-    paginationController.loadDelegate = _getTasks;
-    paginationController.refreshDelegate = refreshData;
-    paginationController.pullDownEnabled = true;
+    _paginationController.loadDelegate = _getTasks;
+    _paginationController.refreshDelegate = refreshData;
+    _paginationController.pullDownEnabled = true;
 
     if (_withFAB) {
       getFabVisibility(false);
@@ -136,7 +136,7 @@ class TasksController extends BaseTasksController {
   Future loadTasks() async {
     loaded.value = false;
 
-    paginationController.startIndex = 0;
+    _paginationController.startIndex = 0;
     if (_preset != null) await _filterController.setupPreset(_preset!);
 
     await _getTasks(needToClear: true);
@@ -146,7 +146,7 @@ class TasksController extends BaseTasksController {
 
   Future<bool> _getTasks({bool needToClear = false}) async {
     final result = await _api.getTasksByParams(
-      startIndex: paginationController.startIndex,
+      startIndex: _paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       responsibleFilter: _filterController.responsibleFilter,
@@ -160,12 +160,12 @@ class TasksController extends BaseTasksController {
 
     if (result == null) return Future.value(false);
 
-    if (needToClear) paginationController.data.clear();
+    if (needToClear) _paginationController.data.clear();
 
-    paginationController.total.value = result.total;
-    if (result.total != 0) paginationController.data.addAll(result.response ?? <PortalTask>[]);
+    _paginationController.total.value = result.total;
+    if (result.total != 0) _paginationController.data.addAll(result.response ?? <PortalTask>[]);
 
-    expandedCardView.value = paginationController.data.isNotEmpty;
+    expandedCardView.value = _paginationController.data.isNotEmpty;
 
     return Future.value(true);
   }
