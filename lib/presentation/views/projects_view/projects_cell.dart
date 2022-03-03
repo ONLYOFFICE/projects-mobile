@@ -68,8 +68,8 @@ class ProjectCell extends StatelessWidget {
         ProjectCellController(),
         tag: projectDetails.id.toString(),
       );
-      itemController.setup(projectDetails);
     }
+    itemController.setup(projectDetails);
 
     ProjectDetailsController projectController;
     if (Get.isRegistered<ProjectDetailsController>(tag: projectDetails.id.toString()))
@@ -79,8 +79,8 @@ class ProjectCell extends StatelessWidget {
         ProjectDetailsController(),
         tag: projectDetails.id.toString(),
       );
-      projectController.fillProjectInfo(projectDetails);
     }
+    projectController.fillProjectInfo(projectDetails);
 
     return InkWell(
       onTap: () {
