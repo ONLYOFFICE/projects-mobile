@@ -65,7 +65,8 @@ class FileCell extends StatelessWidget {
       onTap: () async {
         await cellController.openFile(cellController.file);
       },
-      child: SizedBox(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
         height: 72,
         child: Row(
           children: [
@@ -94,7 +95,7 @@ class FileCell extends StatelessWidget {
               ),
             ),
             SizedBox(
-              width: 60,
+              width: 48,
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: PlatformPopupMenuButton(
@@ -145,6 +146,7 @@ class FileCell extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(width: 16),
           ],
         ),
       ),

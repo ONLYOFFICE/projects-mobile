@@ -50,6 +50,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/documents/file_cell.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
@@ -65,6 +66,8 @@ class DocumentsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platformController = Get.find<PlatformController>();
+
     return Obx(
       () {
         if (!controller.loaded.value) return const ListLoadingSkeleton();
@@ -76,7 +79,7 @@ class DocumentsContent extends StatelessWidget {
                 return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
               }
               if (controller.loaded.value &&
-                  controller.paginationController.data.isEmpty &&
+                  controller.itemList.isEmpty &&
                   !controller.filterController.hasFilters.value &&
                   !controller.searchMode.value) {
                 return Center(
@@ -84,18 +87,20 @@ class DocumentsContent extends StatelessWidget {
                         icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
               }
               if (controller.loaded.value &&
-                  controller.paginationController.data.isEmpty &&
+                  controller.itemList.isEmpty &&
                   controller.filterController.hasFilters.value &&
                   !controller.searchMode.value) {
                 return Center(
                     child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
               }
-              if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
+              if (controller.loaded.value && controller.itemList.isNotEmpty)
                 return ListView.separated(
-                  itemCount: controller.paginationController.data.length,
-                  separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
-                  itemBuilder: (BuildContext context, int index) {
-                    final element = controller.paginationController.data[index];
+                  itemCount: controller.itemList.length,
+                  separatorBuilder: (_, i) => !platformController.isMobile
+                      ? const StyledDivider(leftPadding: 72)
+                      : const SizedBox(),
+                  itemBuilder: (_, index) {
+                    final element = controller.itemList[index];
                     return element is Folder
                         ? FolderCell(
                             entity: element,

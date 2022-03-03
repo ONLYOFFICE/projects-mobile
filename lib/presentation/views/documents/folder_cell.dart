@@ -70,14 +70,15 @@ class FolderCell extends StatelessWidget {
             preventDuplicates: false,
             arguments: {'folderName': entity.title, 'folderId': entity.id});
       },
-      child: SizedBox(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
         height: 72,
         child: Row(
           children: [
             const FolderCellAvatar(),
             FolderCellTitle(element: entity),
             SizedBox(
-              width: 60,
+              width: 48,
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: PlatformPopupMenuButton(
@@ -129,6 +130,7 @@ class FolderCell extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(width: 16),
           ],
         ),
       ),
