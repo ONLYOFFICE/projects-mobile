@@ -39,6 +39,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
+import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -63,11 +64,10 @@ class _CodeViewState extends State<CodeView> {
           body: SingleChildScrollView(
             child: Center(
               child: Container(
-                //color: Get.theme.backgroundColor,
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Column(
                   children: [
-                    SizedBox(height: Get.height * 0.165),
+                    SizedBox(height: Get.height * 0.1),
                     //TODO fix dark theme icon
                     const AppIcon(
                       hasDarkVersion: true,
@@ -94,10 +94,12 @@ class _CodeViewState extends State<CodeView> {
                     SizedBox(height: Get.height * 0.0333),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 36),
-                      child: PlatformTextField(
+                      child: AuthTextField(
                         controller: codeController,
-                        textAlign: TextAlign.center,
-                        style: TextStyleHelper.subtitle1(),
+                        hintText: tr('code'),
+                        keyboardType: TextInputType.number,
+                        //textAlign: TextAlign.center,
+                        //style: TextStyleHelper.subtitle1(),
                       ),
                     ),
                     SizedBox(height: Get.height * 0.055),

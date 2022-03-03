@@ -69,7 +69,7 @@ class AuthTextField extends StatelessWidget {
     return PlatformTextFormField(
       focusNode: focusNode,
       controller: controller,
-      autofillHints: [autofillHint!],
+      autofillHints: autofillHint != null ? [autofillHint!] : null,
       onChanged: onChanged,
       obscureText: obscureText,
       obscuringCharacter: '*',
