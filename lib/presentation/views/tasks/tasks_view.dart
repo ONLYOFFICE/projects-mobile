@@ -57,8 +57,6 @@ class TasksView extends StatelessWidget {
     final controller = Get.find<TasksController>(tag: 'TasksView');
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      //backgroundColor: Get.theme.backgroundColor,
       floatingActionButton: Obx(
         () => Visibility(
           visible: controller.fabIsVisible.value,

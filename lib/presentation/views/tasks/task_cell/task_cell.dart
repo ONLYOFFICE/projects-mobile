@@ -76,7 +76,8 @@ class TaskCell extends StatelessWidget {
       enableFeedback: false,
       onTap: () => Get.find<NavigationController>()
           .to(const TaskDetailedView(), arguments: {'controller': itemController}),
-      child: SizedBox(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
         height: 72,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -166,7 +167,7 @@ class _SecondColumn extends StatelessWidget {
             children: <Widget>[
               CellAtributedTitle(
                 text: itemController!.task.value.title,
-                style: TextStyleHelper.subtitle1(),
+                style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                 atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
                 atributeIconVisible: itemController!.task.value.priority == 1,
               ),

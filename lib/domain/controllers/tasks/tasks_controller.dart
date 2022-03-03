@@ -58,7 +58,7 @@ class TasksController extends BaseTasksController {
   PaginationController<PortalTask> get paginationController => _paginationController;
   final _paginationController = PaginationController<PortalTask>();
   @override
-  RxList get itemList => paginationController.data;
+  RxList<PortalTask> get itemList => paginationController.data;
 
   @override
   TasksSortController get sortController => _sortController;
@@ -81,10 +81,11 @@ class TasksController extends BaseTasksController {
   TasksController() {
     screenName = tr('tasks');
 
-    _filterController.applyFiltersDelegate = () async => loadTasks();
-    _sortController.updateSortDelegate = () async => loadTasks();
-    paginationController.loadDelegate = () async => _getTasks();
-    paginationController.refreshDelegate = () async => refreshData();
+    _sortController.updateSortDelegate = loadTasks;
+    _filterController.applyFiltersDelegate = loadTasks;
+
+    paginationController.loadDelegate = _getTasks;
+    paginationController.refreshDelegate = refreshData;
     paginationController.pullDownEnabled = true;
 
     if (_withFAB) {
@@ -159,8 +160,9 @@ class TasksController extends BaseTasksController {
 
     if (result == null) return Future.value(false);
 
-    paginationController.total.value = result.total;
     if (needToClear) paginationController.data.clear();
+
+    paginationController.total.value = result.total;
     if (result.total != 0) paginationController.data.addAll(result.response ?? <PortalTask>[]);
 
     expandedCardView.value = paginationController.data.isNotEmpty;

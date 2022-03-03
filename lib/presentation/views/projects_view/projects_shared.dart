@@ -63,31 +63,38 @@ class ProjectsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller.loaded.value == false) {
-          return const ListLoadingSkeleton();
-        }
-        if (controller.loaded.value == true &&
-            controller.paginationController.data.isEmpty &&
-            !controller.filterController.hasFilters.value) {
-          return Center(
-            child: EmptyScreen(icon: SvgIcons.project_not_created, text: tr('noProjectsCreated')),
-          );
-        }
-        if (controller.loaded.value == true &&
-            controller.paginationController.data.isEmpty &&
-            controller.filterController.hasFilters.value) {
-          return Center(
-            child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
-          );
-        }
+        if (!controller.loaded.value) return const ListLoadingSkeleton();
+
         return PaginationListView(
           paginationController: controller.paginationController,
-          child: ListView.builder(
-            itemBuilder: (c, i) =>
-                ProjectCell(projectDetails: controller.paginationController.data[i]),
-            itemExtent: 72,
-            itemCount: controller.paginationController.data.length,
-          ),
+          child: () {
+            if (controller.loaded.value &&
+                controller.paginationController.data.isEmpty &&
+                !controller.filterController.hasFilters.value) {
+              return Center(
+                child: EmptyScreen(
+                  icon: SvgIcons.project_not_created,
+                  text: tr('noProjectsCreated'),
+                ),
+              );
+            }
+            if (controller.loaded.value &&
+                controller.paginationController.data.isEmpty &&
+                controller.filterController.hasFilters.value) {
+              return Center(
+                child: EmptyScreen(
+                  icon: SvgIcons.not_found,
+                  text: tr('noProjectsMatching'),
+                ),
+              );
+            }
+            if (controller.loaded.value && controller.itemList.isNotEmpty)
+              return ListView.builder(
+                itemBuilder: (c, i) => ProjectCell(projectDetails: controller.itemList[i]),
+                itemExtent: 72,
+                itemCount: controller.itemList.length,
+              );
+          }() as Widget,
         );
       },
     );

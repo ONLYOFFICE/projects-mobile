@@ -67,9 +67,8 @@ class DiscussionsContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (!controller.loaded.value) {
-        return const ListLoadingSkeleton();
-      }
+      if (!controller.loaded.value) return const ListLoadingSkeleton();
+
       return PaginationListView(
           paginationController: controller.paginationController,
           child: () {

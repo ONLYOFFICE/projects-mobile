@@ -49,19 +49,16 @@ class _StatusImage extends StatelessWidget {
         child: SizedBox(
           width: 72,
           child: SizedBox(
-            height: 40,
-            width: 40,
-            child: Padding(
-              padding: const EdgeInsets.all(0.5),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: controller!.getStatusBGColor,
-                ),
-                child: StatusIcon(
-                  canEditTask: controller!.task.value.canEdit!,
-                  status: controller!.status.value,
-                ),
+            height: 44,
+            width: 44,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: controller!.getStatusBGColor,
+              ),
+              child: StatusIcon(
+                canEditTask: controller!.task.value.canEdit!,
+                status: controller!.status.value,
               ),
             ),
           ),
@@ -95,11 +92,12 @@ class StatusIcon extends StatelessWidget {
     }
     if (Const.standartTaskStatuses.containsKey(status.id)) {
       return Center(
-          child: AppIcon(
-              icon: Const.standartTaskStatuses[status.id!],
-              color: canEditTask
-                  ? Get.theme.colors().primary
-                  : Get.theme.colors().onBackground.withOpacity(0.6)));
+        child: AppIcon(
+            icon: Const.standartTaskStatuses[status.id!],
+            color: canEditTask
+                ? Get.theme.colors().primary
+                : Get.theme.colors().onBackground.withOpacity(0.6)),
+      );
     }
     throw Exception('STATUS ERROR');
   }

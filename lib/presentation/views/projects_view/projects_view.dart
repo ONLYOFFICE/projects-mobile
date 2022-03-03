@@ -53,7 +53,6 @@ class ProjectsView extends StatelessWidget {
     final controller = Get.find<ProjectsController>(tag: 'ProjectsView');
 
     return Scaffold(
-      backgroundColor: Get.theme.colors().backgroundColor,
       floatingActionButton: Obx(
         () => Visibility(
           visible: controller.fabIsVisible.value,

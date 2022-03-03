@@ -58,7 +58,7 @@ class ProjectsController extends BaseController {
   PaginationController<ProjectDetailed> get paginationController => _paginationController;
 
   @override
-  RxList get itemList => _paginationController.data;
+  RxList<ProjectDetailed> get itemList => _paginationController.data;
 
   PresetProjectFilters? _preset;
 
@@ -77,11 +77,11 @@ class ProjectsController extends BaseController {
   ProjectsController() {
     screenName = tr('projects');
 
-    _sortController.updateSortDelegate = updateSort;
-    _filterController.applyFiltersDelegate = () async => await loadProjects();
+    _sortController.updateSortDelegate = loadProjects;
+    _filterController.applyFiltersDelegate = loadProjects;
 
-    paginationController.loadDelegate = () async => await _getProjects();
-    paginationController.refreshDelegate = () async => await refreshData();
+    paginationController.loadDelegate = _getProjects;
+    paginationController.refreshDelegate = refreshData;
     paginationController.pullDownEnabled = true;
 
     if (_withFAB) {
@@ -120,10 +120,6 @@ class ProjectsController extends BaseController {
         arguments: {'filtersController': filterController, 'sortController': sortController});
   }
 
-  void updateSort() {
-    loadProjects();
-  }
-
   Future<void> refreshData() async {
     loaded.value = false;
 
@@ -159,11 +155,13 @@ class ProjectsController extends BaseController {
       otherFilter: _filterController.otherFilter,
       statusFilter: _filterController.statusFilter,
     );
-    if (needToClear) paginationController.data.clear();
     if (result == null) return;
+
+    if (needToClear) paginationController.data.clear();
 
     paginationController.total.value = result.total;
     paginationController.data.addAll(result.response ?? <ProjectDetailed>[]);
+
     expandedCardView.value = paginationController.data.isNotEmpty;
   }
 

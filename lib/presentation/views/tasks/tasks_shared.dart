@@ -47,6 +47,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
@@ -61,6 +62,8 @@ class TasksContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platformController = Get.find<PlatformController>();
+
     return Obx(
       () {
         if (!controller.loaded.value) return const ListLoadingSkeleton();
@@ -84,9 +87,12 @@ class TasksContent extends StatelessWidget {
                 child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
               );
             if (controller.loaded.value && controller.itemList.isNotEmpty)
-              return ListView.builder(
+              return ListView.separated(
                 itemBuilder: (c, i) => TaskCell(task: controller.itemList[i] as PortalTask),
-                itemExtent: 72,
+                separatorBuilder: (_, i) => !platformController.isMobile
+                    ? const StyledDivider(leftPadding: 72)
+                    : const SizedBox(),
+                //itemExtent: 80,
                 itemCount: controller.itemList.length,
               );
           }() as Widget,
