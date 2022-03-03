@@ -43,7 +43,7 @@ class _StatusImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (controller!.isStatusLoaded.isFalse) return const _StatusLoadingIcon();
+      if (!controller!.isStatusLoaded.value) return const _StatusLoadingIcon();
       return GestureDetector(
         onTap: () async => controller!.openStatuses(context),
         child: Row(
@@ -114,27 +114,31 @@ class _StatusLoadingIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 72,
-      child: SizedBox(
-        height: 40,
-        width: 40,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Get.theme.colors().onBackground.withOpacity(0.05),
-          ),
-          child: Center(
-            child: SizedBox(
-              height: 16,
-              width: 16,
-              child: PlatformCircularProgressIndicator(
-                color: Get.theme.colors().primary,
+    return Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const SizedBox(width: 16),
+          SizedBox(
+            height: 44,
+            width: 44,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Get.theme.colors().onBackground.withOpacity(0.05),
+              ),
+              child: Center(
+                child: SizedBox(
+                  height: 16,
+                  width: 16,
+                  child: PlatformCircularProgressIndicator(
+                    color: Get.theme.colors().primary,
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    );
+          const SizedBox(width: 16),
+        ]);
   }
 }

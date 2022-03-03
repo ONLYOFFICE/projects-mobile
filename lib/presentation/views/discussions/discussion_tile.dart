@@ -58,15 +58,18 @@ class DiscussionTile extends StatelessWidget {
     final discussion = controller.discussion;
     return InkWell(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        height: 72,
         child: Row(
           children: [
+            const SizedBox(width: 16),
             _Image(avatarUrl: controller.avatarUrl),
             const SizedBox(width: 16),
-            _DiscussionInfo(discussion: discussion.value),
-            const SizedBox(width: 11.33),
+            Expanded(child: _DiscussionInfo(discussion: discussion.value)),
+            const SizedBox(width: 8),
             _CommentsCount(commentsCount: discussion.value.commentsCount),
+            const SizedBox(width: 16),
           ],
         ),
       ),
@@ -84,9 +87,9 @@ class _Image extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 40,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
+      width: 44,
+      height: 44,
+      child: ClipOval(
         child: Obx(
           () => CustomNetworkImage(
             image: avatarUrl.value,
@@ -108,37 +111,36 @@ class _DiscussionInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            discussion!.title!,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyleHelper.subtitle1().copyWith(
-              color:
-                  discussion!.status == 1 ? Get.theme.colors().onBackground.withOpacity(0.6) : null,
-            ),
-          ),
-          RichText(
-            text: TextSpan(
-              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
-              children: [
-                if (discussion!.status == 1)
-                  TextSpan(
-                      text: '${tr('archived')} • ',
-                      style: TextStyleHelper.status(color: Get.theme.colors().onBackground)),
-                TextSpan(text: formatedDate(discussion!.created!)),
-                const TextSpan(text: ' • '),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          discussion!.title!,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyleHelper.subtitle1(
+              color: discussion!.status == 1
+                  ? Get.theme.colors().onBackground.withOpacity(0.6)
+                  : null),
+        ),
+        RichText(
+          text: TextSpan(
+            style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+            children: [
+              if (discussion!.status == 1)
                 TextSpan(
-                  text: NameFormatter.formateName(discussion!.createdBy!),
-                )
-              ],
-            ),
+                    text: '${tr('archived')} • ',
+                    style: TextStyleHelper.status(color: Get.theme.colors().onBackground)),
+              TextSpan(text: formatedDate(discussion!.created!)),
+              const TextSpan(text: ' • '),
+              TextSpan(
+                text: NameFormatter.formateName(discussion!.createdBy!),
+              )
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

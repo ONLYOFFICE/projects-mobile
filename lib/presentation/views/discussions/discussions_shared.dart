@@ -49,6 +49,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
@@ -66,6 +67,8 @@ class DiscussionsContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platformController = Get.find<PlatformController>();
+
     return Obx(() {
       if (!controller.loaded.value) return const ListLoadingSkeleton();
 
@@ -93,12 +96,12 @@ class DiscussionsContent extends StatelessWidget {
             if (controller.loaded.value && controller.itemList.isNotEmpty)
               return ListView.separated(
                 itemCount: controller.itemList.length,
-                padding: const EdgeInsets.only(bottom: 65),
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(height: 12);
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  final discussion = controller.paginationController.data[index] as Discussion;
+                //padding: const EdgeInsets.only(bottom: 65),
+                separatorBuilder: (_, i) => !platformController.isMobile
+                    ? const StyledDivider(leftPadding: 72)
+                    : const SizedBox(),
+                itemBuilder: (_, index) {
+                  final discussion = controller.itemList[index] as Discussion;
                   final discussionItemController = Get.find<DiscussionItemController>();
                   discussionItemController.setup(discussion);
                   return DiscussionTile(
