@@ -214,8 +214,7 @@ class SettingsScreen extends StatelessWidget {
                         trailing: Obx(
                           () => Text(
                             controller.cacheSize.value,
-                            style:
-                                TextStyleHelper.body1.copyWith(color: CupertinoColors.activeBlue),
+                            style: TextStyleHelper.body1(color: CupertinoColors.activeBlue),
                           ),
                         ),
                       ),

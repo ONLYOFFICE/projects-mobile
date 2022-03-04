@@ -304,7 +304,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
     return true;
   }
 
-  Future<void> confirm(BuildContext context) async {
+  Future<void> confirm() async {
     if (_selectedProjectId == null) needToSelectProject.value = true;
     title.value = title.string.trim();
     titleController.text = title.value;
@@ -335,7 +335,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
       locator<EventHub>().fire('needToRefreshTasks');
 
       MessagesHandler.showSnackBar(
-        context: context,
+        context: Get.context!,
         text: tr('taskCreated'),
         buttonText: tr('open').toUpperCase(),
         buttonOnTap: () {
@@ -347,7 +347,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
       );
     } else
       MessagesHandler.showSnackBar(
-        context: context,
+        context: Get.context!,
         text: tr('error'),
       );
   }

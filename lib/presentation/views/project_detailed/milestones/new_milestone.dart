@@ -69,11 +69,11 @@ class NewMilestoneView extends StatelessWidget {
           appBar: StyledAppBar(
             titleText: tr('newMilestone'),
             actions: [
-              IconButton(
-                  icon: const Icon(Icons.check_rounded),
+              PlatformIconButton(
+                  icon: Icon(PlatformIcons(context).checkMark),
                   onPressed: () => newMilestoneController.confirm(context))
             ],
-            leading: IconButton(
+            leading: PlatformIconButton(
                 icon: const Icon(Icons.arrow_back_rounded),
                 onPressed: newMilestoneController.discard),
           ),

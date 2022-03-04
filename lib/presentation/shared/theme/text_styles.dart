@@ -38,19 +38,24 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 //TODO [akryukov] review styles after figma project will be updated
 class TextStyleHelper {
-  static final body1 = Platform.isAndroid ? _androidBody1 : _iosBody1;
-  static const _androidBody1 = TextStyle(
-      fontFamily: 'Roboto',
-      fontWeight: FontWeight.w400,
-      fontSize: 16,
-      height: 1.5,
-      letterSpacing: 0.44);
-  static const _iosBody1 = TextStyle(
-    fontFamily: '.SF Pro',
-    fontWeight: FontWeight.w400,
-    fontSize: 16,
-    height: 1.5,
-  );
+  static TextStyle body1({Color? color}) =>
+      Platform.isAndroid ? _androidBody1(color: color) : _iosBody1(color: color);
+
+  static TextStyle _androidBody1({Color? color}) => TextStyle(
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w400,
+        fontSize: 16,
+        height: 1.5,
+        letterSpacing: 0.44,
+        color: color,
+      );
+  static TextStyle _iosBody1({Color? color}) => TextStyle(
+        fontFamily: '.SF Pro',
+        fontWeight: FontWeight.w400,
+        fontSize: 16,
+        height: 1.5,
+        color: color,
+      );
 
   static TextStyle body2({Color? color}) =>
       Platform.isAndroid ? _androidBody2(color: color) : _iosBody2(color: color);

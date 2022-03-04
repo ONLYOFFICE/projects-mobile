@@ -31,7 +31,6 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -40,8 +39,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_switch.dart';
-import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/new_task/tiles/description_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/due_date_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/milestone_tile.dart';
@@ -72,38 +71,28 @@ class NewTaskView extends StatelessWidget {
         backgroundColor: Get.theme.colors().backgroundColor,
         appBar: StyledAppBar(
           titleText: tr('newTask'),
-          leadingWidth: 65,
+          leadingWidth: GetPlatform.isIOS ? 100 : null,
           centerTitle: GetPlatform.isIOS,
           actions: [
-            PlatformWidget(
-              material: (platformContext, __) => IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: () => controller.confirm(platformContext),
+            PlatformIconButton(
+              materialIcon: const Icon(Icons.check_rounded),
+              cupertinoIcon: Text(
+                tr('done'),
+                style: TextStyleHelper.headline7(color: Get.theme.colors().primary),
               ),
-              cupertino: (platformContext, __) => CupertinoButton(
-                onPressed: () => controller.confirm(platformContext),
-                padding: const EdgeInsets.only(right: 16),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  tr('done'),
-                  style: TextStyleHelper.headline7(),
-                ),
-              ),
+              onPressed: controller.confirm,
             ),
           ],
-          leading: PlatformWidget(
-            cupertino: (_, __) => CupertinoButton(
+          leading: PlatformIconButton(
+            materialIcon: const Icon(Icons.close),
+            cupertinoIcon: Text(
+              tr('closeLowerCase'),
+              style: TextStyleHelper.body1(),
+            ),
+            onPressed: controller.discardTask,
+            cupertino: (_, __) => CupertinoIconButtonData(
               padding: const EdgeInsets.only(left: 16),
               alignment: Alignment.centerLeft,
-              onPressed: controller.discardTask,
-              child: Text(
-                tr('closeLowerCase'),
-                style: TextStyleHelper.button(),
-              ),
-            ),
-            material: (_, __) => IconButton(
-              onPressed: controller.discardTask,
-              icon: const Icon(Icons.close),
             ),
           ),
         ),
