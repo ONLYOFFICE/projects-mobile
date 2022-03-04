@@ -82,7 +82,7 @@ class EditProjectView extends StatelessWidget {
               padding: GetPlatform.isAndroid ? EdgeInsets.zero : const EdgeInsets.only(right: 16),
               onPressed: editProjectController.confirmChanges,
               cupertinoIcon: Text(
-                tr('Done'),
+                tr('done'),
                 style: TextStyleHelper.headline7(),
               ),
               materialIcon: const Icon(Icons.check_rounded),

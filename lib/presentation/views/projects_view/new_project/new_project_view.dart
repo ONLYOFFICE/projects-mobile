@@ -76,7 +76,7 @@ class NewProject extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 16),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  tr('Done'),
+                  tr('done'),
                   style: TextStyleHelper.headline7(),
                 ),
               ),
