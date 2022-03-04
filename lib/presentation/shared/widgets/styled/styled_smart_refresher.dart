@@ -33,6 +33,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
+import 'package:projects/presentation/shared/wrappers/platform_scrollbar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class StyledSmartRefresher extends StatelessWidget {
@@ -82,15 +83,17 @@ class StyledSmartRefresher extends StatelessWidget {
               )
             : const SizedBox());
 
-    return SmartRefresher(
-      header: header,
-      footer: footer,
-      enablePullDown: enablePullDown ?? true,
-      enablePullUp: enablePullUp ?? false,
-      controller: controller,
-      onRefresh: onRefresh,
-      onLoading: onLoading,
-      child: child,
+    return PlatformScrollbar(
+      child: SmartRefresher(
+        header: header,
+        footer: footer,
+        enablePullDown: enablePullDown ?? true,
+        enablePullUp: enablePullUp ?? false,
+        controller: controller,
+        onRefresh: onRefresh,
+        onLoading: onLoading,
+        child: child,
+      ),
     );
   }
 }
