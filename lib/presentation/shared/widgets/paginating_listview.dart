@@ -33,6 +33,7 @@
 import 'package:flutter/material.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:projects/presentation/shared/wrappers/platform_scrollbar.dart';
 
 class PaginationListView<T> extends StatelessWidget {
   const PaginationListView({
@@ -46,7 +47,7 @@ class PaginationListView<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
+    return PlatformScrollbar(
       child: StyledSmartRefresher(
           enablePullDown: paginationController.pullDownEnabled,
           enablePullUp: paginationController.pullUpEnabled,

@@ -36,8 +36,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
-import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/discussions_service.dart';
 
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';

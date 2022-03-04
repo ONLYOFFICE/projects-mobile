@@ -27,7 +27,7 @@ abstract class PlatformWidgetBase<I extends Widget, A extends Widget> extends St
     return throw UnsupportedError('This platform is not supported: $defaultTargetPlatform');
   }
 
-  Widget createCupertinoWidget(BuildContext context);
+  I createCupertinoWidget(BuildContext context);
 
-  Widget createMaterialWidget(BuildContext context);
+  A createMaterialWidget(BuildContext context);
 }

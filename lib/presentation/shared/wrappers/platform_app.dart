@@ -525,8 +525,8 @@ class PlatformApp extends PlatformWidgetBase<CupertinoApp, MaterialApp> {
         onUnknownRoute = null,
         routes = null,
         initialRoute = null,
-        this.material = null,
-        this.cupertino = null,
+        material = null,
+        cupertino = null,
         materialRouter = material,
         cupertinoRouter = cupertino,
         super(key: key);
