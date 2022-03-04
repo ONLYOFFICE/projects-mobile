@@ -43,6 +43,7 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
@@ -113,7 +114,7 @@ class TagsSelectionView extends StatelessWidget {
               onTapFunction: () => {},
             );
           } else if (controller.loaded.value == true && controller.filteredTags.isEmpty) {
-            return Column(children: const [NothingFound()]);
+            return const NothingFound();
           } else
             return const ListLoadingSkeleton();
         },
@@ -220,18 +221,25 @@ class _TagsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platformController = Get.find<PlatformController>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Expanded(
-          child: ListView.builder(
+          child: ListView.separated(
+            separatorBuilder: (_, i) => !platformController.isMobile
+                ? const StyledDivider(
+                    leftPadding: 16,
+                    rightPadding: 16,
+                  )
+                : const SizedBox(),
             itemBuilder: (c, i) => TagItem(
               tagItemDTO: controller.filteredTags[i],
               onTapFunction: () {
                 controller.changeTagSelection(controller.filteredTags[i]);
               },
             ),
-            itemExtent: 65,
             itemCount: controller.filteredTags.length,
           ),
         )

@@ -166,7 +166,7 @@ class SelectProjectScreen extends StatelessWidget {
               searchController.searchResult.isEmpty &&
               searchController.loaded.value == true &&
               searchFieldController.text.isNotEmpty) {
-            return Column(children: const [NothingFound()]);
+            return const NothingFound();
           }
           if (_projectsController.loaded.value == true) {
             return PaginationListView(

@@ -52,7 +52,7 @@ class TagItem extends StatelessWidget {
     return InkWell(
       onTap: onTapFunction,
       child: SizedBox(
-        height: 48,
+        height: 65,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

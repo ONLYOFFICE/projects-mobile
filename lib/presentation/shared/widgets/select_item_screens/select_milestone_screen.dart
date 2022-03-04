@@ -56,7 +56,7 @@ class SelectMilestoneScreen extends StatelessWidget with SelectItemWithSearchMix
   VoidCallback get getItemsFunction => () async => await controller.getMilestones();
 
   @override
-  Widget get nothingFound => Column(children: const [NothingFound()]);
+  Widget get nothingFound => const NothingFound();
 
   @override
   Widget get itemList => const _MilestoneList();

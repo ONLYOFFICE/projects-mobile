@@ -105,7 +105,7 @@ class GroupMembersSelectionView extends StatelessWidget {
               onTapFunction: controller.selectGroupMembers as Function(PortalGroupItemController),
             );
           } else if (groupsDataSource.loaded.value == true) {
-            return Column(children: const [NothingFound()]);
+            return const NothingFound();
           }
           return const ListLoadingSkeleton();
         },

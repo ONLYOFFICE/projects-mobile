@@ -92,7 +92,6 @@ class TasksContent extends StatelessWidget {
                 separatorBuilder: (_, i) => !platformController.isMobile
                     ? const StyledDivider(leftPadding: 72)
                     : const SizedBox(),
-                //itemExtent: 80,
                 itemCount: controller.itemList.length,
               );
           }() as Widget,

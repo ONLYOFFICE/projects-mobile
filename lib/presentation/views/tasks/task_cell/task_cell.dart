@@ -166,7 +166,7 @@ class _SecondColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               CellAtributedTitle(
-                text: itemController!.task.value.title,
+                text: itemController!.task.value.title?.trim(),
                 style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                 atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
                 atributeIconVisible: itemController!.task.value.priority == 1,

@@ -32,12 +32,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_search_controller.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
 class TasksSearchScreen extends StatelessWidget {
@@ -46,6 +48,7 @@ class TasksSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(TasksSearchController());
+    final platformController = Get.find<PlatformController>();
 
     return Scaffold(
       appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
@@ -53,12 +56,14 @@ class TasksSearchScreen extends StatelessWidget {
         () {
           if (controller.loaded.value == false) return const ListLoadingSkeleton();
           if (controller.nothingFound.isTrue)
-            return Column(children: const [NothingFound()]);
+            return const NothingFound();
           else {
             return PaginationListView(
               paginationController: controller.paginationController,
-              child: ListView.builder(
-                itemExtent: 72,
+              child: ListView.separated(
+                separatorBuilder: (_, i) => !platformController.isMobile
+                    ? const StyledDivider(leftPadding: 72)
+                    : const SizedBox(),
                 itemCount: controller.paginationController.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   return TaskCell(task: controller.paginationController.data[index]);

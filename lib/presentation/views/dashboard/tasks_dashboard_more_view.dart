@@ -58,7 +58,7 @@ class TasksDashboardMoreView extends StatelessWidget {
           visible: controller.fabIsVisible.value,
           child: StyledFloatingActionButton(
             onPressed: () => Get.find<NavigationController>()
-                .to(const NewTaskView(), arguments: {'projectDetailed': null}),
+                .toScreen(const NewTaskView(), arguments: {'projectDetailed': null}),
             child: AppIcon(
               icon: SvgIcons.add_fab,
               color: Get.theme.colors().onPrimarySurface,

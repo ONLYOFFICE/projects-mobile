@@ -31,7 +31,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class SubtaskCheckBox extends StatelessWidget {
   const SubtaskCheckBox({
@@ -48,8 +50,9 @@ class SubtaskCheckBox extends StatelessWidget {
       child: IgnorePointer(
         ignoring: !subtaskController!.canEdit,
         child: Checkbox(
+          shape: const CircleBorder(),
           value: subtaskController!.subtask.value!.status == 2,
-          activeColor: const Color(0xFF666666),
+          activeColor: Get.theme.colors().links,
           onChanged: (value) {
             subtaskController!.updateSubtaskStatus(
               context: context,

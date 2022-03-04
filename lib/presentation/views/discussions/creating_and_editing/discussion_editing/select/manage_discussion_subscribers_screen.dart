@@ -121,9 +121,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
               );
             }
             if (usersDataSource.nothingFound.value == true) {
-              // NothingFound contains Expanded widget, that why it is needed
-              // to use Column
-              return Column(children: const [NothingFound()]);
+              return const NothingFound();
             }
             if (usersDataSource.loaded.value == true &&
                 usersDataSource.usersList.isNotEmpty &&

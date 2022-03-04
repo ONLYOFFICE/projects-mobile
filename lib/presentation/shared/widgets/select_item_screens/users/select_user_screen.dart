@@ -65,7 +65,7 @@ class SelectUserScreen extends StatelessWidget with SelectItemWithSearchMixin {
   VoidCallback get getItemsFunction => () async => await controller.getUsers();
 
   @override
-  Widget get nothingFound => Column(children: const [NothingFound()]);
+  Widget get nothingFound => const NothingFound();
 
   @override
   Widget get itemList => const _UserList();

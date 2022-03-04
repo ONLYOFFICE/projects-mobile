@@ -40,6 +40,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
@@ -73,10 +74,11 @@ class SubtasksView extends StatelessWidget {
                     );
 
                   if (controller.task.value.subtasks!.isNotEmpty)
-                    return ListView.builder(
+                    return ListView.separated(
+                      separatorBuilder: (_, i) => const StyledDivider(leftPadding: 72),
                       itemCount: controller.task.value.subtasks!.length,
-                      padding: const EdgeInsets.only(top: 6, bottom: 50),
-                      itemBuilder: (BuildContext context, int index) {
+                      //padding: const EdgeInsets.only(top: 6, bottom: 50),
+                      itemBuilder: (_, index) {
                         return SubtaskCell(
                           subtask: controller.task.value.subtasks![index],
                           parentTask: controller.task.value,

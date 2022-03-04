@@ -116,7 +116,7 @@ class _DiscussionInfo extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
-          discussion!.title!,
+          discussion!.title!.trim(),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: TextStyleHelper.subtitle1(

@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -95,7 +96,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
             );
           }
           if (usersDataSource.nothingFound.value) {
-            return Column(children: const [NothingFound()]);
+            return const NothingFound();
           }
           if (usersDataSource.loaded.value && usersDataSource.isSearchResult.value) {
             if (usersDataSource.usersWithoutVisitors.isNotEmpty)
@@ -105,7 +106,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
                 withoutVisitors: true,
               );
             else
-              return Column(children: const [NothingFound()]);
+              return const NothingFound();
           }
           return const ListLoadingSkeleton();
         },
@@ -129,6 +130,9 @@ class UsersSearchResult extends StatelessWidget {
   Widget build(BuildContext context) {
     final users =
         withoutVisitors ? usersDataSource.usersWithoutVisitors : usersDataSource.usersList;
+
+    final platformController = Get.find<PlatformController>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -138,12 +142,14 @@ class UsersSearchResult extends StatelessWidget {
             enablePullUp: usersDataSource.pullUpEnabled,
             controller: usersDataSource.refreshController,
             onLoading: usersDataSource.onLoading,
-            child: ListView.builder(
+            child: ListView.separated(
+              separatorBuilder: (_, i) => !platformController.isMobile
+                  ? const StyledDivider(leftPadding: 72)
+                  : const SizedBox(),
               itemBuilder: (c, i) => PortalUserItem(
                 userController: users[i],
                 onTapFunction: onTapFunction,
               ),
-              itemExtent: 65,
               itemCount: users.length,
             ),
           ),
@@ -168,29 +174,35 @@ class UsersDefault extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platformController = Get.find<PlatformController>();
+
     final users = withoutGuests ? usersDataSource.usersWithoutVisitors : usersDataSource.usersList;
+
     return StyledSmartRefresher(
       enablePullDown: false,
       enablePullUp: usersDataSource.pullUpEnabled,
       controller: usersDataSource.refreshController,
       onLoading: usersDataSource.onLoading,
       child: ListView(
-        children: <Widget>[
+        children: [
           Obx(() {
             if (usersDataSource.selfIsVisible.value == true)
-              return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const SizedBox(height: 26),
-                Container(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Text(tr('me'), style: TextStyleHelper.body2()),
-                ),
-                const SizedBox(height: 26),
-                PortalUserItem(
-                  onTapFunction: onTapFunction,
-                  userController: selfUserItem,
-                ),
-                const SizedBox(height: 26),
-              ]);
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 26),
+                  Container(
+                    padding: const EdgeInsets.only(left: 16),
+                    child: Text(tr('me'), style: TextStyleHelper.body2()),
+                  ),
+                  const SizedBox(height: 26),
+                  PortalUserItem(
+                    onTapFunction: onTapFunction,
+                    userController: selfUserItem,
+                  ),
+                  const SizedBox(height: 26),
+                ],
+              );
             else
               return const SizedBox();
           }),
@@ -199,16 +211,16 @@ class UsersDefault extends StatelessWidget {
             child: Text(tr('users'), style: TextStyleHelper.body2()),
           ),
           const SizedBox(height: 26),
-          Column(children: [
-            ListView.builder(
-              physics: const ScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (c, i) =>
-                  PortalUserItem(userController: users[i], onTapFunction: onTapFunction),
-              itemExtent: 65,
-              itemCount: users.length,
-            )
-          ]),
+          ListView.separated(
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (_, i) => !platformController.isMobile
+                ? const StyledDivider(leftPadding: 72)
+                : const SizedBox(),
+            shrinkWrap: true,
+            itemBuilder: (c, i) =>
+                PortalUserItem(userController: users[i], onTapFunction: onTapFunction),
+            itemCount: users.length,
+          ),
         ],
       ),
     );

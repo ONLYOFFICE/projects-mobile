@@ -59,7 +59,7 @@ class PortalUserItem extends StatelessWidget {
         onTapFunction?.call(userController);
       },
       child: SizedBox(
-        height: 48,
+        height: 65,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -109,38 +109,24 @@ class PortalUserItem extends StatelessWidget {
             ),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                user.displayName!.replaceAll(' ', '\u00A0'),
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyleHelper.subtitle1(),
-                              ),
-                              Obx(
-                                () => userController!.userTitle.isNotEmpty
-                                    ? Text(
-                                        userController!.userTitle.replaceAll(' ', '\u00A0'),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyleHelper.body2(
-                                          color: Get.theme.colors().onBackground,
-                                        ),
-                                      )
-                                    : const SizedBox(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  Text(
+                    user.displayName!.replaceAll(' ', '\u00A0'),
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                  ),
+                  Obx(
+                    () => userController!.userTitle.isNotEmpty
+                        ? Text(
+                            userController!.userTitle.replaceAll(' ', '\u00A0'),
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyleHelper.body2(
+                              color: Get.theme.colors().onBackground.withOpacity(0.6),
+                            ),
+                          )
+                        : const SizedBox(),
                   ),
                 ],
               ),

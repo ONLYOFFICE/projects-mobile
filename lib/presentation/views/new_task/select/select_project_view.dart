@@ -121,7 +121,7 @@ class SelectProjectView extends StatelessWidget {
         if (searchController.switchToSearchView.value == true &&
             searchController.searchResult.isEmpty &&
             searchController.loaded.value == true) {
-          return Column(children: const [NothingFound()]);
+          return const NothingFound();
         }
         if (projectsController.loaded.value == true &&
             searchController.switchToSearchView.value == false) {

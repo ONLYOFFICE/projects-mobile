@@ -55,8 +55,8 @@ import 'package:projects/presentation/views/discussions/discussions_search_view.
 class ProjectDiscussionsController extends BaseDiscussionsController {
   final DiscussionsService _api = locator<DiscussionsService>();
 
-  var projectId;
-  var projectTitle;
+  int? projectId;
+  String? projectTitle;
 
   @override
   RxList<Discussion> get itemList => paginationController.data;
@@ -139,7 +139,7 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
       authorFilter: _filterController.authorFilter,
       statusFilter: _filterController.statusFilter,
       creationDateFilter: _filterController.creationDateFilter,
-      projectFilter: projectId?.toString() ?? _filterController.projectFilter,
+      projectFilter: _filterController.projectFilter,
       otherFilter: _filterController.otherFilter,
       projectId: projectId.toString(),
     );
@@ -157,10 +157,11 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
       Get.find<NavigationController>()
           .to(DiscussionDetailed(), arguments: {'controller': discussionItemController});
 
-  void toNewDiscussionScreen() => Get.find<NavigationController>().to(const NewDiscussionScreen(),
-      arguments: {'projectId': projectId, 'projectTitle': projectTitle},
-      transition: Transition.cupertinoDialog,
-      fullscreenDialog: true);
+  void toNewDiscussionScreen() =>
+      Get.find<NavigationController>().toScreen(const NewDiscussionScreen(),
+          arguments: {'projectId': projectId, 'projectTitle': projectTitle},
+          transition: Transition.cupertinoDialog,
+          fullscreenDialog: true);
 
   @override
   void showSearch() =>

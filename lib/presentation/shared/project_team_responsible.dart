@@ -95,26 +95,19 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
               enablePullUp: controller.teamController.pullUpEnabled as bool,
               controller: controller.teamController.refreshController as RefreshController,
               onLoading: controller.teamController.onLoading as Function(),
-              child: ListView(
-                children: <Widget>[
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => PortalUserItem(
-                          userController:
-                              controller.teamController.usersList[i] as PortalUserItemController,
-                          onTapFunction: (v) => controller.addResponsible(v)),
-                      itemExtent: 65,
-                      itemCount: controller.teamController.usersList.length as int,
-                    )
-                  ]),
-                ],
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (c, i) => PortalUserItem(
+                    userController:
+                        controller.teamController.usersList[i] as PortalUserItemController,
+                    onTapFunction: (v) => controller.addResponsible(v)),
+                itemExtent: 65,
+                itemCount: controller.teamController.usersList.length as int,
               ),
             );
           }
           if (controller.teamController.nothingFound.value == true) {
-            return Column(children: const [NothingFound()]);
+            return const NothingFound();
           }
           if (controller.teamController.loaded.value == true &&
               controller.teamController.searchResult.isNotEmpty as bool &&
@@ -124,22 +117,14 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
               enablePullUp: controller.teamController.pullUpEnabled as bool,
               controller: controller.teamController.refreshController as RefreshController,
               onLoading: controller.teamController.onLoading as Function(),
-              child: ListView(
-                children: <Widget>[
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => PortalUserItem(
-                          userController:
-                              controller.teamController.searchResult[i] as PortalUserItemController,
-                          onTapFunction:
-                              controller.addResponsible as Function(PortalUserItemController)),
-                      itemExtent: 65,
-                      itemCount: controller.teamController.searchResult.length as int,
-                    )
-                  ]),
-                ],
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (c, i) => PortalUserItem(
+                    userController:
+                        controller.teamController.searchResult[i] as PortalUserItemController,
+                    onTapFunction: controller.addResponsible as Function(PortalUserItemController)),
+                itemExtent: 65,
+                itemCount: controller.teamController.searchResult.length as int,
               ),
             );
           }

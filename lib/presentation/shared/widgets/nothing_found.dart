@@ -45,12 +45,10 @@ class NothingFound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: EmptyScreen(
-          icon: SvgIcons.not_found,
-          text: tr('notFound'),
-        ),
+    return Center(
+      child: EmptyScreen(
+        icon: SvgIcons.not_found,
+        text: tr('notFound'),
       ),
     );
   }
