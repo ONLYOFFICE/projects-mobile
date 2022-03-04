@@ -46,12 +46,14 @@ class PaginationListView<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StyledSmartRefresher(
-        enablePullDown: paginationController.pullDownEnabled,
-        enablePullUp: paginationController.pullUpEnabled,
-        controller: paginationController.refreshController,
-        onRefresh: paginationController.onRefresh,
-        onLoading: paginationController.onLoading,
-        child: child);
+    return Scrollbar(
+      child: StyledSmartRefresher(
+          enablePullDown: paginationController.pullDownEnabled,
+          enablePullUp: paginationController.pullUpEnabled,
+          controller: paginationController.refreshController,
+          onRefresh: paginationController.onRefresh,
+          onLoading: paginationController.onLoading,
+          child: child),
+    );
   }
 }
