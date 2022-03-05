@@ -180,7 +180,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
       selectedTeamMembers.add(user);
     }
     await Get.find<NavigationController>()
-        .to(const TeamMembersSelectionView(), arguments: {'controller': this});
+        .toScreen(const TeamMembersSelectionView(), arguments: {'controller': this});
   }
 
   Future<void> copyLink() async {}

@@ -96,7 +96,6 @@ class DiscussionsContent extends StatelessWidget {
             if (controller.loaded.value && controller.itemList.isNotEmpty)
               return ListView.separated(
                 itemCount: controller.itemList.length,
-                //padding: const EdgeInsets.only(bottom: 65),
                 separatorBuilder: (_, i) => !platformController.isMobile
                     ? const StyledDivider(leftPadding: 72)
                     : const SizedBox(),

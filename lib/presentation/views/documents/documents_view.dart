@@ -210,7 +210,7 @@ class DocsBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

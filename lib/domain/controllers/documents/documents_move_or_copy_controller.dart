@@ -295,7 +295,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
   @override
   void showSearch() {
     Get.find<NavigationController>()
-        .to(DocumentsMoveSearchView(), preventDuplicates: false, arguments: {
+        .toScreen(DocumentsMoveSearchView(), preventDuplicates: false, arguments: {
       'mode': mode,
       'folderName': documentsScreenName.value,
       'target': target,

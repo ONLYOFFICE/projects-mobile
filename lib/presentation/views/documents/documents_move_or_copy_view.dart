@@ -82,6 +82,7 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
     return MoveDocumentsScreen(
       controller: controller,
       appBar: StyledAppBar(
+        centerTitle: GetPlatform.isIOS,
         title: Obx(() => Text(
               controller.documentsScreenName.value,
               style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
@@ -227,7 +228,7 @@ class MoveOrCopyFolderContent extends StatelessWidget {
               if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
                 return ListView.separated(
                   itemCount: controller.paginationController.data.length,
-                  separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
+                  separatorBuilder: (BuildContext context, int index) => const SizedBox(),
                   itemBuilder: (BuildContext context, int index) {
                     final element = controller.paginationController.data[index];
                     return element is Folder
@@ -255,7 +256,8 @@ class _FileCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
       height: 72,
       child: Row(
         children: [
@@ -283,6 +285,7 @@ class _FileCell extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(width: 16)
         ],
       ),
     );

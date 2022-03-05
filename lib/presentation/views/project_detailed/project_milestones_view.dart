@@ -73,7 +73,8 @@ class ProjectMilestonesScreen extends StatelessWidget {
               () => Visibility(
                 visible: controller.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: () => Get.find<NavigationController>().to(const NewMilestoneView(),
+                  onPressed: () => Get.find<NavigationController>().toScreen(
+                      const NewMilestoneView(),
                       arguments: {'projectDetailed': controller.projectDetailed}),
                   child: AppIcon(
                     icon: SvgIcons.fab_milestone,

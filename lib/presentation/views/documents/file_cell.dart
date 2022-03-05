@@ -94,57 +94,50 @@ class FileCell extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              width: 48,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: PlatformPopupMenuButton(
-                  onSelected: (dynamic value) => {
-                    _onFilePopupMenuSelected(value, context, documentsController, cellController)
-                  },
-                  icon: Icon(PlatformIcons(context).ellipsis,
-                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
-                  itemBuilder: (context) {
-                    return [
-                      PlatformPopupMenuItem(
-                        value: 'open',
-                        child: Text(tr('open')),
-                      ),
-                      PlatformPopupMenuItem(
-                        value: 'copyLink',
-                        child: Text(tr('copyLink')),
-                      ),
-                      PlatformPopupMenuItem(
-                        value: 'download',
-                        child: Text(tr('download')),
-                      ),
-                      if (Security.files.canEdit(cellController.file))
-                        PlatformPopupMenuItem(
-                          value: 'copy',
-                          child: Text(tr('copy')),
-                        ),
-                      if (Security.files.canDelete(cellController.file))
-                        PlatformPopupMenuItem(
-                          value: 'move',
-                          child: Text(tr('move')),
-                        ),
-                      if (Security.files.canEdit(cellController.file))
-                        PlatformPopupMenuItem(
-                          value: 'rename',
-                          child: Text(tr('rename')),
-                        ),
-                      if (Security.files.canDelete(cellController.file))
-                        PlatformPopupMenuItem(
-                          value: 'delete',
-                          isDestructiveAction: true,
-                          textStyle:
-                              TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                          child: Text(tr('delete')),
-                        ),
-                    ];
-                  },
-                ),
-              ),
+            const SizedBox(width: 16),
+            PlatformPopupMenuButton(
+              onSelected: (dynamic value) =>
+                  {_onFilePopupMenuSelected(value, context, documentsController, cellController)},
+              icon: Icon(PlatformIcons(context).ellipsis,
+                  color: Get.theme.colors().onSurface.withOpacity(0.5)),
+              itemBuilder: (context) {
+                return [
+                  PlatformPopupMenuItem(
+                    value: 'open',
+                    child: Text(tr('open')),
+                  ),
+                  PlatformPopupMenuItem(
+                    value: 'copyLink',
+                    child: Text(tr('copyLink')),
+                  ),
+                  PlatformPopupMenuItem(
+                    value: 'download',
+                    child: Text(tr('download')),
+                  ),
+                  if (Security.files.canEdit(cellController.file))
+                    PlatformPopupMenuItem(
+                      value: 'copy',
+                      child: Text(tr('copy')),
+                    ),
+                  if (Security.files.canDelete(cellController.file))
+                    PlatformPopupMenuItem(
+                      value: 'move',
+                      child: Text(tr('move')),
+                    ),
+                  if (Security.files.canEdit(cellController.file))
+                    PlatformPopupMenuItem(
+                      value: 'rename',
+                      child: Text(tr('rename')),
+                    ),
+                  if (Security.files.canDelete(cellController.file))
+                    PlatformPopupMenuItem(
+                      value: 'delete',
+                      isDestructiveAction: true,
+                      textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                      child: Text(tr('delete')),
+                    ),
+                ];
+              },
             ),
             const SizedBox(width: 16),
           ],
@@ -179,7 +172,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
       break;
     case 'copy':
       await Get.find<NavigationController>()
-          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
+          .toScreen(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': MoveOrCopyMode.CopyDocument,
         'target': cellController.file.id,
         'initialFolderId': documentsController.currentFolderID,
@@ -187,7 +180,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
       break;
     case 'move':
       await Get.find<NavigationController>()
-          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
+          .toScreen(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': MoveOrCopyMode.MoveDocument,
         'target': cellController.file.id,
         'initialFolderId': documentsController.currentFolderID,

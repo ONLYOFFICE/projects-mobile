@@ -204,13 +204,12 @@ class UsersDefault extends StatelessWidget {
                 ],
               );
             else
-              return const SizedBox();
+              return const SizedBox(height: 26);
           }),
           Container(
             padding: const EdgeInsets.only(left: 16),
             child: Text(tr('users'), style: TextStyleHelper.body2()),
           ),
-          const SizedBox(height: 26),
           ListView.separated(
             physics: const NeverScrollableScrollPhysics(),
             separatorBuilder: (_, i) => !platformController.isMobile

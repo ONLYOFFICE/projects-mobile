@@ -144,27 +144,21 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                        ),
+                      Text(
+                        title,
+                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                       ),
-                      Expanded(
-                        child: Text(
-                          plural('person', controller.selectedTeamMembers.length as int),
-                          style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
-                        ),
+                      Text(
+                        plural('person', controller.selectedTeamMembers.length as int),
+                        style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
                       ),
                     ],
                   ),
                 );
               } else
-                return Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                  ),
+                return Text(
+                  title,
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                 );
             },
           ),
@@ -237,22 +231,19 @@ class TeamMembersSearchBar extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 16),
-          SizedBox(
-            height: 24,
-            width: 24,
-            child: InkWell(
-              onTap: () {
-                Get.find<NavigationController>().toScreen(
-                  const GroupMembersSelectionView(),
-                  arguments: {'controller': controller},
-                  transition: Transition.cupertinoDialog,
-                  fullscreenDialog: true,
-                );
-              },
-              child: AppIcon(
-                icon: SvgIcons.preferences,
-                color: Get.theme.colors().primary,
-              ),
+          PlatformIconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {
+              Get.find<NavigationController>().toScreen(
+                const GroupMembersSelectionView(),
+                arguments: {'controller': controller},
+                transition: Transition.cupertinoDialog,
+                fullscreenDialog: true,
+              );
+            },
+            icon: AppIcon(
+              icon: SvgIcons.preferences,
+              color: Get.theme.colors().primary,
             ),
           ),
         ],

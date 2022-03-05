@@ -33,7 +33,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/widgets/comment.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 

@@ -76,59 +76,51 @@ class FolderCell extends StatelessWidget {
         child: Row(
           children: [
             const FolderCellAvatar(),
-            FolderCellTitle(element: entity),
-            SizedBox(
-              width: 48,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: PlatformPopupMenuButton(
-                  onSelected: (dynamic value) => _onFolderPopupMenuSelected(
-                    value,
-                    entity,
-                    context,
-                    controller,
-                  ),
-                  icon: Icon(PlatformIcons(context).ellipsis,
-                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
-                  itemBuilder: (context) {
-                    return [
-                      PlatformPopupMenuItem(
-                        value: 'open',
-                        child: Text(tr('open')),
-                      ),
-                      PlatformPopupMenuItem(
-                        value: 'copyLink',
-                        child: Text(tr('copyLink')),
-                      ),
-                      if (Security.documents.canEdit(entity))
-                        PlatformPopupMenuItem(
-                          value: 'copy',
-                          child: Text(tr('copy')),
-                        ),
-                      if (!Security.documents.isRoot(entity) &&
-                          Security.documents.canDelete(entity))
-                        PlatformPopupMenuItem(
-                          value: 'move',
-                          child: Text(tr('move')),
-                        ),
-                      if (!Security.documents.isRoot(entity) && Security.documents.canEdit(entity))
-                        PlatformPopupMenuItem(
-                          value: 'rename',
-                          child: Text(tr('rename')),
-                        ),
-                      if (!Security.documents.isRoot(entity) &&
-                          Security.documents.canDelete(entity))
-                        PlatformPopupMenuItem(
-                          value: 'delete',
-                          isDestructiveAction: true,
-                          textStyle:
-                              TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                          child: Text(tr('delete')),
-                        ),
-                    ];
-                  },
-                ),
+            Expanded(child: FolderCellTitle(element: entity)),
+            const SizedBox(width: 16),
+            PlatformPopupMenuButton(
+              onSelected: (dynamic value) => _onFolderPopupMenuSelected(
+                value,
+                entity,
+                context,
+                controller,
               ),
+              icon: Icon(PlatformIcons(context).ellipsis,
+                  color: Get.theme.colors().onSurface.withOpacity(0.5)),
+              itemBuilder: (context) {
+                return [
+                  PlatformPopupMenuItem(
+                    value: 'open',
+                    child: Text(tr('open')),
+                  ),
+                  PlatformPopupMenuItem(
+                    value: 'copyLink',
+                    child: Text(tr('copyLink')),
+                  ),
+                  if (Security.documents.canEdit(entity))
+                    PlatformPopupMenuItem(
+                      value: 'copy',
+                      child: Text(tr('copy')),
+                    ),
+                  if (!Security.documents.isRoot(entity) && Security.documents.canDelete(entity))
+                    PlatformPopupMenuItem(
+                      value: 'move',
+                      child: Text(tr('move')),
+                    ),
+                  if (!Security.documents.isRoot(entity) && Security.documents.canEdit(entity))
+                    PlatformPopupMenuItem(
+                      value: 'rename',
+                      child: Text(tr('rename')),
+                    ),
+                  if (!Security.documents.isRoot(entity) && Security.documents.canDelete(entity))
+                    PlatformPopupMenuItem(
+                      value: 'delete',
+                      isDestructiveAction: true,
+                      textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                      child: Text(tr('delete')),
+                    ),
+                ];
+              },
             ),
             const SizedBox(width: 16),
           ],
@@ -153,7 +145,7 @@ class MoveFolderCell extends StatelessWidget {
     return InkWell(
       onTap: () {
         Get.find<NavigationController>()
-            .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
+            .toScreen(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
           'mode': controller.mode,
           'target': controller.target,
           'currentFolder': element,
@@ -161,12 +153,14 @@ class MoveFolderCell extends StatelessWidget {
           'nestingCounter': controller.nestingCounter,
         });
       },
-      child: SizedBox(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
         height: 72,
         child: Row(
           children: [
             const FolderCellAvatar(),
-            FolderCellTitle(element: element),
+            Expanded(child: FolderCellTitle(element: element)),
+            const SizedBox(width: 16)
           ],
         ),
       ),
@@ -205,25 +199,33 @@ class FolderCellTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-            child: Text(element.title!.replaceAll(' ', '\u00A0'),
-                maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyleHelper.subtitle1()),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Flexible(
+          child: Text(
+            element.title!.replaceAll(' ', '\u00A0'),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyleHelper.subtitle1(),
           ),
-          Text(
-              tr('documentsCaption', args: [
-                formatedDate(element.updated!),
-                element.filesCount.toString(),
-                element.foldersCount.toString()
-              ]),
-              // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
-              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6))),
-        ],
-      ),
+        ),
+        Text(
+          tr(
+            'documentsCaption',
+            args: [
+              formatedDate(element.updated!),
+              element.filesCount.toString(),
+              element.foldersCount.toString()
+            ],
+          ),
+          // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
+          style: TextStyleHelper.caption(
+            color: Get.theme.colors().onSurface.withOpacity(0.6),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -255,7 +257,7 @@ Future<void> _onFolderPopupMenuSelected(
       break;
     case 'copy':
       await Get.find<NavigationController>()
-          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
+          .toScreen(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': MoveOrCopyMode.CopyFolder,
         'target': selectedFolder.id,
         'initialFolderId': controller.currentFolderID,
@@ -263,7 +265,7 @@ Future<void> _onFolderPopupMenuSelected(
       break;
     case 'move':
       await Get.find<NavigationController>()
-          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
+          .toScreen(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': MoveOrCopyMode.MoveFolder,
         'target': selectedFolder.id,
         'initialFolderId': controller.currentFolderID,
