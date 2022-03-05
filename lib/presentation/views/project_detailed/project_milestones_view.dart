@@ -46,6 +46,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/filter/milestone_filter_screen.dart';
@@ -98,45 +99,41 @@ class _Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          (() {
-            if (!controller.loaded.value) return const ListLoadingSkeleton();
+    final platformController = Get.find<PlatformController>();
 
-            return Expanded(
-              child: PaginationListView(
-                paginationController: controller.paginationController,
-                child: () {
-                  if (controller.loaded.value &&
-                      controller.paginationController.data.isEmpty &&
-                      !controller.filterController.hasFilters.value)
-                    return Center(
-                      child: EmptyScreen(
-                        icon: SvgIcons.milestone_not_created,
-                        text: tr('noMilestonesCreated'),
-                      ),
-                    );
-                  if (controller.loaded.value &&
-                      controller.paginationController.data.isEmpty &&
-                      controller.filterController.hasFilters.value)
-                    return Center(
-                      child:
-                          EmptyScreen(icon: SvgIcons.not_found, text: tr('noMilestonesMatching')),
-                    );
-                  if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
-                    return ListView.builder(
-                      itemBuilder: (c, i) => MilestoneCell(milestone: controller.itemList[i]),
-                      itemExtent: 72,
-                      itemCount: controller.itemList.length,
-                    );
-                }() as Widget,
-              ),
-            );
-          }()),
-        ],
-      ),
+    return Obx(
+      () {
+        if (!controller.loaded.value) return const ListLoadingSkeleton();
+
+        return PaginationListView(
+          paginationController: controller.paginationController,
+          child: () {
+            if (controller.loaded.value &&
+                controller.paginationController.data.isEmpty &&
+                !controller.filterController.hasFilters.value)
+              return Center(
+                child: EmptyScreen(
+                  icon: SvgIcons.milestone_not_created,
+                  text: tr('noMilestonesCreated'),
+                ),
+              );
+            if (controller.loaded.value &&
+                controller.paginationController.data.isEmpty &&
+                controller.filterController.hasFilters.value)
+              return Center(
+                child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noMilestonesMatching')),
+              );
+            if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
+              return ListView.separated(
+                separatorBuilder: (_, i) => !platformController.isMobile
+                    ? const StyledDivider(leftPadding: 72)
+                    : const SizedBox(),
+                itemBuilder: (c, i) => MilestoneCell(milestone: controller.itemList[i]),
+                itemCount: controller.itemList.length,
+              );
+          }() as Widget,
+        );
+      },
     );
   }
 }

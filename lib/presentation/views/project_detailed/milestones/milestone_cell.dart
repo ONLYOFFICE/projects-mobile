@@ -52,7 +52,8 @@ class MilestoneCell extends StatelessWidget {
 
     return InkWell(
       onTap: () => {},
-      child: SizedBox(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
         height: 72,
         child: Row(
           children: [
