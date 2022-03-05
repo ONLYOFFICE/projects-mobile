@@ -77,7 +77,7 @@ class ConfirmFiltersButton extends StatelessWidget {
                 //   filterController.suitableResultCount.value.toString(),
                 //   filterController.filtersTitle
                 // ]),
-                style: TextStyleHelper.button(color: Get.theme.colors().onPrimary)),
+                style: TextStyleHelper.body2(color: Get.theme.colors().onNavBar)),
           ),
         ),
       ),
