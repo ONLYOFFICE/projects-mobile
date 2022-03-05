@@ -47,6 +47,7 @@ import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
 
 class Comment extends StatelessWidget {
@@ -83,56 +84,44 @@ class Comment extends StatelessWidget {
         );
       }
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 4),
-            child: _CommentAuthor(comment: comment, controller: controller),
-          ),
-          const SizedBox(height: 28),
-          Obx(
-            () {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: HtmlWidget(
-                      controller.comment?.value.commentBody ?? '',
-                      textStyle: TextStyle(
-                        color: Get.theme.colors().onBackground,
-                      ),
-                      customStylesBuilder: (element) {
-                        if (element.attributes.containsKey('style') &&
-                            element.attributes['style']!.contains('color')) {
-                          element.attributes['style'] = '';
-                        }
-                      },
-                      factoryBuilder: () => _HTMLWidgetFactory(),
-                    ),
-                  ),
-                  if (comment.isResponsePermissions!) const SizedBox(height: 5),
-                  if (comment.isResponsePermissions!)
-                    GestureDetector(
-                      onTap: () async {
-                        return await Get.find<NavigationController>()
-                            .toScreen(const ReplyCommentView(), arguments: {
-                          'comment': controller.comment!.value,
-                          'discussionId': discussionId,
-                          'taskId': taskId,
-                        });
-                      },
-                      child: Text(
-                        tr('reply'),
-                        style: TextStyleHelper.caption(color: Get.theme.colors().primary),
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
-        ],
+      return Container(
+        margin: const EdgeInsets.symmetric(vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _CommentAuthor(comment: comment, controller: controller),
+            const SizedBox(height: 18),
+            Obx(
+              () => HtmlWidget(
+                controller.comment?.value.commentBody ?? '',
+                textStyle: TextStyleHelper.body1(color: Get.theme.colors().onBackground),
+                customStylesBuilder: (element) {
+                  if (element.attributes.containsKey('style') &&
+                      element.attributes['style']!.contains('color')) {
+                    element.attributes['style'] = '';
+                  }
+                },
+                factoryBuilder: () => _HTMLWidgetFactory(),
+              ),
+            ),
+            if (comment.isResponsePermissions!)
+              PlatformTextButton(
+                padding: EdgeInsets.zero,
+                onPressed: () async {
+                  return await Get.find<NavigationController>()
+                      .toScreen(const ReplyCommentView(), arguments: {
+                    'comment': controller.comment!.value,
+                    'discussionId': discussionId,
+                    'taskId': taskId,
+                  });
+                },
+                child: Text(
+                  tr('reply'),
+                  style: TextStyleHelper.caption(color: Get.theme.colors().primary),
+                ),
+              ),
+          ],
+        ),
       );
     }
     if (comment.show) return const _DeletedComment();
@@ -195,39 +184,33 @@ class _CommentAuthor extends StatelessWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 7),
-          child: SizedBox(
-            width: 60,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 35),
-              child: PlatformPopupMenuButton(
-                onSelected: (value) => _onSelected(value as String, controller),
-                icon: Icon(PlatformIcons(context).ellipsis,
-                    size: 25, color: Get.theme.colors().onSurface.withOpacity(0.5)),
-                itemBuilder: (context) {
-                  return [
-                    PlatformPopupMenuItem(
-                      value: 'Copy link',
-                      child: Text(tr('copyLink')),
-                    ),
-                    if (comment.isEditPermissions!)
-                      PlatformPopupMenuItem(
-                        value: 'Edit',
-                        child: Text(tr('edit')),
-                      ),
-                    if (comment.isEditPermissions!)
-                      PlatformPopupMenuItem(
-                        value: 'Delete',
-                        isDestructiveAction: true,
-                        textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                        child: Text(tr('delete')),
-                      ),
-                  ];
-                },
-              ),
-            ),
+        PlatformPopupMenuButton(
+          padding: EdgeInsets.zero,
+          onSelected: (value) => _onSelected(value as String, controller),
+          icon: Icon(
+            PlatformIcons(context).ellipsis,
+            color: Get.theme.colors().onSurface.withOpacity(0.5),
           ),
+          itemBuilder: (context) {
+            return [
+              PlatformPopupMenuItem(
+                value: 'Copy link',
+                child: Text(tr('copyLink')),
+              ),
+              if (comment.isEditPermissions!)
+                PlatformPopupMenuItem(
+                  value: 'Edit',
+                  child: Text(tr('edit')),
+                ),
+              if (comment.isEditPermissions!)
+                PlatformPopupMenuItem(
+                  value: 'Delete',
+                  isDestructiveAction: true,
+                  textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                  child: Text(tr('delete')),
+                ),
+            ];
+          },
         ),
       ],
     );
@@ -243,7 +226,12 @@ class _DeletedComment extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(tr('commentDeleted'), style: TextStyleHelper.body2()),
+        child: Text(
+          tr('commentDeleted'),
+          style: TextStyleHelper.body2(
+            color: Get.theme.colors().onBackground.withOpacity(0.4),
+          ),
+        ),
       ),
     );
   }

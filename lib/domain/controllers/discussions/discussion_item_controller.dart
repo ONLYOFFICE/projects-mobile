@@ -184,7 +184,7 @@ class DiscussionItemController extends GetxController {
   }
 
   Future<void> toDiscussionEditingScreen() async {
-    await Get.find<NavigationController>().to(
+    await Get.find<NavigationController>().toScreen(
       const DiscussionEditingScreen(),
       arguments: {'discussion': discussion.value},
     );

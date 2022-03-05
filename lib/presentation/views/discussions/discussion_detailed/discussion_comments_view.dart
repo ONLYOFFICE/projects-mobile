@@ -35,6 +35,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/add_comment_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
 
@@ -58,14 +59,12 @@ class DiscussionCommentsView extends StatelessWidget {
                 controller: controller!.commentsRefreshController,
                 onRefresh: controller!.onRefresh,
                 child: ListView.separated(
-                  controller: controller!.commentsListController,
+                  //controller: controller!.commentsListController, // TODO investigate scrollcontroller behavior
                   itemCount: controller!.discussion.value.comments!.length,
-                  padding: const EdgeInsets.only(top: 32, bottom: 70),
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: controller!.discussion.value.comments![index].show ? 21 : null,
-                    );
-                  },
+                  separatorBuilder: (_, i) => const StyledDivider(
+                    leftPadding: 16,
+                    rightPadding: 16,
+                  ),
                   itemBuilder: (BuildContext context, int index) {
                     return CommentsThread(
                       comment: controller!.discussion.value.comments![index],

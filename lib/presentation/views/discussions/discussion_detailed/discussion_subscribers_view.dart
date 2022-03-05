@@ -66,9 +66,8 @@ class DiscussionSubscribersView extends StatelessWidget {
                 onRefresh: controller!.onRefresh,
                 child: ListView.separated(
                   itemCount: discussion.subscribers!.length,
-                  padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
                   separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 24);
+                    return const SizedBox();
                   },
                   itemBuilder: (BuildContext context, int index) {
                     final userController =

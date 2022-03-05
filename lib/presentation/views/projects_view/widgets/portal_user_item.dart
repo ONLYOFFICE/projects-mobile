@@ -58,8 +58,9 @@ class PortalUserItem extends StatelessWidget {
         userController!.onTap();
         onTapFunction?.call(userController);
       },
-      child: SizedBox(
-        height: 65,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        height: 72,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

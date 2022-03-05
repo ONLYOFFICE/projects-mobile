@@ -251,12 +251,9 @@ class _AllUsers extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, index) => Padding(
-          padding: const EdgeInsets.only(top: 24),
-          child: PortalUserItem(
-            userController: controller.otherUsers[index],
-            onTapFunction: (value) => {controller.addSubscriber(controller.otherUsers[index])},
-          ),
+        (context, index) => PortalUserItem(
+          userController: controller.otherUsers[index],
+          onTapFunction: (value) => {controller.addSubscriber(controller.otherUsers[index])},
         ),
         childCount: controller.otherUsers.length,
       ),
@@ -279,14 +276,11 @@ class _SubscribedUsers extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (_, index) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 24),
-            child: PortalUserItem(
-              userController: controller.subscribers[index],
-              onTapFunction: (value) => {
-                controller.removeSubscriber(controller.subscribers[index]),
-              },
-            ),
+          return PortalUserItem(
+            userController: controller.subscribers[index],
+            onTapFunction: (value) => {
+              controller.removeSubscriber(controller.subscribers[index]),
+            },
           );
         },
         childCount: controller.subscribers.length,

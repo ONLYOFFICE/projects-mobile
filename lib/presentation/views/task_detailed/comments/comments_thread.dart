@@ -30,10 +30,12 @@
  *
  */
 
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/widgets/comment.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 
 class CommentsThread extends StatelessWidget {
   final PortalComment comment;
@@ -49,27 +51,31 @@ class CommentsThread extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final padding = <int, EdgeInsetsGeometry>{
-      0: const EdgeInsets.fromLTRB(12, 0, 16, 0),
-      1: const EdgeInsets.fromLTRB(20, 29, 16, 0),
-      2: const EdgeInsets.fromLTRB(44, 29, 16, 0)
+    final padding = <int, EdgeInsets>{
+      0: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      1: const EdgeInsets.fromLTRB(20, 0, 16, 0),
+      2: const EdgeInsets.fromLTRB(44, 0, 16, 0)
     };
 
-    // ignore: omit_local_variable_types
-    final List<_SortedComment> visited = sortComments(comment);
+    final visited = sortComments(comment);
 
-    return Column(
-      children: [
-        for (var i = 0; i < visited.length; i++)
-          Padding(
-            padding: visited[i].comment.show ? padding[visited[i].paddingLevel]! : EdgeInsets.zero,
-            child: Comment(
-              comment: visited[i].comment,
-              taskId: taskId,
-              discussionId: discussionId,
-            ),
-          ),
-      ],
+    return ListView.separated(
+      controller: ScrollController(),
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      separatorBuilder: (_, i) => StyledDivider(
+        leftPadding: padding[visited[i].paddingLevel]!.left,
+        rightPadding: 16,
+      ),
+      itemCount: visited.length,
+      itemBuilder: (_, i) => Padding(
+        padding: visited[i].comment.show ? padding[visited[i].paddingLevel]! : EdgeInsets.zero,
+        child: Comment(
+          comment: visited[i].comment,
+          taskId: taskId,
+          discussionId: discussionId,
+        ),
+      ),
     );
   }
 }
