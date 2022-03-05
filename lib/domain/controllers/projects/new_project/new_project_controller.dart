@@ -57,17 +57,23 @@ class NewProjectController extends BaseProjectEditorController {
   }
 
   void discardChanges() {
-    Get.dialog(StyledAlertDialog(
-      titleText: tr('discardChanges'),
-      contentText: tr('changesWillBeLost'),
-      acceptText: tr('discard'),
-      acceptColor: Get.theme.colors().colorError,
-      onAcceptTap: () {
-        Get.back();
-        Get.back();
-      },
-      onCancelTap: Get.back,
-    ));
+    if (!titleIsEmpty.value ||
+        isPMSelected.value ||
+        selectedTeamMembers.isNotEmpty ||
+        descriptionText.isNotEmpty)
+      Get.dialog(StyledAlertDialog(
+        titleText: tr('discardChanges'),
+        contentText: tr('changesWillBeLost'),
+        acceptText: tr('discard'),
+        acceptColor: Get.theme.colors().colorError,
+        onAcceptTap: () {
+          Get.back();
+          Get.back();
+        },
+        onCancelTap: Get.back,
+      ));
+    else
+      Get.back();
   }
 
   Future<void> confirm(BuildContext context) async {

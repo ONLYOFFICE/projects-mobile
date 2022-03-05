@@ -63,7 +63,7 @@ class NewProject extends StatelessWidget {
         //backgroundColor: Get.theme.backgroundColor,
         appBar: StyledAppBar(
           titleText: tr('project'),
-          leadingWidth: 65,
+          leadingWidth: GetPlatform.isIOS ? 100 : null,
           centerTitle: GetPlatform.isIOS,
           actions: [
             PlatformWidget(

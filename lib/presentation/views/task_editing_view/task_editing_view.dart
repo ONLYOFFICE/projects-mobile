@@ -68,7 +68,7 @@ class TaskEditingView extends StatelessWidget {
       child: Scaffold(
         appBar: StyledAppBar(
           titleText: tr('editTask'),
-          leadingWidth: 65,
+          leadingWidth: GetPlatform.isIOS ? 100 : null,
           centerTitle: !GetPlatform.isAndroid,
           actions: [
             PlatformWidget(

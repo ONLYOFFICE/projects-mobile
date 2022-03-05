@@ -77,7 +77,7 @@ class MilestoneFilterScreen extends StatelessWidget {
         titleText: tr('filter'),
         backgroundColor: backgroundColor,
         centerTitle: GetPlatform.isIOS,
-        leadingWidth: 65,
+        leadingWidth: GetPlatform.isIOS ? 100 : null,
         leading: PlatformIconButton(
           padding: GetPlatform.isAndroid ? EdgeInsets.zero : const EdgeInsets.only(left: 16),
           onPressed: onLeadingPressed,

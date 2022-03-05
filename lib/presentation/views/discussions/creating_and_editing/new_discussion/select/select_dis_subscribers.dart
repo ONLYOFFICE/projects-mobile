@@ -113,7 +113,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                   )),
               PlatformIconButton(
                 padding: EdgeInsets.zero,
-                onPressed: () => Get.find<NavigationController>().to(
+                onPressed: () => Get.find<NavigationController>().toScreen(
                   const UsersFromGroups(),
                   arguments: {'controller': controller},
                   transition: Transition.cupertinoDialog,

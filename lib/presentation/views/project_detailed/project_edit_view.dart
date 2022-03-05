@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
@@ -66,13 +67,13 @@ class EditProjectView extends StatelessWidget {
         appBar: StyledAppBar(
           titleText: tr('editProject'),
           centerTitle: !GetPlatform.isAndroid,
-          leadingWidth: 65,
+          leadingWidth: GetPlatform.isIOS ? 100 : null,
           leading: PlatformIconButton(
             padding: GetPlatform.isAndroid ? EdgeInsets.zero : const EdgeInsets.only(left: 16),
             onPressed: editProjectController.discardChanges,
             cupertinoIcon: Text(
               tr('closeLowerCase'),
-              style: TextStyleHelper.button(),
+              style: TextStyleHelper.body1(),
               softWrap: false,
             ),
             materialIcon: const Icon(Icons.close),
@@ -83,7 +84,7 @@ class EditProjectView extends StatelessWidget {
               onPressed: editProjectController.confirmChanges,
               cupertinoIcon: Text(
                 tr('done'),
-                style: TextStyleHelper.headline7(),
+                style: TextStyleHelper.headline7(color: Get.theme.colors().primary),
               ),
               materialIcon: const Icon(Icons.check_rounded),
             ),

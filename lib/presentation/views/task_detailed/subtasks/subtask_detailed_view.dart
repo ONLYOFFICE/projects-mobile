@@ -183,7 +183,7 @@ void _onSelected(BuildContext context, value, SubtaskController controller) {
       );
       break;
     case 'edit':
-      Get.find<NavigationController>().to(const CreatingAndEditingSubtaskView(),
+      Get.find<NavigationController>().toScreen(const CreatingAndEditingSubtaskView(),
           arguments: {
             'taskId': controller.subtask.value!.taskId,
             'projectId': controller.parentTask!.projectOwner!.id,

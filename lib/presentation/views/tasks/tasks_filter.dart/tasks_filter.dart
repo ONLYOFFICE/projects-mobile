@@ -80,7 +80,7 @@ class TasksFilterScreen extends StatelessWidget {
         titleText: tr('filter'),
         centerTitle: GetPlatform.isIOS,
         backgroundColor: backgroundColor,
-        leadingWidth: 65,
+        leadingWidth: GetPlatform.isIOS ? 100 : null,
         leading: PlatformWidget(
           cupertino: (_, __) => CupertinoButton(
             padding: const EdgeInsets.only(left: 16),

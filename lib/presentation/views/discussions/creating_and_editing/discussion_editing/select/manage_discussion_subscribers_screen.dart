@@ -174,7 +174,7 @@ class _DiscussionSubscribersSearchBar extends StatelessWidget {
           const SizedBox(width: 16),
           PlatformIconButton(
             padding: EdgeInsets.zero,
-            onPressed: () => Get.find<NavigationController>().to(
+            onPressed: () => Get.find<NavigationController>().toScreen(
               const UsersFromGroups(),
               arguments: {'controller': controller},
               transition: Transition.cupertinoDialog,

@@ -368,7 +368,7 @@ Future<void> _onSelected(
       break;
 
     case PopupMenuItemValue.editProject:
-      unawaited(Get.find<NavigationController>().to(const EditProjectView(),
+      unawaited(Get.find<NavigationController>().toScreen(const EditProjectView(),
           transition: GetPlatform.isAndroid ? Transition.downToUp : Transition.cupertinoDialog,
           fullscreenDialog: true,
           arguments: {'projectDetailed': controller.projectData}));
