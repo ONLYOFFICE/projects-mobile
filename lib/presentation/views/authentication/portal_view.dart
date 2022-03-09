@@ -35,6 +35,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
@@ -52,9 +53,13 @@ class PortalInputView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<LoginController>()
-      ..checkBoxValue.value = false
-      ..setup();
+    final controller = Get.find<LoginController>();
+
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      controller
+        ..setup()
+        ..checkBoxValue.value = false;
+    });
 
     if (Get.isRegistered<AccountManager>()) {
       Get.find<AccountManager>();
