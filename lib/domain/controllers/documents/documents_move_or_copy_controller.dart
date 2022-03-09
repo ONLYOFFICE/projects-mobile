@@ -242,7 +242,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       }
 
       if (type == null) return;
-      if (type == ConflictResolveType.Skip) {
+      if (type == ConflictResolveType.Skip && conflictsResult.isNotEmpty) {
         Get.close(nestingCounter);
         return;
       }
