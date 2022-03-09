@@ -30,8 +30,6 @@
  *
  */
 
-import 'dart:math' as math;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -41,21 +39,18 @@ import 'package:projects/domain/controllers/discussions/base_discussions_control
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/discussions/discussion_tile.dart';
 import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
-import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
 class DiscussionsContent extends StatelessWidget {
   const DiscussionsContent({
@@ -143,75 +138,6 @@ class DiscussionsFilterButton extends StatelessWidget {
   }
 }
 
-class DiscussionsSortButton extends StatelessWidget {
-  const DiscussionsSortButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final BaseDiscussionsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Obx(
-          () => Text(controller.sortController.currentSortTitle.value),
-        ),
-        const SizedBox(width: 8),
-        Obx(
-          () => (controller.sortController.currentSortOrder == 'ascending')
-              ? AppIcon(
-                  icon: SvgIcons.sorting_4_ascend,
-                  color: Get.theme.colors().onBackground,
-                  width: 20,
-                  height: 20,
-                )
-              : Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.rotationX(math.pi),
-                  child: AppIcon(
-                    icon: SvgIcons.sorting_4_ascend,
-                    color: Get.theme.colors().onBackground,
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
-        ),
-      ],
-    );
-  }
-}
-
-void discussionsSortButtonOnPressed(
-    BaseDiscussionsController controller, BuildContext context) async {
-  List<SortTile> _getSortTile() {
-    return [
-      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
-      SortTile(sortParameter: 'title', sortController: controller.sortController),
-      SortTile(sortParameter: 'comments', sortController: controller.sortController),
-    ];
-  }
-
-  if (Get.find<PlatformController>().isMobile) {
-    final options = Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        ..._getSortTile(),
-        const SizedBox(height: 20)
-      ],
-    );
-    await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
-  } else {
-    await showPopupMenu(
-      context: context,
-      options: _getSortTile(),
-      offset: const Offset(0, 30),
-    );
-  }
-}
-
 class DiscussionsMoreButtonWidget extends StatelessWidget {
   const DiscussionsMoreButtonWidget({
     Key? key,
@@ -236,24 +162,12 @@ class DiscussionsMoreButtonWidget extends StatelessWidget {
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
-      onSelected: (value) => _onSelected(value as String, controller, context),
       itemBuilder: (context) {
         return [
-          PlatformPopupMenuItem(
-            value: PopupMenuItemValue.sortDiscussions,
-            child: DiscussionsSortButton(controller: controller),
-          ),
+          for (final tile in controller.sortController.getSortTile())
+            PlatformPopupMenuItem(child: tile),
         ];
       },
     );
-  }
-}
-
-Future<void> _onSelected(
-    String value, BaseDiscussionsController controller, BuildContext context) async {
-  switch (value) {
-    case PopupMenuItemValue.sortDiscussions:
-      discussionsSortButtonOnPressed(controller, context);
-      break;
   }
 }

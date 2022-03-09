@@ -90,45 +90,28 @@ class SortTile extends StatelessWidget {
     final _selected = sortController!.currentSortfilter == sortParameter;
     final title = sortController!.getFilterLabel(sortParameter);
 
-    BoxDecoration _selectedDecoration() {
-      return BoxDecoration(
-          color: Get.theme.colors().bgDescription, borderRadius: BorderRadius.circular(6));
-    }
-
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         sortController!.changeSort(sortParameter);
         Get.back();
       },
-      child: Container(
-        height: 40,
-        margin: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
-        padding: const EdgeInsets.only(left: 12, right: 20),
-        decoration: _selected ? _selectedDecoration() : null,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                      child: Text(title,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: TextStyleHelper.body2()))
-                ],
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Text(
+              title,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
-            if (_selected)
-              AppIcon(
-                icon: sortController!.isSortAscending.value == true
-                    ? SvgIcons.up_arrow
-                    : SvgIcons.down_arrow,
-                color: Get.theme.colors().primary,
-              )
-          ],
-        ),
+          ),
+          if (_selected)
+            AppIcon(
+              icon: sortController!.isSortAscending.value ? SvgIcons.up_arrow : SvgIcons.down_arrow,
+              color: Get.theme.colors().onSurface,
+            ),
+          if (_selected) const SizedBox(width: 16)
+        ],
       ),
     );
   }

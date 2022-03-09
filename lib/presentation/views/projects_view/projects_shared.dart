@@ -30,26 +30,21 @@
  *
  */
 
-import 'dart:math' as math;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
-import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
-import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 
 class ProjectsContent extends StatelessWidget {
@@ -131,96 +126,12 @@ class ProjectsMoreButtonWidget extends StatelessWidget {
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
-      onSelected: (value) => _onSelected(value as String, controller, context),
       itemBuilder: (context) {
         return [
-          PlatformPopupMenuItem(
-            value: PopupMenuItemValue.sortTasks,
-            child: ProjectsSortButton(controller: controller),
-          ),
+          for (final tile in controller.sortController.getSortTile())
+            PlatformPopupMenuItem(child: tile),
         ];
       },
-    );
-  }
-}
-
-Future<void> _onSelected(String value, ProjectsController controller, BuildContext context) async {
-  switch (value) {
-    case PopupMenuItemValue.sortTasks:
-      projectsSortButtonOnPressed(controller, context);
-      break;
-  }
-}
-
-class ProjectsSortButton extends StatelessWidget {
-  const ProjectsSortButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final ProjectsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Obx(
-          () => Text(controller.sortController.currentSortTitle.value),
-        ),
-        const SizedBox(width: 8),
-        Obx(
-          () => (controller.sortController.currentSortOrder == 'ascending')
-              ? AppIcon(
-                  icon: SvgIcons.sorting_4_ascend,
-                  color: Get.theme.colors().onBackground,
-                  width: 20,
-                  height: 20,
-                )
-              : Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.rotationX(math.pi),
-                  child: AppIcon(
-                    icon: SvgIcons.sorting_4_ascend,
-                    color: Get.theme.colors().onBackground,
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
-        ),
-      ],
-    );
-  }
-}
-
-void projectsSortButtonOnPressed(ProjectsController controller, BuildContext context) async {
-  List<SortTile> _getSortTile() {
-    return [
-      SortTile(
-        sortParameter: 'create_on',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'title',
-        sortController: controller.sortController,
-      ),
-    ];
-  }
-
-  if (Get.find<PlatformController>().isMobile) {
-    final options = Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        ..._getSortTile(),
-        const SizedBox(height: 20)
-      ],
-    );
-    await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
-  } else {
-    await showPopupMenu(
-      context: context,
-      options: _getSortTile(),
-      offset: const Offset(0, 30),
     );
   }
 }

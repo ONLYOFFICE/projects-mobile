@@ -31,6 +31,7 @@
  */
 
 import 'package:projects/domain/controllers/base/base_sort_controller.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class ProjectsSortController extends BaseSortController {
   ProjectsSortController() {
@@ -38,13 +39,10 @@ class ProjectsSortController extends BaseSortController {
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
 
-  // @override
-  // String getFilterLabel(value) {
-  //   return tr(value);
-  // }
+  List<SortTile> getSortTile() {
+    return [
+      SortTile(sortParameter: 'create_on', sortController: this),
+      SortTile(sortParameter: 'title', sortController: this),
+    ];
+  }
 }
-
-// const _filtersMapping = {
-//   'create_on': 'Creation date',
-//   'title': 'Title',
-// };

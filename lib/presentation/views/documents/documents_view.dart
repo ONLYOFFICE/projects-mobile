@@ -181,25 +181,13 @@ class _MoreButtonWidget extends StatelessWidget {
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
-      onSelected: (value) => _onSelected(value as String, controller, context),
       itemBuilder: (context) {
         return [
-          PlatformPopupMenuItem(
-            value: PopupMenuItemValue.sortDocuments,
-            child: DocumentsSortButton(controller: controller),
-          ),
+          for (final tile in controller.sortController.getSortTile())
+            PlatformPopupMenuItem(child: tile),
         ];
       },
     );
-  }
-}
-
-Future<void> _onSelected(
-    String value, BaseDocumentsController controller, BuildContext context) async {
-  switch (value) {
-    case PopupMenuItemValue.sortDocuments:
-      documentsSortButtonOnPressed(controller, context);
-      break;
   }
 }
 
@@ -217,13 +205,26 @@ class DocsBottom extends StatelessWidget {
         children: <Widget>[
           Obx(() {
             if (controller.itemList.isNotEmpty)
-              return PlatformTextButton(
+              return PlatformPopupMenuButton(
                 padding: EdgeInsets.zero,
-                onPressed: () => documentsSortButtonOnPressed(controller, context),
-                child: DocumentsSortButton(
-                  controller: controller,
-                  color: Get.theme.colors().primary,
+                icon: PlatformIconButton(
+                  padding: EdgeInsets.zero,
+                  cupertinoIcon: Icon(
+                    CupertinoIcons.ellipsis_circle,
+                    color: Get.theme.colors().primary,
+                  ),
+                  materialIcon: Icon(
+                    Icons.more_vert,
+                    color: Get.theme.colors().primary,
+                  ),
+                  cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
                 ),
+                itemBuilder: (context) {
+                  return [
+                    for (final tile in controller.sortController.getSortTile())
+                      PlatformPopupMenuItem(child: tile),
+                  ];
+                },
               );
             return const SizedBox();
           }),

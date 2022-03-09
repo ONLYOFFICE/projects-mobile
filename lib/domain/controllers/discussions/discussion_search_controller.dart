@@ -37,8 +37,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
-import 'package:projects/domain/controllers/base/base_controller.dart';
-import 'package:projects/domain/controllers/base/base_sort_controller.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/base_discussions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
@@ -64,7 +62,7 @@ class DiscussionSearchController extends BaseDiscussionsController {
   @override
   BaseFilterController get filterController => _filterController!;
   @override
-  BaseSortController get sortController => _sortController!;
+  DiscussionsSortController get sortController => _sortController!;
 
   final int? _projectId = Get.arguments['projectId'] as int?;
   final DiscussionsFilterController? _filterController =

@@ -121,23 +121,12 @@ class TasksMoreButtonWidget extends StatelessWidget {
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
-      onSelected: (value) => _onSelected(value as String, controller, context),
       itemBuilder: (context) {
         return [
-          PlatformPopupMenuItem(
-            value: PopupMenuItemValue.sortTasks,
-            child: TasksSortButton(controller: controller),
-          ),
+          for (final tile in controller.sortController.getSortTile())
+            PlatformPopupMenuItem(child: tile),
         ];
       },
     );
-  }
-}
-
-Future<void> _onSelected(String value, BaseTasksController controller, BuildContext context) async {
-  switch (value) {
-    case PopupMenuItemValue.sortTasks:
-      taskSortButtonOnPressed(controller, context);
-      break;
   }
 }

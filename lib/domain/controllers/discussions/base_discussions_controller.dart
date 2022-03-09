@@ -31,11 +31,11 @@
  */
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
-import 'package:projects/domain/controllers/base/base_sort_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 
 abstract class BaseDiscussionsController extends BaseController {
-  BaseSortController get sortController;
+  DiscussionsSortController get sortController;
   BaseFilterController get filterController;
 
   void toDetailed(DiscussionItemController discussionItemController) {}

@@ -31,6 +31,7 @@
  */
 
 import 'package:projects/domain/controllers/base/base_sort_controller.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DocumentsSortController extends BaseSortController {
   DocumentsSortController() {
@@ -38,17 +39,14 @@ class DocumentsSortController extends BaseSortController {
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
 
-  // @override
-  // String getFilterLabel(value) {
-  //   return _filtersMapping[value];
-  // }
+  List<SortTile> getSortTile() {
+    return [
+      SortTile(sortParameter: 'dateandtime', sortController: this),
+      SortTile(sortParameter: 'create_on', sortController: this),
+      SortTile(sortParameter: 'AZ', sortController: this),
+      SortTile(sortParameter: 'type', sortController: this),
+      SortTile(sortParameter: 'size', sortController: this),
+      SortTile(sortParameter: 'author', sortController: this),
+    ];
+  }
 }
-
-// const _filtersMapping = {
-//   'dateandtime': 'Last modified date',
-//   'create_on': 'Creation date',
-//   'AZ': 'Title',
-//   'type': 'Type',
-//   'size': 'Size',
-//   'author': 'Author',
-// };

@@ -288,37 +288,27 @@ class _ProjectContextMenu extends StatelessWidget {
               controller.projectTasksController != null &&
               (controller.projectTasksController!.itemList.isNotEmpty ||
                   controller.projectTasksController!.filterController.hasFilters.value))
-            PlatformPopupMenuItem(
-              value: PopupMenuItemValue.sortTasks,
-              child: TasksSortButton(controller: controller.projectTasksController!),
-            ),
+            for (final tile in controller.projectTasksController!.sortController.getSortTile())
+              PlatformPopupMenuItem(child: tile),
           if (index == ProjectDetailedTabs.milestones &&
               controller.projectMilestonesController != null &&
               (controller.projectMilestonesController!.itemList.isNotEmpty ||
                   controller.projectMilestonesController!.filterController.hasFilters.value))
-            PlatformPopupMenuItem(
-              value: PopupMenuItemValue.sortMilestones,
-              child:
-                  ProjectMilestonesSortButton(controller: controller.projectMilestonesController!),
-            ),
+            for (final tile in controller.projectMilestonesController!.sortController.getSortTile())
+              PlatformPopupMenuItem(child: tile),
           if (index == ProjectDetailedTabs.discussions &&
               controller.projectDiscussionsController != null &&
               (controller.projectDiscussionsController!.itemList.isNotEmpty ||
                   controller.projectDiscussionsController!.filterController.hasFilters.value))
-            PlatformPopupMenuItem(
-                value: PopupMenuItemValue.sortDiscussions,
-                child: DiscussionsSortButton(
-                  controller: controller.projectDiscussionsController!,
-                )),
+            for (final tile
+                in controller.projectDiscussionsController!.sortController.getSortTile())
+              PlatformPopupMenuItem(child: tile),
           if (index == ProjectDetailedTabs.documents &&
               controller.projectDocumentsController != null &&
               (controller.projectDocumentsController!.itemList.isNotEmpty ||
                   controller.projectDocumentsController!.filterController.hasFilters.value))
-            PlatformPopupMenuItem(
-                value: PopupMenuItemValue.sortDocuments,
-                child: DocumentsSortButton(
-                  controller: controller.projectDocumentsController!,
-                )),
+            for (final tile in controller.projectDocumentsController!.sortController.getSortTile())
+              PlatformPopupMenuItem(child: tile),
           if (controller.projectData.canEdit!)
             PlatformPopupMenuItem(
               value: PopupMenuItemValue.editProject,
@@ -326,7 +316,7 @@ class _ProjectContextMenu extends StatelessWidget {
             ),
           if (!(controller.projectData.security?['isInTeam'] as bool))
             PlatformPopupMenuItem(
-              value: PopupMenuItemValue.followProject,
+              onTap: controller.followProject,
               child: controller.projectData.isFollow as bool
                   ? Text(tr('unFollowProjectButton'))
                   : Text(tr('followProjectButton')),
@@ -349,22 +339,6 @@ Future<void> _onSelected(
   switch (value) {
     case 'copyLink':
       await controller.copyLink();
-      break;
-
-    case PopupMenuItemValue.sortTasks:
-      taskSortButtonOnPressed(controller.projectTasksController!, context);
-      break;
-
-    case PopupMenuItemValue.sortMilestones:
-      milestonesSortButtonOnPressed(controller.projectMilestonesController!, context);
-      break;
-
-    case PopupMenuItemValue.sortDiscussions:
-      discussionsSortButtonOnPressed(controller.projectDiscussionsController!, context);
-      break;
-
-    case PopupMenuItemValue.sortDocuments:
-      documentsSortButtonOnPressed(controller.projectDocumentsController!, context);
       break;
 
     case PopupMenuItemValue.editProject:
