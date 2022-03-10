@@ -76,8 +76,10 @@ class ResponsibleTile extends StatelessWidget {
           suffixPadding: const EdgeInsets.only(right: 16),
           icon: SvgIcons.person,
           onTap: () => Get.find<NavigationController>().toScreen(
-              const ProjectTeamResponsibleSelectionView(),
-              arguments: {'controller': controller}),
+            const ProjectTeamResponsibleSelectionView(),
+            arguments: {'controller': controller},
+            transition: Transition.rightToLeft,
+          ),
         );
       },
     );

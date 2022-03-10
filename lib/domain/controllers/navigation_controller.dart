@@ -114,7 +114,7 @@ class NavigationController extends GetxController {
         preventDuplicates: preventDuplicates ?? false,
         fullscreenDialog: fullscreenDialog,
         arguments: arguments,
-        transition: transition,
+        transition: transition ?? Transition.downToUp,
         popGesture: popGesture,
       );
     } else {
@@ -142,7 +142,7 @@ class NavigationController extends GetxController {
         fullscreenDialog: fullscreenDialog,
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
-        transition: transition,
+        transition: transition ?? Transition.rightToLeft,
       );
     } else {
       treeLength++;

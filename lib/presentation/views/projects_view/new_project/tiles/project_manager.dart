@@ -73,8 +73,11 @@ class ProjectManagerTile extends StatelessWidget {
                   ),
                 )
               : null,
-          onTap: () => Get.find<NavigationController>()
-              .toScreen(const ProjectManagerSelectionView(), arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>().toScreen(
+            const ProjectManagerSelectionView(),
+            arguments: {'controller': controller},
+            transition: Transition.rightToLeft,
+          ),
         );
       },
     );

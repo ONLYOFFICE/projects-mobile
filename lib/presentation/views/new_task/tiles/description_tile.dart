@@ -107,8 +107,11 @@ class _DescriptionTileState extends State<DescriptionTile> with TickerProviderSt
         final textSize = _textSize(text, TextStyleHelper.subtitle1());
 
         return InkWell(
-          onTap: () => Get.find<NavigationController>()
-              .toScreen(const TaskDescription(), arguments: {'controller': widget.controller}),
+          onTap: () => Get.find<NavigationController>().toScreen(
+            const TaskDescription(),
+            arguments: {'controller': widget.controller},
+            transition: Transition.rightToLeft,
+          ),
           child: Column(
             children: [
               AnimatedSize(

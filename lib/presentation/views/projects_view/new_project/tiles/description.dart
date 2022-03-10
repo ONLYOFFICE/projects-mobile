@@ -108,8 +108,11 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
         final textSize = _textSize(text, TextStyleHelper.subtitle1());
 
         return InkWell(
-          onTap: () => Get.find<NavigationController>().toScreen(const NewProjectDescription(),
-              arguments: {'controller': widget.controller}),
+          onTap: () => Get.find<NavigationController>().toScreen(
+            const NewProjectDescription(),
+            arguments: {'controller': widget.controller},
+            transition: Transition.rightToLeft,
+          ),
           child: Column(
             children: [
               AnimatedSize(

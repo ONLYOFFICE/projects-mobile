@@ -62,8 +62,11 @@ class MilestoneTile extends StatelessWidget {
             // because color is always black
             isSelected: true,
             caption: '${tr('milestone')}:',
-            onTap: () => Get.find<NavigationController>()
-                .toScreen(const SelectMilestoneView(), arguments: {'controller': controller}));
+            onTap: () => Get.find<NavigationController>().toScreen(
+                  const SelectMilestoneView(),
+                  arguments: {'controller': controller},
+                  transition: Transition.rightToLeft,
+                ));
       },
     );
   }

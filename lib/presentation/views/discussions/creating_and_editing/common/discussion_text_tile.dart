@@ -60,8 +60,10 @@ class DiscussionTextTile extends StatelessWidget {
         icon: SvgIcons.description,
         selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
         onTap: () => Get.find<NavigationController>().toScreen(
-            NewDiscussionTextScreen(controller: controller),
-            arguments: {'controller': controller}),
+          NewDiscussionTextScreen(controller: controller),
+          arguments: {'controller': controller},
+          transition: Transition.rightToLeft,
+        ),
       ),
     );
   }

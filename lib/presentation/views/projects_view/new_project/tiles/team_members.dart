@@ -73,8 +73,11 @@ class TeamMembersTile extends StatelessWidget {
                   ),
                 )
               : null,
-          onTap: () => Get.find<NavigationController>()
-              .toScreen(const TeamMembersSelectionView(), arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>().toScreen(
+            const TeamMembersSelectionView(),
+            arguments: {'controller': controller},
+            transition: Transition.rightToLeft,
+          ),
         );
       },
     );

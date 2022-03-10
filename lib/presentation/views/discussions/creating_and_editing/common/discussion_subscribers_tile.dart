@@ -61,10 +61,12 @@ class DiscussionSubscribersTile extends StatelessWidget {
         selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
         onTap: () {
           Get.find<NavigationController>().toScreen(
-              controller is NewDiscussionController
-                  ? const SelectDiscussionSubscribers()
-                  : const ManageDiscussionSubscribersScreen(),
-              arguments: {'controller': controller});
+            controller is NewDiscussionController
+                ? const SelectDiscussionSubscribers()
+                : const ManageDiscussionSubscribersScreen(),
+            arguments: {'controller': controller},
+            transition: Transition.rightToLeft,
+          );
         },
       ),
     );

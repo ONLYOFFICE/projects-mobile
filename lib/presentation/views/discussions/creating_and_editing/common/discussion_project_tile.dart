@@ -63,8 +63,11 @@ class DiscussionProjectTile extends StatelessWidget {
               controller.selectProjectError.value == true ? Get.theme.colors().colorError : null,
           isSelected: controller.selectedProjectTitle.value.isNotEmpty,
           selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
-          onTap: () => Get.find<NavigationController>()
-              .toScreen(const SelectProjectView(), arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>().toScreen(
+            const SelectProjectView(),
+            arguments: {'controller': controller},
+            transition: Transition.rightToLeft,
+          ),
         ),
       ),
     );

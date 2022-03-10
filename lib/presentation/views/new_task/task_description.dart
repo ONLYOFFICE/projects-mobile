@@ -80,12 +80,17 @@ class TaskDescription extends StatelessWidget {
             maxLines: null,
             style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
             hintText: tr('taskDescription'),
-            cupertino: (_, __) =>
-                CupertinoTextFieldData(placeholderStyle: TextStyleHelper.subtitle1()),
+            cupertino: (_, __) => CupertinoTextFieldData(
+              placeholderStyle: TextStyleHelper.subtitle1(
+                color: Get.theme.colors().onSurface.withOpacity(0.4),
+              ),
+            ),
             material: (_, __) => MaterialTextFieldData(
               decoration: InputDecoration.collapsed(
                 hintText: tr('taskDescription'),
-                hintStyle: TextStyleHelper.subtitle1(),
+                hintStyle: TextStyleHelper.subtitle1(
+                  color: Get.theme.colors().onSurface.withOpacity(0.4),
+                ),
               ),
             ),
           ),
