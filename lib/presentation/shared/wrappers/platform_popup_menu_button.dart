@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_divider.dart';
 
 const Duration _kMenuDuration = Duration(milliseconds: 300);
 const double _kMenuCloseIntervalEnd = 2.0 / 3.0;
@@ -13,6 +15,9 @@ const double _kMenuVerticalPadding = 8;
 const double _kMenuWidthStep = 56;
 const double _kMenuScreenPadding = 14;
 const double _kMenuBorderRadius = 20;
+
+final Color _kBackgroundColorPressed =
+    Get.isDarkMode ? const Color.fromRGBO(54, 54, 54, 1) : const Color.fromRGBO(216, 216, 216, 1);
 
 class PlatformPopupMenuButton<T> extends StatefulWidget {
   PlatformPopupMenuButton({
@@ -302,7 +307,16 @@ class _PopupMenu<T> extends StatelessWidget {
           },
           child: FadeTransition(
             opacity: opacity,
-            child: item,
+            child: Container(
+              decoration: BoxDecoration(
+                border: GetPlatform.isIOS &&
+                        i != route.items.length - 1 &&
+                        item is! PlatformPopupMenuDivider
+                    ? Border(bottom: BorderSide(color: _kBackgroundColorPressed))
+                    : null,
+              ),
+              child: item,
+            ),
           ),
         ),
       );

@@ -50,6 +50,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/discussions/discussions_shared.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
@@ -309,6 +310,7 @@ class _ProjectContextMenu extends StatelessWidget {
                   controller.projectDocumentsController!.filterController.hasFilters.value))
             for (final tile in controller.projectDocumentsController!.sortController.getSortTile())
               PlatformPopupMenuItem(child: tile),
+          if (index >= ProjectDetailedTabs.tasks) const PlatformPopupMenuDivider(),
           if (controller.projectData.canEdit!)
             PlatformPopupMenuItem(
               value: PopupMenuItemValue.editProject,
@@ -327,7 +329,7 @@ class _ProjectContextMenu extends StatelessWidget {
               value: PopupMenuItemValue.deleteProject,
               isDestructiveAction: true,
               child: Text(tr('delete')),
-            )
+            ),
         ];
       },
     );

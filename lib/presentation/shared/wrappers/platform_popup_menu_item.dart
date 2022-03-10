@@ -18,9 +18,7 @@ class PlatformPopupMenuItem<T> extends PopupMenuEntry<T> {
     this.isDestructiveAction = false,
     this.trailingIcon,
     required this.child,
-  })  : assert(enabled != null),
-        assert(height != null),
-        super(key: key);
+  }) : super(key: key);
 
   final T? value;
   final VoidCallback? onTap;
@@ -49,9 +47,11 @@ class PlatformPopupMenuItem<T> extends PopupMenuEntry<T> {
 
 class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<W> {
   static const double _kMenuHorizontalPadding = 16;
-  static final Color _kBackgroundColor = Get.isDarkMode ? Colors.black54 : Colors.white54;
+  static final Color _kBackgroundColor = Get.isDarkMode
+      ? const Color.fromRGBO(58, 58, 60, 0.78)
+      : const Color.fromRGBO(249, 249, 249, 0.78);
   static final Color _kBackgroundColorPressed =
-      Get.isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300;
+      Get.isDarkMode ? const Color.fromRGBO(54, 54, 54, 1) : const Color.fromRGBO(216, 216, 216, 1);
   static const double _kButtonHeight = 44;
   static final TextStyle _kActionSheetActionStyle = TextStyle(
     fontFamily: '.SF Pro Text',
@@ -122,9 +122,6 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
           child: Container(
             decoration: BoxDecoration(
               color: _isPressed ? _kBackgroundColorPressed : _kBackgroundColor.withOpacity(0.4),
-              border: Border(
-                bottom: BorderSide(color: _kBackgroundColorPressed),
-              ),
             ),
             padding: const EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
             child: DefaultTextStyle(
