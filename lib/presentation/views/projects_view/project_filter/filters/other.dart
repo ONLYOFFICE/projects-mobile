@@ -55,8 +55,10 @@ class _Other extends StatelessWidget {
             isSelected: filterController.other['withTag'].isNotEmpty as bool,
             cancelButtonEnabled: filterController.other['withTag'].isNotEmpty as bool?,
             onTap: () async {
-              final selectedTag =
-                  await Get.find<NavigationController>().toScreen(const SelectTagScreen());
+              final selectedTag = await Get.find<NavigationController>().toScreen(
+                const SelectTagScreen(),
+                transition: Transition.rightToLeft,
+              );
               await filterController.changeOther('withTag', selectedTag);
             },
             onCancelTap: () => filterController.changeOther('withTag', null),

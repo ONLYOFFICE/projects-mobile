@@ -63,6 +63,7 @@ class _CreatingDate extends StatelessWidget {
                       end: filterController!.creationDate['custom']['stopDate'] as DateTime,
                     ),
                   ),
+                  transition: Transition.rightToLeft,
                 );
                 if (pickedRange != null) {
                   await filterController!.changeCreationDate(

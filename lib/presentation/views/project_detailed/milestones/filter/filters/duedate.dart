@@ -68,6 +68,7 @@ class _DueDate extends StatelessWidget {
                       end: filterController.deadline['custom']['stopDate'] as DateTime,
                     ),
                   ),
+                  transition: Transition.rightToLeft,
                 );
                 if (pickedRange != null) {
                   await filterController.changeDeadline('custom',

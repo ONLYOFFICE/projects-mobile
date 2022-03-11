@@ -54,8 +54,10 @@ class _Responsible extends StatelessWidget {
               isSelected: filterController.responsible['other'].isNotEmpty as bool,
               cancelButtonEnabled: filterController.responsible['other'].isNotEmpty as bool?,
               onTap: () async {
-                final newUser =
-                    await Get.find<NavigationController>().toScreen(const SelectUserScreen());
+                final newUser = await Get.find<NavigationController>().toScreen(
+                  const SelectUserScreen(),
+                  transition: Transition.rightToLeft,
+                );
                 filterController.changeResponsible('other', newUser);
               },
               onCancelTap: () => filterController.changeResponsible('other', null)),
@@ -66,8 +68,10 @@ class _Responsible extends StatelessWidget {
               isSelected: filterController.responsible['groups'].isNotEmpty as bool,
               cancelButtonEnabled: filterController.responsible['groups'].isNotEmpty as bool?,
               onTap: () async {
-                final newGroup =
-                    await Get.find<NavigationController>().toScreen(const SelectGroupScreen());
+                final newGroup = await Get.find<NavigationController>().toScreen(
+                  const SelectGroupScreen(),
+                  transition: Transition.rightToLeft,
+                );
                 filterController.changeResponsible('groups', newGroup);
               },
               onCancelTap: () => filterController.changeResponsible('groups', null)),
