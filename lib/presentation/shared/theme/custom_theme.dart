@@ -67,6 +67,8 @@ final AppColors lightColors = AppColors(
   tabbarBackground: const Color(0xff2E4057),
   backgroundSecond: const Color(0xffF4F4F4),
   inactiveGrey: const Color(0xff666666),
+  skeleton: const Color(0xffE7E7E7),
+  skeletonHighlighted: const Color.fromRGBO(237, 237, 237, 0.5),
 );
 
 final AppColors darkColors = AppColors(
@@ -91,6 +93,8 @@ final AppColors darkColors = AppColors(
   tabbarBackground: const Color(0xff2E4057),
   backgroundSecond: const Color(0xff080808),
   inactiveGrey: const Color(0xff646464),
+  skeleton: const Color.fromRGBO(81, 82, 85, 0.3),
+  skeletonHighlighted: const Color.fromRGBO(83, 84, 87, 1),
 );
 
 final ThemeData lightTheme = ThemeData.light().copyWith(

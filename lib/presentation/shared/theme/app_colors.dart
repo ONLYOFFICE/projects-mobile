@@ -57,6 +57,8 @@ class AppColors {
   final Color colorError;
   final Color backgroundSecond;
   final Color inactiveGrey;
+  final Color skeleton;
+  final Color skeletonHighlighted;
 
   const AppColors({
     required this.background,
@@ -80,5 +82,7 @@ class AppColors {
     required this.colorError,
     required this.backgroundSecond,
     required this.inactiveGrey,
+    required this.skeleton,
+    required this.skeletonHighlighted,
   });
 }
