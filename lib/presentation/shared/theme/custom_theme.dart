@@ -48,7 +48,7 @@ extension ThemeDataExtensions on ThemeData {
 final AppColors lightColors = AppColors(
   background: const Color(0xffFBFBFB),
   backgroundColor: const Color(0xffffffff),
-  bgDescription: const Color(0xffF1F3F8),
+  bgDescription: const Color(0xffEFEFF0),
   colorError: const Color(0xffFF0C3E),
   lightSecondary: const Color(0xffED7309),
   links: const Color(0xff0C76D5),
