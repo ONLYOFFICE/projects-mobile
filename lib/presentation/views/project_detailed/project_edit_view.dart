@@ -99,12 +99,6 @@ class EditProjectView extends StatelessWidget {
                     controller: editProjectController,
                     showCaption: true,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 72, bottom: 10, top: 10),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: ProjectStatusButton(projectController: editProjectController)),
-                  ),
                   ProjectDescriptionTile(controller: editProjectController),
                   ProjectManagerTile(controller: editProjectController),
                   TeamMembersTile(controller: editProjectController),
