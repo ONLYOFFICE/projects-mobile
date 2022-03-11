@@ -481,15 +481,16 @@
 	"overwriteDialogTitle": "Duplicate name",
 	"overwriteDialogContent": {
 		"beforeText": "The file with the name",
-		"afterText": "already exists in the destination folder."
-	},
-	"overwriteConfirmation": "Overwrite",
-	"duplicateConfirmation": "Keep both",
-	"skipConfirmation": "Skip",
-	"loading": "Loading",
-	"disablePasscode": "Disable the passcode",
-
-	"downloadComplete": "Download complete",
-	"downloadError": "Download error",
-	"noPermission": "No permission"
+      "afterText": "already exists in the destination folder."
+    },
+  "overwriteConfirmation": "Overwrite",
+  "duplicateConfirmation": "Keep both",
+  "skipConfirmation": "Skip",
+  "loading": "Loading",
+  "disablePasscode": "Disable the passcode",
+  "downloadComplete": "Download complete",
+  "downloadError": "Download error",
+  "noPermission": "No permission",
+  "clearCacheQuestion": "Очистить кэш?",
+  "clearCacheQuestionDescription": "Эта операция освободит место на устройстве за счет удаления временных файлов. Автономные файлы и персональные данные не будут удалены."
 }

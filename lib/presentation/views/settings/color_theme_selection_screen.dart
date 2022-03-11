@@ -84,6 +84,12 @@ class ColorThemeSelectionScreen extends StatelessWidget {
                 ),
               )
             : SettingsList(
+                darkTheme: const SettingsThemeData().copyWith(
+                  settingsListBackground:
+                      platformController.isMobile ? null : Get.theme.colors().surface,
+                  settingsSectionBackground:
+                      platformController.isMobile ? null : Get.theme.colors().bgDescription,
+                ),
                 applicationType: ApplicationType.cupertino,
                 sections: [
                   SettingsSection(

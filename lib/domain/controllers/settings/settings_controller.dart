@@ -35,7 +35,6 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:path_provider/path_provider.dart';
@@ -149,20 +148,35 @@ class SettingsController extends GetxController {
 
   Future<void> onClearCachePressed() async {
     final cacheDir = await getTemporaryDirectory();
-    await DefaultCacheManager().emptyCache();
-    await Directory(cacheDir.path).delete(recursive: true);
+    if (cacheDir.existsSync()) {
+      await Directory(cacheDir.path).list().forEach((e) => e.delete(recursive: true));
+    }
+
+    final docDir = await getApplicationDocumentsDirectory();
+    if (docDir.existsSync()) {
+      await Directory(docDir.path).list().forEach((e) => e.delete(recursive: true));
+    }
+
     await setupCacheDirectorySize();
   }
 
   Future<void> setupCacheDirectorySize() async {
     final cacheDir = (await getTemporaryDirectory()).path;
+    final docDir = (await getApplicationDocumentsDirectory()).path;
 
     var totalSize = 0;
-    final dir = Directory(cacheDir);
-
+    final cache = Directory(cacheDir);
+    final doc = Directory(docDir);
     try {
-      if (dir.existsSync()) {
-        dir.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
+      if (cache.existsSync()) {
+        cache.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
+          if (entity is File) {
+            totalSize += entity.lengthSync();
+          }
+        });
+      }
+      if (doc.existsSync()) {
+        doc.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
           if (entity is File) {
             totalSize += entity.lengthSync();
           }
@@ -187,6 +201,12 @@ class SettingsController extends GetxController {
     final device = await _deviceInfoService.deviceInfo;
     final os = await _deviceInfoService.osReleaseVersion;
 
+    String? encodeQueryParameters(Map<String, String> params) {
+      return params.entries
+          .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+    }
+
     var body = '';
     body += '\n\n\n\n\n';
     body += '____________________';
@@ -201,17 +221,28 @@ class SettingsController extends GetxController {
         break;
     }
 
-    String url;
+    String subject;
     switch (_deviceInfoService.deviceType) {
       case DeviceType.ios:
-        url = '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects iOS Feedback&body=$body';
+        subject = 'ONLYOFFICE Projects iOS Feedback';
         break;
       case DeviceType.android:
-        url = '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
+        subject = 'ONLYOFFICE Projects Android Feedback';
         break;
     }
 
-    await _service.openEmailApp(url, Get.context!);
+    final emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: Const.Urls.supportMail,
+      query: encodeQueryParameters(
+        <String, String>{
+          'subject': subject,
+          'body': body,
+        },
+      ),
+    );
+
+    await _service.openEmailApp(emailLaunchUri.toString(), Get.context!);
   }
 
   Future<void> onRateAppPressed() async {

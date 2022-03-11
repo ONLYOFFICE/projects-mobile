@@ -53,11 +53,29 @@ class PasscodeSettingsScreen extends StatelessWidget {
     final controller = Get.put(PasscodeSettingsController());
     final platformController = Get.find<PlatformController>();
 
-    final backgroundColor =
-        GetPlatform.isAndroid ? Get.theme.colors().surface : CupertinoColors.systemGrey6;
+    Color backgroundColor;
+    if (GetPlatform.isAndroid) {
+      if (platformController.isMobile) {
+        Theme.of(context).brightness == Brightness.dark
+            ? backgroundColor = Get.theme.colors().background
+            : backgroundColor = Get.theme.colors().surface;
+      } else {
+        backgroundColor = Get.theme.colors().surface;
+      }
+    } else {
+      if (platformController.isMobile) {
+        Theme.of(context).brightness == Brightness.dark
+            ? backgroundColor = Get.theme.colors().background
+            : backgroundColor = CupertinoColors.systemGrey6;
+      } else {
+        Theme.of(context).brightness == Brightness.dark
+            ? backgroundColor = Get.theme.colors().surface
+            : backgroundColor = CupertinoColors.systemGrey6;
+      }
+    }
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? backgroundColor : backgroundColor,
+      backgroundColor: backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('passcodeLock'),
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
@@ -132,6 +150,12 @@ class PasscodeSettingsScreen extends StatelessWidget {
                     SettingsList(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
+                      darkTheme: const SettingsThemeData().copyWith(
+                        settingsListBackground:
+                            platformController.isMobile ? null : Get.theme.colors().surface,
+                        settingsSectionBackground:
+                            platformController.isMobile ? null : Get.theme.colors().bgDescription,
+                      ),
                       applicationType: ApplicationType.cupertino,
                       sections: [
                         SettingsSection(
@@ -190,6 +214,12 @@ class PasscodeSettingsScreen extends StatelessWidget {
                       SettingsList(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
+                        darkTheme: const SettingsThemeData().copyWith(
+                          settingsListBackground:
+                              platformController.isMobile ? null : Get.theme.colors().surface,
+                          settingsSectionBackground:
+                              platformController.isMobile ? null : Get.theme.colors().bgDescription,
+                        ),
                         applicationType: ApplicationType.cupertino,
                         sections: [
                           SettingsSection(

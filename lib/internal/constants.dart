@@ -53,7 +53,7 @@ class _ConstUrl {
   final help = 'https://helpcenter.onlyoffice.com/mobile-applications/androidprojects/index.aspx';
   final helpIOS =
       'https://helpcenter.onlyoffice.com/mobile-applications/documents/projects/index.aspx';
-  final supportMail = 'mailto:support@onlyoffice.com';
+  final supportMail = 'support@onlyoffice.com';
   final openDocument = 'oodocuments://openfile?data=';
 }
 

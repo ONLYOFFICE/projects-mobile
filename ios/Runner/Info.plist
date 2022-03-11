@@ -24,6 +24,8 @@
 	<array>
 		<string>itms-beta</string>
 		<string>itms</string>
+		<string>https</string>
+        <string>http</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

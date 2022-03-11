@@ -42,6 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
 import 'package:projects/presentation/views/settings/setting_tile.dart';
@@ -57,16 +58,45 @@ class SettingsScreen extends StatelessWidget {
 
     controller.setupCacheDirectorySize();
 
+    final mobileAppBar = StyledAppBar(
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      titleText: tr('settings'),
+      onLeadingPressed: controller.leave,
+      backButtonIcon: platformController.isMobile
+          ? Icon(PlatformIcons(context).back)
+          : Icon(PlatformIcons(context).clear),
+    );
+
+    final tabletAppBar = StyledAppBar(
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      titleText: tr('settings'),
+      leadingWidth: GetPlatform.isIOS ? 100 : null,
+      leading: PlatformWidget(
+        cupertino: (_, __) => CupertinoButton(
+          padding: const EdgeInsets.only(left: 16),
+          alignment: Alignment.centerLeft,
+          onPressed: () {
+            Get.find<NavigationController>().modalViewTreeLength = 0;
+            controller.leave();
+          },
+          child: Text(
+            tr('closeLowerCase'),
+            style: TextStyleHelper.button(),
+          ),
+        ),
+        material: (_, __) => IconButton(
+          onPressed: () {
+            Get.find<NavigationController>().modalViewTreeLength = 0;
+            controller.leave();
+          },
+          icon: const Icon(Icons.close),
+        ),
+      ),
+    );
+
     return Scaffold(
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-      appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        titleText: tr('settings'),
-        onLeadingPressed: controller.leave,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? Icon(PlatformIcons(context).back)
-            : Icon(PlatformIcons(context).clear),
-      ),
+      appBar: platformController.isMobile ? mobileAppBar : tabletAppBar,
       body: Obx(
         () {
           if (controller.loaded.value == true) {
@@ -140,6 +170,12 @@ class SettingsScreen extends StatelessWidget {
               );
             } else {
               return SettingsList(
+                darkTheme: const SettingsThemeData().copyWith(
+                  settingsListBackground:
+                      platformController.isMobile ? null : Get.theme.colors().surface,
+                  settingsSectionBackground:
+                      platformController.isMobile ? null : Get.theme.colors().bgDescription,
+                ),
                 applicationType: ApplicationType.cupertino,
                 sections: [
                   SettingsSection(
@@ -205,7 +241,58 @@ class SettingsScreen extends StatelessWidget {
                   SettingsSection(
                     tiles: [
                       SettingsTile(
-                        onPressed: (_) => controller.onClearCachePressed(),
+                        onPressed: (context) {
+                          if (platformController.isMobile) {
+                            showCupertinoModalPopup(
+                              context: context,
+                              builder: (BuildContext context) => CupertinoActionSheet(
+                                title: Text(tr('clearCacheQuestion')),
+                                message: Text(tr('clearCacheQuestionDescription')),
+                                actions: <CupertinoActionSheetAction>[
+                                  CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      controller.onClearCachePressed();
+                                      Navigator.pop(context);
+                                    },
+                                    isDestructiveAction: true,
+                                    child: Text(tr('clearCache')),
+                                  ),
+                                ],
+                                cancelButton: CupertinoActionSheetAction(
+                                  isDefaultAction: true,
+                                  child: Text(tr('cancel').toLowerCase().capitalizeFirst!),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                            );
+                          } else {
+                            showCupertinoDialog<void>(
+                              context: context,
+                              builder: (BuildContext context) => CupertinoAlertDialog(
+                                title: Text(tr('clearCacheQuestion')),
+                                content: Text(tr('clearCacheQuestionDescription')),
+                                actions: <CupertinoDialogAction>[
+                                  CupertinoDialogAction(
+                                    child: Text(tr('cancel').toLowerCase().capitalizeFirst!),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  CupertinoDialogAction(
+                                    isDestructiveAction: true,
+                                    onPressed: () {
+                                      controller.onClearCachePressed();
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(tr('clearCache')),
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+                        },
                         title: Text(
                           tr('clearCache'),
                           overflow: TextOverflow.ellipsis,

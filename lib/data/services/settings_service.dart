@@ -46,9 +46,7 @@ class SettingsService {
   Future<bool> get isPasscodeEnable async => _passcodeService.isPasscodeEnable;
 
   Future<void> openEmailApp(String url, BuildContext context) async {
-    try {
-      await launch(url);
-    } catch (e) {
+    if (!await launch(url)) {
       await showDialog(
         context: context,
         builder: (context) {
