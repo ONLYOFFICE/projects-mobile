@@ -284,74 +284,67 @@ class _ProjectContextMenu extends StatelessWidget {
       ),
       onSelected: (value) => _onSelected(value as String, controller, context),
       itemBuilder: (context) {
-        return [
-          if (index == ProjectDetailedTabs.tasks &&
-              controller.projectTasksController != null &&
-              (controller.projectTasksController!.itemList.isNotEmpty ||
-                  controller.projectTasksController!.filterController.hasFilters.value))
-            for (final tile in controller.projectTasksController!.sortController.getSortTile())
-              PlatformPopupMenuItem(child: tile),
-          if (index == ProjectDetailedTabs.milestones &&
-              controller.projectMilestonesController != null &&
-              (controller.projectMilestonesController!.itemList.isNotEmpty ||
-                  controller.projectMilestonesController!.filterController.hasFilters.value))
-            for (final tile in controller.projectMilestonesController!.sortController.getSortTile())
-              PlatformPopupMenuItem(child: tile),
-          if (index == ProjectDetailedTabs.discussions &&
-              controller.projectDiscussionsController != null &&
-              (controller.projectDiscussionsController!.itemList.isNotEmpty ||
-                  controller.projectDiscussionsController!.filterController.hasFilters.value))
-            for (final tile
-                in controller.projectDiscussionsController!.sortController.getSortTile())
-              PlatformPopupMenuItem(child: tile),
-          if (index == ProjectDetailedTabs.documents &&
-              controller.projectDocumentsController != null &&
-              (controller.projectDocumentsController!.itemList.isNotEmpty ||
-                  controller.projectDocumentsController!.filterController.hasFilters.value))
-            for (final tile in controller.projectDocumentsController!.sortController.getSortTile())
-              PlatformPopupMenuItem(child: tile),
-          if (index >= ProjectDetailedTabs.tasks) const PlatformPopupMenuDivider(),
-          if (controller.projectData.canEdit!)
-            PlatformPopupMenuItem(
-              value: PopupMenuItemValue.editProject,
-              child: Text(tr('editProject')),
-            ),
-          if (!(controller.projectData.security?['isInTeam'] as bool))
-            PlatformPopupMenuItem(
-              onTap: controller.followProject,
-              child: controller.projectData.isFollow as bool
-                  ? Text(tr('unFollowProjectButton'))
-                  : Text(tr('followProjectButton')),
-            ),
-          if (controller.projectData.canDelete as bool)
-            PlatformPopupMenuItem(
-              textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-              value: PopupMenuItemValue.deleteProject,
-              isDestructiveAction: true,
-              child: Text(tr('delete')),
-            ),
-        ];
+        final items = getSortTiles();
+        if (items.isNotEmpty) items.add(const PlatformPopupMenuDivider());
+        if (controller.projectData.canEdit!)
+          items.add(PlatformPopupMenuItem(
+            value: PopupMenuItemValue.editProject,
+            child: Text(tr('editProject')),
+          ));
+        if (!(controller.projectData.security?['isInTeam'] as bool))
+          items.add(PlatformPopupMenuItem(
+            onTap: controller.followProject,
+            child: controller.projectData.isFollow as bool
+                ? Text(tr('unFollowProjectButton'))
+                : Text(tr('followProjectButton')),
+          ));
+        if (controller.projectData.canDelete as bool)
+          items.add(PlatformPopupMenuItem(
+            textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+            value: PopupMenuItemValue.deleteProject,
+            isDestructiveAction: true,
+            child: Text(tr('delete')),
+          ));
+
+        return items;
       },
     );
+  }
+
+  List<PopupMenuEntry<dynamic>> getSortTiles() {
+    return [
+      if (index == ProjectDetailedTabs.tasks &&
+          controller.projectTasksController != null &&
+          controller.projectTasksController!.itemList.isNotEmpty)
+        for (final tile in controller.projectTasksController!.sortController.getSortTile())
+          PlatformPopupMenuItem(child: tile),
+      if (index == ProjectDetailedTabs.milestones &&
+          controller.projectMilestonesController != null &&
+          controller.projectMilestonesController!.itemList.isNotEmpty)
+        for (final tile in controller.projectMilestonesController!.sortController.getSortTile())
+          PlatformPopupMenuItem(child: tile),
+      if (index == ProjectDetailedTabs.discussions &&
+          controller.projectDiscussionsController != null &&
+          controller.projectDiscussionsController!.itemList.isNotEmpty)
+        for (final tile in controller.projectDiscussionsController!.sortController.getSortTile())
+          PlatformPopupMenuItem(child: tile),
+      if (index == ProjectDetailedTabs.documents &&
+          controller.projectDocumentsController != null &&
+          controller.projectDocumentsController!.itemList.isNotEmpty)
+        for (final tile in controller.projectDocumentsController!.sortController.getSortTile())
+          PlatformPopupMenuItem(child: tile),
+    ];
   }
 }
 
 Future<void> _onSelected(
     String value, ProjectDetailsController controller, BuildContext context) async {
   switch (value) {
-    case 'copyLink':
-      await controller.copyLink();
-      break;
-
     case PopupMenuItemValue.editProject:
       unawaited(Get.find<NavigationController>().toScreen(const EditProjectView(),
           transition: GetPlatform.isAndroid ? Transition.downToUp : Transition.cupertinoDialog,
           fullscreenDialog: true,
           arguments: {'projectDetailed': controller.projectData}));
-      break;
-
-    case PopupMenuItemValue.followProject:
-      await controller.followProject();
       break;
 
     case PopupMenuItemValue.deleteProject:
