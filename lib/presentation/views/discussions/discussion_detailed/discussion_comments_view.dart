@@ -33,53 +33,71 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
-import 'package:projects/presentation/shared/widgets/add_comment_button.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
 
 class DiscussionCommentsView extends StatelessWidget {
-  final DiscussionItemController? controller;
   const DiscussionCommentsView({
     Key? key,
     required this.controller,
   }) : super(key: key);
 
+  final DiscussionItemController controller;
+
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller!.loaded.value == false)
+        if (!controller.loaded.value)
           return const ListLoadingSkeleton();
         else {
           return Stack(
             children: [
               StyledSmartRefresher(
-                controller: controller!.commentsRefreshController,
-                onRefresh: controller!.onRefresh,
+                controller: controller.commentsRefreshController,
+                onRefresh: controller.onRefresh,
                 child: ListView.separated(
                   //controller: controller!.commentsListController, // TODO investigate scrollcontroller behavior
-                  itemCount: controller!.discussion.value.comments!.length,
-                  separatorBuilder: (_, i) => const StyledDivider(
-                    leftPadding: 16,
-                    rightPadding: 16,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
+                  itemCount: controller.discussion.value.comments!.length,
+                  separatorBuilder: (_, int index) {
+                    if (controller.discussion.value.comments![index].inactive == true)
+                      return const SizedBox();
+
+                    return const StyledDivider(
+                      leftPadding: 16,
+                      rightPadding: 16,
+                    );
+                  },
+                  itemBuilder: (_, int index) {
+                    if (controller.discussion.value.comments![index].inactive == true)
+                      return const SizedBox();
+
                     return CommentsThread(
-                      comment: controller!.discussion.value.comments![index],
-                      discussionId: controller!.discussion.value.id,
+                      comment: controller.discussion.value.comments![index],
+                      discussionId: controller.discussion.value.id,
                     );
                   },
                 ),
               ),
-              if (controller!.discussion.value.canCreateComment == true)
+              if (controller.discussion.value.canCreateComment == true)
                 Align(
-                  alignment: Alignment.bottomCenter,
-                  child: AddCommentButton(
-                    onPressed: controller!.toNewCommentView,
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16, bottom: 24),
+                    child: StyledFloatingActionButton(
+                      onPressed: controller.toNewCommentView,
+                      child: AppIcon(
+                        icon: SvgIcons.add_fab,
+                        color: Get.theme.colors().onPrimarySurface,
+                      ),
+                    ),
                   ),
-                )
+                ),
             ],
           );
         }

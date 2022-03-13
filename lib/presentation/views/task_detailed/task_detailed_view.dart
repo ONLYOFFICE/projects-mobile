@@ -135,11 +135,11 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
                   CustomTab(
                       title: tr('subtasks'),
                       currentTab: _activeIndex.value == 1,
-                      count: taskItemController.task.value.subtasks?.length),
+                      count: taskItemController.task.value.subtasks?.length ?? 0),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == 2,
-                      count: taskItemController.task.value.files?.length),
+                      count: taskItemController.task.value.files?.length ?? 0),
                   CustomTab(
                       title: tr('comments'),
                       currentTab: _activeIndex.value == 3,

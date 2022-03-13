@@ -37,9 +37,6 @@ import 'package:projects/presentation/shared/widgets/comment.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 
 class CommentsThread extends StatelessWidget {
-  final PortalComment comment;
-  final int? discussionId;
-  final int? taskId;
   const CommentsThread({
     Key? key,
     required this.comment,
@@ -48,34 +45,48 @@ class CommentsThread extends StatelessWidget {
   })  : assert(discussionId == null || taskId == null),
         super(key: key);
 
+  final PortalComment comment;
+  final int? discussionId;
+  final int? taskId;
+
+  static const padding = <int, EdgeInsets>{
+    0: EdgeInsets.fromLTRB(16, 0, 16, 8),
+    1: EdgeInsets.fromLTRB(32, 0, 16, 8),
+    2: EdgeInsets.fromLTRB(48, 0, 16, 8)
+  };
+
   @override
   Widget build(BuildContext context) {
-    final padding = <int, EdgeInsets>{
-      0: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      1: const EdgeInsets.fromLTRB(20, 0, 16, 0),
-      2: const EdgeInsets.fromLTRB(44, 0, 16, 0)
-    };
-
     final visited = sortComments(comment);
 
     return ListView.separated(
-      controller: ScrollController(),
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      separatorBuilder: (_, i) => StyledDivider(
-        leftPadding: padding[visited[i].paddingLevel]!.left,
-        rightPadding: 16,
-      ),
-      itemCount: visited.length,
-      itemBuilder: (_, i) => Padding(
-        padding: visited[i].comment.show ? padding[visited[i].paddingLevel]! : EdgeInsets.zero,
-        child: Comment(
-          comment: visited[i].comment,
-          taskId: taskId,
-          discussionId: discussionId,
-        ),
-      ),
-    );
+        padding: EdgeInsets.zero,
+        controller: null,
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        separatorBuilder: (_, int index) {
+          if (visited[index].comment.inactive == true) return const SizedBox();
+
+          return StyledDivider(
+            leftPadding: padding[visited[index].paddingLevel]!.left,
+            rightPadding: 16,
+          );
+        },
+        itemCount: visited.length,
+        itemBuilder: (_, int index) {
+          if (visited[index].comment.inactive == true) return const SizedBox();
+
+          return Padding(
+            padding: visited[index].comment.show
+                ? padding[visited[index].paddingLevel]!
+                : EdgeInsets.zero,
+            child: Comment(
+              comment: visited[index].comment,
+              taskId: taskId,
+              discussionId: discussionId,
+            ),
+          );
+        });
   }
 }
 
@@ -106,8 +117,8 @@ List<_SortedComment> sortComments(PortalComment initComment) {
 }
 
 class _SortedComment {
-  int paddingLevel;
   PortalComment comment;
+  int paddingLevel;
 
   _SortedComment(
     this.comment,

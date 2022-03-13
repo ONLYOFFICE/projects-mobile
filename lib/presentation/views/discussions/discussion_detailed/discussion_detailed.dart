@@ -109,26 +109,27 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                   CustomTab(
                       title: tr('comments'),
                       currentTab: _activeIndex == 0,
-                      count: controller.discussion.value.commentsCount),
+                      count: controller.discussion.value.commentsCount ?? 0),
                   CustomTab(
                       title: tr('subscribers'),
                       currentTab: _activeIndex == 1,
-                      count: controller.discussion.value.subscribers?.length),
+                      count: controller.discussion.value.subscribers?.length ?? 0),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex == 2,
-                      count: controller.discussion.value.files?.length),
+                      count: controller.discussion.value.files?.length ?? 0),
                   Tab(text: tr('overview')),
                 ]),
           ),
         ),
-        body: SafeArea(
-          child: TabBarView(controller: _tabController, children: [
+        body: TabBarView(
+          controller: _tabController,
+          children: [
             DiscussionCommentsView(controller: controller),
             DiscussionSubscribersView(controller: controller),
             ProjectDocumentsScreen(controller: documentsController),
             DiscussionOverview(controller: controller),
-          ]),
+          ],
         ),
       ),
     );

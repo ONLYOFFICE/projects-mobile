@@ -85,15 +85,15 @@ class Comment extends StatelessWidget {
       }
 
       return Container(
-        margin: const EdgeInsets.symmetric(vertical: 16),
+        margin: const EdgeInsets.symmetric(vertical: 8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _CommentAuthor(comment: comment, controller: controller),
-            const SizedBox(height: 18),
+            const SizedBox(height: 8),
             Obx(
               () => HtmlWidget(
-                controller.comment?.value.commentBody ?? '',
+                controller.comment?.value.commentBody?.trim() ?? '',
                 textStyle: TextStyleHelper.body1(color: Get.theme.colors().onBackground),
                 customStylesBuilder: (element) {
                   if (element.attributes.containsKey('style') &&
@@ -106,7 +106,7 @@ class Comment extends StatelessWidget {
             ),
             if (comment.isResponsePermissions!)
               PlatformTextButton(
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.only(top: 8),
                 onPressed: () async {
                   return await Get.find<NavigationController>()
                       .toScreen(const ReplyCommentView(), arguments: {
@@ -115,6 +115,8 @@ class Comment extends StatelessWidget {
                     'taskId': taskId,
                   });
                 },
+                alignment: Alignment.centerLeft,
+                cupertino: (_, __) => CupertinoTextButtonData(minSize: 0),
                 child: Text(
                   tr('reply'),
                   style: TextStyleHelper.caption(color: Get.theme.colors().primary),

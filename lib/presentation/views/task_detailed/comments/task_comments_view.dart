@@ -36,10 +36,12 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/comments/new_comment/new_task_comment_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
-import 'package:projects/presentation/shared/widgets/add_comment_button.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
 import 'package:projects/presentation/views/task_detailed/comments/new_comment_view.dart';
@@ -56,52 +58,59 @@ class TaskCommentsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller.loaded.value == true && controller.task.value.comments != null) {
-          final comments = controller.task.value.comments!;
-          return Column(
+        if (controller.loaded.value) {
+          final comments = controller.task.value.comments;
+          final canCreateComment = controller.task.value.canCreateComment;
+          return Stack(
             children: [
-              Expanded(
-                child: StyledSmartRefresher(
-                  controller: controller.commentsRefreshController,
-                  onRefresh: () async => await controller.reloadTask(showLoading: true),
-                  child: () {
-                    if (comments.isEmpty)
-                      return Center(
-                        child: EmptyScreen(
-                          icon: SvgIcons.comments_not_created,
-                          text: tr('noCommentsCreated'),
-                        ),
-                      );
+              StyledSmartRefresher(
+                controller: controller.commentsRefreshController,
+                onRefresh: () async => await controller.reloadTask(showLoading: true),
+                child: () {
+                  if (comments == null || comments.isEmpty)
+                    return Center(
+                      child: EmptyScreen(
+                        icon: SvgIcons.comments_not_created,
+                        text: tr('noCommentsCreated'),
+                      ),
+                    );
 
-                    if (comments.isNotEmpty)
-                      return ListView.separated(
-                        itemCount: comments.length,
-                        controller: controller.commentsListController,
-                        padding: const EdgeInsets.only(top: 32, bottom: 40),
-                        separatorBuilder: (BuildContext context, int index) {
-                          return SizedBox(
-                            height: comments[index].show ? 21 : null,
-                          );
-                        },
-                        itemBuilder: (BuildContext context, int index) {
-                          return CommentsThread(
-                            comment: comments[index],
-                            taskId: controller.task.value.id,
-                          );
-                        },
-                      );
-                  }(),
-                ),
+                  if (comments.isNotEmpty)
+                    return ListView.separated(
+                      itemCount: comments.length,
+                      //controller: controller.commentsListController,
+                      padding: EdgeInsets.zero,
+                      separatorBuilder: (_, i) => const StyledDivider(
+                        leftPadding: 16,
+                        rightPadding: 16,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return CommentsThread(
+                          comment: comments[index],
+                          taskId: controller.task.value.id,
+                        );
+                      },
+                    );
+                }(),
               ),
-              if (controller.task.value.canCreateComment == null ||
-                  controller.task.value.canCreateComment == true)
-                AddCommentButton(
-                  onPressed: () => Get.find<NavigationController>().toScreen(
-                    const NewCommentView(),
-                    arguments: {
-                      'controller':
-                          Get.put(NewTaskCommentController(idFrom: controller.task.value.id))
-                    },
+              if (canCreateComment == null || canCreateComment == true) //TODO why null??
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16, bottom: 24),
+                    child: StyledFloatingActionButton(
+                      onPressed: () => Get.find<NavigationController>().toScreen(
+                        const NewCommentView(),
+                        arguments: {
+                          'controller':
+                              Get.put(NewTaskCommentController(idFrom: controller.task.value.id))
+                        },
+                      ),
+                      child: AppIcon(
+                        icon: SvgIcons.add_fab,
+                        color: Get.theme.colors().onPrimarySurface,
+                      ),
+                    ),
                   ),
                 ),
             ],
