@@ -65,7 +65,7 @@ class DiscussionCommentsView extends StatelessWidget {
                   //controller: controller!.commentsListController, // TODO investigate scrollcontroller behavior
                   itemCount: controller.discussion.value.comments!.length,
                   separatorBuilder: (_, int index) {
-                    if (controller.discussion.value.comments![index].inactive == true)
+                    if (controller.discussion.value.comments![index].show == false)
                       return const SizedBox();
 
                     return const StyledDivider(
@@ -74,7 +74,7 @@ class DiscussionCommentsView extends StatelessWidget {
                     );
                   },
                   itemBuilder: (_, int index) {
-                    if (controller.discussion.value.comments![index].inactive == true)
+                    if (controller.discussion.value.comments![index].show == false)
                       return const SizedBox();
 
                     return CommentsThread(

@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,8 +84,9 @@ class DiscussionCommentItemController extends GetxController implements CommentI
       onAcceptTap: () async {
         final response = await _api.deleteComment(commentId: comment.value.commentId!);
         if (response != null) {
-          // ignore: unawaited_futures
-          Get.find<DiscussionItemController>().onRefresh(showLoading: false);
+          if (discussionId != null)
+            unawaited(Get.find<DiscussionItemController>(tag: discussionId.toString())
+                .onRefresh(showLoading: false));
           Get.back();
           MessagesHandler.showSnackBar(
             context: Get.context!,

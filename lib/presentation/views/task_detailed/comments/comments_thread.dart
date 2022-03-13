@@ -65,7 +65,7 @@ class CommentsThread extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         separatorBuilder: (_, int index) {
-          if (visited[index].comment.inactive == true) return const SizedBox();
+          if (visited[index].comment.show == false) return const SizedBox();
 
           return StyledDivider(
             leftPadding: padding[visited[index].paddingLevel]!.left,
@@ -74,7 +74,7 @@ class CommentsThread extends StatelessWidget {
         },
         itemCount: visited.length,
         itemBuilder: (_, int index) {
-          if (visited[index].comment.inactive == true) return const SizedBox();
+          if (visited[index].comment.show == false) return const SizedBox();
 
           return Padding(
             padding: visited[index].comment.show

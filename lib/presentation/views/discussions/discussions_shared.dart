@@ -96,7 +96,9 @@ class DiscussionsContent extends StatelessWidget {
                     : const SizedBox(),
                 itemBuilder: (_, index) {
                   final discussion = controller.itemList[index] as Discussion;
-                  final discussionItemController = Get.find<DiscussionItemController>();
+                  final discussionItemController = Get.put<DiscussionItemController>(
+                      DiscussionItemController(),
+                      tag: discussion.id.toString());
                   discussionItemController.setup(discussion);
                   return DiscussionTile(
                     controller: discussionItemController,

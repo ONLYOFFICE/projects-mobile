@@ -227,7 +227,7 @@ class _DeletedComment extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.only(top: 8),
         child: Text(
           tr('commentDeleted'),
           style: TextStyleHelper.body2(
