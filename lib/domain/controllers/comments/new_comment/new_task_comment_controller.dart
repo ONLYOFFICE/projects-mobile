@@ -45,19 +45,12 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 class NewTaskCommentController extends NewCommentController {
   final CommentsService _api = locator<CommentsService>();
 
-  @override
-  // ignore: overridden_fields
-  final int? idFrom;
-  @override
-  // ignore: overridden_fields
-  final String? parentId;
-
   NewTaskCommentController({
-    this.parentId,
-    this.idFrom,
-  });
+    String? parentId,
+    int? idFrom,
+  }) : super(idFrom: idFrom, parentId: parentId);
 
-  final HtmlEditorController _textController = HtmlEditorController();
+  final _textController = HtmlEditorController();
 
   @override
   HtmlEditorController get textController => _textController;
@@ -77,8 +70,10 @@ class NewTaskCommentController extends NewCommentController {
         locator<EventHub>().fire('scrollToLastComment', [idFrom]);
 
         Get.back();
+
         MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
-      }
+      } else
+        MessagesHandler.showSnackBar(context: context, text: tr('error'));
     }
   }
 
@@ -100,8 +95,10 @@ class NewTaskCommentController extends NewCommentController {
         locator<EventHub>().fire('needToRefreshParentTask', [idFrom, true]);
 
         Get.back();
+
         MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
-      }
+      } else
+        MessagesHandler.showSnackBar(context: context, text: tr('error'));
     }
   }
 

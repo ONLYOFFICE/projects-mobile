@@ -41,7 +41,7 @@ import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 
 class AppBarMenuButton extends StatelessWidget {
-  final DiscussionItemController? controller;
+  final DiscussionItemController controller;
   const AppBarMenuButton({
     Key? key,
     required this.controller,
@@ -66,7 +66,7 @@ class AppBarMenuButton extends StatelessWidget {
       onSelected: (value) => _onSelected(controller, value as String),
       itemBuilder: (context) {
         return [
-          if (controller!.discussion.value.canEdit!)
+          if (controller.discussion.value.canEdit!)
             PlatformPopupMenuItem(
               value: 'Edit',
               child: Text(tr('editDiscussion')),
@@ -77,10 +77,10 @@ class AppBarMenuButton extends StatelessWidget {
           PlatformPopupMenuItem(
             value: 'Subscribe',
             child: Text(
-              controller!.isSubscribed ? tr('unsubscribeFromComments') : tr('subscribeToComments'),
+              controller.isSubscribed ? tr('unsubscribeFromComments') : tr('subscribeToComments'),
             ),
           ),
-          if (controller!.discussion.value.canEdit!)
+          if (controller.discussion.value.canEdit!)
             PlatformPopupMenuItem(
               value: 'Delete',
               isDestructiveAction: true,
@@ -94,16 +94,16 @@ class AppBarMenuButton extends StatelessWidget {
   }
 }
 
-void _onSelected(DiscussionItemController? controller, String value) async {
+void _onSelected(DiscussionItemController controller, String value) async {
   switch (value) {
     case 'Edit':
-      await controller!.toDiscussionEditingScreen();
+      await controller.toDiscussionEditingScreen();
       break;
     case 'Subscribe':
-      await controller!.subscribeToMessageAction();
+      await controller.subscribeToMessageAction();
       break;
     case 'Delete':
-      await controller!.deleteMessage();
+      await controller.deleteMessage();
       break;
     default:
   }

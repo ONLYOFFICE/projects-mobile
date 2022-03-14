@@ -60,7 +60,7 @@ class ReplyCommentView extends StatelessWidget {
     if (Get.arguments['taskId'] != null) {
       controller = Get.put(
         NewTaskCommentController(
-          idFrom: Get.arguments['taskId'] as int?,
+          idFrom: Get.arguments['taskId'] as int,
           parentId: comment.commentId,
         ),
       );
@@ -68,7 +68,7 @@ class ReplyCommentView extends StatelessWidget {
     if (Get.arguments['discussionId'] != null) {
       controller = Get.put(
         NewDiscussionCommentController(
-          idFrom: Get.arguments['discussionId'] as int?,
+          idFrom: Get.arguments['discussionId'] as int,
           parentId: comment.commentId,
         ),
       );

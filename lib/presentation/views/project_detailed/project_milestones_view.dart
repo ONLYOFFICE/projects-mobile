@@ -102,7 +102,9 @@ class _Content extends StatelessWidget {
       () {
         if (!controller.loaded.value) return const ListLoadingSkeleton();
 
+        final scrollController = ScrollController();
         return PaginationListView(
+          scrollController: scrollController,
           paginationController: controller.paginationController,
           child: () {
             if (controller.loaded.value &&
@@ -122,6 +124,7 @@ class _Content extends StatelessWidget {
               );
             if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
               return ListView.separated(
+                controller: scrollController,
                 separatorBuilder: (_, i) => !platformController.isMobile
                     ? const StyledDivider(leftPadding: 72)
                     : const SizedBox(),

@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:darq/darq.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
@@ -331,14 +333,15 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
       );
 
       if (editedDiss != null) {
-        final discussionsController = Get.find<DiscussionsController>();
-        final discussionController = Get.find<DiscussionItemController>();
         clearUserSearch();
-        // ignore: unawaited_futures
-        discussionController.onRefresh();
+
+        final discussionController = Get.find<DiscussionItemController>(tag: id.toString());
+        unawaited(discussionController.onRefresh());
+
+        final discussionsController = Get.find<DiscussionsController>(tag: 'DiscussionsView');
+        unawaited(discussionsController.loadDiscussions());
+
         Get.back();
-        // ignore: unawaited_futures
-        discussionsController.loadDiscussions();
       }
     }
   }

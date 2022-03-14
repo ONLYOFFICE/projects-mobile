@@ -58,7 +58,11 @@ class DiscussionCommentItemController extends GetxController implements CommentI
 
   @override
   Future<void> copyLink() async {
-    final projectId = Get.find<DiscussionItemController>().discussion.value.projectOwner!.id;
+    final projectId = Get.find<DiscussionItemController>(tag: discussionId.toString())
+        .discussion
+        .value
+        .projectOwner!
+        .id;
 
     final link = await _api.getDiscussionCommentLink(
       commentId: comment.value.commentId!,

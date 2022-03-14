@@ -367,7 +367,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     );
 
     if (createdDiss != null) {
-      locator<EventHub>().fire('needToRefreshDetails', [_selectedProjectId]);
+      //locator<EventHub>().fire('needToRefreshDetails', [_selectedProjectId]); // TODO
       locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
 
       MessagesHandler.showSnackBar(

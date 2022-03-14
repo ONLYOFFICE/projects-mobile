@@ -72,7 +72,7 @@ class ProjectTasksController extends BaseTasksController {
   final fabIsVisible = false.obs;
 
   late StreamSubscription _refreshTasksSubscription;
-  late StreamSubscription _refreshDetailesSubscription;
+  late StreamSubscription _refreshDetailsSubscription;
 
   ProjectTasksController() {
     _sortController.updateSortDelegate = () async => await loadTasks();
@@ -86,10 +86,10 @@ class ProjectTasksController extends BaseTasksController {
       loadTasks();
     });
 
-    _refreshDetailesSubscription = locator<EventHub>().on('needToRefreshDetailes', (dynamic data) {
-      if ((data['detailes'] as ProjectDetailed).id != _projectDetailed.id) return;
+    _refreshDetailsSubscription = locator<EventHub>().on('needToRefreshDetails', (dynamic data) {
+      if ((data['details'] as ProjectDetailed).id != _projectDetailed.id) return;
 
-      _projectDetailed = data['detailes'] as ProjectDetailed;
+      _projectDetailed = data['details'] as ProjectDetailed;
       fabIsVisible.value = _canCreate();
     });
   }
@@ -97,7 +97,7 @@ class ProjectTasksController extends BaseTasksController {
   @override
   void onClose() {
     _refreshTasksSubscription.cancel();
-    _refreshDetailesSubscription.cancel();
+    _refreshDetailsSubscription.cancel();
     super.dispose();
   }
 
@@ -163,6 +163,6 @@ class ProjectTasksController extends BaseTasksController {
     _projectDetailed = response;
     fabIsVisible.value = _canCreate();
 
-    locator<EventHub>().fire('needToRefreshDetailes', {'detailes': response});
+    locator<EventHub>().fire('needToRefreshDetails', {'details': response});
   }
 }

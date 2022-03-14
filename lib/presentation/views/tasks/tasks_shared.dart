@@ -63,7 +63,9 @@ class TasksContent extends StatelessWidget {
       () {
         if (!controller.loaded.value) return const ListLoadingSkeleton();
 
+        final scrollController = ScrollController();
         return PaginationListView(
+          scrollController: scrollController,
           paginationController: controller.paginationController,
           child: () {
             if (controller.loaded.value &&
@@ -83,6 +85,7 @@ class TasksContent extends StatelessWidget {
               );
             if (controller.loaded.value && controller.itemList.isNotEmpty)
               return ListView.separated(
+                controller: scrollController,
                 itemBuilder: (c, i) => TaskCell(task: controller.itemList[i] as PortalTask),
                 separatorBuilder: (_, i) => !platformController.isMobile
                     ? const StyledDivider(leftPadding: 72)

@@ -77,7 +77,7 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
   final fabIsVisible = false.obs;
 
   late StreamSubscription _refreshDiscussionsSubscription;
-  late StreamSubscription _refreshDetailesSubscription;
+  late StreamSubscription _refreshDetailsSubscription;
 
   ProjectDiscussionsController() {
     _sortController.updateSortDelegate = () async => await loadProjectDiscussions();
@@ -92,10 +92,10 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
       await loadProjectDiscussions();
     });
 
-    _refreshDetailesSubscription = locator<EventHub>().on('needToRefreshDetailes', (dynamic data) {
-      if ((data['detailes'] as ProjectDetailed).id != _projectDetailed.id) return;
+    _refreshDetailsSubscription = locator<EventHub>().on('needToRefreshDetails', (dynamic data) {
+      if ((data['details'] as ProjectDetailed).id != _projectDetailed.id) return;
 
-      _projectDetailed = data['detailes'] as ProjectDetailed;
+      _projectDetailed = data['details'] as ProjectDetailed;
       fabIsVisible.value = _canCreate();
     });
   }
@@ -103,7 +103,7 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
   @override
   void onClose() {
     _refreshDiscussionsSubscription.cancel();
-    _refreshDetailesSubscription.cancel();
+    _refreshDetailsSubscription.cancel();
     super.onClose();
   }
 
@@ -179,6 +179,6 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
     _projectDetailed = response;
     fabIsVisible.value = _canCreate();
 
-    locator<EventHub>().fire('needToRefreshDetailes', {'detailes': response});
+    locator<EventHub>().fire('needToRefreshDetails', {'details': response});
   }
 }

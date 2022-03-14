@@ -91,10 +91,14 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
           Obx(
             () {
               if (_milestoneController.loaded.value == true) {
+                final scrollController = ScrollController();
+
                 return Expanded(
                   child: PaginationListView(
+                    scrollController: scrollController,
                     paginationController: _milestoneController.paginationController,
                     child: ListView.separated(
+                      controller: scrollController,
                       itemCount: _milestoneController.itemCount + 1,
                       separatorBuilder: (BuildContext context, int index) {
                         return const Divider(indent: 16, endIndent: 16, height: 1);

@@ -109,7 +109,7 @@ class DiscussionItemController extends GetxController {
   }
 
   void scrollToLastComment() {
-    //commentsListController.jumpTo(commentsListController.position.maxScrollExtent); TODO
+    commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
   }
 
   bool get isSubscribed {
@@ -216,7 +216,7 @@ class DiscussionItemController extends GetxController {
             Get.back();
             MessagesHandler.showSnackBar(context: Get.context!, text: tr('discussionDeleted'));
 
-            locator<EventHub>().fire('needToRefreshDetails', [discussion.value.project!.id]);
+            //locator<EventHub>().fire('needToRefreshDetails', [discussion.value.project!.id]);TODO
             locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
           }
         } catch (e) {
@@ -256,7 +256,7 @@ class DiscussionItemController extends GetxController {
       ),
     );
 
-    Get.find<NavigationController>().to(
+    Get.find<NavigationController>().toScreen(
       const ManageDiscussionSubscribersScreen(),
       arguments: {
         'controller': controller,

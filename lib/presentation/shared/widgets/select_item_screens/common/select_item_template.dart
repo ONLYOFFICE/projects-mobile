@@ -145,9 +145,13 @@ mixin SelectItemListMixin on StatelessWidget {
       if (paginationController.data.isEmpty) {
         return Center(child: EmptyScreen(icon: SvgIcons.group, text: tr('noGroups')));
       } else {
+        final scrollController = ScrollController();
+
         return PaginationListView(
+          scrollController: scrollController,
           paginationController: paginationController,
           child: ListView.separated(
+            controller: scrollController,
             itemCount: paginationController.data.length,
             padding: const EdgeInsets.symmetric(vertical: 8),
             separatorBuilder: (BuildContext context, int index) {

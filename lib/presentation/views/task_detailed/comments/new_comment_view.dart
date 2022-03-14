@@ -59,7 +59,7 @@ class NewCommentView extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('newComment'),
-          backButtonIcon: Get.put(PlatformController()).isMobile
+          backButtonIcon: platformController.isMobile
               ? Icon(PlatformIcons(context).back)
               : Icon(PlatformIcons(context).clear),
           onLeadingPressed: controller.leavePage,

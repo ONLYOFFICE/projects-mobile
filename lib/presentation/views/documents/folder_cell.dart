@@ -317,13 +317,12 @@ void _renameFolder(dynamic controller, Folder element, BuildContext context) {
         } else {
           if (inputController.text != element.title) {
             final success = await controller.renameFolder(element, inputController.text) as bool;
-            if (success)
+            if (success) {
+              Get.back();
               MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
-            else
+            } else
               MessagesHandler.showSnackBar(context: context, text: tr('error'));
           }
-
-          Get.back();
         }
       },
       onCancelTap: Get.back,
@@ -391,13 +390,12 @@ class _NameFolderTextFieldWidget extends StatelessWidget {
         } else {
           if (inputController.text != element.title) {
             final success = await controller.renameFolder(element, inputController.text) as bool;
-            if (success)
+            if (success) {
+              Get.back();
               MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
-            else
+            } else
               MessagesHandler.showSnackBar(context: context, text: tr('error'));
           }
-
-          Get.back();
         }
       },
     );

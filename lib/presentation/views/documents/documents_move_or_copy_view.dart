@@ -204,7 +204,9 @@ class MoveOrCopyFolderContent extends StatelessWidget {
       () {
         if (!controller.loaded.value) return const ListLoadingSkeleton();
 
+        final scrollController = ScrollController();
         return PaginationListView(
+            scrollController: scrollController,
             paginationController: controller.paginationController,
             child: () {
               if (controller.loaded.value && controller.nothingFound.value) {
@@ -227,6 +229,7 @@ class MoveOrCopyFolderContent extends StatelessWidget {
               }
               if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
                 return ListView.separated(
+                  controller: scrollController,
                   itemCount: controller.paginationController.data.length,
                   separatorBuilder: (BuildContext context, int index) => const SizedBox(),
                   itemBuilder: (BuildContext context, int index) {

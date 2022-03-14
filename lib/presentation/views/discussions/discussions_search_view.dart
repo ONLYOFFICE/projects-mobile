@@ -61,17 +61,30 @@ class DiscussionsSearchScreen extends StatelessWidget {
           if (controller.nothingFound.value)
             return const NothingFound();
           else {
+            final scrollController = ScrollController();
             return PaginationListView(
+              scrollController: scrollController,
               paginationController: controller.paginationController,
               child: ListView.separated(
+                controller: scrollController,
                 itemCount: controller.paginationController.data.length,
                 separatorBuilder: (_, i) => !platformController.isMobile
                     ? const StyledDivider(leftPadding: 72)
                     : const SizedBox(),
                 itemBuilder: (BuildContext context, int index) {
                   final discussion = controller.paginationController.data[index];
-                  final discussionItemController = Get.find<DiscussionItemController>();
-                  discussionItemController.setup(discussion);
+
+                  DiscussionItemController discussionItemController;
+                  if (Get.isRegistered<DiscussionItemController>(tag: discussion.id.toString()))
+                    discussionItemController =
+                        Get.find<DiscussionItemController>(tag: discussion.id.toString());
+                  else {
+                    discussionItemController = Get.put<DiscussionItemController>(
+                        DiscussionItemController(),
+                        tag: discussion.id.toString());
+                    discussionItemController.setup(discussion);
+                  }
+
                   return DiscussionTile(
                     controller: discussionItemController,
                     onTap: () => Get.find<NavigationController>().to(DiscussionDetailed(),

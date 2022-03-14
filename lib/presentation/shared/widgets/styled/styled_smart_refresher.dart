@@ -43,6 +43,7 @@ class StyledSmartRefresher extends StatelessWidget {
   final void Function()? onRefresh;
   final void Function()? onLoading;
   final Widget? child;
+  final ScrollController? scrollController;
 
   StyledSmartRefresher({
     Key? key,
@@ -52,6 +53,7 @@ class StyledSmartRefresher extends StatelessWidget {
     this.onRefresh,
     this.onLoading,
     this.child,
+    this.scrollController,
   }) : super(key: key);
 
   @override
@@ -84,6 +86,7 @@ class StyledSmartRefresher extends StatelessWidget {
             : const SizedBox());
 
     return PlatformScrollbar(
+      scrollController: scrollController,
       child: SmartRefresher(
         header: header,
         footer: footer,

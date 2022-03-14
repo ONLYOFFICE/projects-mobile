@@ -75,7 +75,7 @@ class MilestonesDataSource extends BaseController {
   final fabIsVisible = false.obs;
 
   late StreamSubscription _refreshMilestonesSubscription;
-  late StreamSubscription _refreshDetailesSubscription;
+  late StreamSubscription _refreshDetailsSubscription;
 
   MilestonesDataSource() {
     _sortController.updateSortDelegate = () async => loadMilestones();
@@ -89,10 +89,10 @@ class MilestonesDataSource extends BaseController {
       loadMilestones();
     });
 
-    _refreshDetailesSubscription = locator<EventHub>().on('needToRefreshDetailes', (dynamic data) {
-      if ((data['detailes'] as ProjectDetailed).id != _projectDetailed?.id) return;
+    _refreshDetailsSubscription = locator<EventHub>().on('needToRefreshDetails', (dynamic data) {
+      if ((data['details'] as ProjectDetailed).id != _projectDetailed?.id) return;
 
-      _projectDetailed = data['detailes'] as ProjectDetailed;
+      _projectDetailed = data['details'] as ProjectDetailed;
       fabIsVisible.value = _canCreate();
     });
   }
@@ -100,7 +100,7 @@ class MilestonesDataSource extends BaseController {
   @override
   void onClose() {
     _refreshMilestonesSubscription.cancel();
-    _refreshDetailesSubscription.cancel();
+    _refreshDetailsSubscription.cancel();
     searchTextEditingController.dispose();
     super.onClose();
   }
@@ -174,6 +174,6 @@ class MilestonesDataSource extends BaseController {
     _projectDetailed = response;
     fabIsVisible.value = _canCreate();
 
-    locator<EventHub>().fire('needToRefreshDetailes', {'detailes': response});
+    locator<EventHub>().fire('needToRefreshDetails', {'details': response});
   }
 }

@@ -67,7 +67,9 @@ class DiscussionsContent extends StatelessWidget {
     return Obx(() {
       if (!controller.loaded.value) return const ListLoadingSkeleton();
 
+      final scrollController = ScrollController();
       return PaginationListView(
+          scrollController: scrollController,
           paginationController: controller.paginationController,
           child: () {
             if (controller.loaded.value &&
@@ -90,16 +92,25 @@ class DiscussionsContent extends StatelessWidget {
               );
             if (controller.loaded.value && controller.itemList.isNotEmpty)
               return ListView.separated(
+                controller: scrollController,
                 itemCount: controller.itemList.length,
                 separatorBuilder: (_, i) => !platformController.isMobile
                     ? const StyledDivider(leftPadding: 72)
                     : const SizedBox(),
                 itemBuilder: (_, index) {
                   final discussion = controller.itemList[index] as Discussion;
-                  final discussionItemController = Get.put<DiscussionItemController>(
-                      DiscussionItemController(),
-                      tag: discussion.id.toString());
-                  discussionItemController.setup(discussion);
+
+                  DiscussionItemController discussionItemController;
+                  if (Get.isRegistered<DiscussionItemController>(tag: discussion.id.toString()))
+                    discussionItemController =
+                        Get.find<DiscussionItemController>(tag: discussion.id.toString());
+                  else {
+                    discussionItemController = Get.put<DiscussionItemController>(
+                        DiscussionItemController(),
+                        tag: discussion.id.toString());
+                    discussionItemController.setup(discussion);
+                  }
+
                   return DiscussionTile(
                     controller: discussionItemController,
                     onTap: () => controller.toDetailed(discussionItemController),

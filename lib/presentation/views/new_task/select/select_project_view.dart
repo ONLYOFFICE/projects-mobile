@@ -101,14 +101,18 @@ class SelectProjectView extends StatelessWidget {
         ),
       ),
       body: Obx(() {
+        final scrollController = ScrollController();
+
         if (searchController.switchToSearchView.value == true &&
             searchController.searchResult.isNotEmpty) {
           return StyledSmartRefresher(
+            scrollController: scrollController,
             enablePullDown: false,
             enablePullUp: searchController.pullUpEnabled,
             controller: searchController.refreshController,
             onLoading: searchController.onLoading,
             child: ListView.separated(
+              controller: scrollController,
               itemCount: searchController.searchResult.length,
               separatorBuilder: (BuildContext context, int index) {
                 return const StyledDivider(leftPadding: 16, rightPadding: 16);
@@ -126,8 +130,10 @@ class SelectProjectView extends StatelessWidget {
         if (projectsController.loaded.value == true &&
             searchController.switchToSearchView.value == false) {
           return PaginationListView(
+            scrollController: scrollController,
             paginationController: projectsController.paginationController,
             child: ListView.separated(
+              controller: scrollController,
               itemCount: projectsController.paginationController.data.length,
               separatorBuilder: (BuildContext context, int index) {
                 return const StyledDivider(leftPadding: 16, rightPadding: 16);

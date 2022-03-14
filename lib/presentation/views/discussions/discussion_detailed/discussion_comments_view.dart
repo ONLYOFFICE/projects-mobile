@@ -60,9 +60,10 @@ class DiscussionCommentsView extends StatelessWidget {
             children: [
               StyledSmartRefresher(
                 controller: controller.commentsRefreshController,
+                scrollController: controller.commentsListController,
                 onRefresh: controller.onRefresh,
                 child: ListView.separated(
-                  //controller: controller!.commentsListController, // TODO investigate scrollcontroller behavior
+                  controller: controller.commentsListController,
                   itemCount: controller.discussion.value.comments!.length,
                   separatorBuilder: (_, int index) {
                     if (controller.discussion.value.comments![index].show == false)

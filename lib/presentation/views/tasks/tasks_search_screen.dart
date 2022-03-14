@@ -54,13 +54,17 @@ class TasksSearchScreen extends StatelessWidget {
       appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
       body: Obx(
         () {
-          if (controller.loaded.value == false) return const ListLoadingSkeleton();
-          if (controller.nothingFound.isTrue)
-            return const NothingFound();
-          else {
-            return PaginationListView(
-              paginationController: controller.paginationController,
-              child: ListView.separated(
+          if (!controller.loaded.value) return const ListLoadingSkeleton();
+
+          if (controller.nothingFound.value) return const NothingFound();
+
+          final scrollController = ScrollController();
+          return PaginationListView(
+            scrollController: scrollController,
+            paginationController: controller.paginationController,
+            child: () {
+              return ListView.separated(
+                controller: scrollController,
                 separatorBuilder: (_, i) => !platformController.isMobile
                     ? const StyledDivider(leftPadding: 72)
                     : const SizedBox(),
@@ -68,9 +72,9 @@ class TasksSearchScreen extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return TaskCell(task: controller.paginationController.data[index]);
                 },
-              ),
-            );
-          }
+              );
+            }(),
+          );
         },
       ),
     );

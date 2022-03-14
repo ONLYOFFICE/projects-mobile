@@ -65,6 +65,7 @@ class TaskCommentsView extends StatelessWidget {
             children: [
               StyledSmartRefresher(
                 controller: controller.commentsRefreshController,
+                scrollController: controller.commentsListController,
                 onRefresh: () async => await controller.reloadTask(showLoading: true),
                 child: () {
                   if (comments == null || comments.isEmpty)
@@ -78,7 +79,7 @@ class TaskCommentsView extends StatelessWidget {
                   if (comments.isNotEmpty)
                     return ListView.separated(
                       itemCount: comments.length,
-                      //controller: controller.commentsListController,
+                      controller: controller.commentsListController,
                       padding: EdgeInsets.zero,
                       separatorBuilder: (_, i) => const StyledDivider(
                         leftPadding: 16,

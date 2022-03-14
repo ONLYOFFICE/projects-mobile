@@ -63,7 +63,9 @@ class ProjectsContent extends StatelessWidget {
       () {
         if (!controller.loaded.value) return const ListLoadingSkeleton();
 
+        final scrollController = ScrollController();
         return PaginationListView(
+          scrollController: scrollController,
           paginationController: controller.paginationController,
           child: () {
             if (controller.loaded.value &&

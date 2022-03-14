@@ -31,12 +31,12 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -45,19 +45,12 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 class NewDiscussionCommentController extends NewCommentController {
   final CommentsService _api = locator<CommentsService>();
 
-  @override
-  // ignore: overridden_fields
-  final int? idFrom;
-  @override
-  // ignore: overridden_fields
-  final String? parentId;
-
   NewDiscussionCommentController({
-    this.parentId,
-    this.idFrom,
-  });
+    String? parentId,
+    int? idFrom,
+  }) : super(idFrom: idFrom, parentId: parentId);
 
-  final HtmlEditorController _textController = HtmlEditorController();
+  final _textController = HtmlEditorController();
 
   @override
   HtmlEditorController get textController => _textController;
@@ -69,15 +62,20 @@ class NewDiscussionCommentController extends NewCommentController {
       await emptyTitleError();
     else {
       setTitleError.value = false;
+
       final newComment = await _api.addMessageComment(content: text, messageId: idFrom!);
       if (newComment != null) {
-        MessagesHandler.showSnackBar(
-            context: context, text: tr('commentCreated')); // TODO scroll down to comment
-        locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
+        _textController.clear();
+
+        final discussionController = Get.find<DiscussionItemController>(tag: idFrom.toString());
+        await discussionController.onRefresh(showLoading: false);
+        discussionController.scrollToLastComment();
+
+        Get.back();
+
+        MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
       } else
         MessagesHandler.showSnackBar(context: context, text: tr('error'));
-
-      Get.back();
     }
   }
 
@@ -96,12 +94,16 @@ class NewDiscussionCommentController extends NewCommentController {
       );
 
       if (newComment != null) {
+        _textController.clear();
+
+        final discussionController = Get.find<DiscussionItemController>(tag: idFrom.toString());
+        await discussionController.onRefresh(showLoading: false);
+
+        Get.back();
+
         MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
-        locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
       } else
         MessagesHandler.showSnackBar(context: context, text: tr('error'));
-
-      Get.back();
     }
   }
 

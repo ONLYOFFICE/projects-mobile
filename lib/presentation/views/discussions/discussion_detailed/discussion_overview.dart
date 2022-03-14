@@ -46,7 +46,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresh
 import 'package:readmore/readmore.dart';
 
 class DiscussionOverview extends StatelessWidget {
-  final DiscussionItemController? controller;
+  final DiscussionItemController controller;
   const DiscussionOverview({
     Key? key,
     required this.controller,
@@ -56,13 +56,13 @@ class DiscussionOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller!.loaded.value == false)
+        if (controller.loaded.value == false)
           return const ListLoadingSkeleton();
         else {
-          final discussion = controller!.discussion.value;
+          final discussion = controller.discussion.value;
           return StyledSmartRefresher(
-            controller: controller!.refreshController,
-            onRefresh: controller!.onRefresh,
+            controller: controller.refreshController,
+            onRefresh: controller.onRefresh,
             child: ListView(
               children: [
                 const SizedBox(height: 20),
@@ -133,7 +133,7 @@ class DiscussionOverview extends StatelessWidget {
                   subtitleStyle: TextStyleHelper.subtitle1(
                     color: Get.theme.colors().links,
                   ),
-                  onTap: controller!.toProjectOverview,
+                  onTap: controller.toProjectOverview,
                 ),
                 if (discussion.created != null) const SizedBox(height: 20),
                 if (discussion.created != null)

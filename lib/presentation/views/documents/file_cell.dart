@@ -237,13 +237,12 @@ void _renameFile(
           if (inputController.text != cellController.file.title) {
             final success =
                 await cellController.renameFile(cellController.file, inputController.text);
-            if (success)
+            if (success) {
+              Get.back();
               MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
-            else
+            } else
               MessagesHandler.showSnackBar(context: context, text: tr('error'));
           }
-
-          Get.back();
         }
       },
       onCancelTap: Get.back,
@@ -313,13 +312,12 @@ class _NewFileTextFieldWidget extends StatelessWidget {
           if (inputController.text != cellController.file.title) {
             final success =
                 await cellController.renameFile(cellController.file, inputController.text);
-            if (success)
+            if (success) {
+              Get.back();
               MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
-            else
+            } else
               MessagesHandler.showSnackBar(context: context, text: tr('error'));
           }
-
-          Get.back();
         }
       },
     );

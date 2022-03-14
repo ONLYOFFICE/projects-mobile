@@ -39,14 +39,17 @@ class PaginationListView<T> extends StatelessWidget {
     Key? key,
     required this.paginationController,
     required this.child,
+    this.scrollController,
   }) : super(key: key);
 
   final PaginationController<T> paginationController;
   final Widget child;
+  final ScrollController? scrollController;
 
   @override
   Widget build(BuildContext context) {
     return StyledSmartRefresher(
+        scrollController: scrollController,
         enablePullDown: paginationController.pullDownEnabled,
         enablePullUp: paginationController.pullUpEnabled,
         controller: paginationController.refreshController,

@@ -45,7 +45,7 @@ import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 
 class DiscussionSubscribersView extends StatelessWidget {
-  final DiscussionItemController? controller;
+  final DiscussionItemController controller;
   const DiscussionSubscribersView({
     Key? key,
     required this.controller,
@@ -55,15 +55,15 @@ class DiscussionSubscribersView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller!.loaded.value == false)
+        if (controller.loaded.value == false)
           return const ListLoadingSkeleton();
         else {
-          final discussion = controller!.discussion.value;
+          final discussion = controller.discussion.value;
           return Stack(
             children: [
               StyledSmartRefresher(
-                controller: controller!.subscribersRefreshController,
-                onRefresh: controller!.onRefresh,
+                controller: controller.subscribersRefreshController,
+                onRefresh: controller.onRefresh,
                 child: ListView.separated(
                   itemCount: discussion.subscribers!.length,
                   separatorBuilder: (BuildContext context, int index) {
@@ -87,9 +87,9 @@ class DiscussionSubscribersView extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 16, bottom: 24),
                   child: Obx(
                     () => Visibility(
-                      visible: controller!.fabIsVisible.value,
+                      visible: controller.fabIsVisible.value,
                       child: StyledFloatingActionButton(
-                        onPressed: () => controller!.toSubscribersManagingScreen(context),
+                        onPressed: () => controller.toSubscribersManagingScreen(context),
                         child: AppIcon(
                           icon: SvgIcons.add_fab,
                           color: Get.theme.colors().onPrimarySurface,

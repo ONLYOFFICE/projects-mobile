@@ -6,15 +6,18 @@ import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 
 class PlatformScrollbar extends PlatformWidgetBase<CupertinoScrollbar, Scrollbar> {
   final Widget child;
+  final ScrollController? scrollController;
 
   PlatformScrollbar({
     Key? key,
     required this.child,
+    this.scrollController,
   }) : super(key: key);
 
   @override
   Scrollbar createMaterialWidget(BuildContext context) {
     return Scrollbar(
+      controller: scrollController,
       child: child,
     );
   }
@@ -22,6 +25,7 @@ class PlatformScrollbar extends PlatformWidgetBase<CupertinoScrollbar, Scrollbar
   @override
   CupertinoScrollbar createCupertinoWidget(BuildContext context) {
     return CupertinoScrollbar(
+      controller: scrollController,
       child: child,
     );
   }
