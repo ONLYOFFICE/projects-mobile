@@ -105,7 +105,6 @@ class NewProject extends StatelessWidget {
           },
           child: ListView(
             children: [
-              const SizedBox(height: 16),
               ProjectTitleTile(controller: controller),
               const StyledDivider(leftPadding: 72.5),
               ProjectManagerTile(controller: controller),
