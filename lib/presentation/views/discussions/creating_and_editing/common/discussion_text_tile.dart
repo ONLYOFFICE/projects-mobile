@@ -63,6 +63,7 @@ class DiscussionTextTile extends StatelessWidget {
           NewDiscussionTextScreen(controller: controller),
           arguments: {'controller': controller},
           transition: Transition.rightToLeft,
+          isRootModalScreenView: false,
         ),
       ),
     );

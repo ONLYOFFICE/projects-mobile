@@ -57,6 +57,7 @@ class _TaskResponsible extends StatelessWidget {
               final newUser = await Get.find<NavigationController>().toScreen(
                 const SelectUserScreen(),
                 transition: Transition.rightToLeft,
+                isRootModalScreenView: false,
               );
               await filterController.changeTasksResponsible('other', newUser);
             },

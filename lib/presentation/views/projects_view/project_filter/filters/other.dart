@@ -58,6 +58,7 @@ class _Other extends StatelessWidget {
               final selectedTag = await Get.find<NavigationController>().toScreen(
                 const SelectTagScreen(),
                 transition: Transition.rightToLeft,
+                isRootModalScreenView: false,
               );
               await filterController.changeOther('withTag', selectedTag);
             },

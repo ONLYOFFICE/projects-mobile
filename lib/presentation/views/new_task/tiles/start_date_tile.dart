@@ -77,6 +77,7 @@ class StartDateTile extends StatelessWidget {
               'initialDate': controller.startDate
             },
             transition: Transition.rightToLeft,
+            isRootModalScreenView: false,
           ),
         );
       },

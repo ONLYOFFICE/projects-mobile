@@ -75,20 +75,14 @@ class SettingsScreen extends StatelessWidget {
         cupertino: (_, __) => CupertinoButton(
           padding: const EdgeInsets.only(left: 16),
           alignment: Alignment.centerLeft,
-          onPressed: () {
-            Get.find<NavigationController>().modalViewTreeLength = 0;
-            controller.leave();
-          },
+          onPressed: controller.leave,
           child: Text(
             tr('closeLowerCase'),
             style: TextStyleHelper.button(),
           ),
         ),
         material: (_, __) => IconButton(
-          onPressed: () {
-            Get.find<NavigationController>().modalViewTreeLength = 0;
-            controller.leave();
-          },
+          onPressed: controller.leave,
           icon: const Icon(Icons.close),
         ),
       ),
@@ -114,6 +108,8 @@ class SettingsScreen extends StatelessWidget {
                       icon: SvgIcons.passcode,
                       onTap: () => Get.find<NavigationController>().toScreen(
                         const PasscodeSettingsScreen(),
+                        transition: Transition.rightToLeft,
+                        isRootModalScreenView: false,
                       ),
                     ),
                     SettingTile(
@@ -124,6 +120,8 @@ class SettingsScreen extends StatelessWidget {
                       enableUnderline: true,
                       onTap: () => Get.find<NavigationController>().toScreen(
                         const ColorThemeSelectionScreen(),
+                        transition: Transition.rightToLeft,
+                        isRootModalScreenView: false,
                       ),
                     ),
                     SettingTile(
@@ -183,6 +181,8 @@ class SettingsScreen extends StatelessWidget {
                       SettingsTile.navigation(
                         onPressed: (_) => Get.find<NavigationController>().toScreen(
                           const PasscodeSettingsScreen(),
+                          transition: Transition.rightToLeft,
+                          isRootModalScreenView: false,
                         ),
                         title: Text(
                           tr('passcodeLock'),
@@ -214,6 +214,8 @@ class SettingsScreen extends StatelessWidget {
                       SettingsTile.navigation(
                         onPressed: (_) => Get.find<NavigationController>().toScreen(
                           const ColorThemeSelectionScreen(),
+                          transition: Transition.rightToLeft,
+                          isRootModalScreenView: false,
                         ),
                         title: Text(
                           tr('colorTheme'),

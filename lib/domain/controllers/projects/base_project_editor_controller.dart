@@ -31,21 +31,19 @@
  */
 
 import 'package:darq/darq.dart';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
@@ -206,8 +204,11 @@ abstract class BaseProjectEditorController extends GetxController {
     if (selectedTeamMembers.length == 1) {
       selectedTeamMembers.clear();
     } else {
-      Get.find<NavigationController>()
-          .toScreen(const TeamMembersSelectionView(), arguments: {'controller': this});
+      Get.find<NavigationController>().toScreen(
+        const TeamMembersSelectionView(),
+        arguments: {'controller': this},
+        isRootModalScreenView: false,
+      );
     }
   }
 

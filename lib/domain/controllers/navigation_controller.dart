@@ -47,7 +47,6 @@ class NavigationController extends GetxController {
   final selfUserItem = Rx(PortalUserItemController(portalUser: PortalUser()));
 
   int treeLength = 0;
-  int modalViewTreeLength = 0;
 
   @override
   void onInit() {
@@ -108,6 +107,7 @@ class NavigationController extends GetxController {
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
+    bool isRootModalScreenView = true,
   }) async {
     if (Get.find<PlatformController>().isMobile) {
       return await Get.to(
@@ -120,11 +120,10 @@ class NavigationController extends GetxController {
       );
     } else {
       //TODO modal dialog also overlap dimmed background, fix if possible
-      modalViewTreeLength++;
       return await Get.dialog(
         ModalScreenView(contentView: widget),
         barrierDismissible: false,
-        barrierColor: modalViewTreeLength == 1 ? null : Colors.transparent,
+        barrierColor: isRootModalScreenView ? null : Colors.transparent,
         arguments: arguments,
       );
     }

@@ -244,6 +244,7 @@ class DescriptionTile extends StatelessWidget {
                   const NewMilestoneDescription(),
                   arguments: {'newMilestoneController': newMilestoneController},
                   transition: Transition.rightToLeft,
+                  isRootModalScreenView: false,
                 ));
       },
     );
@@ -286,6 +287,7 @@ class ProjectTile extends StatelessWidget {
                     const SelectProjectView(),
                     arguments: {'controller': controller},
                     transition: Transition.rightToLeft,
+                    isRootModalScreenView: false,
                   ),
                 });
       },
@@ -323,6 +325,7 @@ class ResponsibleTile extends StatelessWidget {
             const ProjectTeamResponsibleSelectionView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
+            isRootModalScreenView: false,
           )
         },
       );

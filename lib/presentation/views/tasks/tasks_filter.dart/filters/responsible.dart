@@ -57,6 +57,7 @@ class _Responsible extends StatelessWidget {
                 final newUser = await Get.find<NavigationController>().toScreen(
                   const SelectUserScreen(),
                   transition: Transition.rightToLeft,
+                  isRootModalScreenView: false,
                 );
                 filterController.changeResponsible('other', newUser);
               },
@@ -71,6 +72,7 @@ class _Responsible extends StatelessWidget {
                 final newGroup = await Get.find<NavigationController>().toScreen(
                   const SelectGroupScreen(),
                   transition: Transition.rightToLeft,
+                  isRootModalScreenView: false,
                 );
                 filterController.changeResponsible('groups', newGroup);
               },

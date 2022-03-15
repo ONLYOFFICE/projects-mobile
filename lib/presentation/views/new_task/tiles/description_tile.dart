@@ -111,6 +111,7 @@ class _DescriptionTileState extends State<DescriptionTile> with TickerProviderSt
             const TaskDescription(),
             arguments: {'controller': widget.controller},
             transition: Transition.rightToLeft,
+            isRootModalScreenView: false,
           ),
           child: Column(
             children: [

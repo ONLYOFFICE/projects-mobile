@@ -66,6 +66,7 @@ class DiscussionSubscribersTile extends StatelessWidget {
                 : const ManageDiscussionSubscribersScreen(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
+            isRootModalScreenView: false,
           );
         },
       ),

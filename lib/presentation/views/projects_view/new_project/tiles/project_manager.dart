@@ -77,6 +77,7 @@ class ProjectManagerTile extends StatelessWidget {
             const ProjectManagerSelectionView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
+            isRootModalScreenView: false,
           ),
         );
       },

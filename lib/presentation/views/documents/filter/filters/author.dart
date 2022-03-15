@@ -58,6 +58,7 @@ class _Author extends StatelessWidget {
                 final newUser = await Get.find<NavigationController>().toScreen(
                   const SelectUserScreen(),
                   transition: Transition.rightToLeft,
+                  isRootModalScreenView: false,
                 );
                 await filterController.changeAuthorFilter('users', newUser);
               },
@@ -72,6 +73,7 @@ class _Author extends StatelessWidget {
                 final newGroup = await Get.find<NavigationController>().toScreen(
                   const SelectGroupScreen(),
                   transition: Transition.rightToLeft,
+                  isRootModalScreenView: false,
                 );
                 await filterController.changeAuthorFilter('groups', newGroup);
               },

@@ -79,6 +79,7 @@ class ResponsibleTile extends StatelessWidget {
             const ProjectTeamResponsibleSelectionView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
+            isRootModalScreenView: false,
           ),
         );
       },

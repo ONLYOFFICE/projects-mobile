@@ -69,6 +69,7 @@ class _DueDate extends StatelessWidget {
                     ),
                   ),
                   transition: Transition.rightToLeft,
+                  isRootModalScreenView: false,
                 );
                 if (pickedRange != null) {
                   filterController.changeDeadline('custom',

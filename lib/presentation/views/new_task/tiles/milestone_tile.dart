@@ -35,11 +35,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
-
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class MilestoneTile extends StatelessWidget {
   final TaskActionsController controller;
@@ -55,18 +54,20 @@ class MilestoneTile extends StatelessWidget {
         // ignore: omit_local_variable_types
         final bool _isSelected = controller.selectedMilestoneTitle!.value.isNotEmpty;
         return NewItemTile(
-            text: _isSelected ? controller.selectedMilestoneTitle!.value : tr('none'),
-            icon: SvgIcons.milestone,
-            iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-            selectedIconColor: Get.theme.colors().onBackground,
-            // because color is always black
-            isSelected: true,
-            caption: '${tr('milestone')}:',
-            onTap: () => Get.find<NavigationController>().toScreen(
-                  const SelectMilestoneView(),
-                  arguments: {'controller': controller},
-                  transition: Transition.rightToLeft,
-                ));
+          text: _isSelected ? controller.selectedMilestoneTitle!.value : tr('none'),
+          icon: SvgIcons.milestone,
+          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Get.theme.colors().onBackground,
+          // because color is always black
+          isSelected: true,
+          caption: '${tr('milestone')}:',
+          onTap: () => Get.find<NavigationController>().toScreen(
+            const SelectMilestoneView(),
+            arguments: {'controller': controller},
+            transition: Transition.rightToLeft,
+            isRootModalScreenView: false,
+          ),
+        );
       },
     );
   }

@@ -64,6 +64,7 @@ class _CreatingDate extends StatelessWidget {
                     ),
                   ),
                   transition: Transition.rightToLeft,
+                  isRootModalScreenView: false,
                 );
                 if (pickedRange != null) {
                   await filterController!.changeCreationDate(

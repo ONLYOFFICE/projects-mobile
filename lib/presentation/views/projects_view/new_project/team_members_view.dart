@@ -239,6 +239,7 @@ class TeamMembersSearchBar extends StatelessWidget {
                 arguments: {'controller': controller},
                 transition: Transition.cupertinoDialog,
                 fullscreenDialog: true,
+                isRootModalScreenView: false,
               );
             },
             icon: AppIcon(
