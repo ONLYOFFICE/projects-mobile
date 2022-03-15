@@ -290,8 +290,11 @@ class NewMilestoneController extends GetxController {
   void enableRemindBeforeDueDate(bool value) => remindBeforeDueDate.value = value;
 
   void onDueDateTilePressed() {
-    Get.find<NavigationController>().toScreen(const SelectDateView(),
-        arguments: {'controller': this, 'startDate': false, 'initialDate': _dueDate});
+    Get.find<NavigationController>().toScreen(
+      const SelectDateView(),
+      arguments: {'controller': this, 'startDate': false, 'initialDate': _dueDate},
+      transition: Transition.rightToLeft,
+    );
   }
 
   void enableNotification(bool value) {

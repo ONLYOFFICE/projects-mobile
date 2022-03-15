@@ -144,14 +144,18 @@ class MoveFolderCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Get.find<NavigationController>()
-            .toScreen(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-          'mode': controller.mode,
-          'target': controller.target,
-          'currentFolder': element,
-          'initialFolderId': controller.initialFolderId,
-          'nestingCounter': controller.nestingCounter,
-        });
+        Get.find<NavigationController>().toScreen(
+          DocumentsMoveOrCopyView(),
+          preventDuplicates: false,
+          arguments: {
+            'mode': controller.mode,
+            'target': controller.target,
+            'currentFolder': element,
+            'initialFolderId': controller.initialFolderId,
+            'nestingCounter': controller.nestingCounter,
+          },
+          transition: Transition.rightToLeft,
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
@@ -256,20 +260,28 @@ Future<void> _onFolderPopupMenuSelected(
           arguments: {'folderName': selectedFolder.title, 'folderId': selectedFolder.id});
       break;
     case 'copy':
-      await Get.find<NavigationController>()
-          .toScreen(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': MoveOrCopyMode.CopyFolder,
-        'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolderID,
-      });
+      await Get.find<NavigationController>().toScreen(
+        DocumentsMoveOrCopyView(),
+        preventDuplicates: false,
+        arguments: {
+          'mode': MoveOrCopyMode.CopyFolder,
+          'target': selectedFolder.id,
+          'initialFolderId': controller.currentFolderID,
+        },
+        transition: Transition.rightToLeft,
+      );
       break;
     case 'move':
-      await Get.find<NavigationController>()
-          .toScreen(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': MoveOrCopyMode.MoveFolder,
-        'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolderID,
-      });
+      await Get.find<NavigationController>().toScreen(
+        DocumentsMoveOrCopyView(),
+        preventDuplicates: false,
+        arguments: {
+          'mode': MoveOrCopyMode.MoveFolder,
+          'target': selectedFolder.id,
+          'initialFolderId': controller.currentFolderID,
+        },
+        transition: Transition.rightToLeft,
+      );
 
       break;
     case 'rename':

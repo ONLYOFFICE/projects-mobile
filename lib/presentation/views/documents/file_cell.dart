@@ -171,20 +171,28 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
       await cellController.downloadFile(cellController.file.viewUrl!);
       break;
     case 'copy':
-      await Get.find<NavigationController>()
-          .toScreen(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': MoveOrCopyMode.CopyDocument,
-        'target': cellController.file.id,
-        'initialFolderId': documentsController.currentFolderID,
-      });
+      await Get.find<NavigationController>().toScreen(
+        DocumentsMoveOrCopyView(),
+        preventDuplicates: false,
+        arguments: {
+          'mode': MoveOrCopyMode.CopyDocument,
+          'target': cellController.file.id,
+          'initialFolderId': documentsController.currentFolderID,
+        },
+        transition: Transition.rightToLeft,
+      );
       break;
     case 'move':
-      await Get.find<NavigationController>()
-          .toScreen(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': MoveOrCopyMode.MoveDocument,
-        'target': cellController.file.id,
-        'initialFolderId': documentsController.currentFolderID,
-      });
+      await Get.find<NavigationController>().toScreen(
+        DocumentsMoveOrCopyView(),
+        preventDuplicates: false,
+        arguments: {
+          'mode': MoveOrCopyMode.MoveDocument,
+          'target': cellController.file.id,
+          'initialFolderId': documentsController.currentFolderID,
+        },
+        transition: Transition.rightToLeft,
+      );
       break;
     case 'rename':
       _renameFile(documentsController, cellController, context);

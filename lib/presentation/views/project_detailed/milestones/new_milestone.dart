@@ -240,10 +240,11 @@ class DescriptionTile extends StatelessWidget {
                 ? Icon(PlatformIcons(context).rightChevron,
                     size: 24, color: Get.theme.colors().onBackground)
                 : null,
-            onTap: () => Get.find<NavigationController>()
-                    .toScreen(const NewMilestoneDescription(), arguments: {
-                  'newMilestoneController': newMilestoneController,
-                }));
+            onTap: () => Get.find<NavigationController>().toScreen(
+                  const NewMilestoneDescription(),
+                  arguments: {'newMilestoneController': newMilestoneController},
+                  transition: Transition.rightToLeft,
+                ));
       },
     );
   }
@@ -281,9 +282,11 @@ class ProjectTile extends StatelessWidget {
                 : null,
             suffixPadding: EdgeInsets.zero,
             onTap: () => {
-                  Get.find<NavigationController>().toScreen(const SelectProjectView(), arguments: {
-                    'controller': controller,
-                  }),
+                  Get.find<NavigationController>().toScreen(
+                    const SelectProjectView(),
+                    arguments: {'controller': controller},
+                    transition: Transition.rightToLeft,
+                  ),
                 });
       },
     );
@@ -316,8 +319,11 @@ class ResponsibleTile extends StatelessWidget {
         iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
         selectedIconColor: Get.theme.colors().onBackground,
         onTap: () => {
-          Get.find<NavigationController>().toScreen(const ProjectTeamResponsibleSelectionView(),
-              arguments: {'controller': controller})
+          Get.find<NavigationController>().toScreen(
+            const ProjectTeamResponsibleSelectionView(),
+            arguments: {'controller': controller},
+            transition: Transition.rightToLeft,
+          )
         },
       );
     });

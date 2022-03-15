@@ -47,9 +47,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
-import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 
 class PortalDocumentsView extends StatelessWidget {
@@ -147,7 +145,7 @@ class DocumentsScreen extends StatelessWidget {
             actions: [
               SearchButton(controller: controller),
               DocumentsFilterButton(controller: controller),
-              _MoreButtonWidget(controller: controller),
+              DocumentsMoreButton(controller: controller),
             ],
           ),
         ];
@@ -157,8 +155,8 @@ class DocumentsScreen extends StatelessWidget {
   }
 }
 
-class _MoreButtonWidget extends StatelessWidget {
-  const _MoreButtonWidget({
+class DocumentsMoreButton extends StatelessWidget {
+  const DocumentsMoreButton({
     Key? key,
     required this.controller,
   }) : super(key: key);
@@ -201,33 +199,8 @@ class DocsBottom extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          Obx(() {
-            if (controller.itemList.isNotEmpty)
-              return PlatformPopupMenuButton(
-                padding: EdgeInsets.zero,
-                icon: PlatformIconButton(
-                  padding: EdgeInsets.zero,
-                  cupertinoIcon: Icon(
-                    CupertinoIcons.ellipsis_circle,
-                    color: Get.theme.colors().primary,
-                  ),
-                  materialIcon: Icon(
-                    Icons.more_vert,
-                    color: Get.theme.colors().primary,
-                  ),
-                  cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
-                ),
-                itemBuilder: (context) {
-                  return [
-                    for (final tile in controller.sortController.getSortTile())
-                      PlatformPopupMenuItem(child: tile),
-                  ];
-                },
-              );
-            return const SizedBox();
-          }),
           Obx(
             () => Text(
               tr('total', args: [controller.foldersCount.value.toString()]),

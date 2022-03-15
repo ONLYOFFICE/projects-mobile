@@ -64,9 +64,7 @@ class NewTaskProjectTile extends StatelessWidget {
           caption: _isNotEmpty ? '${tr('project')}:' : null,
           onTap: () => Get.find<NavigationController>().toScreen(
             const SelectProjectView(),
-            arguments: {
-              'controller': controller,
-            },
+            arguments: {'controller': controller},
             transition: Transition.rightToLeft,
           ),
         );

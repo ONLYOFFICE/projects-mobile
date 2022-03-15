@@ -90,7 +90,8 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
         bottom: DocsBottom(controller: controller),
         actions: [
           SearchButton(controller: controller),
-          DocumentsFilterButton(controller: controller)
+          DocumentsFilterButton(controller: controller),
+          DocumentsMoreButton(controller: controller),
         ],
       ),
     );

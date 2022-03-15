@@ -71,6 +71,8 @@ class _Step4 extends StatelessWidget {
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 480),
               child: PlatformTextField(
+                onSubmitted: (str) async => await controller.sendCode(str),
+                hintText: tr('code'),
                 controller: codeController,
                 keyboardType: TextInputType.number,
                 cupertino: (_, __) => CupertinoTextFieldData(
