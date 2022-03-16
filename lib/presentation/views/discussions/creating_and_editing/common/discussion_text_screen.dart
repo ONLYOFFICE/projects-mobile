@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -64,7 +63,7 @@ class NewDiscussionTextScreen extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('text'),
-          backButtonIcon: Get.put(PlatformController()).isMobile
+          backButtonIcon: platformController.isMobile
               ? Icon(PlatformIcons(context).back)
               : Icon(PlatformIcons(context).clear),
           onLeadingPressed: controller.leaveTextView,
@@ -75,8 +74,7 @@ class NewDiscussionTextScreen extends StatelessWidget {
         ),
         body: HtmlTextEditor(
           initialText: controller.text.value,
-          // ignore: unnecessary_cast
-          textController: controller.textController as HtmlEditorController,
+          textController: controller.textController,
           hintText: tr('discussionText'),
         ),
       ),

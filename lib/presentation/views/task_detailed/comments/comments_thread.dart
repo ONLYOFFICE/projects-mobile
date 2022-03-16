@@ -58,35 +58,38 @@ class CommentsThread extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final visited = sortComments(comment);
+    final items = buildItems(visited);
 
-    return ListView.separated(
-        padding: EdgeInsets.zero,
-        controller: null,
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        separatorBuilder: (_, int index) {
-          if (visited[index].comment.show == false) return const SizedBox();
+    return ListBody(children: items);
+  }
 
-          return StyledDivider(
-            leftPadding: padding[visited[index].paddingLevel]!.left,
-            rightPadding: 16,
-          );
-        },
-        itemCount: visited.length,
-        itemBuilder: (_, int index) {
-          if (visited[index].comment.show == false) return const SizedBox();
+  List<Widget> buildItems(List<_SortedComment> visited) {
+    final list = <Widget>[];
+    for (final item in visited) {
+      if (item.comment.show == false) continue;
 
-          return Padding(
-            padding: visited[index].comment.show
-                ? padding[visited[index].paddingLevel]!
-                : EdgeInsets.zero,
-            child: Comment(
-              comment: visited[index].comment,
-              taskId: taskId,
-              discussionId: discussionId,
+      list.add(
+        ListBody(
+          children: [
+            if (item.paddingLevel > 0)
+              StyledDivider(
+                leftPadding: padding[item.paddingLevel]!.left,
+                rightPadding: 16,
+              ),
+            Padding(
+              padding: item.comment.show ? padding[item.paddingLevel]! : EdgeInsets.zero,
+              child: Comment(
+                comment: item.comment,
+                taskId: taskId,
+                discussionId: discussionId,
+              ),
             ),
-          );
-        });
+          ],
+        ),
+      );
+    }
+
+    return list;
   }
 }
 
