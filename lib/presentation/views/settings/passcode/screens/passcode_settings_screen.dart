@@ -41,7 +41,6 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -89,53 +88,61 @@ class PasscodeSettingsScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 childrenDelegate: SliverChildListDelegate([
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(height: 3),
-                      PlatformTextButton(
+                      TextButton(
                         onPressed: () =>
                             controller.onPasscodeTilePressed(!controller.isPasscodeEnable.value),
+                        style: ButtonStyle(
+                          alignment: Alignment.centerLeft,
+                          padding: MaterialStateProperty.all(EdgeInsets.zero),
+                          splashFactory: NoSplash.splashFactory,
+                        ),
                         child: Text(
                           controller.isPasscodeEnable.value
                               ? tr('disablePasscode')
                               : tr('enablePasscode'),
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                          textAlign: TextAlign.start,
                         ),
                       ),
                       if (controller.isPasscodeEnable.value == true)
-                        PlatformTextButton(
+                        TextButton(
                           onPressed: controller.tryChangingPasscode,
+                          style: ButtonStyle(
+                            alignment: Alignment.centerLeft,
+                            padding: MaterialStateProperty.all(EdgeInsets.zero),
+                            splashFactory: NoSplash.splashFactory,
+                          ),
                           child: Text(
                             tr('changePasscode'),
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
                           ),
                         ),
                       const StyledDivider(),
                       const SizedBox(height: 17),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 7),
-                        child: RichText(
-                          text: TextSpan(
-                            text: tr('passcodeLock'),
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              color: Get.theme.colors().onSurface,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: " - ${tr('passcodeLockDescription')}",
-                                // style: const TextStyle(fontWeight: FontWeight.w400),
-                              ),
-                            ],
+                      RichText(
+                        text: TextSpan(
+                          text: tr('passcodeLock'),
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: Get.theme.colors().onSurface,
                           ),
+                          children: [
+                            TextSpan(
+                              text: " - ${tr('passcodeLockDescription')}",
+                              // style: const TextStyle(fontWeight: FontWeight.w400),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 6),
-                      if (controller.isFingerprintAvailable.value == true &&
+                      const SizedBox(height: 28),
+                      if (controller.isFingerprintAvailable.value == true ||
                           controller.isPasscodeEnable.value == true)
                         OptionWithSwitch(
                             title: tr('fingerprint'),
-                            style: TextStyleHelper.subtitle1(),
+                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                             switchOnChanged: controller.tryTogglingFingerprintStatus,
                             switchValue: controller.isFingerprintEnable),
                     ],
