@@ -107,7 +107,7 @@ class _NewAccountButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => const PortalInputView()),
+      onTap: () => Get.to(() => PortalInputView()),
       child: SizedBox(
         height: 64,
         child: Row(

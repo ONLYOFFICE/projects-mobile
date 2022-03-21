@@ -126,7 +126,7 @@ class AccountTileController extends GetxController {
       loginController.setupPortalUri();
       locator.get<CoreApi>().setPortalName('${accountData!.scheme}${accountData!.portal}');
 
-      await Get.to(() => const LoginView());
+      await Get.to(() => LoginView());
     } else {
       await locator<SecureStorage>()
           .putString('portalName', '${accountData!.scheme}${accountData!.portal}');

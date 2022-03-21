@@ -155,7 +155,7 @@ class MainController extends GetxController {
             await accountManager.setup(),
             if (accountManager.accounts.isEmpty)
               {
-                portalInputView = const PortalInputView(),
+                portalInputView = PortalInputView(),
               }
             else
               {

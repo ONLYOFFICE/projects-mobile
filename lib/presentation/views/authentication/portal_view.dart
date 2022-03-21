@@ -49,23 +49,23 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PortalInputView extends StatelessWidget {
-  const PortalInputView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = Get.find<LoginController>();
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      controller
-        ..setup()
-        ..checkBoxValue.value = false;
-    });
-
+  PortalInputView({Key? key}) : super(key: key) {
     if (Get.isRegistered<AccountManager>()) {
       Get.find<AccountManager>();
     } else {
       Get.put(AccountManager()).setup();
     }
+
+    controller.setup();
+  }
+
+  final controller = Get.find<LoginController>();
+
+  @override
+  Widget build(BuildContext context) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      controller.checkBoxValue.value = false;
+    });
 
     final height = controller.accountManager.accounts.isEmpty ? Get.height : Get.height - 80;
 

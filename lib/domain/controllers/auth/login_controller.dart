@@ -284,7 +284,7 @@ class LoginController extends GetxController {
         capabilities = _capabilities;
         checkBoxValue.value = false;
         loaded.value = true;
-        await Get.to(() => const LoginView());
+        await Get.to(() => LoginView());
       }
 
       loaded.value = true;

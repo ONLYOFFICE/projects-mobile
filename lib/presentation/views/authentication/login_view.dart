@@ -48,37 +48,36 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({Key? key}) : super(key: key);
+  LoginView({Key? key}) : super(key: key);
+
+  final controller = Get.find<LoginController>();
+  final passwordFocusNode = FocusNode();
+
+  final styledAppBar = StyledAppBar(
+    backButtonIcon: Platform.isAndroid ? Icon(PlatformIcons(Get.context!).clear) : null,
+    leading: Platform.isIOS
+        ? Align(
+            alignment: Alignment.centerLeft,
+            child: CupertinoNavigationBarBackButton(
+              onPressed: Get.back,
+              previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
+            ),
+          )
+        : null,
+    leadingWidth: Platform.isIOS ? 150 : null,
+    elevation: Platform.isAndroid ? 1 : 0,
+    title: Platform.isAndroid
+        ? Text(
+            tr('addNewAccount'),
+            style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+          )
+        : null,
+    titleHeight: Platform.isIOS ? 50 : 56,
+    centerTitle: Platform.isIOS,
+  );
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<LoginController>();
-
-    final styledAppBar = StyledAppBar(
-      backButtonIcon: Platform.isAndroid ? Icon(PlatformIcons(context).clear) : null,
-      leading: Platform.isIOS
-          ? Align(
-              alignment: Alignment.centerLeft,
-              child: CupertinoNavigationBarBackButton(
-                onPressed: Get.back,
-                previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
-              ),
-            )
-          : null,
-      leadingWidth: Platform.isIOS ? 150 : null,
-      elevation: Platform.isAndroid ? 1 : 0,
-      title: Platform.isAndroid
-          ? Text(
-              tr('addNewAccount'),
-              style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-            )
-          : null,
-      titleHeight: Platform.isIOS ? 50 : 56,
-      centerTitle: Platform.isIOS,
-    );
-
-    final passwordFocusNode = FocusNode();
-
     return WillPopScope(
       onWillPop: () async {
         controller.leaveLoginScreen();
