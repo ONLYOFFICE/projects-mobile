@@ -62,14 +62,17 @@ class ProjectTagsController extends GetxController {
 
   void onLoading() async {}
 
-  late final StreamSubscription _ss;
+  StreamSubscription? _ss;
 
   Future<void> setup(BaseProjectEditorController projController) async {
     _projController = projController;
+
     loaded.value = false;
+
     tags.clear();
     projectDetailedTags.clear();
     filteredTags.clear();
+
     final allTags = await _api.getProjectTags();
 
     for (final value in projController.tags) {
@@ -86,14 +89,14 @@ class ProjectTagsController extends GetxController {
     }
 
     getFabVisibility(Get.find<UserController>().user.value);
-    _ss = Get.find<UserController>().user.listen(getFabVisibility);
+    _ss ??= Get.find<UserController>().user.listen(getFabVisibility);
 
     loaded.value = true;
   }
 
   @override
   void onClose() {
-    _ss.cancel();
+    _ss?.cancel();
 
     super.onClose();
   }
