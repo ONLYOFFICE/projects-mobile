@@ -73,9 +73,7 @@ class TeamMembersSelectionView extends StatelessWidget {
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? Icon(PlatformIcons(context).back)
-            : Icon(PlatformIcons(context).clear),
+        backButtonIcon: Icon(PlatformIcons(context).back),
         title: TeamMembersSelectionHeader(
           controller: controller,
           title: tr('addTeamMembers'),
@@ -131,39 +129,22 @@ class TeamMembersSelectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 60,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Obx(
-            () {
-              if (controller.selectedTeamMembers.isNotEmpty as bool) {
-                return Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        title,
-                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                      ),
-                      Text(
-                        plural('person', controller.selectedTeamMembers.length as int),
-                        style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
-                      ),
-                    ],
-                  ),
-                );
-              } else
-                return Text(
-                  title,
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                );
-            },
-          ),
-          // const SizedBox(width: 4),
-        ],
+      child: Obx(
+        () => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              title,
+              style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+            ),
+            if (controller.selectedTeamMembers.isNotEmpty as bool)
+              Text(
+                plural('person', controller.selectedTeamMembers.length as int),
+                style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
+              ),
+          ],
+        ),
       ),
     );
   }
@@ -237,7 +218,7 @@ class TeamMembersSearchBar extends StatelessWidget {
               Get.find<NavigationController>().toScreen(
                 const GroupMembersSelectionView(),
                 arguments: {'controller': controller},
-                transition: Transition.cupertinoDialog,
+                transition: Transition.rightToLeft,
                 fullscreenDialog: true,
                 isRootModalScreenView: false,
               );

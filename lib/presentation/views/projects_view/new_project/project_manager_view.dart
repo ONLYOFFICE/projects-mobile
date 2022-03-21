@@ -87,7 +87,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
               usersDataSource.usersWithoutVisitors.isNotEmpty &&
               !usersDataSource.isSearchResult.value) {
             return UsersDefault(
-              selfUserItem: controller.selfUserItem as PortalUserItemController,
+              selfUserItem: controller.selfUserItem,
               usersDataSource: usersDataSource,
               onTapFunction: controller.changePMSelection,
               withoutGuests: true,
@@ -191,7 +191,9 @@ class UsersDefault extends StatelessWidget {
                   const SizedBox(height: 26),
                   Container(
                     padding: const EdgeInsets.only(left: 16),
-                    child: Text(tr('me'), style: TextStyleHelper.body2()),
+                    child: Text(tr('me'),
+                        style: TextStyleHelper.body2(
+                            color: Get.theme.colors().onSurface.withOpacity(0.6))),
                   ),
                   const SizedBox(height: 26),
                   PortalUserItem(
@@ -206,7 +208,8 @@ class UsersDefault extends StatelessWidget {
           }),
           Container(
             padding: const EdgeInsets.only(left: 16),
-            child: Text(tr('users'), style: TextStyleHelper.body2()),
+            child: Text(tr('users'),
+                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6))),
           ),
           ListView.separated(
             physics: const NeverScrollableScrollPhysics(),

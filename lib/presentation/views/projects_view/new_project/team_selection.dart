@@ -41,6 +41,8 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_group_item.dart';
 
@@ -64,19 +66,12 @@ class GroupMembersSelectionView extends StatelessWidget {
         titleText: tr('addMembersOf'),
         centerTitle: GetPlatform.isIOS,
         leadingWidth: GetPlatform.isIOS ? 100 : null,
-        leading: PlatformWidget(
-          cupertino: (_, __) => CupertinoButton(
+        leading: PlatformIconButton(
+          icon: Icon(PlatformIcons(context).back),
+          onPressed: Get.back,
+          cupertino: (_, __) => CupertinoIconButtonData(
             padding: const EdgeInsets.only(left: 16),
             alignment: Alignment.centerLeft,
-            onPressed: Get.back,
-            child: Text(
-              tr('closeLowerCase'),
-              style: TextStyleHelper.button(),
-            ),
-          ),
-          material: (_, __) => IconButton(
-            onPressed: Get.back,
-            icon: const Icon(Icons.close),
           ),
         ),
         actions: [
