@@ -85,8 +85,9 @@ class ColorThemeSelectionScreen extends StatelessWidget {
               )
             : SettingsList(
                 darkTheme: const SettingsThemeData().copyWith(
-                  settingsListBackground:
-                      platformController.isMobile ? null : Get.theme.colors().surface,
+                  settingsListBackground: platformController.isMobile
+                      ? Get.theme.colors().backgroundSecond
+                      : Get.theme.colors().surface,
                   settingsSectionBackground:
                       platformController.isMobile ? null : Get.theme.colors().bgDescription,
                 ),

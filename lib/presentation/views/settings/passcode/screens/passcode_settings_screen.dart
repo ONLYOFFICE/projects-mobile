@@ -64,7 +64,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
     } else {
       if (platformController.isMobile) {
         Theme.of(context).brightness == Brightness.dark
-            ? backgroundColor = Get.theme.colors().background
+            ? backgroundColor = Get.theme.colors().backgroundSecond
             : backgroundColor = CupertinoColors.systemGrey6;
       } else {
         Theme.of(context).brightness == Brightness.dark
@@ -158,8 +158,9 @@ class PasscodeSettingsScreen extends StatelessWidget {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       darkTheme: const SettingsThemeData().copyWith(
-                        settingsListBackground:
-                            platformController.isMobile ? null : Get.theme.colors().surface,
+                        settingsListBackground: platformController.isMobile
+                            ? Get.theme.colors().backgroundSecond
+                            : Get.theme.colors().surface,
                         settingsSectionBackground:
                             platformController.isMobile ? null : Get.theme.colors().bgDescription,
                       ),
