@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
@@ -49,21 +50,18 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 
 class ProjectManagerSelectionView extends StatelessWidget {
-  const ProjectManagerSelectionView({
-    Key? key,
-  }) : super(key: key);
+  ProjectManagerSelectionView({Key? key}) : super(key: key);
+
+  final usersDataSource = Get.find<UsersDataSource>();
+  final platformController = Get.find<PlatformController>();
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
-
-    final usersDataSource = Get.find<UsersDataSource>();
+    final controller = Get.arguments['controller'] as BaseProjectEditorController;
 
     controller.selectionMode = UserSelectionMode.Single;
     usersDataSource.selectionMode = UserSelectionMode.Single;
     controller.setupUsersSelection();
-
-    final platformController = Get.find<PlatformController>();
 
     return Scaffold(
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
@@ -85,13 +83,13 @@ class ProjectManagerSelectionView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.usersLoaded.value as bool &&
+          if (controller.usersLoaded.value &&
               usersDataSource.usersWithoutVisitors.isNotEmpty &&
               !usersDataSource.isSearchResult.value) {
             return UsersDefault(
               selfUserItem: controller.selfUserItem as PortalUserItemController,
               usersDataSource: usersDataSource,
-              onTapFunction: (v) => controller.changePMSelection(v),
+              onTapFunction: controller.changePMSelection,
               withoutGuests: true,
             );
           }
@@ -102,7 +100,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
             if (usersDataSource.usersWithoutVisitors.isNotEmpty)
               return UsersSearchResult(
                 usersDataSource: usersDataSource,
-                onTapFunction: (v) => controller.changePMSelection(v),
+                onTapFunction: controller.changePMSelection,
                 withoutVisitors: true,
               );
             else
@@ -122,7 +120,7 @@ class UsersSearchResult extends StatelessWidget {
     required this.onTapFunction,
     this.withoutVisitors = false,
   }) : super(key: key);
-  final Function? onTapFunction;
+  final Function(PortalUserItemController) onTapFunction;
   final UsersDataSource usersDataSource;
   final bool withoutVisitors;
 
@@ -167,8 +165,8 @@ class UsersDefault extends StatelessWidget {
     required this.onTapFunction,
     this.withoutGuests = false,
   }) : super(key: key);
-  final Function? onTapFunction;
-  final PortalUserItemController? selfUserItem;
+  final Function(PortalUserItemController) onTapFunction;
+  final PortalUserItemController selfUserItem;
   final UsersDataSource usersDataSource;
   final bool withoutGuests;
 

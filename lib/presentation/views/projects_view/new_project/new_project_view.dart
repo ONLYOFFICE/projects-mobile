@@ -153,11 +153,11 @@ class NewProject extends StatelessWidget {
                       padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
                       child: OptionWithSwitch(
                         title: tr('followProject'),
-                        switchValue: controller.selfUserItem?.id ==
+                        switchValue: controller.selfUserItem.id ==
                                 controller.selectedProjectManager.value?.id
                             ? false.obs
                             : controller.isFolowed,
-                        switchOnChanged: controller.selfUserItem?.id ==
+                        switchOnChanged: controller.selfUserItem.id ==
                                 controller.selectedProjectManager.value?.id
                             ? (v) => {}
                             : controller.folow,

@@ -47,16 +47,16 @@ class PortalUserItem extends StatelessWidget {
     required this.userController,
   }) : super(key: key);
 
-  final Function? onTapFunction;
-  final PortalUserItemController? userController;
+  final Function(PortalUserItemController) onTapFunction;
+  final PortalUserItemController userController;
 
   @override
   Widget build(BuildContext context) {
-    final user = userController!.portalUser;
+    final user = userController.portalUser;
     return InkWell(
       onTap: () {
-        userController!.onTap();
-        onTapFunction?.call(userController);
+        userController.onTap();
+        onTapFunction.call(userController);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
@@ -80,7 +80,7 @@ class PortalUserItem extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Obx(() {
-                            return userController!.avatar.value;
+                            return userController.avatar.value;
                           }),
                         ),
                       ),
@@ -119,9 +119,9 @@ class PortalUserItem extends StatelessWidget {
                     style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
                   ),
                   Obx(
-                    () => userController!.userTitle.isNotEmpty
+                    () => userController.userTitle.isNotEmpty
                         ? Text(
-                            userController!.userTitle.replaceAll(' ', '\u00A0'),
+                            userController.userTitle.replaceAll(' ', '\u00A0'),
                             overflow: TextOverflow.ellipsis,
                             style: TextStyleHelper.body2(
                               color: Get.theme.colors().onBackground.withOpacity(0.6),
@@ -135,8 +135,8 @@ class PortalUserItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 54),
               child: Obx(() {
-                if (userController!.selectionMode.value == UserSelectionMode.Multiple) {
-                  if (userController!.isSelected.value == true) {
+                if (userController.selectionMode.value == UserSelectionMode.Multiple) {
+                  if (userController.isSelected.value == true) {
                     return Icon(PlatformIcons(context).checkBoxCheckedOutlineRounded,
                         color: Get.theme.colors().primary);
                   } else {
@@ -146,7 +146,7 @@ class PortalUserItem extends StatelessWidget {
                     );
                   }
                 } else {
-                  if (userController!.isSelected.value == true) {
+                  if (userController.isSelected.value == true) {
                     return Icon(
                       PlatformIcons(context).checkMark,
                       color: Get.theme.colors().primary,

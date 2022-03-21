@@ -113,8 +113,7 @@ List<GetPage> getxPages() => [
       GetPage(name: '/DocumentsFilterScreen', page: () => const DocumentsFilterScreen()),
       GetPage(name: '/NewProject', page: () => const NewProject()),
       GetPage(name: '/NewProjectDescription', page: () => const NewProjectDescription()),
-      GetPage(
-          name: '/ProjectManagerSelectionView', page: () => const ProjectManagerSelectionView()),
+      GetPage(name: '/ProjectManagerSelectionView', page: () => ProjectManagerSelectionView()),
       GetPage(name: '/ReplyCommentView', page: () => const ReplyCommentView()),
       GetPage(name: '/ProjectDetailedView', page: () => ProjectDetailedView()),
       GetPage(name: '/TeamMembersSelectionView', page: () => const TeamMembersSelectionView()),

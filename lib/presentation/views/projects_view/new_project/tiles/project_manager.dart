@@ -74,7 +74,7 @@ class ProjectManagerTile extends StatelessWidget {
                 )
               : null,
           onTap: () => Get.find<NavigationController>().toScreen(
-            const ProjectManagerSelectionView(),
+            ProjectManagerSelectionView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
             isRootModalScreenView: false,

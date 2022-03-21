@@ -94,7 +94,7 @@ class TeamMembersSelectionView extends StatelessWidget {
               usersDataSource.usersList.isNotEmpty &&
               usersDataSource.isSearchResult.value == false) {
             return UsersDefault(
-              selfUserItem: controller.selfUserItem as PortalUserItemController?,
+              selfUserItem: controller.selfUserItem as PortalUserItemController,
               usersDataSource: usersDataSource,
               onTapFunction: (v) => controller.selectTeamMember(v),
             );
