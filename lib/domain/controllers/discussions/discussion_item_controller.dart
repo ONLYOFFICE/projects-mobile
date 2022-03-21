@@ -217,6 +217,7 @@ class DiscussionItemController extends GetxController {
             Get.back();
             MessagesHandler.showSnackBar(context: Get.context!, text: tr('discussionDeleted'));
 
+            await _ss?.cancel();
             //locator<EventHub>().fire('needToRefreshDetails', [discussion.value.project!.id]);TODO
             locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
           }
