@@ -37,9 +37,9 @@ import 'package:projects/domain/controllers/projects/new_project/portal_group_it
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
 abstract class DiscussionActionsController {
-  RxString text = RxString('');
-  RxString title = RxString('');
-  RxString selectedProjectTitle = RxString('');
+  final text = RxString('');
+  final title = RxString('');
+  final selectedProjectTitle = RxString('');
   final subscribers = <PortalUserItemController>[].obs;
   final otherUsers = <PortalUserItemController>[].obs;
 

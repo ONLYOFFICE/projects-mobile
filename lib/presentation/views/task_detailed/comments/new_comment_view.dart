@@ -66,7 +66,7 @@ class NewCommentView extends StatelessWidget {
           actions: [
             PlatformIconButton(
               icon: Icon(PlatformIcons(context).checkMark),
-              onPressed: () => controller.addComment(context),
+              onPressed: controller.addComment,
             ),
           ],
         ),

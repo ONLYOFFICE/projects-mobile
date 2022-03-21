@@ -249,9 +249,9 @@ Future<void> _onFolderPopupMenuSelected(
 
         if (link.isURL) {
           await Clipboard.setData(ClipboardData(text: link));
-          MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
         } else
-          MessagesHandler.showSnackBar(context: context, text: tr('error'));
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
       }
       break;
     case 'open':
@@ -291,7 +291,7 @@ Future<void> _onFolderPopupMenuSelected(
       final success = await controller.deleteFolder(selectedFolder);
 
       if (success as bool) {
-        MessagesHandler.showSnackBar(context: context, text: tr('folderDeleted'));
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderDeleted'));
       }
       break;
     default:
@@ -331,9 +331,9 @@ void _renameFolder(dynamic controller, Folder element, BuildContext context) {
             final success = await controller.renameFolder(element, inputController.text) as bool;
             if (success) {
               Get.back();
-              MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderRenamed'));
             } else
-              MessagesHandler.showSnackBar(context: context, text: tr('error'));
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
           }
         }
       },
@@ -404,9 +404,9 @@ class _NameFolderTextFieldWidget extends StatelessWidget {
             final success = await controller.renameFolder(element, inputController.text) as bool;
             if (success) {
               Get.back();
-              MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderRenamed'));
             } else
-              MessagesHandler.showSnackBar(context: context, text: tr('error'));
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
           }
         }
       },

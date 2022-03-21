@@ -31,7 +31,6 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/services/comments_service.dart';
@@ -56,7 +55,7 @@ class NewDiscussionCommentController extends NewCommentController {
   HtmlEditorController get textController => _textController;
 
   @override
-  Future addComment(BuildContext context) async {
+  Future addComment() async {
     final text = await _textController.getText();
     if (text.isEmpty)
       await emptyTitleError();
@@ -73,14 +72,14 @@ class NewDiscussionCommentController extends NewCommentController {
 
         Get.back();
 
-        MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('commentCreated'));
       } else
-        MessagesHandler.showSnackBar(context: context, text: tr('error'));
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
     }
   }
 
   @override
-  Future addReplyComment(BuildContext context) async {
+  Future addReplyComment() async {
     final text = await _textController.getText();
     if (text.isEmpty)
       await emptyTitleError();
@@ -101,9 +100,9 @@ class NewDiscussionCommentController extends NewCommentController {
 
         Get.back();
 
-        MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('commentCreated'));
       } else
-        MessagesHandler.showSnackBar(context: context, text: tr('error'));
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
     }
   }
 

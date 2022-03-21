@@ -107,7 +107,7 @@ class _Code extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   Clipboard.setData(ClipboardData(text: code.removeAllWhitespace));
-                  MessagesHandler.showSnackBar(context: context, text: tr('keyCopied'));
+                  MessagesHandler.showSnackBar(context: Get.context!, text: tr('keyCopied'));
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 12, bottom: 10),

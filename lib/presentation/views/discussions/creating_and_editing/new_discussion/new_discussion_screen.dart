@@ -72,12 +72,12 @@ class NewDiscussionScreen extends StatelessWidget {
           centerTitle: !GetPlatform.isAndroid,
           actions: [
             PlatformWidget(
-              material: (platformContext, __) => IconButton(
+              material: (_, __) => IconButton(
                 icon: const Icon(Icons.check_rounded),
-                onPressed: () => controller.confirm(platformContext),
+                onPressed: controller.confirm,
               ),
               cupertino: (platformContext, __) => CupertinoButton(
-                onPressed: () => controller.confirm(platformContext),
+                onPressed: controller.confirm,
                 padding: const EdgeInsets.only(right: 16),
                 alignment: Alignment.centerLeft,
                 child: Text(

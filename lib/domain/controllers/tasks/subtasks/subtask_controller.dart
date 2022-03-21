@@ -87,7 +87,7 @@ class SubtaskController extends GetxController {
   }) async {
     final result = await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
     if (result != null) {
-      MessagesHandler.showSnackBar(context: context, text: tr('subtaskCopied'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('subtaskCopied'));
       locator<EventHub>().fire('needToRefreshParentTask', [taskId]);
     }
   }
@@ -102,7 +102,7 @@ class SubtaskController extends GetxController {
     if (result != null) {
       locator<EventHub>().fire('needToRefreshParentTask', [taskId]);
 
-      MessagesHandler.showSnackBar(context: context, text: 'Subtask deleted');
+      MessagesHandler.showSnackBar(context: Get.context!, text: 'Subtask deleted');
       if (closePage) Get.back();
     }
   }
@@ -127,7 +127,7 @@ class SubtaskController extends GetxController {
 
       if (result != null) subtask.value = result;
     } else {
-      MessagesHandler.showSnackBar(context: context, text: tr('cantEditSubtask'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('cantEditSubtask'));
     }
   }
 

@@ -159,9 +159,9 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
 
         if (link.isURL) {
           await Clipboard.setData(ClipboardData(text: link));
-          MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
         } else
-          MessagesHandler.showSnackBar(context: context, text: tr('error'));
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
       }
       break;
     case 'open':
@@ -201,9 +201,9 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
       final success = await cellController.deleteFile(cellController.file);
 
       if (success) {
-        MessagesHandler.showSnackBar(context: context, text: tr('fileDeleted'));
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileDeleted'));
       } else
-        MessagesHandler.showSnackBar(context: context, text: tr('error'));
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
       break;
     default:
   }
@@ -247,9 +247,9 @@ void _renameFile(
                 await cellController.renameFile(cellController.file, inputController.text);
             if (success) {
               Get.back();
-              MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
             } else
-              MessagesHandler.showSnackBar(context: context, text: tr('error'));
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
           }
         }
       },
@@ -322,9 +322,9 @@ class _NewFileTextFieldWidget extends StatelessWidget {
                 await cellController.renameFile(cellController.file, inputController.text);
             if (success) {
               Get.back();
-              MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
             } else
-              MessagesHandler.showSnackBar(context: context, text: tr('error'));
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
           }
         }
       },

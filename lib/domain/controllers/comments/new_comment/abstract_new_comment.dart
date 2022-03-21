@@ -47,9 +47,9 @@ abstract class NewCommentController extends GetxController {
 
   HtmlEditorController get textController;
 
-  void addComment(BuildContext context);
+  void addComment();
 
-  void addReplyComment(BuildContext context);
+  void addReplyComment();
 
   void leavePage();
 

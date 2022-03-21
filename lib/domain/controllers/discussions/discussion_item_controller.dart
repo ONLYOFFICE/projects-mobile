@@ -109,7 +109,8 @@ class DiscussionItemController extends GetxController {
   }
 
   void scrollToLastComment() {
-    commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
+    if (commentsListController.hasClients)
+      commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
   }
 
   bool get isSubscribed {

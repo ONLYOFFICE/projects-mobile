@@ -88,7 +88,7 @@ class ReplyCommentView extends StatelessWidget {
           actions: [
             PlatformIconButton(
               icon: Icon(PlatformIcons(context).checkMark),
-              onPressed: () => controller.addReplyComment(context),
+              onPressed: controller.addReplyComment,
             )
           ],
         ),

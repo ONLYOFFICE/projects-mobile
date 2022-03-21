@@ -44,6 +44,7 @@ import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
@@ -335,7 +336,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     _usersDataSource.clearSearch();
   }
 
-  Future<void> confirm(BuildContext context) async {
+  Future<void> confirm() async {
     if (_selectedProjectId == null) selectProjectError.value = true;
 
     title.value = title.value.trim();
@@ -370,16 +371,18 @@ class NewDiscussionController extends GetxController implements DiscussionAction
       //locator<EventHub>().fire('needToRefreshDetails', [_selectedProjectId]); // TODO
       locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
 
+      final discussionController = DiscussionItemController()..setup(createdDiss);
+
       MessagesHandler.showSnackBar(
-          context: context,
+          context: Get.context!,
           text: tr('discussionCreated'),
           buttonText: tr('open').toUpperCase(),
           buttonOnTap: () {
             return Get.find<NavigationController>()
-                .to(DiscussionDetailed(), arguments: {'discussion': createdDiss});
+                .to(DiscussionDetailed(), arguments: {'controller': discussionController});
           });
     } else
-      MessagesHandler.showSnackBar(context: context, text: tr('error'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   void discardDiscussion() {

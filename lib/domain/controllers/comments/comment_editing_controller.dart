@@ -54,7 +54,7 @@ class CommentEditingController extends GetxController {
 
   RxBool setTitleError = false.obs;
 
-  final HtmlEditorController _textController = HtmlEditorController();
+  final _textController = HtmlEditorController();
 
   HtmlEditorController get textController => _textController;
 
