@@ -54,10 +54,10 @@ class StartDateTile extends StatelessWidget {
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        final bool _isSelected = controller.startDateText!.value.isNotEmpty;
+        final bool _isSelected = controller.startDateText.value.isNotEmpty;
         return NewItemTile(
           icon: SvgIcons.start_date,
-          text: _isSelected ? controller.startDateText!.value : tr('setStartDate'),
+          text: _isSelected ? controller.startDateText.value : tr('setStartDate'),
           caption: _isSelected ? '${tr('startDate')}:' : null,
           isSelected: _isSelected,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),

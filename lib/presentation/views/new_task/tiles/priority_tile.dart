@@ -47,7 +47,7 @@ class PriorityTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => TileWithSwitch(
         title: tr('highPriority'),
-        isSelected: controller.highPriority!.value,
+        isSelected: controller.highPriority.value,
         onChanged: controller.changePriority));
   }
 }

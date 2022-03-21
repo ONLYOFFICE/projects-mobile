@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
@@ -144,11 +146,15 @@ class ProjectEditController extends BaseProjectEditorController {
     titleController.text = titleController.text.trim();
     needToFillTitle.value = titleController.text.isEmpty;
 
-    needToFillManager.value =
-        selectedProjectManager.value == null || selectedProjectManager.value!.id == null;
+    needToFillManager.value = selectedProjectManager.value?.id == null;
 
-    if (needToFillTitle.value == true || needToFillManager.value == true) return;
-
+    if (needToFillTitle.value || needToFillManager.value) {
+      unawaited(900.milliseconds.delay().then((value) {
+        needToFillTitle.value = false;
+        needToFillManager.value = false;
+      }));
+      return;
+    }
     final participants = <Participant>[];
 
     for (final element in selectedTeamMembers) {

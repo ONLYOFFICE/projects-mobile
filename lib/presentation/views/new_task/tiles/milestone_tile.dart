@@ -52,9 +52,9 @@ class MilestoneTile extends StatelessWidget {
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        final bool _isSelected = controller.selectedMilestoneTitle!.value.isNotEmpty;
+        final bool _isSelected = controller.selectedMilestoneTitle.value.isNotEmpty;
         return NewItemTile(
-          text: _isSelected ? controller.selectedMilestoneTitle!.value : tr('none'),
+          text: _isSelected ? controller.selectedMilestoneTitle.value : tr('none'),
           icon: SvgIcons.milestone,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground,

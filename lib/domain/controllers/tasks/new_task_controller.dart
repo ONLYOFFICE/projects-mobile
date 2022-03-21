@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
@@ -53,7 +55,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
-class NewTaskController extends GetxController implements TaskActionsController {
+class NewTaskController extends TaskActionsController {
   final TaskService _api = locator<TaskService>();
   late ProjectTeamController teamController;
 
@@ -73,17 +75,6 @@ class NewTaskController extends GetxController implements TaskActionsController 
   @override
   DateTime? get dueDate => _dueDate;
 
-  @override
-  RxString title = ''.obs;
-  @override
-  RxString? selectedProjectTitle = ''.obs;
-  @override
-  RxString? selectedMilestoneTitle = ''.obs;
-  @override
-  RxBool titleIsEmpty = true.obs;
-
-  @override
-  RxString? descriptionText = ''.obs;
   Rx<TextEditingController> descriptionController = TextEditingController().obs;
   final TextEditingController _titleController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
@@ -93,24 +84,9 @@ class NewTaskController extends GetxController implements TaskActionsController 
   @override
   FocusNode get titleFocus => _titleFocus;
 
-  // for readable format
-  @override
-  RxString? startDateText = ''.obs;
-  @override
-  RxString? dueDateText = ''.obs;
-
-  @override
-  RxList? responsibles = [].obs;
   // to track changes
   List _previusSelectedResponsibles = [];
-  @override
-  RxBool? highPriority = false.obs;
   RxBool notifyResponsibles = true.obs;
-
-  @override
-  dynamic needToSelectProject = false.obs; //RxBool
-  @override
-  RxBool? setTitleError = false.obs;
 
   void init(ProjectDetailed? projectDetailed) {
     _titleFocus.requestFocus();
@@ -118,7 +94,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
     teamController = Get.find<ProjectTeamController>();
 
     if (projectDetailed != null) {
-      selectedProjectTitle!.value = projectDetailed.title!;
+      selectedProjectTitle.value = projectDetailed.title!;
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
     }
@@ -131,7 +107,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
   void changeProjectSelection({int? id, String? title}) {
     if (id != null && title != null) {
-      selectedProjectTitle!.value = title;
+      selectedProjectTitle.value = title;
       _selectedProjectId = id;
       _clearState();
       needToSelectProject.value = false;
@@ -143,20 +119,20 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
   void _clearState() {
     teamController.usersList.clear();
-    responsibles!.clear();
+    responsibles.clear();
     _previusSelectedResponsibles.clear();
     removeMilestoneSelection();
   }
 
   void removeProjectSelection() {
     _selectedProjectId = null;
-    selectedProjectTitle!.value = '';
+    selectedProjectTitle.value = '';
   }
 
   @override
   void changeMilestoneSelection({int? id, String? title}) {
     if (id != null && title != null) {
-      selectedMilestoneTitle!.value = title;
+      selectedMilestoneTitle.value = title;
       newMilestoneId = id;
     } else {
       removeMilestoneSelection();
@@ -166,11 +142,11 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
   void removeMilestoneSelection() {
     newMilestoneId = null;
-    selectedMilestoneTitle!.value = '';
+    selectedMilestoneTitle.value = '';
   }
 
   @override
-  void changePriority(bool value) => highPriority!.value = value;
+  void changePriority(bool value) => highPriority.value = value;
 
   void changeNotifyResponsiblesValue(bool value) {
     notifyResponsibles.value = value;
@@ -178,13 +154,13 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
   @override
   void confirmDescription(String newText) {
-    descriptionText!.value = newText;
+    descriptionText.value = newText;
     Get.back();
   }
 
   @override
   void leaveDescriptionView(String typedText) {
-    if (typedText == descriptionText!.value) {
+    if (typedText == descriptionText.value) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -193,7 +169,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
         acceptText: tr('delete').toUpperCase(),
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
-          descriptionController.value.text = descriptionText!.value;
+          descriptionController.value.text = descriptionText.value;
           Get.back();
           Get.back();
         },
@@ -204,13 +180,13 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
   void confirmResponsiblesSelection() {
     // ignore: invalid_use_of_protected_member
-    _previusSelectedResponsibles = List.of(responsibles!.value);
+    _previusSelectedResponsibles = List.of(responsibles.value);
     Get.back();
   }
 
   void leaveResponsiblesSelectionView() {
     // ignore: invalid_use_of_protected_member
-    if (listEquals(_previusSelectedResponsibles, responsibles!.value)) {
+    if (listEquals(_previusSelectedResponsibles, responsibles.value)) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -220,7 +196,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           notifyResponsibles.value = false;
-          responsibles!.value = List.of(_previusSelectedResponsibles);
+          responsibles.value = List.of(_previusSelectedResponsibles);
           Get.back();
           Get.back();
         },
@@ -245,7 +221,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Multiple;
     }
-    for (final selectedMember in responsibles!) {
+    for (final selectedMember in responsibles) {
       for (final user in teamController.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
@@ -256,9 +232,9 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
   void addResponsible(PortalUserItemController user) {
     if (user.isSelected.value == true) {
-      responsibles!.add(user);
+      responsibles.add(user);
     } else {
-      responsibles!.removeWhere((element) => user.portalUser.id == element.portalUser.id);
+      responsibles.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
   }
 
@@ -269,12 +245,12 @@ class NewTaskController extends GetxController implements TaskActionsController 
       final bool verificationResult = checkDate(newDate, _dueDate);
       if (verificationResult) {
         _startDate = newDate;
-        startDateText!.value = formatedDate(newDate);
+        startDateText.value = formatedDate(newDate);
         Get.back();
       }
     } else {
       _startDate = null;
-      startDateText!.value = '';
+      startDateText.value = '';
     }
   }
 
@@ -285,12 +261,12 @@ class NewTaskController extends GetxController implements TaskActionsController 
       final bool verificationResult = checkDate(_startDate, newDate);
       if (verificationResult) {
         _dueDate = newDate;
-        dueDateText!.value = formatedDate(newDate);
+        dueDateText.value = formatedDate(newDate);
         Get.back();
       }
     } else {
       _dueDate = null;
-      dueDateText!.value = '';
+      dueDateText.value = '';
     }
   }
 
@@ -306,18 +282,27 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
   Future<void> confirm() async {
     if (_selectedProjectId == null) needToSelectProject.value = true;
+
     title.value = title.string.trim();
     titleController.text = title.value;
-    if (title.isEmpty) setTitleError!.value = true;
-    if (_selectedProjectId == null || title.isEmpty) return;
+
+    if (title.isEmpty) setTitleError.value = true;
+
+    if (needToSelectProject.value || setTitleError.value) {
+      unawaited(900.milliseconds.delay().then((value) {
+        needToSelectProject.value = false;
+        setTitleError.value = false;
+      }));
+      return;
+    }
 
     Get.back();
 
     String? priority;
     final responsibleIds = <String?>[];
 
-    if (highPriority!.value == true) priority = 'high';
-    for (final item in responsibles!) responsibleIds.add(item.id as String?);
+    if (highPriority.value == true) priority = 'high';
+    for (final item in responsibles) responsibleIds.add(item.id as String?);
 
     final newTask = NewTaskDTO(
         projectId: _selectedProjectId!,
@@ -326,7 +311,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
         deadline: _dueDate,
         priority: priority,
         notify: notifyResponsibles.value,
-        description: descriptionText!.value,
+        description: descriptionText.value,
         title: title.value,
         milestoneid: newMilestoneId);
 
@@ -355,8 +340,8 @@ class NewTaskController extends GetxController implements TaskActionsController 
   void discardTask() {
     if (_selectedProjectId != null ||
         title.isNotEmpty ||
-        responsibles!.isNotEmpty ||
-        descriptionText!.isNotEmpty ||
+        responsibles.isNotEmpty ||
+        descriptionText.isNotEmpty ||
         _startDate != null ||
         _dueDate != null) {
       Get.dialog(StyledAlertDialog(

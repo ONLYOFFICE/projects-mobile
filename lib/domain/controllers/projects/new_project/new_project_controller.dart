@@ -30,9 +30,10 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -76,14 +77,19 @@ class NewProjectController extends BaseProjectEditorController {
       Get.back();
   }
 
-  Future<void> confirm(BuildContext context) async {
+  Future<void> confirm() async {
     titleController.text = titleController.text.trim();
     needToFillTitle.value = titleController.text.isEmpty;
 
-    needToFillManager.value =
-        selectedProjectManager.value == null || selectedProjectManager.value!.id == null;
+    needToFillManager.value = selectedProjectManager.value?.id == null;
 
-    if (needToFillTitle.value == true || needToFillManager.value == true) return;
+    if (needToFillTitle.value == true || needToFillManager.value == true) {
+      unawaited(900.milliseconds.delay().then((value) {
+        needToFillTitle.value = false;
+        needToFillManager.value = false;
+      }));
+      return;
+    }
 
     Get.back();
 
@@ -116,7 +122,7 @@ class NewProjectController extends BaseProjectEditorController {
       locator<EventHub>().fire('needToRefreshProjects', ['all']);
 
       MessagesHandler.showSnackBar(
-        context: context,
+        context: Get.context!,
         text: tr('projectCreated'),
         buttonOnTap: () => Get.find<NavigationController>()
             .to(ProjectDetailedView(), arguments: {'projectDetailed': result}),
@@ -124,7 +130,7 @@ class NewProjectController extends BaseProjectEditorController {
       );
     } else
       MessagesHandler.showSnackBar(
-        context: context,
+        context: Get.context!,
         text: tr('error'),
       );
   }

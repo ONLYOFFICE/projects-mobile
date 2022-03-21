@@ -34,27 +34,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 abstract class TaskActionsController extends GetxController {
-  RxString title = ''.obs;
-  RxString? descriptionText;
-  RxString? selectedMilestoneTitle;
-  RxString? selectedProjectTitle;
-  RxList? responsibles;
-  RxString? startDateText;
-  RxString? dueDateText;
+  final title = ''.obs;
+  final descriptionText = ''.obs;
+  final selectedMilestoneTitle = ''.obs;
+  final selectedProjectTitle = ''.obs;
+  final responsibles = [].obs;
+  final startDateText = ''.obs;
+  final dueDateText = ''.obs;
 
   DateTime? get dueDate;
 
   DateTime? get startDate;
 
-  RxBool? highPriority;
-  late RxBool titleIsEmpty;
+  final highPriority = false.obs;
+  final titleIsEmpty = false.obs;
 
   TextEditingController? _titleController;
   TextEditingController? get titleController => _titleController;
   FocusNode? get titleFocus => FocusNode();
 
-  RxBool? setTitleError;
-  var needToSelectProject;
+  final setTitleError = false.obs;
+  final needToSelectProject = false.obs;
 
   void changeMilestoneSelection();
   void leaveDescriptionView(String typedText);

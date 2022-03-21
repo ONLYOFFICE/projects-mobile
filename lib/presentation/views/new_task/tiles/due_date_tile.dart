@@ -54,10 +54,10 @@ class DueDateTile extends StatelessWidget {
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        final bool _isSelected = controller.dueDateText!.value.isNotEmpty;
+        final bool _isSelected = controller.dueDateText.value.isNotEmpty;
         return NewItemTile(
           icon: SvgIcons.due_date,
-          text: _isSelected ? controller.dueDateText!.value : tr('setDueDate'),
+          text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
           caption: _isSelected ? '${tr('dueDate')}:' : null,
           isSelected: _isSelected,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
