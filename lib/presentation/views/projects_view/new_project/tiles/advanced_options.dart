@@ -103,7 +103,7 @@ class OptionWithSwitch extends StatelessWidget {
       : super(key: key);
 
   final RxBool switchValue;
-  final Function(bool) switchOnChanged;
+  final Function(bool)? switchOnChanged;
   final String title;
   final TextStyle? style;
 

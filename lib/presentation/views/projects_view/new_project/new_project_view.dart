@@ -120,12 +120,15 @@ class NewProject extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
-                    child: OptionWithSwitch(
-                      title: tr('notifyPM'),
-                      switchValue: controller.notificationEnabled,
-                      switchOnChanged: (bool value) {
-                        controller.enableNotification(value);
-                      },
+                    child: Obx(
+                      () => OptionWithSwitch(
+                        title: tr('notifyPM'),
+                        switchValue: controller.notificationEnabled,
+                        switchOnChanged: controller.selectedProjectManager.value?.id !=
+                                controller.selfUserItem.id!
+                            ? controller.enableNotification
+                            : null,
+                      ),
                     ),
                   ),
                   const StyledDivider(
@@ -138,9 +141,7 @@ class NewProject extends StatelessWidget {
                     child: OptionWithSwitch(
                       title: tr('privateProject'),
                       switchValue: controller.isPrivate,
-                      switchOnChanged: (bool value) {
-                        controller.setPrivate(value);
-                      },
+                      switchOnChanged: controller.setPrivate,
                     ),
                   ),
                   const StyledDivider(
@@ -148,18 +149,15 @@ class NewProject extends StatelessWidget {
                     height: 1,
                     thickness: 1,
                   ),
-                  Obx(
-                    () => Padding(
-                      padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
-                      child: OptionWithSwitch(
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                    child: Obx(
+                      () => OptionWithSwitch(
                         title: tr('followProject'),
-                        switchValue: controller.selfUserItem.id ==
+                        switchValue: controller.isFolowed,
+                        switchOnChanged: controller.selfUserItem.id! ==
                                 controller.selectedProjectManager.value?.id
-                            ? false.obs
-                            : controller.isFolowed,
-                        switchOnChanged: controller.selfUserItem.id ==
-                                controller.selectedProjectManager.value?.id
-                            ? (v) => {}
+                            ? null
                             : controller.folow,
                       ),
                     ),

@@ -75,7 +75,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
   Future<bool> updateStatus({int? newStatusId});
 
-  RxList<PortalUserItemController> selectedTeamMembers = <PortalUserItemController>[].obs;
+  final selectedTeamMembers = <PortalUserItemController>[].obs;
 
   Rx<PortalUser?> selectedProjectManager = PortalUser().obs;
   final needToFillManager = false.obs;
@@ -92,6 +92,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
   @override
   void onInit() {
+    selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
     _userController.updateData();
     _userController.user.listen((user) {
       if (user == null) return;
@@ -159,6 +160,12 @@ abstract class BaseProjectEditorController extends GetxController {
       selectedProjectManager.value = user.portalUser;
       managerName.value = selectedProjectManager.value!.displayName!;
       isPMSelected.value = true;
+
+      if (user.portalUser.id == selfUserItem.id) {
+        notificationEnabled.value = false;
+        isFolowed.value = false;
+      }
+      if (user.portalUser.id != selfUserItem.id) notificationEnabled.value = true;
 
       selectedTeamMembers
           .removeWhere((element) => selectedProjectManager.value!.id == element.portalUser.id);
