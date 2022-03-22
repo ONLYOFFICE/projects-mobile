@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -45,8 +47,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ProfileController extends GetxController {
-  final DownloadService _downloadService = locator<DownloadService>();
-  final UserPhotoService _photoService = locator<UserPhotoService>();
+  final _downloadService = locator<DownloadService>();
+  final _photoService = locator<UserPhotoService>();
 
   final portalInfoController = Get.find<PortalInfoController>();
   final userController = Get.find<UserController>();
@@ -61,30 +63,41 @@ class ProfileController extends GetxController {
   final isOwner = false.obs;
   final isAdmin = false.obs;
 
-  // ignore: unnecessary_cast
-  Rx<Widget> avatar = (AppIcon(
-    width: 120,
-    height: 120,
-    icon: SvgIcons.avatar,
-    color: Get.theme.colors().onSurface,
-  ) as Widget)
-      .obs;
+  final avatar = Rx<Widget>(
+    AppIcon(
+      width: 120,
+      height: 120,
+      icon: SvgIcons.avatar,
+      color: Get.theme.colors().onSurface,
+    ),
+  );
 
-  Future<void> setup() async {
-    await userController.getUserInfo();
+  ProfileController() {
+    if (userController.user.value != null)
+      setUserData(userController.user.value!);
+    else
+      unawaited(userController.updateData());
 
-    user.value = userController.user.value!;
-    username.value = userController.user.value!.displayName!;
-    status.value = userController.user.value!.status!;
-    isVisitor.value = userController.user.value!.isVisitor!;
-    isOwner.value = userController.user.value!.isOwner!;
-    isAdmin.value = userController.user.value!.isAdmin!;
-    email.value = userController.user.value!.email!;
+    userController.user.listen((user) {
+      if (user == null) return;
+      setUserData(user);
+    });
 
-    await portalInfoController.setup();
-    portalName.value = portalInfoController.portalName!;
+    portalInfoController.setup().then((value) {
+      portalName.value = portalInfoController.portalName!;
+    });
+  }
 
-    await loadAvatar();
+  void setUserData(PortalUser _user) {
+    user.value = _user;
+    username.value = _user.displayName!;
+    status.value = _user.status!;
+    isVisitor.value = _user.isVisitor!;
+    isOwner.value = _user.isOwner!;
+    isAdmin.value = _user.isAdmin!;
+    email.value = _user.email!;
+
+    loadAvatar();
   }
 
   void logout(context) async {
@@ -105,13 +118,12 @@ class ProfileController extends GetxController {
           photoUrl?.max ?? user.value.avatar ?? user.value.avatarMedium ?? user.value.avatarSmall!);
       if (avatarBytes == null) return;
 
-      // ignore: unnecessary_cast
       avatar.value = Image.memory(
         avatarBytes,
         width: 120,
         height: 120,
         fit: BoxFit.cover,
-      ) as Widget;
+      );
     } catch (e) {
       print(e);
       return;

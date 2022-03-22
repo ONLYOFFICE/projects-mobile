@@ -92,8 +92,11 @@ abstract class BaseProjectEditorController extends GetxController {
 
   @override
   void onInit() {
-    selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
-    _userController.updateData();
+    if (_userController.user.value != null)
+      selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
+    else
+      _userController.updateData();
+
     _userController.user.listen((user) {
       if (user == null) return;
       selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
