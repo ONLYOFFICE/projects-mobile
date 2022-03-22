@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -55,15 +56,16 @@ class EditProjectView extends StatelessWidget {
   Widget build(BuildContext context) {
     final editProjectController = Get.find<ProjectEditController>();
     editProjectController.setupEditor(Get.arguments['projectDetailed'] as ProjectDetailed);
-
+    final platformController = Get.find<PlatformController>();
     return WillPopScope(
       onWillPop: () async {
         editProjectController.discardChanges();
         return false;
       },
       child: Scaffold(
-        //backgroundColor: Get.theme.backgroundColor,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('editProject'),
           centerTitle: !GetPlatform.isAndroid,
           leadingWidth: GetPlatform.isIOS ? 100 : null,

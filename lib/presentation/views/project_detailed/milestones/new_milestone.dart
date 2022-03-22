@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 import 'package:projects/presentation/shared/project_team_responsible.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -56,6 +57,7 @@ class NewMilestoneView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final newMilestoneController = Get.find<NewMilestoneController>();
+    final platformController = Get.find<PlatformController>();
     final projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
     newMilestoneController.setup(projectDetailed);
 
@@ -65,8 +67,13 @@ class NewMilestoneView extends StatelessWidget {
           return false;
         },
         child: Scaffold(
-          backgroundColor: Get.theme.colors().backgroundColor,
+          backgroundColor: platformController.isMobile
+              ? Get.theme.colors().backgroundColor
+              : Get.theme.colors().surface,
           appBar: StyledAppBar(
+            backgroundColor: platformController.isMobile
+                ? Get.theme.colors().backgroundColor
+                : Get.theme.colors().surface,
             titleText: tr('newMilestone'),
             actions: [
               PlatformIconButton(

@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -59,6 +60,7 @@ class NewTaskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<NewTaskController>();
+    final platformController = Get.find<PlatformController>();
     final projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed?;
     controller.init(projectDetailed);
 
@@ -68,8 +70,13 @@ class NewTaskView extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Get.theme.colors().backgroundColor,
+        backgroundColor: platformController.isMobile
+            ? Get.theme.colors().backgroundColor
+            : Get.theme.colors().surface,
         appBar: StyledAppBar(
+          backgroundColor: platformController.isMobile
+              ? Get.theme.colors().backgroundColor
+              : Get.theme.colors().surface,
           titleText: tr('newTask'),
           leadingWidth: GetPlatform.isIOS ? 100 : null,
           centerTitle: GetPlatform.isIOS,

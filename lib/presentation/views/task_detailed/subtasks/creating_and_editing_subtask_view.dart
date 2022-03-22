@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/new_subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
@@ -69,13 +70,17 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
       controller.init(projectId: projectId);
     }
 
+    final platformController = Get.find<PlatformController>();
+
     return WillPopScope(
       onWillPop: () async {
         controller.leavePage();
         return false;
       },
       child: Scaffold(
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: forEditing ? tr('editSubtask') : tr('addSubtask'),
           leadingWidth: GetPlatform.isIOS ? 100 : null,
           centerTitle: !GetPlatform.isAndroid,

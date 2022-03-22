@@ -34,8 +34,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
@@ -56,13 +58,15 @@ class GroupMembersSelectionView extends StatelessWidget {
     final controller = Get.arguments['controller'];
 
     final groupsDataSource = Get.find<GroupsDataSource>();
+    final platformController = Get.find<PlatformController>();
 
     void onActionPressed() => controller.confirmGroupSelection();
 
     groupsDataSource.getGroups();
     return Scaffold(
-      //backgroundColor: Get.theme.backgroundColor,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('addMembersOf'),
         centerTitle: GetPlatform.isIOS,
         leadingWidth: GetPlatform.isIOS ? 100 : null,

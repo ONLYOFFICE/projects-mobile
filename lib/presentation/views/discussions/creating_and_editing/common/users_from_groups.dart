@@ -35,7 +35,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
@@ -47,13 +49,17 @@ class UsersFromGroups extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platformController = Get.find<PlatformController>();
+
     final controller = Get.arguments['controller'] as DiscussionActionsController;
 
     final groupsDataSource = Get.find<GroupsDataSource>();
     groupsDataSource.getGroups();
 
     return Scaffold(
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: 'Users from groups',
         centerTitle: GetPlatform.isIOS,
         leadingWidth: GetPlatform.isIOS ? 100 : null,
