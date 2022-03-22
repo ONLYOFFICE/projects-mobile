@@ -81,37 +81,35 @@ class NavigationView extends StatelessWidget {
   void setupControllers() {
     Get.find<UserController>().updateData();
 
-    if (!Get.isRegistered<PlatformController>()) Get.put(PlatformController(), permanent: true);
-
     if (!Get.isRegistered<DashboardController>(tag: 'DashboardController')) {
-      Get.put(DashboardController(), tag: 'DashboardController', permanent: true)
+      Get.put(DashboardController(), tag: 'DashboardController')
         ..setup()
         ..loadContent();
     }
 
     if (!Get.isRegistered<TasksController>(tag: 'TasksView')) {
-      Get.put(TasksController(), tag: 'TasksView', permanent: true)
+      Get.put(TasksController(), tag: 'TasksView')
         ..setup(PresetTaskFilters.saved)
         ..loadTasks();
     }
 
     if (!Get.isRegistered<ProjectsController>(tag: 'ProjectsView')) {
-      Get.put(ProjectsController(), tag: 'ProjectsView', permanent: true)
+      Get.put(ProjectsController(), tag: 'ProjectsView')
         ..setup(PresetProjectFilters.saved)
         ..loadProjects();
     }
 
     if (!Get.isRegistered<DiscussionsController>(tag: 'DiscussionsView')) {
-      Get.put(DiscussionsController(), tag: 'DiscussionsView', permanent: true)
+      Get.put(DiscussionsController(), tag: 'DiscussionsView')
           .loadDiscussions(preset: PresetDiscussionFilters.saved);
     }
 
     if (!Get.isRegistered<DocumentsController>(tag: 'DocumentsView')) {
-      Get.put(DocumentsController(), tag: 'DocumentsView', permanent: true).initialSetup();
+      Get.put(DocumentsController(), tag: 'DocumentsView').initialSetup();
     }
 
     if (!Get.isRegistered<ProfileController>(tag: 'SelfProfileScreen')) {
-      Get.put(ProfileController(), tag: 'SelfProfileScreen', permanent: true);
+      Get.put(ProfileController(), tag: 'SelfProfileScreen');
     }
   }
 }

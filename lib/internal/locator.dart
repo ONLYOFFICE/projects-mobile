@@ -169,7 +169,7 @@ void setupLocator() {
 }
 
 void setupGetX() {
-  Get.lazyPut(() => PlatformController(), fenix: true);
+  Get.put(PlatformController(), permanent: true);
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
 
