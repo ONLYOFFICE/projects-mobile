@@ -35,6 +35,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:path_provider/path_provider.dart';
@@ -147,14 +148,13 @@ class SettingsController extends GetxController {
   }
 
   Future<void> onClearCachePressed() async {
+    final cm = DefaultCacheManager();
+    cm.store.emptyMemoryCache();
+    await cm.store.emptyCache();
+
     final cacheDir = await getTemporaryDirectory();
     if (cacheDir.existsSync()) {
       await Directory(cacheDir.path).list().forEach((e) => e.delete(recursive: true));
-    }
-
-    final docDir = await getApplicationDocumentsDirectory();
-    if (docDir.existsSync()) {
-      await Directory(docDir.path).list().forEach((e) => e.delete(recursive: true));
     }
 
     await setupCacheDirectorySize();
@@ -162,21 +162,12 @@ class SettingsController extends GetxController {
 
   Future<void> setupCacheDirectorySize() async {
     final cacheDir = (await getTemporaryDirectory()).path;
-    final docDir = (await getApplicationDocumentsDirectory()).path;
 
     var totalSize = 0;
     final cache = Directory(cacheDir);
-    final doc = Directory(docDir);
     try {
       if (cache.existsSync()) {
         cache.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
-          if (entity is File) {
-            totalSize += entity.lengthSync();
-          }
-        });
-      }
-      if (doc.existsSync()) {
-        doc.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
           if (entity is File) {
             totalSize += entity.lengthSync();
           }

@@ -40,6 +40,7 @@ import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
@@ -117,11 +118,40 @@ class SettingsScreen extends StatelessWidget {
                       loverText: tr(controller.currentTheme.value),
                       enableIconOpacity: true,
                       icon: SvgIcons.color_scheme,
-                      enableUnderline: true,
                       onTap: () => Get.find<NavigationController>().toScreen(
                         const ColorThemeSelectionScreen(),
                         transition: Transition.rightToLeft,
                         isRootModalScreenView: false,
+                      ),
+                    ),
+                    SettingTile(
+                      text: tr('clearCache'),
+                      enableIconOpacity: true,
+                      icon: SvgIcons.clean,
+                      enableUnderline: true,
+                      onTap: () {
+                        Get.dialog(
+                          StyledAlertDialog(
+                            title: Text(tr('clearCacheQuestion')),
+                            // content: Text(tr('clearCacheQuestionDescription')),
+                            cancelText: tr('cancel').toLowerCase().capitalizeFirst,
+                            acceptText: tr('clearCache'),
+                            onCancelTap: () {
+                              Navigator.pop(context);
+                            },
+                            onAcceptTap: () {
+                              controller.onClearCachePressed();
+                              Navigator.pop(context);
+                            },
+                          ),
+                        );
+                      },
+                      suffix: Obx(
+                        () => Text(
+                          controller.cacheSize.value,
+                          style: TextStyleHelper.body2(
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
+                        ),
                       ),
                     ),
                     SettingTile(
