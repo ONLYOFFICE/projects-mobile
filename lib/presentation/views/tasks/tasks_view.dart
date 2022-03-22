@@ -34,7 +34,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/tasks/base_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -46,7 +45,6 @@ import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart'
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
-import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/tasks/tasks_shared.dart';
 
 class TasksView extends StatelessWidget {

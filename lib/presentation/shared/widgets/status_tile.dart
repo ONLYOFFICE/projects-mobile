@@ -94,12 +94,6 @@ class StatusTileTablet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BoxDecoration _selectedDecoration() {
-      // TODO delete if not needed
-      return BoxDecoration(
-          color: Get.theme.colors().bgDescription, borderRadius: BorderRadius.circular(6));
-    }
-
     return Row(
       children: [
         Container(

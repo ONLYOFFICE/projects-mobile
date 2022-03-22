@@ -78,7 +78,6 @@ import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
-import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';

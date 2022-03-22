@@ -41,7 +41,6 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/project_manager.dart';

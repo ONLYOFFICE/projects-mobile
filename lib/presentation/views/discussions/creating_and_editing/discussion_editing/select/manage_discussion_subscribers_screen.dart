@@ -36,7 +36,6 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -128,8 +127,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
                 usersDataSource.isSearchResult.value == true) {
               return UsersSearchResult(
                 usersDataSource: usersDataSource,
-                onTapFunction: (user) => controller.addSubscriber(user as PortalUserItemController,
-                    fromUsersDataSource: true),
+                onTapFunction: (user) => controller.addSubscriber(user, fromUsersDataSource: true),
               );
             }
             return const ListLoadingSkeleton();
