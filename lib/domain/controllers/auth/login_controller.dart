@@ -39,7 +39,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
@@ -79,7 +78,6 @@ class LoginController extends GetxController {
   final emailFieldError = false.obs;
   final passwordFieldError = false.obs;
 
-  Capabilities? capabilities;
   String? _pass;
   String? _email;
   String? _tfaKey;
@@ -281,7 +279,6 @@ class LoginController extends GetxController {
       final _capabilities = await _portalService.portalCapabilities();
 
       if (_capabilities != null) {
-        capabilities = _capabilities;
         checkBoxValue.value = false;
         loaded.value = true;
         await Get.to(() => LoginView());
@@ -303,7 +300,12 @@ class LoginController extends GetxController {
       if (portalString[portalString.length - 1] == '.')
         portalString = portalString.substring(0, portalString.length - 1);
 
-      portalURI = Uri.parse(portalString);
+      if (portalString.isURL) {
+        if (!portalString.contains('http')) portalString = 'https://$portalString';
+
+        portalURI = Uri.parse(portalString);
+      } else
+        return '';
     }
 
     return portalString;
@@ -357,7 +359,6 @@ class LoginController extends GetxController {
     _emailController.clear();
     _passwordController.clear();
 
-    capabilities = null;
     _pass = null;
     _email = null;
     _tfaKey = null;
@@ -375,7 +376,6 @@ class LoginController extends GetxController {
     _emailController.clear();
     _passwordController.clear();
 
-    capabilities = null;
     _pass = null;
     _email = null;
     _tfaKey = null;

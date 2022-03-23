@@ -112,6 +112,7 @@ Map _blockingErrors = {
   // 'bad gateway': 'Bad Gateway',
   'forbidden': 'Forbidden',
   'payment required': 'Payment required',
+  'paymentrequired': 'Payment required',
   'the paid period is over': 'The paid period is over',
   'access to the projects module is forbidden': 'Access to the Projects module is Forbidden',
   'contact the portal administrator for access to the projects module.':

@@ -230,6 +230,6 @@ class AccountManager extends GetxController {
     account.token = '';
     final accountString = jsonEncode(account.toIOSJson());
 
-    await accountProvider.updateAccount(accountData: accountString, accountId: account.id!);
+    await accountProvider.updateAccount(accountData: accountString, accountId: account.id ?? '');
   }
 }
