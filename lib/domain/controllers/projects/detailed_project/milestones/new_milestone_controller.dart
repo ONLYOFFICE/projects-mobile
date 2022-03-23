@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
@@ -235,13 +237,22 @@ class NewMilestoneController extends GetxController {
 
     titleController.text = titleController.text.trim();
     needToSetTitle.value = titleController.text.isEmpty;
+
     needToSelectResponsible.value = responsible.value == null;
     needToSetDueDate.value = dueDate == null;
 
     if (needToSelectProject.value ||
         needToSetTitle.value ||
         needToSelectResponsible.value ||
-        needToSetDueDate.value) return;
+        needToSetDueDate.value) {
+      unawaited(900.milliseconds.delay().then((value) {
+        needToSelectProject.value = false;
+        needToSetTitle.value = false;
+        needToSelectResponsible.value = false;
+        needToSetDueDate.value = false;
+      }));
+      return;
+    }
 
     Get.back();
 
