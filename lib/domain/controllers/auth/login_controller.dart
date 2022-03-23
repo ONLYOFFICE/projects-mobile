@@ -303,8 +303,6 @@ class LoginController extends GetxController {
       if (portalString[portalString.length - 1] == '.')
         portalString = portalString.substring(0, portalString.length - 1);
 
-      if (!portalString.contains('http')) portalString = 'https://$portalString';
-
       portalURI = Uri.parse(portalString);
     }
 
