@@ -210,8 +210,10 @@ class AccountManager extends GetxController {
     if ((currentAccount ?? '') != '') {
       final account = AccountData.fromJson(json.decode(currentAccount!) as Map<String, dynamic>);
 
-      await clearTokenForAccount(account);
-      await _secureStorage.putString('currentAccount', jsonEncode(account.toJson()));
+      if (account.id != null) {
+        await clearTokenForAccount(account);
+        await _secureStorage.putString('currentAccount', jsonEncode(account.toJson()));
+      }
     }
   }
 
@@ -230,6 +232,6 @@ class AccountManager extends GetxController {
     account.token = '';
     final accountString = jsonEncode(account.toIOSJson());
 
-    await accountProvider.updateAccount(accountData: accountString, accountId: account.id ?? '');
+    await accountProvider.updateAccount(accountData: accountString, accountId: account.id!);
   }
 }
