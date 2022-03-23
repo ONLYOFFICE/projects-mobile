@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -47,6 +48,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart'
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
@@ -71,18 +73,44 @@ class NewMilestoneView extends StatelessWidget {
               ? Get.theme.colors().backgroundColor
               : Get.theme.colors().surface,
           appBar: StyledAppBar(
+            leadingWidth: GetPlatform.isIOS ? 100 : null,
+            centerTitle: !GetPlatform.isAndroid,
             backgroundColor: platformController.isMobile
                 ? Get.theme.colors().backgroundColor
                 : Get.theme.colors().surface,
             titleText: tr('newMilestone'),
             actions: [
-              PlatformIconButton(
-                  icon: Icon(PlatformIcons(context).checkMark),
-                  onPressed: () => newMilestoneController.confirm(context))
+              PlatformWidget(
+                material: (_, __) => IconButton(
+                  icon: const Icon(Icons.check_rounded),
+                  onPressed: newMilestoneController.confirm,
+                ),
+                cupertino: (_, __) => CupertinoButton(
+                  onPressed: newMilestoneController.confirm,
+                  padding: const EdgeInsets.only(right: 16),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    tr('done'),
+                    style: TextStyleHelper.headline7(),
+                  ),
+                ),
+              )
             ],
-            leading: PlatformIconButton(
-                icon: const Icon(Icons.arrow_back_rounded),
-                onPressed: newMilestoneController.discard),
+            leading: PlatformWidget(
+              cupertino: (_, __) => CupertinoButton(
+                padding: const EdgeInsets.only(left: 16),
+                alignment: Alignment.centerLeft,
+                onPressed: newMilestoneController.discard,
+                child: Text(
+                  tr('closeLowerCase'),
+                  style: TextStyleHelper.button(),
+                ),
+              ),
+              material: (_, __) => IconButton(
+                onPressed: newMilestoneController.discard,
+                icon: const Icon(Icons.close),
+              ),
+            ),
           ),
           body: Listener(
             onPointerDown: (_) {
