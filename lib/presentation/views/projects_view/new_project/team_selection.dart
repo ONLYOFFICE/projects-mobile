@@ -133,9 +133,9 @@ class GroupsOverview extends StatelessWidget {
         itemCount: groupsDataSource.groupsList.length,
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(vertical: 22),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         separatorBuilder: (BuildContext c, int i) {
-          return const SizedBox(height: 25);
+          return const SizedBox(height: 10);
         },
         itemBuilder: (BuildContext c, int i) {
           return PortalGroupItem(

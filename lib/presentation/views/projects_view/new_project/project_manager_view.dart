@@ -188,23 +188,22 @@ class UsersDefault extends StatelessWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 26),
+                  const SizedBox(height: 20),
                   Container(
                     padding: const EdgeInsets.only(left: 16),
                     child: Text(tr('me'),
                         style: TextStyleHelper.body2(
                             color: Get.theme.colors().onSurface.withOpacity(0.6))),
                   ),
-                  const SizedBox(height: 26),
                   PortalUserItem(
                     onTapFunction: onTapFunction,
                     userController: selfUserItem,
                   ),
-                  const SizedBox(height: 26),
+                  const SizedBox(height: 20),
                 ],
               );
             else
-              return const SizedBox(height: 26);
+              return const SizedBox(height: 20);
           }),
           Container(
             padding: const EdgeInsets.only(left: 16),

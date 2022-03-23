@@ -137,6 +137,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
             Text(
               title,
               style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+              overflow: TextOverflow.fade,
             ),
             if (controller.selectedTeamMembers.isNotEmpty as bool)
               Text(
@@ -196,7 +197,7 @@ class TeamMembersSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 32,
-      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 4),
+      margin: const EdgeInsets.only(left: 16, right: 4, bottom: 8, top: 4),
       child: Row(
         children: <Widget>[
           Expanded(
