@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:darq/darq.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
@@ -345,7 +347,14 @@ class NewDiscussionController extends GetxController implements DiscussionAction
 
     if (text.isEmpty) setTextError.value = true;
 
-    if (_selectedProjectId == null || title.isEmpty || text.isEmpty) return;
+    if (selectProjectError.value || setTitleError.value || setTextError.value) {
+      unawaited(900.milliseconds.delay().then((value) {
+        selectProjectError.value = false;
+        setTitleError.value = false;
+        setTextError.value = false;
+      }));
+      return;
+    }
 
     Get.back();
 
