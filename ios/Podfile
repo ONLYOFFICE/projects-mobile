@@ -38,6 +38,10 @@ target 'Runner' do
   pod 'KeychainSwift'
   
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  # Workaround Xcode 13.3 build
+  # https://github.com/miguelpruivo/flutter_file_picker/issues/999
+  pod 'DKImagePickerController/PhotoGallery', :git => 'https://github.com/miguelpruivo/DKImagePickerController.git'
 end
 
 post_install do |installer|

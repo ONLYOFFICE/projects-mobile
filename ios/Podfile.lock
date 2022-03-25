@@ -215,6 +215,7 @@ DEPENDENCIES:
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - devicelocale (from `.symlinks/plugins/devicelocale/ios`)
+  - DKImagePickerController/PhotoGallery (from `https://github.com/miguelpruivo/DKImagePickerController.git`)
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -244,7 +245,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/CocoaPods/Specs.git:
-    - DKImagePickerController
     - DKPhotoGallery
     - Firebase
     - FirebaseABTesting
@@ -277,6 +277,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/device_info_plus/ios"
   devicelocale:
     :path: ".symlinks/plugins/devicelocale/ios"
+  DKImagePickerController:
+    :git: https://github.com/miguelpruivo/DKImagePickerController.git
   file_picker:
     :path: ".symlinks/plugins/file_picker/ios"
   firebase_analytics:
@@ -323,6 +325,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_cookie_manager/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/ios"
+
+CHECKOUT OPTIONS:
+  DKImagePickerController:
+    :commit: ded0926eb9fddf0bc03fa79d552b1cbd3537ce97
+    :git: https://github.com/miguelpruivo/DKImagePickerController.git
 
 SPEC CHECKSUMS:
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
@@ -376,6 +383,6 @@ SPEC CHECKSUMS:
   webview_cookie_manager: eaf920722b493bd0f7611b5484771ca53fed03f7
   webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
-PODFILE CHECKSUM: fdf793b27e406915bd61c1d5fb240d0bc23b5aa6
+PODFILE CHECKSUM: 1786190ff51d5a08d6798c72988c67aa3cff4bc2
 
 COCOAPODS: 1.11.2
