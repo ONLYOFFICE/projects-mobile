@@ -149,6 +149,7 @@ class ProjectIcon extends StatelessWidget {
             final color = itemController.canEdit.value == true
                 ? Get.theme.colors().primary
                 : Get.theme.colors().onBackground;
+            final statusImage = itemController.statusImageString.value;
             return Stack(
               alignment: Alignment.center,
               children: <Widget>[
@@ -185,7 +186,7 @@ class ProjectIcon extends StatelessWidget {
                     ),
                   ),
                 ),
-                AppIcon(icon: itemController.statusImage, color: color),
+                AppIcon(icon: statusImage, color: color),
               ],
             );
           }),
@@ -243,7 +244,7 @@ class _Content extends StatelessWidget {
                     ? Get.theme.colors().primary
                     : Get.theme.colors().onBackground;
                 return Text(
-                  itemController.statusName,
+                  itemController.statusNameString.value,
                   style: TextStyleHelper.status(color: color),
                 );
               }),
@@ -304,7 +305,8 @@ class _Suffix extends StatelessWidget {
   }
 }
 
-void showsStatusesBS({required BuildContext context, dynamic itemController}) {
+void showsStatusesBS(
+    {required BuildContext context, required BaseProjectEditorController itemController}) {
   final _statusesController = Get.find<ProjectStatusesController>();
   showCustomBottomSheet(
     context: context,
@@ -349,9 +351,10 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) {
                       onTap: () async {
                         final success = await itemController.updateStatus(
                           newStatusId: _statusesController.statuses[i],
-                        ) as bool;
+                        );
                         if (success) {
-                          locator<EventHub>().fire('needToRefreshProjects', ['all']);
+                          locator<EventHub>()
+                              .fire('needToRefreshProjects', [itemController.projectData!.id]);
                         }
                         Get.back();
                       },
@@ -359,11 +362,11 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) {
                           title: _statusesController.getStatusName(i),
                           icon: AppIcon(
                               icon: _statusesController.getStatusImageString(i),
-                              color: itemController.projectData.canEdit as bool
+                              color: itemController.projectData!.canEdit!
                                   ? Get.theme.colors().primary
                                   : Get.theme.colors().onBackground),
-                          selected:
-                              _statusesController.statuses[i] == itemController.projectData.status),
+                          selected: _statusesController.statuses[i] ==
+                              itemController.projectData!.status!),
                     ),
                   const SizedBox(height: 16),
                 ],
@@ -402,7 +405,8 @@ void showsStatusesPM(
                   newStatusId: _statusesController.statuses[i],
                 );
                 if (success) {
-                  locator<EventHub>().fire('needToRefreshProjects', ['all']);
+                  locator<EventHub>()
+                      .fire('needToRefreshProjects', [itemController.projectData!.id]);
                 }
                 Get.back();
               },

@@ -32,6 +32,7 @@
 
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -50,6 +51,8 @@ class ProjectCellController extends BaseProjectEditorController {
       isPrivate.value = project.isPrivate!;
       status.value = project.status!;
       canEdit.value = project.canEdit!;
+      statusNameString.value = ProjectStatus.toName(_project.status);
+      statusImageString.value = ProjectStatus.toImageString(_project.status);
     });
   }
 
@@ -58,20 +61,28 @@ class ProjectCellController extends BaseProjectEditorController {
   @override
   ProjectDetailed get projectData => _project;
 
-  RxBool canEdit = false.obs;
-  RxInt status = (-1).obs;
+  final canEdit = false.obs;
+  final status = RxInt(ProjectStatusCode.open.index);
 
-  RxString statusImageString = ''.obs;
-
-  String get statusImage => ProjectStatus.toImageString(_project.status);
-
-  String get statusName => ProjectStatus.toName(_project.status);
+  final statusImageString = RxString(ProjectStatus.toImageString(ProjectStatusCode.open.index));
+  final statusNameString = RxString(tr('statusOpen'));
 
   String decodeImageString(String image) {
     return utf8.decode(base64.decode(image));
   }
 
   @override
-  Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
-      .updateStatus(newStatusId: newStatusId, projectData: projectData);
+  Future<bool> updateStatus({int? newStatusId}) async {
+    final resp = await Get.find<ProjectStatusesController>()
+        .updateStatus(newStatusId: newStatusId, projectData: projectData);
+
+    if (resp) {
+      _project.status = newStatusId;
+      status.value = newStatusId!;
+      statusNameString.value = ProjectStatus.toName(_project.status);
+      statusImageString.value = ProjectStatus.toImageString(_project.status);
+    }
+
+    return resp;
+  }
 }
