@@ -45,7 +45,7 @@ class _StatusImage extends StatelessWidget {
     return Obx(() {
       if (!controller.isStatusLoaded.value) return const _StatusLoadingIcon();
       return GestureDetector(
-        onTap: () async => controller.openStatuses(context),
+        onTap: () => controller.openStatuses(context),
         child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -59,9 +59,15 @@ class _StatusImage extends StatelessWidget {
                     shape: BoxShape.circle,
                     color: controller.getStatusBGColor,
                   ),
-                  child: StatusIcon(
-                    canEditTask: controller.task.value.canEdit!,
-                    status: controller.status.value,
+                  child: Obx(
+                    () {
+                      final canEditTask = controller.task.value.canEdit!;
+                      final status = controller.status.value;
+                      return StatusIcon(
+                        canEditTask: canEditTask,
+                        status: status,
+                      );
+                    },
                   ),
                 ),
               ),

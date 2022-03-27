@@ -93,7 +93,6 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
-import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';

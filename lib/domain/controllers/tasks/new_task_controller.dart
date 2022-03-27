@@ -317,7 +317,7 @@ class NewTaskController extends TaskActionsController {
 
     final createdTask = await _api.addTask(newTask: newTask);
     if (createdTask != null) {
-      locator<EventHub>().fire('needToRefreshTasks');
+      locator<EventHub>().fire('needToRefreshTasks', {'all': true});
 
       MessagesHandler.showSnackBar(
         context: Get.context!,

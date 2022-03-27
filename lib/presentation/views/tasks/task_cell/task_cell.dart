@@ -104,10 +104,9 @@ class _StatusText extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
-  final TaskItemController? controller;
+  final TaskItemController controller;
 
-  bool get _loading =>
-      controller!.isStatusLoaded.isFalse || controller?.status.value.isNull != false;
+  bool get _loading => controller.isStatusLoaded.isFalse || controller.status.value.isNull != false;
 
   @override
   Widget build(BuildContext context) {
@@ -120,10 +119,10 @@ class _StatusText extends StatelessWidget {
           children: [
             ConstrainedBox(
               constraints: BoxConstraints(maxWidth: Get.width * 0.25),
-              child: Text(controller!.status.value.title!,
+              child: Text(controller.status.value.title!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.status(color: controller!.getStatusTextColor)),
+                  style: TextStyleHelper.status(color: controller.getStatusTextColor)),
             ),
             Text(' • ',
                 style:

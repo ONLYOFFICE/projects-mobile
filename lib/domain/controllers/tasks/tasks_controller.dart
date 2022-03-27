@@ -107,7 +107,14 @@ class TasksController extends BaseTasksController {
         .then((value) => taskStatusesLoaded.value = true);
 
     _ss.add(locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
-      refreshData();
+      if (data['all'] == true) refreshData();
+      if (data['task'].id != null) {
+        for (var i = 0; i < itemList.length; i++)
+          if (itemList[i].id == data['task'].id) {
+            itemList[i] = data['task'] as PortalTask;
+            return;
+          }
+      }
     }));
   }
 

@@ -107,26 +107,23 @@ class TaskItemController extends GetxController {
 
   final commentsListController = ScrollController();
 
-  late StreamSubscription _refreshParentTaskSubscription;
-  late StreamSubscription _scrollToLastCommentSubscription;
+  final _ss = <StreamSubscription>[];
 
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
 
-    _refreshParentTaskSubscription =
-        locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
+    _ss.add(locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         final showLoading = data.length > 1 ? data[1] as bool : false;
         await reloadTask(showLoading: showLoading);
       }
-    });
+    }));
 
-    _scrollToLastCommentSubscription =
-        locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
+    _ss.add(locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         scrollToLastComment();
       }
-    });
+    }));
   }
 
   void setup(PortalTask portalTask) {
@@ -135,8 +132,9 @@ class TaskItemController extends GetxController {
 
   @override
   void onClose() {
-    _refreshParentTaskSubscription.cancel();
-    _scrollToLastCommentSubscription.cancel();
+    for (final element in _ss) {
+      element.cancel();
+    }
     super.onClose();
   }
 
@@ -211,7 +209,7 @@ class TaskItemController extends GetxController {
     final copiedTask = await _api.copyTask(copyFrom: task.value.id!, newTask: newTask);
 
     if (copiedTask != null) {
-      locator<EventHub>().fire('needToRefreshTasks');
+      locator<EventHub>().fire('needToRefreshTasks', {'all': true});
 
       final newTaskController =
           Get.put(TaskItemController(copiedTask), tag: copiedTask.id.toString());
@@ -237,7 +235,9 @@ class TaskItemController extends GetxController {
     final t = await _api.getTaskByID(id: task.value.id!);
     if (t != null) {
       task.value = t;
-      await initTaskStatus(task.value);
+      unawaited(initTaskStatus(task.value));
+
+      locator<EventHub>().fire('needToRefreshTasks', {'task': t});
     }
 
     final team = Get.find<ProjectTeamController>()..setup(projectId: task.value.projectOwner!.id);
@@ -251,12 +251,10 @@ class TaskItemController extends GetxController {
       task.value.responsibles!.add(user.portalUser);
     }
 
-    //locator<EventHub>().fire('needToRefreshTasks'); // TODO
-
     if (showLoading) loaded.value = true;
   }
 
-  Future<void> openStatuses(BuildContext context) async {
+  void openStatuses(BuildContext context) {
     if (task.value.canEdit! && isStatusLoaded.isTrue) {
       if (Get.find<PlatformController>().isMobile)
         showsStatusesBS(context: context, taskItemController: this);
@@ -289,16 +287,19 @@ class TaskItemController extends GetxController {
   Future _changeTaskStatus(
       {required int id, required int newStatusId, required int newStatusType}) async {
     loaded.value = false;
+
     final t = await _api.updateTaskStatus(
         taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
 
     if (t != null) {
       final newTask = PortalTask.fromJson(t as Map<String, dynamic>);
       task.value = newTask;
-      await initTaskStatus(newTask);
+      unawaited(initTaskStatus(newTask));
 
-      locator<EventHub>().fire('needToRefreshTasks');
-    }
+      locator<EventHub>().fire('needToRefreshTasks', {'task': newTask});
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
     loaded.value = true;
   }
 

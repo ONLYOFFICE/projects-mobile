@@ -129,7 +129,7 @@ void _onSelected(value, TaskItemController controller) async {
         onAcceptTap: () async {
           final result = await controller.deleteTask(taskId: task.id!);
           if (result) {
-            locator<EventHub>().fire('needToRefreshTasks');
+            locator<EventHub>().fire('needToRefreshTasks', {'all': true});
 
             Get.back();
             Get.back();

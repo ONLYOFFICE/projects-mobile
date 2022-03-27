@@ -353,13 +353,13 @@ class TaskEditingController extends TaskActionsController {
 
     // update the task status if it has been changed
     if (initialStatus!.id != newStatus.value!.id) {
-      await _taskItemController.tryChangingStatus(
+      unawaited(_taskItemController.tryChangingStatus(
           id: task.id!,
           newStatusId: newStatus.value!.id!,
-          newStatusType: newStatus.value!.statusType!);
+          newStatusType: newStatus.value!.statusType!));
     }
-    final responsibleIds = <String?>[];
 
+    final responsibleIds = <String?>[];
     for (final item in responsibles) responsibleIds.add(item.id as String?);
     final newTask = NewTaskDTO(
       description: descriptionText.value,
@@ -376,10 +376,10 @@ class TaskEditingController extends TaskActionsController {
     final updatedTask = await _api.updateTask(newTask: newTask);
 
     if (updatedTask != null) {
-      // ignore: unawaited_futures
-      _taskItemController.reloadTask(showLoading: true);
+      unawaited(_taskItemController.reloadTask(showLoading: true));
       Get.back();
-    }
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   Future<void> acceptTask() async {

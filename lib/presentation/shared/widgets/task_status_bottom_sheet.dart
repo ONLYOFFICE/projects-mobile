@@ -88,8 +88,8 @@ void showsStatusesBS({
                   const SizedBox(height: 4),
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
-                      onTap: () async {
-                        await taskItemController.tryChangingStatus(
+                      onTap: () {
+                        taskItemController.tryChangingStatus(
                             id: taskItemController.task.value.id!,
                             newStatusId: _statusesController.statuses[i].id!,
                             newStatusType: _statusesController.statuses[i].statusType!);
@@ -128,8 +128,8 @@ void showsStatusesPM({
         return [
           for (var i = 0; i < _statusesController.statuses.length; i++)
             PlatformPopupMenuItem(
-              onTap: () async {
-                await taskItemController.tryChangingStatus(
+              onTap: () {
+                taskItemController.tryChangingStatus(
                     id: taskItemController.task.value.id!,
                     newStatusId: _statusesController.statuses[i].id!,
                     newStatusType: _statusesController.statuses[i].statusType!);
