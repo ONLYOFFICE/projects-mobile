@@ -74,8 +74,10 @@ class TaskCell extends StatelessWidget {
 
     return InkWell(
       enableFeedback: false,
-      onTap: () => Get.find<NavigationController>()
-          .to(const TaskDetailedView(), arguments: {'controller': itemController}),
+      onTap: () => Get.find<NavigationController>().to(
+        const TaskDetailedView(),
+        arguments: {'controller': itemController},
+      ),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
         height: 72,
@@ -84,22 +86,10 @@ class TaskCell extends StatelessWidget {
           children: [
             _StatusImage(controller: itemController),
             Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _SecondColumn(itemController: itemController),
-                        const SizedBox(width: 8),
-                        _ThirdColumn(controller: itemController),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              child: _SecondColumn(itemController: itemController),
             ),
+            const SizedBox(width: 24),
+            _ThirdColumn(controller: itemController),
             const SizedBox(width: 16),
           ],
         ),
@@ -147,7 +137,7 @@ class _StatusText extends StatelessWidget {
 
 // refactor
 class _SecondColumn extends StatelessWidget {
-  final TaskItemController? itemController;
+  final TaskItemController itemController;
 
   const _SecondColumn({
     Key? key,
@@ -158,34 +148,33 @@ class _SecondColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        return Expanded(
-          flex: 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CellAtributedTitle(
-                text: itemController!.task.value.title?.trim(),
-                style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
-                atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
-                atributeIconVisible: itemController!.task.value.priority == 1,
-              ),
-              Wrap(
-                children: [
-                  _StatusText(controller: itemController),
-                  Text(
-                    itemController!.displayName!,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CellAtributedTitle(
+              text: itemController.task.value.title?.trim(),
+              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+              atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
+              atributeIconVisible: itemController.task.value.priority == 1,
+            ),
+            Row(
+              children: [
+                _StatusText(controller: itemController),
+                Expanded(
+                  child: Text(
+                    itemController.displayName!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
                       color: Get.theme.colors().onSurface.withOpacity(0.6),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         );
       },
     );
@@ -193,7 +182,7 @@ class _SecondColumn extends StatelessWidget {
 }
 
 class _ThirdColumn extends StatelessWidget {
-  final TaskItemController? controller;
+  final TaskItemController controller;
 
   const _ThirdColumn({
     Key? key,
@@ -205,8 +194,8 @@ class _ThirdColumn extends StatelessWidget {
     final _now = DateTime.now();
 
     DateTime? _deadline;
-    if (controller!.task.value.deadline != null)
-      _deadline = DateTime.parse(controller!.task.value.deadline!);
+    if (controller.task.value.deadline != null)
+      _deadline = DateTime.parse(controller.task.value.deadline!);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -216,7 +205,7 @@ class _ThirdColumn extends StatelessWidget {
           Text(
               formatedDateFromString(
                 now: _now,
-                stringDate: controller!.task.value.deadline!,
+                stringDate: controller.task.value.deadline!,
               ),
               style: _deadline.isBefore(_now)
                   ? TextStyleHelper.caption(color: Get.theme.colors().colorError)
@@ -230,7 +219,7 @@ class _ThirdColumn extends StatelessWidget {
             SizedBox(
               width: 20,
               child: Text(
-                controller!.task.value.subtasks!.length.toString(),
+                controller.task.value.subtasks!.length.toString(),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6)),
               ),

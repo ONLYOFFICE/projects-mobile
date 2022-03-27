@@ -84,8 +84,10 @@ class ProjectCell extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        Get.find<NavigationController>()
-            .to(ProjectDetailedView(), arguments: {'projectController': projectController});
+        Get.find<NavigationController>().to(
+          ProjectDetailedView(),
+          arguments: {'projectController': projectController},
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
@@ -95,29 +97,15 @@ class ProjectCell extends StatelessWidget {
           children: [
             ProjectIcon(
               itemController: itemController,
-              canEdit: projectDetails.canEdit!,
             ),
             Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _Content(
-                          item: projectDetails,
-                          itemController: itemController,
-                        ),
-                        const Spacer(),
-                        _Suffix(
-                          projectController: projectController,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              child: _Content(
+                itemController: itemController,
               ),
+            ),
+            const SizedBox(width: 24),
+            _Suffix(
+              projectController: projectController,
             ),
           ],
         ),
@@ -130,16 +118,16 @@ class ProjectIcon extends StatelessWidget {
   const ProjectIcon({
     Key? key,
     required this.itemController,
-    this.canEdit = false,
   }) : super(key: key);
 
   final ProjectCellController itemController;
-  final bool canEdit;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: canEdit ? () => showStatuses(context: context, itemController: itemController) : null,
+      onTap: itemController.projectData.canEdit!
+          ? () => showStatuses(context: context, itemController: itemController)
+          : null,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -198,70 +186,65 @@ class ProjectIcon extends StatelessWidget {
 }
 
 class _Content extends StatelessWidget {
-  final ProjectDetailed? item;
   final ProjectCellController itemController;
 
   const _Content({
     Key? key,
-    required this.item,
     required this.itemController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Obx(
-            () {
-              TextStyle style;
-              if (itemController.status.value == 1) {
-                style =
-                    TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.6))
-                        .copyWith(decoration: TextDecoration.lineThrough);
-              } else if (itemController.status.value == 2) {
-                style =
-                    TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.6));
-              } else {
-                style = TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface);
-              }
-              return CellAtributedTitle(
-                text: item!.title,
-                style: style,
-                atributeIcon: const AppIcon(icon: SvgIcons.lock),
-                atributeIconVisible: itemController.isPrivate.value == true,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Obx(
+          () {
+            TextStyle style;
+            if (itemController.status.value == 1) {
+              style =
+                  TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.6))
+                      .copyWith(decoration: TextDecoration.lineThrough);
+            } else if (itemController.status.value == 2) {
+              style =
+                  TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.6));
+            } else {
+              style = TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface);
+            }
+            return CellAtributedTitle(
+              text: itemController.projectData.title,
+              style: style,
+              atributeIcon: const AppIcon(icon: SvgIcons.lock),
+              atributeIconVisible: itemController.isPrivate.value == true,
+            );
+          },
+        ),
+        Row(
+          children: [
+            Obx(() {
+              final color = itemController.canEdit.value == true
+                  ? Get.theme.colors().primary
+                  : Get.theme.colors().onBackground;
+              return Text(
+                itemController.statusNameString.value,
+                style: TextStyleHelper.status(color: color),
               );
-            },
-          ),
-          Row(
-            children: [
-              Obx(() {
-                final color = itemController.canEdit.value == true
-                    ? Get.theme.colors().primary
-                    : Get.theme.colors().onBackground;
-                return Text(
-                  itemController.statusNameString.value,
-                  style: TextStyleHelper.status(color: color),
-                );
-              }),
-              Text(' • ',
+            }),
+            Text(' • ',
+                style:
+                    TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6))),
+            Flexible(
+              child: Text(NameFormatter.formateName(itemController.projectData.responsible!)!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyleHelper.caption(
                       color: Get.theme.colors().onSurface.withOpacity(0.6))),
-              Flexible(
-                child: Text(NameFormatter.formateName(item!.responsible!)!,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyleHelper.caption(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
-              ),
-            ],
-          ),
-        ],
-      ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
@@ -276,30 +259,25 @@ class _Suffix extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            AppIcon(icon: SvgIcons.check_square, color: Get.theme.colors().onSurface),
-            const SizedBox(width: 3),
-            SizedBox(
-              width: 20,
-              child: Obx(
-                () => Text(
-                  projectController.taskCount.value.toString(),
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.body2(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6),
-                  ),
-                ),
+        AppIcon(icon: SvgIcons.check_square, color: Get.theme.colors().onSurface),
+        const SizedBox(width: 3),
+        SizedBox(
+          width: 20,
+          child: Obx(
+            () => Text(
+              projectController.taskCount.value.toString(),
+              overflow: TextOverflow.ellipsis,
+              style: TextStyleHelper.body2(
+                color: Get.theme.colors().onSurface.withOpacity(0.6),
               ),
             ),
-            const SizedBox(width: 16)
-          ],
+          ),
         ),
+        const SizedBox(width: 16)
       ],
     );
   }
