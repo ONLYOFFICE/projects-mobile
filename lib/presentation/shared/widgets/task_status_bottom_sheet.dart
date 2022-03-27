@@ -45,7 +45,7 @@ import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
 void showsStatusesBS({
   required BuildContext context,
-  TaskItemController? taskItemController,
+  required TaskItemController taskItemController,
 }) {
   final _statusesController = Get.find<TaskStatusesController>();
   showCustomBottomSheet(
@@ -89,7 +89,7 @@ void showsStatusesBS({
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        await taskItemController!.tryChangingStatus(
+                        await taskItemController.tryChangingStatus(
                             id: taskItemController.task.value.id!,
                             newStatusId: _statusesController.statuses[i].id!,
                             newStatusType: _statusesController.statuses[i].statusType!);
@@ -98,7 +98,7 @@ void showsStatusesBS({
                       child: StatusTile(
                           title: _statusesController.statuses[i].title,
                           icon: StatusIcon(
-                            canEditTask: taskItemController!.task.value.canEdit!,
+                            canEditTask: taskItemController.task.value.canEdit!,
                             status: _statusesController.statuses[i],
                           ),
                           selected: _statusesController.statuses[i].title ==

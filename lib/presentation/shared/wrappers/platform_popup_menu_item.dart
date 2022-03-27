@@ -18,7 +18,11 @@ class PlatformPopupMenuItem<T> extends PopupMenuEntry<T> {
     this.isDestructiveAction = false,
     this.trailingIcon,
     required this.child,
-  }) : super(key: key);
+  })  : assert(
+          !(value != null && onTap != null),
+          'You can only pass [value] or [onTap], not both.',
+        ),
+        super(key: key);
 
   final T? value;
   final VoidCallback? onTap;
@@ -90,7 +94,7 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
   void handleTap() {
     widget.onTap?.call();
 
-    Navigator.pop<T>(context, widget.value);
+    if (widget.onTap == null) Navigator.pop<T>(context, widget.value);
   }
 
   TextStyle get _textStyle {

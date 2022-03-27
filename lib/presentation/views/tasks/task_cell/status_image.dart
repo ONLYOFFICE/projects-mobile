@@ -38,14 +38,14 @@ class _StatusImage extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
-  final TaskItemController? controller;
+  final TaskItemController controller;
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (!controller!.isStatusLoaded.value) return const _StatusLoadingIcon();
+      if (!controller.isStatusLoaded.value) return const _StatusLoadingIcon();
       return GestureDetector(
-        onTap: () async => controller!.openStatuses(context),
+        onTap: () async => controller.openStatuses(context),
         child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -57,11 +57,11 @@ class _StatusImage extends StatelessWidget {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: controller!.getStatusBGColor,
+                    color: controller.getStatusBGColor,
                   ),
                   child: StatusIcon(
-                    canEditTask: controller!.task.value.canEdit!,
-                    status: controller!.status.value,
+                    canEditTask: controller.task.value.canEdit!,
+                    status: controller.status.value,
                   ),
                 ),
               ),
