@@ -31,7 +31,6 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -41,7 +40,6 @@ import 'package:projects/domain/controllers/projects/base_project_editor_control
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
-import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -227,8 +225,9 @@ class _Content extends StatelessWidget {
               final color = itemController.canEdit.value == true
                   ? Get.theme.colors().primary
                   : Get.theme.colors().onBackground;
+              final status = itemController.statusNameString.value;
               return Text(
-                itemController.statusNameString.value,
+                status,
                 style: TextStyleHelper.status(color: color),
               );
             }),
@@ -326,14 +325,11 @@ void showsStatusesBS(
                   const SizedBox(height: 4),
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
-                      onTap: () async {
-                        final success = await itemController.updateStatus(
+                      onTap: () {
+                        itemController.updateStatus(
                           newStatusId: _statusesController.statuses[i],
                         );
-                        if (success) {
-                          locator<EventHub>()
-                              .fire('needToRefreshProjects', [itemController.projectData!.id]);
-                        }
+
                         Get.back();
                       },
                       child: StatusTile(
@@ -358,7 +354,7 @@ void showsStatusesBS(
 }
 
 void showStatuses(
-    {required BuildContext context, required BaseProjectEditorController itemController}) async {
+    {required BuildContext context, required BaseProjectEditorController itemController}) {
   if (itemController.projectData!.canEdit!) {
     if (Get.find<PlatformController>().isMobile)
       showsStatusesBS(context: context, itemController: itemController);
@@ -378,14 +374,11 @@ void showsStatusesPM(
         return [
           for (var i = 0; i < _statusesController.statuses.length; i++)
             PlatformPopupMenuItem(
-              onTap: () async {
-                final success = await itemController.updateStatus(
+              onTap: () {
+                itemController.updateStatus(
                   newStatusId: _statusesController.statuses[i],
                 );
-                if (success) {
-                  locator<EventHub>()
-                      .fire('needToRefreshProjects', [itemController.projectData!.id]);
-                }
+
                 Get.back();
               },
               child: StatusTileTablet(

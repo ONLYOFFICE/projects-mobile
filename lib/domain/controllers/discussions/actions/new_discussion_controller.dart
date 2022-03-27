@@ -356,8 +356,6 @@ class NewDiscussionController extends GetxController implements DiscussionAction
       return;
     }
 
-    Get.back();
-
     // ignore: omit_local_variable_types
     final List<String?> subscribersIds = [];
 
@@ -377,6 +375,8 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     );
 
     if (createdDiss != null) {
+      Get.back();
+
       //locator<EventHub>().fire('needToRefreshDetails', [_selectedProjectId]); // TODO
       locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
 

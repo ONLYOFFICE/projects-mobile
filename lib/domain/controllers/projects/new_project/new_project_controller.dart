@@ -91,8 +91,6 @@ class NewProjectController extends BaseProjectEditorController {
       return;
     }
 
-    Get.back();
-
     final participants = <Participant>[];
 
     for (final element in selectedTeamMembers) {
@@ -119,7 +117,9 @@ class NewProjectController extends BaseProjectEditorController {
 
     final result = await _api.createProject(project: newProject);
     if (result != null) {
-      locator<EventHub>().fire('needToRefreshProjects', ['all']);
+      Get.back();
+
+      locator<EventHub>().fire('needToRefreshProjects', {'all': true});
 
       MessagesHandler.showSnackBar(
         context: Get.context!,
@@ -129,10 +129,7 @@ class NewProjectController extends BaseProjectEditorController {
         buttonText: tr('open').toUpperCase(),
       );
     } else
-      MessagesHandler.showSnackBar(
-        context: Get.context!,
-        text: tr('error'),
-      );
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   Future<void> showTags() async {

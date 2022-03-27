@@ -363,12 +363,9 @@ Future<void> _onSelected(
               context: context,
               text: tr('projectDeleted'),
             );
-            locator<EventHub>().fire('needToRefreshProjects', ['all']);
+            locator<EventHub>().fire('needToRefreshProjects', {'all': true});
           } else {
-            MessagesHandler.showSnackBar(
-              context: context,
-              text: tr('error'),
-            );
+            MessagesHandler.showSnackBar(context: context, text: tr('error'));
           }
         },
       ));

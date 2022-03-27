@@ -99,9 +99,13 @@ class ProjectsController extends BaseController {
     }
 
     _ss.add(locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      if (data.any((elem) => elem == 'all') as bool) {
-        loadProjects();
-        return;
+      if (data['all'] == true) loadProjects();
+      if (data['projectDetails'].id != null) {
+        for (var i = 0; i < itemList.length; i++)
+          if (itemList[i].id == data['projectDetails'].id) {
+            itemList[i] = data['projectDetails'] as ProjectDetailed;
+            return;
+          }
       }
     }));
   }

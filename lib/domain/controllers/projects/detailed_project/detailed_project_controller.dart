@@ -34,6 +34,7 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
@@ -69,8 +70,6 @@ class ProjectDetailsController extends BaseProjectEditorController {
   final projectTitleText = ''.obs;
   final managerText = ''.obs;
   final creationDateText = ''.obs;
-
-  bool markedToDelete = false;
 
   final taskCount = 0.obs;
 
@@ -110,12 +109,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
     _refreshProjectsSubscription = locator<EventHub>().on(
       'needToRefreshProjects',
       (dynamic data) {
-        if (markedToDelete) {
-          _refreshProjectsSubscription?.cancel();
-          return;
+        if (data['all'] == true) refreshData();
+        if (data['projectDetails'].id == _projectDetailed.id) {
+          _projectDetailed = data['projectDetails'] as ProjectDetailed;
+          refreshData();
         }
-
-        if (data.any((elem) => elem == _projectDetailed.id || elem == 'all') as bool) refreshData();
       },
     );
 
@@ -147,13 +145,16 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     taskCount.value = _projectDetailed.taskCountTotal ?? 0;
 
-    loaded.value = true;
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      loaded.value = true;
+    });
   }
 
   Future<void> refreshData({bool hidden = false}) async {
     if (!hidden) loaded.value = false;
 
-    final response = await _projectService.getProjectById(projectId: _projectDetailed.id!);
+    final response =
+        await _projectService.getProjectById(projectId: _projectDetailed.id!); // TODO new method
     if (response != null) _projectDetailed = response;
 
     fillProjectInfo(_projectDetailed);
@@ -186,8 +187,10 @@ class ProjectDetailsController extends BaseProjectEditorController {
   Future<void> copyLink() async {}
 
   Future deleteProject() async {
-    markedToDelete = true;
-    return _projectService.deleteProject(projectId: _projectDetailed.id!);
+    final responce = await _projectService.deleteProject(projectId: _projectDetailed.id!);
+    if (responce) await _refreshProjectsSubscription?.cancel();
+
+    return responce;
   }
 
   @override

@@ -40,6 +40,7 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
@@ -155,6 +156,7 @@ class ProjectEditController extends BaseProjectEditorController {
       }));
       return;
     }
+
     final participants = <Participant>[];
 
     for (final element in selectedTeamMembers) {
@@ -180,15 +182,16 @@ class ProjectEditController extends BaseProjectEditorController {
       notify: notificationEnabled.value,
     );
 
-    final success =
-        await _projectService.editProject(project: newProject, projectId: _projectDetailed!.id!);
+    final success = await _projectService.editProject(
+      project: newProject,
+      projectId: _projectDetailed!.id!,
+    );
     if (success) {
-      {
-        locator<EventHub>().fire('needToRefreshProjects', ['all']);
-      }
-
       Get.back();
-    }
+
+      locator<EventHub>().fire('needToRefreshProjects', {'all': true});
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   void discardChanges() {

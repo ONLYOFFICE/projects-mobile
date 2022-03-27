@@ -50,12 +50,11 @@ class CellAtributedTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text.rich(
       TextSpan(
-        style: style,
         children: [
           if (atributeIconVisible!)
             WidgetSpan(child: atributeIcon, alignment: PlaceholderAlignment.middle),
-          if (atributeIconVisible!) TextSpan(text: ' $text'),
-          if (!atributeIconVisible!) TextSpan(text: text),
+          if (atributeIconVisible!) const TextSpan(text: ' '),
+          TextSpan(text: text, style: style),
         ],
       ),
       overflow: TextOverflow.ellipsis,

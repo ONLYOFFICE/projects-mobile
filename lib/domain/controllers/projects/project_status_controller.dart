@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
@@ -62,6 +63,8 @@ class ProjectStatusesController extends GetxController {
         projectId: projectData.id!, newStatus: ProjectStatus.toLiteral(newStatusId));
 
     if (t != null) {
+      locator<EventHub>().fire('needToRefreshProjects', {'projectDetails': t});
+
       return true;
     }
 
