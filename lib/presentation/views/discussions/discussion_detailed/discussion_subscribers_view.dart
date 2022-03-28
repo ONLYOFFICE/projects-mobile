@@ -73,11 +73,15 @@ class DiscussionSubscribersView extends StatelessWidget {
                     final userController =
                         PortalUserItemController(portalUser: discussion.subscribers![index]);
                     return PortalUserItem(
-                        userController: userController,
-                        onTapFunction: (value) => {
-                              Get.find<NavigationController>().toScreen(const ProfileScreen(),
-                                  arguments: {'controller': userController})
-                            });
+                      userController: userController,
+                      onTapFunction: (value) => {
+                        Get.find<NavigationController>().toScreen(
+                          const ProfileScreen(),
+                          transition: Transition.rightToLeft,
+                          arguments: {'controller': userController},
+                        )
+                      },
+                    );
                   },
                 ),
               ),

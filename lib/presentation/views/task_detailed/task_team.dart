@@ -72,6 +72,7 @@ class TaskTeamView extends StatelessWidget {
                     onTapFunction: (value) => {
                       Get.find<NavigationController>().toScreen(
                         const ProfileScreen(),
+                        transition: Transition.rightToLeft,
                         arguments: {'controller': userController},
                         isRootModalScreenView: false,
                       )

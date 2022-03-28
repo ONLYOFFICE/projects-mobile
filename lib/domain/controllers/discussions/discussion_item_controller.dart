@@ -220,7 +220,8 @@ class DiscussionItemController extends GetxController {
             await _ss?.cancel();
 
             locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
-          }
+          } else
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
         } catch (e) {
           printError(e);
         }

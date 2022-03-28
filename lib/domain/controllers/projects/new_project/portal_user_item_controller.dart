@@ -117,7 +117,10 @@ class PortalUserItemController extends GetxController {
         selectionMode.value == UserSelectionMode.Multiple)
       isSelected.value = !isSelected.value;
     else
-      Get.find<NavigationController>()
-          .toScreen(const ProfileScreen(), arguments: {'controller': this});
+      Get.find<NavigationController>().toScreen(
+        const ProfileScreen(),
+        transition: Transition.rightToLeft,
+        arguments: {'controller': this},
+      );
   }
 }

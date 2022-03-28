@@ -107,11 +107,14 @@ class _Content extends StatelessWidget {
               itemBuilder: (c, i) => PortalUserItem(
                   userController: projectTeamDataSource.usersList[i],
                   onTapFunction: (value) => {
-                        Get.find<NavigationController>().toScreen(const ProfileScreen(),
-                            arguments: {
-                              'controller': PortalUserItemController(
-                                  portalUser: projectTeamDataSource.usersList[i].portalUser)
-                            })
+                        Get.find<NavigationController>().toScreen(
+                          const ProfileScreen(),
+                          transition: Transition.rightToLeft,
+                          arguments: {
+                            'controller': PortalUserItemController(
+                                portalUser: projectTeamDataSource.usersList[i].portalUser)
+                          },
+                        )
                       }),
               itemExtent: 65,
               itemCount: projectTeamDataSource.usersList.length,
