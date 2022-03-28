@@ -78,9 +78,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
             controller: controller,
           ),
           onLeadingPressed: controller.leaveSubscribersSelectionView,
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? Icon(PlatformIcons(context).back)
-              : Icon(PlatformIcons(context).clear),
+          backButtonIcon: Icon(PlatformIcons(context).back),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 4),

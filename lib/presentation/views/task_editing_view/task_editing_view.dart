@@ -98,7 +98,7 @@ class TaskEditingView extends StatelessWidget {
               alignment: Alignment.centerLeft,
               onPressed: controller.discardChanges,
               child: Text(
-                tr('closeLowerCase'),
+                tr('cancel').toLowerCase().capitalizeFirst!,
                 style: TextStyleHelper.button(),
               ),
             ),

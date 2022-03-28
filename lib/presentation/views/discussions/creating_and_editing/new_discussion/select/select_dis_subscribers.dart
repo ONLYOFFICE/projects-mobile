@@ -74,9 +74,8 @@ class SelectDiscussionSubscribers extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
 
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? Icon(PlatformIcons(context).back)
-              : Icon(PlatformIcons(context).clear),
+          backButtonIcon: Icon(PlatformIcons(context).back),
+
           title: Obx(
             () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -88,12 +88,10 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
             PlatformWidget(
               material: (platformContext, __) => IconButton(
                 icon: const Icon(Icons.check_rounded),
-                onPressed: () =>
-                    controller.confirm(context: platformContext, taskId: taskId ?? -1), // TODO FIX,
+                onPressed: () => controller.confirm(context: platformContext, taskId: taskId ?? -1),
               ),
               cupertino: (platformContext, __) => CupertinoButton(
                 onPressed: () => controller.confirm(context: platformContext, taskId: taskId ?? -1),
-                // TODO FIX,
                 padding: const EdgeInsets.only(right: 16),
                 alignment: Alignment.centerLeft,
                 child: Text(
@@ -109,7 +107,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
               alignment: Alignment.centerLeft,
               onPressed: controller.leavePage,
               child: Text(
-                tr('closeLowerCase'),
+                tr('cancel').toLowerCase().capitalizeFirst!,
                 style: TextStyleHelper.button(),
               ),
             ),

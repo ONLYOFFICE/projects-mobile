@@ -36,17 +36,17 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 
 class ProjectManagerSelectionView extends StatelessWidget {
@@ -68,9 +68,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('selectPM'),
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? Icon(PlatformIcons(context).back)
-            : Icon(PlatformIcons(context).clear),
+        backButtonIcon: Icon(PlatformIcons(context).back),
         bottom: SearchField(
           controller: usersDataSource.searchInputController,
           hintText: tr('usersSearch'),

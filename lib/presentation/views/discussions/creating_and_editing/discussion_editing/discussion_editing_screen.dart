@@ -31,22 +31,20 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-
-import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_title_text_field.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_project_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_subscribers_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_tile.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_title_text_field.dart';
 
 class DiscussionEditingScreen extends StatelessWidget {
   const DiscussionEditingScreen({Key? key}) : super(key: key);
@@ -74,13 +72,40 @@ class DiscussionEditingScreen extends StatelessWidget {
       child: Scaffold(
         appBar: StyledAppBar(
           titleText: tr('editDiscussion'),
+          leadingWidth: GetPlatform.isIOS ? 100 : null,
+          centerTitle: !GetPlatform.isAndroid,
           actions: [
-            PlatformIconButton(
-              onPressed: () => controller.confirm(context),
-              icon: Icon(PlatformIcons(context).checkMark),
+            PlatformWidget(
+              material: (_, __) => IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: () => controller.confirm(context),
+              ),
+              cupertino: (_, __) => CupertinoButton(
+                onPressed: () => controller.confirm(context),
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  tr('done'),
+                  style: TextStyleHelper.headline7(),
+                ),
+              ),
             )
           ],
-          onLeadingPressed: controller.discardDiscussion,
+          leading: PlatformWidget(
+            cupertino: (_, __) => CupertinoButton(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+              onPressed: controller.discardDiscussion,
+              child: Text(
+                tr('cancel').toLowerCase().capitalizeFirst!,
+                style: TextStyleHelper.button(),
+              ),
+            ),
+            material: (_, __) => IconButton(
+              onPressed: controller.discardDiscussion,
+              icon: const Icon(Icons.close),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(

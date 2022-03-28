@@ -233,7 +233,7 @@ class SettingsScreen extends StatelessWidget {
                             ),
                             Icon(
                               Icons.chevron_right,
-                              color: Get.theme.colors().onBackground.withOpacity(0.6),
+                              color: Get.theme.colors().onBackground.withOpacity(0.3),
                             ),
                           ],
                         ),
@@ -264,7 +264,7 @@ class SettingsScreen extends StatelessWidget {
                             ),
                             Icon(
                               Icons.chevron_right,
-                              color: Get.theme.colors().onBackground.withOpacity(0.6),
+                              color: Get.theme.colors().onBackground.withOpacity(0.3),
                             ),
                           ],
                         ),
@@ -382,7 +382,7 @@ class SettingsScreen extends StatelessWidget {
                           style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
                         ),
                       ),
-                      SettingsTile(
+                      SettingsTile.navigation(
                         onPressed: (_) => controller.onAnalyticsPressed(),
                         title: Text(
                           tr('analytics'),

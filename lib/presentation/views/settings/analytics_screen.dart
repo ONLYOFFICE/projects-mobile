@@ -31,15 +31,16 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
+import 'package:settings_ui/settings_ui.dart';
 
 class AnalyticsScreen extends StatelessWidget {
   const AnalyticsScreen({Key? key}) : super(key: key);
@@ -49,30 +50,95 @@ class AnalyticsScreen extends StatelessWidget {
     final controller = Get.find<SettingsController>();
     final platformController = Get.find<PlatformController>();
 
+    Color backgroundColor;
+    if (GetPlatform.isAndroid) {
+      if (platformController.isMobile) {
+        Theme.of(context).brightness == Brightness.dark
+            ? backgroundColor = Get.theme.colors().background
+            : backgroundColor = Get.theme.colors().surface;
+      } else {
+        backgroundColor = Get.theme.colors().surface;
+      }
+    } else {
+      if (platformController.isMobile) {
+        Theme.of(context).brightness == Brightness.dark
+            ? backgroundColor = Get.theme.colors().backgroundSecond
+            : backgroundColor = CupertinoColors.systemGrey6;
+      } else {
+        Theme.of(context).brightness == Brightness.dark
+            ? backgroundColor = Get.theme.colors().surface
+            : backgroundColor = CupertinoColors.systemGrey6;
+      }
+    }
+
+    final scaleFactor = MediaQuery.of(context).textScaleFactor;
+
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('analytics'),
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: backgroundColor,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            const SizedBox(height: 3),
-            OptionWithSwitch(
-              title: tr('shareAnalytics'),
-              switchOnChanged: controller.changeAnalyticsSharingEnability,
-              switchValue: controller.shareAnalytics,
-              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-            ),
-            Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: Text(tr('shareAnalyticsDescription'),
-                    style: TextStyleHelper.body2(
-                        color: Theme.of(context).colors().onSurface.withOpacity(0.6)))),
-          ],
-        ),
+      body: Obx(
+        () => GetPlatform.isAndroid
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 3),
+                    OptionWithSwitch(
+                      title: tr('shareAnalytics'),
+                      switchOnChanged: controller.changeAnalyticsSharingEnability,
+                      switchValue: controller.shareAnalytics,
+                      style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: Text(tr('shareAnalyticsDescription'),
+                            style: TextStyleHelper.body2(
+                                color: Theme.of(context).colors().onSurface.withOpacity(0.6)))),
+                  ],
+                ),
+              )
+            : ListView.custom(
+                childrenDelegate: SliverChildListDelegate(
+                  [
+                    SettingsList(
+                      shrinkWrap: true,
+                      darkTheme: const SettingsThemeData().copyWith(
+                        settingsListBackground: platformController.isMobile
+                            ? Get.theme.colors().backgroundSecond
+                            : Get.theme.colors().surface,
+                        settingsSectionBackground:
+                            platformController.isMobile ? null : Get.theme.colors().bgDescription,
+                      ),
+                      applicationType: ApplicationType.cupertino,
+                      sections: [
+                        SettingsSection(
+                          margin: EdgeInsetsDirectional.only(
+                            top: 14.0 * scaleFactor,
+                            bottom: 10 * scaleFactor,
+                            start: 16,
+                            end: 16,
+                          ),
+                          tiles: [
+                            SettingsTile.switchTile(
+                                initialValue: controller.shareAnalytics.value,
+                                onToggle: controller.changeAnalyticsSharingEnability,
+                                title: Text(tr('shareAnalytics'))),
+                          ],
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 27.5),
+                      child: Text(
+                        tr('shareAnalyticsDescription'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
       ),
     );
   }

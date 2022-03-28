@@ -96,7 +96,7 @@ class NewDiscussionScreen extends StatelessWidget {
               alignment: Alignment.centerLeft,
               onPressed: controller.discardDiscussion,
               child: Text(
-                tr('closeLowerCase'),
+                tr('cancel').toLowerCase().capitalizeFirst!,
                 style: TextStyleHelper.button(),
               ),
             ),

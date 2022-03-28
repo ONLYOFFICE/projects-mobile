@@ -81,6 +81,7 @@ class SelectProjectScreen extends StatelessWidget {
       appBar: StyledAppBar(
         backgroundColor: _platformController.isMobile ? null : Get.theme.colors().surface,
         showBackButton: true,
+        centerTitle: !GetPlatform.isAndroid,
         title: Obx(
           () => AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
@@ -100,12 +101,9 @@ class SelectProjectScreen extends StatelessWidget {
                     ),
                     onSubmitted: searchController.newSearch,
                   )
-                : Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      tr('selectProject'),
-                      style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                    ),
+                : Text(
+                    tr('selectProject'),
+                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                   ),
           ),
         ),

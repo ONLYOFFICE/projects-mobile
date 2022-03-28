@@ -80,6 +80,7 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
           appBarText: appBarText,
           searchController: searchController,
         ),
+        centerTitle: !GetPlatform.isAndroid,
         actions: [
           _AppBarIcon(
             searchController: searchController,

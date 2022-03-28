@@ -62,12 +62,9 @@ class _AppBarTitle extends StatelessWidget {
                   ),
                   onSubmitted: (value) async => await searchController.search(query: value),
                 )
-              : Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    appBarText,
-                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                  ),
+              : Text(
+                  appBarText,
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                 ),
         ));
   }

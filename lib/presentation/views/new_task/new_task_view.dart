@@ -93,8 +93,8 @@ class NewTaskView extends StatelessWidget {
           leading: PlatformIconButton(
             materialIcon: const Icon(Icons.close),
             cupertinoIcon: Text(
-              tr('closeLowerCase'),
-              style: TextStyleHelper.body1(),
+              tr('cancel').toLowerCase().capitalizeFirst!,
+              style: TextStyleHelper.body1(color: Get.theme.colors().primary),
             ),
             onPressed: controller.discardTask,
             cupertino: (_, __) => CupertinoIconButtonData(

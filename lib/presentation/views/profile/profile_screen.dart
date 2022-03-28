@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_status.dart';
@@ -46,7 +47,7 @@ import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/settings/settings_screen.dart';
 
 class SelfProfileScreen extends StatelessWidget {
@@ -78,12 +79,26 @@ class SelfProfileScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-          showBackButton: showBackButton,
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? Icon(PlatformIcons(context).back)
-              : Icon(PlatformIcons(context).clear),
-          // titleText: tr('profile'),
+          leadingWidth: GetPlatform.isIOS ? 100 : null,
+          showBackButton: showBackButton,
+          leading: showBackButton
+              ? PlatformWidget(
+                  cupertino: (_, __) => CupertinoButton(
+                    padding: const EdgeInsets.only(left: 16),
+                    alignment: Alignment.centerLeft,
+                    onPressed: Get.back,
+                    child: Text(
+                      tr('close').toLowerCase().capitalizeFirst!,
+                      style: TextStyleHelper.button(),
+                    ),
+                  ),
+                  material: (_, __) => IconButton(
+                    onPressed: Get.back,
+                    icon: const Icon(Icons.close),
+                  ),
+                )
+              : null,
           title: Text(
             tr('profile'),
             style: TextStyle(color: Get.theme.colors().onSurface),

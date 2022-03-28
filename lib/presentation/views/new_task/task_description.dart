@@ -60,9 +60,7 @@ class TaskDescription extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('description'),
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? Icon(PlatformIcons(context).back)
-              : Icon(PlatformIcons(context).clear),
+          backButtonIcon: Icon(PlatformIcons(context).back),
           onLeadingPressed: () =>
               controller.leaveDescriptionView(controller.descriptionController.value.text),
           actions: [

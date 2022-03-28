@@ -87,9 +87,8 @@ class SelectProjectView extends StatelessWidget {
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectProject'),
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? Icon(PlatformIcons(context).back)
-            : Icon(PlatformIcons(context).clear),
+        // centerTitle: true,
+        backButtonIcon: Icon(PlatformIcons(context).back),
         bottomHeight: 44,
         bottom: SearchField(
           hintText: tr('searchProjects'),
