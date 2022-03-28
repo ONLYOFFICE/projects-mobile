@@ -177,8 +177,6 @@ void setupGetX() {
   Get.create<PaginationController<PortalTask>>(() => PaginationController<PortalTask>());
   Get.create<PaginationController<ProjectDetailed>>(() => PaginationController<ProjectDetailed>());
 
-  Get.create<DiscussionItemController>(() => DiscussionItemController());
-
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
 
