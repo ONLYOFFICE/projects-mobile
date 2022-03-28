@@ -68,6 +68,7 @@ class ProjectStatusesController extends GetxController {
       return true;
     }
 
+    MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
     return false;
   }
 }

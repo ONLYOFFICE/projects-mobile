@@ -82,8 +82,7 @@ class ProjectCellController extends BaseProjectEditorController {
       status.value = newStatusId!;
       statusNameString.value = ProjectStatus.toName(_project.status);
       statusImageString.value = ProjectStatus.toImageString(_project.status);
-    } else
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+    }
 
     return resp;
   }

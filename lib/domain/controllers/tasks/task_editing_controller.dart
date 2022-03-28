@@ -353,10 +353,10 @@ class TaskEditingController extends TaskActionsController {
 
     // update the task status if it has been changed
     if (initialStatus!.id != newStatus.value!.id) {
-      unawaited(_taskItemController.tryChangingStatus(
+      await _taskItemController.tryChangingStatus(
           id: task.id!,
           newStatusId: newStatus.value!.id!,
-          newStatusType: newStatus.value!.statusType!));
+          newStatusType: newStatus.value!.statusType!);
     }
 
     final responsibleIds = <String?>[];
