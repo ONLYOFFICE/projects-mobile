@@ -173,6 +173,7 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
       });
 
   Future<void> updateDetails() async {
+    // TODO change to needToRefreshProjects updateID ...
     final response =
         await locator<ProjectService>().getProjectById(projectId: _projectDetailed.id!);
     if (response == null) return;
