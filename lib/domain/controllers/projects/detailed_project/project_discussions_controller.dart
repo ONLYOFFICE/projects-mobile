@@ -89,7 +89,15 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
 
     _refreshDiscussionsSubscription =
         locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
-      await loadProjectDiscussions();
+      if (data['all'] == true) unawaited(loadProjectDiscussions());
+
+      if (data['discussion'].id != null) {
+        for (var i = 0; i < itemList.length; i++)
+          if (itemList[i].id == data['discussion'].id) {
+            itemList[i] = data['discussion'] as Discussion;
+            return;
+          }
+      }
     });
 
     _refreshDetailsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {

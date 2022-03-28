@@ -380,7 +380,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
       final discussionController = Get.put<DiscussionItemController>(DiscussionItemController(),
           tag: createdDiss.id.toString());
       discussionController.setup(createdDiss);
-      locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
+      locator<EventHub>().fire('needToRefreshDiscussions', {'all': true});
 
       MessagesHandler.showSnackBar(
           context: Get.context!,

@@ -98,7 +98,7 @@ class DiscussionItemController extends GetxController {
 
     _ss?.cancel();
     _ss = locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
-      if (data.any((elem) => elem == 'all') as bool) await getDiscussionDetailed();
+      if (data['all'] == true) await getDiscussionDetailed();
     });
   }
 
@@ -175,8 +175,8 @@ class DiscussionItemController extends GetxController {
       if (result != null) {
         discussion.value.setStatus = result.status;
         status.value = result.status!;
-        // ignore: unawaited_futures
-        getDiscussionDetailed();
+
+        locator<EventHub>().fire('needToRefreshDiscussions', {'discussion': result});
         Get.back();
       }
     } catch (e) {
@@ -219,7 +219,7 @@ class DiscussionItemController extends GetxController {
 
             await _ss?.cancel();
 
-            locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
+            locator<EventHub>().fire('needToRefreshDiscussions', {'all': true});
           } else
             MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
         } catch (e) {
