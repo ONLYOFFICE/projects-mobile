@@ -89,10 +89,11 @@ class MilestonesDataSource extends BaseController {
       loadMilestones();
     });
 
-    _refreshDetailsSubscription = locator<EventHub>().on('needToRefreshDetails', (dynamic data) {
-      if ((data['details'] as ProjectDetailed).id != _projectDetailed?.id) return;
+    _refreshDetailsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (data['projectDetails'].id == null || data['projectDetails'].id != _projectDetailed?.id)
+        return;
 
-      _projectDetailed = data['details'] as ProjectDetailed;
+      _projectDetailed = data['projectDetails'] as ProjectDetailed;
       fabIsVisible.value = _canCreate();
     });
   }
@@ -174,6 +175,6 @@ class MilestonesDataSource extends BaseController {
     _projectDetailed = response;
     fabIsVisible.value = _canCreate();
 
-    locator<EventHub>().fire('needToRefreshDetails', {'details': response});
+    locator<EventHub>().fire('needToRefreshProjects', {'projectDetails': response});
   }
 }

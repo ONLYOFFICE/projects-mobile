@@ -377,7 +377,6 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     if (createdDiss != null) {
       Get.back();
 
-      //locator<EventHub>().fire('needToRefreshDetails', [_selectedProjectId]); // TODO
       locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
 
       final discussionController = DiscussionItemController()..setup(createdDiss);
