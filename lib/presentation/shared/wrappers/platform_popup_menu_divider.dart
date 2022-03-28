@@ -5,9 +5,6 @@ import 'package:projects/presentation/shared/wrappers/platform.dart';
 const double _kMenuDividerHeight = 16;
 const double _iosMenuDividerHeight = 8;
 
-final Color _kBackgroundColorPressed =
-    Get.isDarkMode ? const Color.fromRGBO(54, 54, 54, 1) : const Color.fromRGBO(216, 216, 216, 1);
-
 class PlatformPopupMenuDivider extends PopupMenuEntry {
   const PlatformPopupMenuDivider({Key? key, this.height = _kMenuDividerHeight}) : super(key: key);
 
@@ -22,6 +19,10 @@ class PlatformPopupMenuDivider extends PopupMenuEntry {
 }
 
 class _PopupMenuDividerState extends State<PlatformPopupMenuDivider> {
+  final Color _kBackgroundColorPressed = Get.isDarkMode
+      ? const Color.fromRGBO(37, 37, 37, 0.8)
+      : const Color.fromRGBO(216, 216, 216, 1);
+
   Widget createMaterialWidget(BuildContext context) => Divider(
         height: widget.height,
         thickness: widget.height,

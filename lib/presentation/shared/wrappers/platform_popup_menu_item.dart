@@ -50,14 +50,15 @@ class PlatformPopupMenuItem<T> extends PopupMenuEntry<T> {
 }
 
 class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<W> {
-  static const double _kMenuHorizontalPadding = 16;
-  static final Color _kBackgroundColor = Get.isDarkMode
-      ? const Color.fromRGBO(58, 58, 60, 0.78)
-      : const Color.fromRGBO(249, 249, 249, 0.78);
-  static final Color _kBackgroundColorPressed =
-      Get.isDarkMode ? const Color.fromRGBO(54, 54, 54, 1) : const Color.fromRGBO(216, 216, 216, 1);
-  static const double _kButtonHeight = 44;
-  static final TextStyle _kActionSheetActionStyle = TextStyle(
+  final double _kMenuHorizontalPadding = 16;
+  final Color _kBackgroundColor = Get.isDarkMode
+      ? const Color.fromRGBO(37, 37, 37, 0.5)
+      : const Color.fromRGBO(237, 237, 237, 0.9);
+  final Color _kBackgroundColorPressed = Get.isDarkMode
+      ? const Color.fromRGBO(37, 37, 37, 0.8)
+      : const Color.fromRGBO(216, 216, 216, 1);
+  final double _kButtonHeight = 44;
+  final TextStyle _kActionSheetActionStyle = TextStyle(
     fontFamily: '.SF Pro Text',
     fontSize: 17,
     color: Get.theme.colors().onSurface,
@@ -120,14 +121,14 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
       onTap: handleTap,
       behavior: HitTestBehavior.opaque,
       child: ConstrainedBox(
-        constraints: const BoxConstraints.tightFor(height: _kButtonHeight),
+        constraints: BoxConstraints.tightFor(height: _kButtonHeight),
         child: Semantics(
           button: true,
           child: Container(
             decoration: BoxDecoration(
               color: _isPressed ? _kBackgroundColorPressed : _kBackgroundColor.withOpacity(0.4),
             ),
-            padding: const EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
+            padding: EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
             child: DefaultTextStyle(
               style: _textStyle,
               child: Row(
@@ -163,7 +164,7 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
       child: Container(
         alignment: AlignmentDirectional.centerStart,
         constraints: BoxConstraints(minHeight: widget.height),
-        padding: widget.padding ?? const EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
+        padding: widget.padding ?? EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
         child: buildChild(),
       ),
     );

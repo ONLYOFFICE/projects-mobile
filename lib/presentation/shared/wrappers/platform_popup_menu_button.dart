@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -10,14 +12,11 @@ import 'package:projects/presentation/shared/wrappers/platform_popup_menu_divide
 const Duration _kMenuDuration = Duration(milliseconds: 300);
 const double _kMenuCloseIntervalEnd = 2.0 / 3.0;
 const double _kMenuMaxWidth = 5.0 * _kMenuWidthStep;
-const double _kMenuMinWidth = 3.5 * _kMenuWidthStep;
+const double _kMenuMinWidth = 4 * _kMenuWidthStep;
 const double _kMenuVerticalPadding = 8;
-const double _kMenuWidthStep = 56;
+const double _kMenuWidthStep = 50;
 const double _kMenuScreenPadding = 14;
 const double _kMenuBorderRadius = 20;
-
-final Color _kBackgroundColorPressed =
-    Get.isDarkMode ? const Color.fromRGBO(54, 54, 54, 1) : const Color.fromRGBO(216, 216, 216, 1);
 
 class PlatformPopupMenuButton<T> extends StatefulWidget {
   PlatformPopupMenuButton({
@@ -281,6 +280,10 @@ class _PopupMenu<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _kBackgroundColorPressed = Get.isDarkMode
+        ? const Color.fromRGBO(37, 37, 37, 0.8)
+        : const Color.fromRGBO(216, 216, 216, 1);
+
     final unit =
         1.0 / (route.items.length + 1.5); // 1.0 for the width and 0.5 for the last item's fade.
     final children = <Widget>[];
@@ -311,8 +314,14 @@ class _PopupMenu<T> extends StatelessWidget {
               decoration: BoxDecoration(
                 border: GetPlatform.isIOS &&
                         i != route.items.length - 1 &&
-                        item is! PlatformPopupMenuDivider
-                    ? Border(bottom: BorderSide(color: _kBackgroundColorPressed))
+                        item is! PlatformPopupMenuDivider &&
+                        route.items[i + 1] is! PlatformPopupMenuDivider
+                    ? Border(
+                        bottom: BorderSide(
+                          color: _kBackgroundColorPressed,
+                          width: 0.5,
+                        ),
+                      )
                     : null,
               ),
               child: item,
@@ -343,9 +352,11 @@ class _PopupMenu<T> extends StatelessWidget {
               vertical: isMaterial(context) ? _kMenuVerticalPadding : 0,
             ),
             child: ClipRRect(
-                borderRadius: BorderRadius.all(
-                    isMaterial(context) ? Radius.zero : const Radius.circular(_kMenuBorderRadius)),
-                child: ListBody(children: children)),
+              borderRadius: BorderRadius.all(
+                isMaterial(context) ? Radius.zero : const Radius.circular(_kMenuBorderRadius),
+              ),
+              child: ListBody(children: children),
+            ),
           ),
         ),
       ),
