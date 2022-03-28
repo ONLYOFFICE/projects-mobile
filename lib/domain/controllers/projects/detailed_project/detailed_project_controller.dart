@@ -106,16 +106,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
     });
 
     _refreshProjectsSubscription?.cancel();
-    _refreshProjectsSubscription = locator<EventHub>().on(
-      'needToRefreshProjects',
-      (dynamic data) {
-        if (data['all'] == true) refreshData();
-        if (data['projectDetails'].id == _projectDetailed.id) {
-          _projectDetailed = data['projectDetails'] as ProjectDetailed;
-          refreshData();
-        }
-      },
-    );
+    _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (data['all'] == true) refreshData();
+      if (data['projectDetails'].id == _projectDetailed.id)
+        _projectDetailed = data['projectDetails'] as ProjectDetailed;
+    });
 
     _userController.getUserInfo().then((res) {
       selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
@@ -153,8 +148,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
   Future<void> refreshData({bool hidden = false}) async {
     if (!hidden) loaded.value = false;
 
-    final response =
-        await _projectService.getProjectById(projectId: _projectDetailed.id!); // TODO new method
+    final response = await _projectService.getProjectById(
+        projectId: _projectDetailed.id!); // TODO move to new method
     if (response != null) _projectDetailed = response;
 
     fillProjectInfo(_projectDetailed);
