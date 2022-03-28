@@ -42,6 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/filters/filter_element_widget.dart';
 import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
+import 'package:projects/presentation/shared/widgets/reset_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_date_range_picker.dart';
@@ -60,16 +61,14 @@ class MilestoneFilterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final filterController = Get.arguments['filterController'] as BaseFilterController;
-    final platformController = Get.find<PlatformController>();
-
-    void onActionPressed() async => filterController.resetFilters();
 
     void onLeadingPressed() {
       filterController.restoreFilters();
       Get.back();
     }
 
-    final backgroundColor = platformController.isMobile ? null : Get.theme.colors().surface;
+    final backgroundColor =
+        Get.find<PlatformController>().isMobile ? null : Get.theme.colors().surface;
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -88,18 +87,7 @@ class MilestoneFilterScreen extends StatelessWidget {
           ),
           materialIcon: const Icon(Icons.close),
         ),
-        actions: [
-          PlatformIconButton(
-            padding: GetPlatform.isAndroid ? EdgeInsets.zero : const EdgeInsets.only(right: 16),
-            onPressed: onActionPressed,
-            cupertinoIcon: Text(
-              GetPlatform.isAndroid ? tr('reset') : tr('reset').toLowerCase().capitalizeFirst!,
-              style: TextStyleHelper.button(),
-              softWrap: false,
-            ),
-            materialIcon: const Icon(Icons.check_rounded),
-          ),
-        ],
+        actions: [ResetFiltersButton(filterController: filterController)],
       ),
       body: Stack(
         children: [

@@ -42,6 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/filters/filter_element_widget.dart';
 import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
+import 'package:projects/presentation/shared/widgets/reset_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_group_screen.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_milestone_screen.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_project_screen.dart';
@@ -64,16 +65,15 @@ class TasksFilterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final filterController = Get.arguments['filterController'] as BaseTaskFilterController;
-    final platformController = Get.find<PlatformController>();
 
     void onLeadingPressed() {
       filterController.restoreFilters();
       Get.back();
     }
 
-    void onActionPressed() async => filterController.resetFilters();
+    final backgroundColor =
+        Get.find<PlatformController>().isMobile ? null : Get.theme.colors().surface;
 
-    final backgroundColor = platformController.isMobile ? null : Get.theme.colors().surface;
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: StyledAppBar(
@@ -96,26 +96,7 @@ class TasksFilterScreen extends StatelessWidget {
             icon: const Icon(Icons.close),
           ),
         ),
-        actions: [
-          PlatformWidget(
-            material: (platformContext, __) => TextButton(
-              onPressed: onActionPressed,
-              child: Text(
-                tr('reset'),
-                style: TextStyleHelper.button(color: Get.theme.colors().systemBlue),
-              ),
-            ),
-            cupertino: (platformContext, __) => CupertinoButton(
-              onPressed: onActionPressed,
-              padding: const EdgeInsets.only(right: 16),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                tr('reset').toLowerCase().capitalizeFirst!,
-                style: TextStyleHelper.button(),
-              ),
-            ),
-          ),
-        ],
+        actions: [ResetFiltersButton(filterController: filterController)],
       ),
       body: Stack(
         children: [
