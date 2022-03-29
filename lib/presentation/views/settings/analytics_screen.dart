@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -77,30 +78,31 @@ class AnalyticsScreen extends StatelessWidget {
       backgroundColor: backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('analytics'),
-        backgroundColor: backgroundColor,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        onLeadingPressed: () => Get.back(id: SettingsRouteNames.key),
       ),
-      body: Obx(
-        () => GetPlatform.isAndroid
-            ? Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  children: [
-                    const SizedBox(height: 3),
-                    OptionWithSwitch(
-                      title: tr('shareAnalytics'),
-                      switchOnChanged: controller.changeAnalyticsSharingEnability,
-                      switchValue: controller.shareAnalytics,
-                      style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
-                    ),
-                    Padding(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: Text(tr('shareAnalyticsDescription'),
-                            style: TextStyleHelper.body2(
-                                color: Theme.of(context).colors().onSurface.withOpacity(0.6)))),
-                  ],
-                ),
-              )
-            : ListView.custom(
+      body: GetPlatform.isAndroid
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  const SizedBox(height: 3),
+                  OptionWithSwitch(
+                    title: tr('shareAnalytics'),
+                    switchOnChanged: controller.changeAnalyticsSharingEnability,
+                    switchValue: controller.shareAnalytics,
+                    style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(tr('shareAnalyticsDescription'),
+                          style: TextStyleHelper.body2(
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6)))),
+                ],
+              ),
+            )
+          : Obx(
+              () => ListView.custom(
                 childrenDelegate: SliverChildListDelegate(
                   [
                     SettingsList(
@@ -139,7 +141,7 @@ class AnalyticsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-      ),
+            ),
     );
   }
 }

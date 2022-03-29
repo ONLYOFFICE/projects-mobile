@@ -44,8 +44,6 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
-import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
-import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
 import 'package:projects/presentation/views/settings/setting_tile.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -107,22 +105,26 @@ class SettingsScreen extends StatelessWidget {
                           : tr('disabled'),
                       enableIconOpacity: true,
                       icon: SvgIcons.passcode,
-                      onTap: () => Get.find<NavigationController>().toScreen(
-                        const PasscodeSettingsScreen(),
-                        transition: Transition.rightToLeft,
-                        isRootModalScreenView: false,
-                      ),
+                      // onTap: () => Get.find<NavigationController>().toScreen(
+                      //   const PasscodeSettingsScreen(),
+                      //   transition: Transition.rightToLeft,
+                      //   isRootModalScreenView: false,
+                      // ),
+                      onTap: () => Get.toNamed(SettingsRouteNames.passcodeSettingsScreen,
+                          id: SettingsRouteNames.key),
                     ),
                     SettingTile(
                       text: tr('colorTheme'),
                       loverText: tr(controller.currentTheme.value),
                       enableIconOpacity: true,
                       icon: SvgIcons.color_scheme,
-                      onTap: () => Get.find<NavigationController>().toScreen(
-                        const ColorThemeSelectionScreen(),
-                        transition: Transition.rightToLeft,
-                        isRootModalScreenView: false,
-                      ),
+                      // onTap: () => Get.find<NavigationController>().toScreen(
+                      //   const ColorThemeSelectionScreen(),
+                      //   transition: Transition.rightToLeft,
+                      //   isRootModalScreenView: false,
+                      // ),
+                      onTap: () => Get.toNamed(SettingsRouteNames.themeSettingsScreen,
+                          id: SettingsRouteNames.key),
                     ),
                     SettingTile(
                       text: tr('clearCache'),
@@ -210,11 +212,13 @@ class SettingsScreen extends StatelessWidget {
                   SettingsSection(
                     tiles: [
                       SettingsTile.navigation(
-                        onPressed: (_) => Get.find<NavigationController>().toScreen(
-                          const PasscodeSettingsScreen(),
-                          transition: Transition.rightToLeft,
-                          isRootModalScreenView: false,
-                        ),
+                        // onPressed: (_) => Get.find<NavigationController>().toScreen(
+                        //   const PasscodeSettingsScreen(),
+                        //   transition: Transition.rightToLeft,
+                        //   isRootModalScreenView: false,
+                        // ),
+                        onPressed: (_) => Get.toNamed(SettingsRouteNames.passcodeSettingsScreen,
+                            id: SettingsRouteNames.key),
                         title: Text(
                           tr('passcodeLock'),
                           overflow: TextOverflow.ellipsis,
@@ -243,11 +247,13 @@ class SettingsScreen extends StatelessWidget {
                   SettingsSection(
                     tiles: [
                       SettingsTile.navigation(
-                        onPressed: (_) => Get.find<NavigationController>().toScreen(
-                          const ColorThemeSelectionScreen(),
-                          transition: Transition.rightToLeft,
-                          isRootModalScreenView: false,
-                        ),
+                        // onPressed: (_) => Get.find<NavigationController>().toScreen(
+                        //   const ColorThemeSelectionScreen(),
+                        //   transition: Transition.rightToLeft,
+                        //   isRootModalScreenView: false,
+                        // ),
+                        onPressed: (_) => Get.toNamed(SettingsRouteNames.themeSettingsScreen,
+                            id: SettingsRouteNames.key),
                         title: Text(
                           tr('colorTheme'),
                           overflow: TextOverflow.ellipsis,

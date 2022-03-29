@@ -49,7 +49,6 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/views/settings/analytics_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
@@ -253,5 +252,5 @@ class SettingsController extends GetxController {
       );
 
   Future<void> onAnalyticsPressed() async =>
-      Get.find<NavigationController>().toScreen(const AnalyticsScreen());
+      Get.toNamed(SettingsRouteNames.analyticsSettingsScreen, id: SettingsRouteNames.key);
 }

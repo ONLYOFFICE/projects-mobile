@@ -31,6 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 
 class ModalScreenView extends StatelessWidget {
   final Widget contentView;
@@ -50,6 +51,35 @@ class ModalScreenView extends StatelessWidget {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 540, maxHeight: 620),
             child: contentView,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ModalScreenViewSkeleton extends StatelessWidget {
+  final ModalNavigationData modalNavigationData;
+
+  const ModalScreenViewSkeleton({
+    Key? key,
+    required this.modalNavigationData,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 540, maxHeight: 620),
+            child: Navigator(
+              key: modalNavigationData.id,
+              // initialRoute: widget.setupPageRoute,
+              onGenerateRoute: modalNavigationData.onGenerateRoute,
+            ),
           ),
         ),
       ),

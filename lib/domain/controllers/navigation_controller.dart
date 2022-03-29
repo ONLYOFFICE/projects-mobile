@@ -40,6 +40,10 @@ import 'package:projects/domain/controllers/projects/new_project/portal_user_ite
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
+import 'package:projects/presentation/views/settings/analytics_screen.dart';
+import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
+import 'package:projects/presentation/views/settings/settings_screen.dart';
 
 class NavigationController extends GetxController {
   final tabIndex = 0.obs;
@@ -119,7 +123,6 @@ class NavigationController extends GetxController {
         popGesture: popGesture,
       );
     } else {
-      //TODO modal dialog also overlap dimmed background, fix if possible
       return await Get.dialog(
         ModalScreenView(contentView: widget),
         barrierDismissible: false,
@@ -128,6 +131,14 @@ class NavigationController extends GetxController {
       );
     }
   }
+
+  Future<void> toModalScreen({required ModalNavigationData modalNavigationData}) async {
+    await Get.dialog(ModalScreenViewSkeleton(
+      modalNavigationData: modalNavigationData,
+    ));
+  }
+
+  // temporary. nested navigation for tablet modal view
 
   Future to(
     Widget widget, {
@@ -156,4 +167,46 @@ class NavigationController extends GetxController {
       );
     }
   }
+}
+
+class ModalNavigationData {
+  final GlobalKey<NavigatorState>? id;
+  final Route? Function(RouteSettings)? onGenerateRoute;
+
+  const ModalNavigationData({
+    required this.id,
+    this.onGenerateRoute,
+  });
+
+  ModalNavigationData.settingsRouting()
+      : this(
+            id: Get.nestedKey(SettingsRouteNames.key),
+            onGenerateRoute: (settings) {
+              if (settings.name == SettingsRouteNames.settingsScreen) {
+                return GetPageRoute(
+                  page: () => const SettingsScreen(),
+                );
+              } else if (settings.name == SettingsRouteNames.themeSettingsScreen) {
+                return GetPageRoute(
+                  page: () => const ColorThemeSelectionScreen(),
+                );
+              } else if (settings.name == SettingsRouteNames.passcodeSettingsScreen) {
+                return GetPageRoute(
+                  page: () => const PasscodeSettingsScreen(),
+                );
+              } else if (settings.name == SettingsRouteNames.analyticsSettingsScreen) {
+                return GetPageRoute(
+                  page: () => const AnalyticsScreen(),
+                );
+              } else
+                return null;
+            });
+}
+
+abstract class SettingsRouteNames {
+  static const key = 1;
+  static const settingsScreen = '/';
+  static const themeSettingsScreen = '/theme_settings';
+  static const passcodeSettingsScreen = '/passcode_settings';
+  static const analyticsSettingsScreen = '/analytics_settings';
 }

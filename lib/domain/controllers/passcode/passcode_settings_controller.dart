@@ -33,6 +33,7 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/passcode_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -159,7 +160,7 @@ class PasscodeSettingsController extends GetxController {
   void leavePasscodeSettingsScreen() {
     clear();
     Get.find<SettingsController>().onInit();
-    Get.back();
+    Get.back(id: SettingsRouteNames.key);
   }
 
   void leave() {

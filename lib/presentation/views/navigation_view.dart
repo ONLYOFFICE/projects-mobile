@@ -261,7 +261,8 @@ class TabletLayout extends StatelessWidget {
                       height: 24,
                       color: Get.theme.colors().onNavBar.withOpacity(0.4),
                     ),
-                    onPressed: () => controller.toScreen(const SettingsScreen()),
+                    onPressed: () => controller.toModalScreen(
+                        modalNavigationData: ModalNavigationData.settingsRouting()),
                   ),
                   const SizedBox(height: 60)
                 ],
