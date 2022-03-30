@@ -182,7 +182,13 @@ class DocumentsMoreButton extends StatelessWidget {
       itemBuilder: (context) {
         return [
           for (final tile in controller.sortController.getSortTile())
-            PlatformPopupMenuItem(child: tile),
+            PlatformPopupMenuItem(
+              onTap: () {
+                tile.sortController.changeSort(tile.sortParameter);
+                Get.back();
+              },
+              child: tile,
+            ),
         ];
       },
     );

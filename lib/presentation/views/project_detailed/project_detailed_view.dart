@@ -61,6 +61,7 @@ import 'package:projects/presentation/views/project_detailed/project_milestones_
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
+import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
 import 'package:projects/presentation/views/tasks/tasks_shared.dart';
 
 class ProjectDetailedTabs {
@@ -317,22 +318,46 @@ class _ProjectContextMenu extends StatelessWidget {
           controller.projectTasksController != null &&
           controller.projectTasksController!.itemList.isNotEmpty)
         for (final tile in controller.projectTasksController!.sortController.getSortTile())
-          PlatformPopupMenuItem(child: tile),
+          PlatformPopupMenuItem(
+            onTap: () {
+              tile.sortController.changeSort(tile.sortParameter);
+              Get.back();
+            },
+            child: tile,
+          ),
       if (index == ProjectDetailedTabs.milestones &&
           controller.projectMilestonesController != null &&
           controller.projectMilestonesController!.itemList.isNotEmpty)
         for (final tile in controller.projectMilestonesController!.sortController.getSortTile())
-          PlatformPopupMenuItem(child: tile),
+          PlatformPopupMenuItem(
+            onTap: () {
+              tile.sortController.changeSort(tile.sortParameter);
+              Get.back();
+            },
+            child: tile,
+          ),
       if (index == ProjectDetailedTabs.discussions &&
           controller.projectDiscussionsController != null &&
           controller.projectDiscussionsController!.itemList.isNotEmpty)
         for (final tile in controller.projectDiscussionsController!.sortController.getSortTile())
-          PlatformPopupMenuItem(child: tile),
+          PlatformPopupMenuItem(
+            onTap: () {
+              tile.sortController.changeSort(tile.sortParameter);
+              Get.back();
+            },
+            child: tile,
+          ),
       if (index == ProjectDetailedTabs.documents &&
           controller.projectDocumentsController != null &&
           controller.projectDocumentsController!.itemList.isNotEmpty)
         for (final tile in controller.projectDocumentsController!.sortController.getSortTile())
-          PlatformPopupMenuItem(child: tile),
+          PlatformPopupMenuItem(
+            onTap: () {
+              tile.sortController.changeSort(tile.sortParameter);
+              Get.back();
+            },
+            child: tile,
+          ),
     ];
   }
 }

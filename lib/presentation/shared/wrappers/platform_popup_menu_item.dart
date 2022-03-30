@@ -93,9 +93,9 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
 
   @protected
   void handleTap() {
-    widget.onTap?.call();
+    if (widget.enabled) widget.onTap?.call();
 
-    if (widget.onTap == null) Navigator.pop<T>(context, widget.value);
+    if (widget.onTap == null && widget.value != null) Navigator.pop<T>(context, widget.value);
   }
 
   TextStyle get _textStyle {
@@ -126,7 +126,11 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
           button: true,
           child: Container(
             decoration: BoxDecoration(
-              color: _isPressed ? _kBackgroundColorPressed : _kBackgroundColor.withOpacity(0.4),
+              color: widget.enabled
+                  ? _isPressed
+                      ? _kBackgroundColorPressed
+                      : _kBackgroundColor.withOpacity(0.4)
+                  : CupertinoColors.inactiveGray,
             ),
             padding: EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
             child: DefaultTextStyle(
