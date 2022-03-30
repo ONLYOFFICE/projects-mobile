@@ -133,18 +133,7 @@ class LoginController extends GetxController {
       }
 
       if (result.response!.token != null) {
-        await saveLoginData(token: result.response!.token, expires: result.response!.expires);
-        await Get.find<AccountManager>()
-            .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
-
-        await cookieManager.setCookies([
-          Cookie('asc_auth_key', result.response!.token!)
-            ..domain = portalAdress
-            ..expires = DateTime.now().add(const Duration(days: 10))
-            ..httpOnly = false
-        ]);
-
-        locator<EventHub>().fire('loginSuccess');
+        await _login(result.response!.token!, result.response!.expires!);
 
         loaded.value = true;
       } else if (result.response!.tfa == true) {
@@ -182,7 +171,7 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> saveLoginData({String? token, String? expires}) async {
+  Future<void> saveLoginData({required String token, required String expires}) async {
     GetIt.instance.resetLazySingleton<CoreApi>();
     await saveToken(token, expires);
     await sendRegistrationType();
@@ -222,10 +211,16 @@ class LoginController extends GetxController {
     return result;
   }
 
-  Future saveToken(String? token, String? expires) async {
+  Future saveToken(String token, String expires) async {
     //TODO: replace with AccountData
     await _secureStorage.putString('token', token);
     await _secureStorage.putString('expires', expires);
+  }
+
+  Future clearToken() async {
+    //TODO: replace with AccountData
+    await _secureStorage.delete('token');
+    await _secureStorage.delete('expires');
   }
 
   Future<bool> sendCode(String code, {String? userName, String? password}) async {
@@ -243,12 +238,9 @@ class LoginController extends GetxController {
     }
 
     if (result.response!.token != null) {
-      await saveLoginData(token: result.response!.token, expires: result.response!.expires);
-      await Get.find<AccountManager>()
-          .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
+      await _login(result.response!.token!, result.response!.expires!);
 
       loaded.value = true;
-      locator<EventHub>().fire('loginSuccess');
       return true;
     } else if (result.response!.tfa!) {
       loaded.value = true;
@@ -257,6 +249,27 @@ class LoginController extends GetxController {
     }
 
     return false;
+  }
+
+  Future<bool> _login(String token, String expires) async {
+    await saveToken(token, expires);
+    if (await Get.find<UserController>().getUserId() == null) {
+      unawaited(logout()); // TODO garanin cleartoken
+      return false;
+    }
+
+    await saveLoginData(token: token, expires: expires);
+    await Get.find<AccountManager>().addAccount(tokenString: token, expires: expires);
+
+    await cookieManager.setCookies([
+      Cookie('asc_auth_key', token)
+        ..domain = portalAdress
+        ..expires = DateTime.now().add(const Duration(days: 10))
+        ..httpOnly = false
+    ]);
+
+    locator<EventHub>().fire('loginSuccess');
+    return true;
   }
 
   Future<void> getPortalCapabilities() async {
@@ -321,9 +334,8 @@ class LoginController extends GetxController {
 
     locator.get<CoreApi>().cancellationToken.cancel();
 
-    await _secureStorage.delete('expires');
     await _secureStorage.delete('portalName');
-    await _secureStorage.delete('token');
+    await clearToken();
 
     await storage.remove('taskFilters');
     await storage.remove('projectFilters');

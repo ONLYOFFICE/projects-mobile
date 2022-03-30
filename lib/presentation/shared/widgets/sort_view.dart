@@ -80,39 +80,33 @@ class SortView extends StatelessWidget {
 
 class SortTile extends StatelessWidget {
   final String sortParameter;
-  final BaseSortController? sortController;
+  final BaseSortController sortController;
 
   const SortTile({Key? key, required this.sortParameter, required this.sortController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _selected = sortController!.currentSortfilter == sortParameter;
-    final title = sortController!.getFilterLabel(sortParameter);
+    final _selected = sortController.currentSortfilter == sortParameter;
+    final title = sortController.getFilterLabel(sortParameter);
 
-    return GestureDetector(
-      onTap: () {
-        sortController!.changeSort(sortParameter);
-        Get.back();
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          child: Text(
+            title,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           ),
-          if (_selected)
-            AppIcon(
-              icon: sortController!.isSortAscending.value ? SvgIcons.up_arrow : SvgIcons.down_arrow,
-              color: Get.theme.colors().onSurface,
-            ),
-          if (_selected) const SizedBox(width: 16)
-        ],
-      ),
+        ),
+        if (_selected)
+          AppIcon(
+            icon: sortController.isSortAscending.value ? SvgIcons.up_arrow : SvgIcons.down_arrow,
+            color: Get.theme.colors().onSurface,
+          ),
+        if (_selected) const SizedBox(width: 16)
+      ],
     );
   }
 }

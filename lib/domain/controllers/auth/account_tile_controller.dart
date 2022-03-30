@@ -131,7 +131,9 @@ class AccountTileController extends GetxController {
       await locator<SecureStorage>()
           .putString('portalName', '${accountData!.scheme}${accountData!.portal}');
       await Get.find<LoginController>()
-          .saveLoginData(token: accountData!.token, expires: accountData!.expires);
+          .saveLoginData(token: accountData!.token!, expires: accountData!.expires!);
+
+      // TODO @garanin add cookie
 
       await locator<SecureStorage>()
           .putString('currentAccount', json.encode(accountData!.toJson()));

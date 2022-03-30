@@ -34,8 +34,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 
 abstract class BaseSortController extends GetxController {
-  RxString currentSortTitle = ''.obs;
-  RxBool isSortAscending = true.obs;
+  final currentSortTitle = ''.obs;
+  final isSortAscending = true.obs;
   Function? updateSortDelegate;
 
   late String currentSortfilter;
@@ -50,7 +50,7 @@ abstract class BaseSortController extends GetxController {
     currentSortTitle.value = getFilterLabel(currentSortfilter);
 
     if (updateSortDelegate != null) {
-      await updateSortDelegate!();
+      await updateSortDelegate!.call();
     }
   }
 

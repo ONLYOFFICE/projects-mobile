@@ -66,11 +66,7 @@ void main() async {
 
   await Firebase.initializeApp();
   await RemoteConfigService.initialize();
-  try {
-    await RemoteConfigService.fetchAndActivate();
-  } catch (e) {
-    debugPrint(e.toString());
-  }
+  await RemoteConfigService.fetchAndActivate();
 
   setupLocator();
   setupGetX();
