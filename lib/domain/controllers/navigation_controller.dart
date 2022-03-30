@@ -116,8 +116,9 @@ class NavigationController extends GetxController {
     ModalNavigationData? modalNavigationData,
   }) async {
     if (platformController.isMobile) {
+      assert(widget != null, 'Widget must not be null for mobile layout');
       await Get.to(
-        () => widget,
+        () => widget!,
         preventDuplicates: preventDuplicates ?? false,
         fullscreenDialog: fullscreenDialog,
         arguments: arguments,
