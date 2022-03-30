@@ -122,7 +122,7 @@ class NavigationController extends GetxController {
         preventDuplicates: preventDuplicates ?? false,
         fullscreenDialog: fullscreenDialog,
         arguments: arguments,
-        transition: transition ?? Transition.downToUp,
+        transition: transition ?? Transition.native,
         popGesture: popGesture,
       );
     } else if (modalNavigationData != null) {
@@ -159,7 +159,7 @@ class NavigationController extends GetxController {
         fullscreenDialog: fullscreenDialog,
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
-        transition: transition ?? Transition.rightToLeft,
+        transition: transition ?? Transition.native,
       );
     } else if (modalNavigationData != null) {
       await toModalScreen(modalNavigationData: modalNavigationData);
