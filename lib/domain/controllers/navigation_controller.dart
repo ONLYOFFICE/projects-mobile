@@ -49,6 +49,7 @@ class NavigationController extends GetxController {
   final tabIndex = 0.obs;
   final onMoreView = false.obs;
   final selfUserItem = Rx(PortalUserItemController(portalUser: PortalUser()));
+  final platformController = Get.find<PlatformController>();
 
   int treeLength = 0;
 
@@ -105,16 +106,17 @@ class NavigationController extends GetxController {
   void clearCurrentIndex() => tabIndex.value = 0;
 
   Future toScreen(
-    Widget widget, {
+    Widget? widget, {
     bool? preventDuplicates,
     Map<String, dynamic>? arguments,
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
     bool isRootModalScreenView = true,
+    ModalNavigationData? modalNavigationData,
   }) async {
-    if (Get.find<PlatformController>().isMobile) {
-      return await Get.to(
+    if (platformController.isMobile) {
+      await Get.to(
         () => widget,
         preventDuplicates: preventDuplicates ?? false,
         fullscreenDialog: fullscreenDialog,
@@ -122,9 +124,11 @@ class NavigationController extends GetxController {
         transition: transition ?? Transition.downToUp,
         popGesture: popGesture,
       );
+    } else if (modalNavigationData != null) {
+      await toModalScreen(modalNavigationData: modalNavigationData);
     } else {
-      return await Get.dialog(
-        ModalScreenView(contentView: widget),
+      await Get.dialog(
+        ModalScreenView(contentView: widget!),
         barrierDismissible: false,
         barrierColor: isRootModalScreenView ? null : Colors.transparent,
         arguments: arguments,
@@ -138,8 +142,6 @@ class NavigationController extends GetxController {
     ));
   }
 
-  // temporary. nested navigation for tablet modal view
-
   Future to(
     Widget widget, {
     bool? preventDuplicates,
@@ -147,8 +149,9 @@ class NavigationController extends GetxController {
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
+    ModalNavigationData? modalNavigationData,
   }) async {
-    if (Get.find<PlatformController>().isMobile) {
+    if (platformController.isMobile) {
       await Get.to(
         () => widget,
         popGesture: popGesture,
@@ -157,6 +160,8 @@ class NavigationController extends GetxController {
         arguments: arguments,
         transition: transition ?? Transition.rightToLeft,
       );
+    } else if (modalNavigationData != null) {
+      await toModalScreen(modalNavigationData: modalNavigationData);
     } else {
       treeLength++;
       await Get.to(
@@ -165,6 +170,14 @@ class NavigationController extends GetxController {
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
       );
+    }
+  }
+
+  void back({int? id}) {
+    if (id != null && !platformController.isMobile) {
+      Get.back(id: id);
+    } else {
+      Get.back();
     }
   }
 }

@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -110,8 +109,7 @@ class SettingsScreen extends StatelessWidget {
                       //   transition: Transition.rightToLeft,
                       //   isRootModalScreenView: false,
                       // ),
-                      onTap: () => Get.toNamed(SettingsRouteNames.passcodeSettingsScreen,
-                          id: SettingsRouteNames.key),
+                      onTap: controller.onPasscodePressed,
                     ),
                     SettingTile(
                       text: tr('colorTheme'),
@@ -123,8 +121,7 @@ class SettingsScreen extends StatelessWidget {
                       //   transition: Transition.rightToLeft,
                       //   isRootModalScreenView: false,
                       // ),
-                      onTap: () => Get.toNamed(SettingsRouteNames.themeSettingsScreen,
-                          id: SettingsRouteNames.key),
+                      onTap: controller.onThemePressed,
                     ),
                     SettingTile(
                       text: tr('clearCache'),
@@ -217,8 +214,7 @@ class SettingsScreen extends StatelessWidget {
                         //   transition: Transition.rightToLeft,
                         //   isRootModalScreenView: false,
                         // ),
-                        onPressed: (_) => Get.toNamed(SettingsRouteNames.passcodeSettingsScreen,
-                            id: SettingsRouteNames.key),
+                        onPressed: (_) => controller.onPasscodePressed(),
                         title: Text(
                           tr('passcodeLock'),
                           overflow: TextOverflow.ellipsis,
@@ -252,8 +248,7 @@ class SettingsScreen extends StatelessWidget {
                         //   transition: Transition.rightToLeft,
                         //   isRootModalScreenView: false,
                         // ),
-                        onPressed: (_) => Get.toNamed(SettingsRouteNames.themeSettingsScreen,
-                            id: SettingsRouteNames.key),
+                        onPressed: (_) => controller.onThemePressed(),
                         title: Text(
                           tr('colorTheme'),
                           overflow: TextOverflow.ellipsis,

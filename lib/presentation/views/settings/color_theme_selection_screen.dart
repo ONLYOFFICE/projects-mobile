@@ -57,7 +57,7 @@ class ColorThemeSelectionScreen extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('colorTheme'),
-          onLeadingPressed: () => Get.back(id: SettingsRouteNames.key),
+          onLeadingPressed: () => controller.back(id: SettingsRouteNames.key),
         ),
         body: GetPlatform.isAndroid
             ? ListView.custom(

@@ -45,10 +45,14 @@ import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/settings_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/views/settings/analytics_screen.dart';
+import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
@@ -56,6 +60,8 @@ class SettingsController extends GetxController {
   final PackageInfoService _packageInfoService = locator<PackageInfoService>();
   final DeviceInfoService _deviceInfoService = locator<DeviceInfoService>();
   final Storage _storage = locator<Storage>();
+  final platformController = Get.find<PlatformController>();
+  final navigationController = Get.find<NavigationController>();
 
   String? appVersion;
   String? buildNumber;
@@ -251,6 +257,17 @@ class SettingsController extends GetxController {
         RemoteConfigService.getString(RemoteConfigService.Keys.linkPrivacyPolicy),
       );
 
-  Future<void> onAnalyticsPressed() async =>
-      Get.toNamed(SettingsRouteNames.analyticsSettingsScreen, id: SettingsRouteNames.key);
+  void onAnalyticsPressed() => platformController.isMobile
+      ? navigationController.to(const AnalyticsScreen())
+      : Get.toNamed(SettingsRouteNames.analyticsSettingsScreen, id: SettingsRouteNames.key);
+
+  void onPasscodePressed() => platformController.isMobile
+      ? navigationController.to(const PasscodeSettingsScreen())
+      : Get.toNamed(SettingsRouteNames.passcodeSettingsScreen, id: SettingsRouteNames.key);
+
+  void onThemePressed() => platformController.isMobile
+      ? navigationController.to(const ColorThemeSelectionScreen())
+      : Get.toNamed(SettingsRouteNames.themeSettingsScreen, id: SettingsRouteNames.key);
+
+  void back({int? id}) => Get.find<NavigationController>().back(id: id);
 }

@@ -79,7 +79,7 @@ class AnalyticsScreen extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('analytics'),
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        onLeadingPressed: () => Get.back(id: SettingsRouteNames.key),
+        onLeadingPressed: () => controller.back(id: SettingsRouteNames.key),
       ),
       body: GetPlatform.isAndroid
           ? Padding(
