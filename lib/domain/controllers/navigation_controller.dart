@@ -40,11 +40,16 @@ import 'package:projects/domain/controllers/projects/new_project/portal_user_ite
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
+import 'package:projects/presentation/views/settings/analytics_screen.dart';
+import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
+import 'package:projects/presentation/views/settings/settings_screen.dart';
 
 class NavigationController extends GetxController {
   final tabIndex = 0.obs;
   final onMoreView = false.obs;
   final selfUserItem = Rx(PortalUserItemController(portalUser: PortalUser()));
+  final platformController = Get.find<PlatformController>();
 
   int treeLength = 0;
 
@@ -101,32 +106,41 @@ class NavigationController extends GetxController {
   void clearCurrentIndex() => tabIndex.value = 0;
 
   Future toScreen(
-    Widget widget, {
+    Widget? widget, {
     bool? preventDuplicates,
     Map<String, dynamic>? arguments,
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
     bool isRootModalScreenView = true,
+    ModalNavigationData? modalNavigationData,
   }) async {
-    if (Get.find<PlatformController>().isMobile) {
-      return await Get.to(
-        () => widget,
+    if (platformController.isMobile) {
+      assert(widget != null, 'Widget must not be null for mobile layout');
+      await Get.to(
+        () => widget!,
         preventDuplicates: preventDuplicates ?? false,
         fullscreenDialog: fullscreenDialog,
         arguments: arguments,
-        transition: transition ?? Transition.downToUp,
+        transition: transition ?? Transition.native,
         popGesture: popGesture,
       );
+    } else if (modalNavigationData != null) {
+      await toModalScreen(modalNavigationData: modalNavigationData);
     } else {
-      //TODO modal dialog also overlap dimmed background, fix if possible
-      return await Get.dialog(
-        ModalScreenView(contentView: widget),
+      await Get.dialog(
+        ModalScreenView(contentView: widget!),
         barrierDismissible: false,
         barrierColor: isRootModalScreenView ? null : Colors.transparent,
         arguments: arguments,
       );
     }
+  }
+
+  Future<void> toModalScreen({required ModalNavigationData modalNavigationData}) async {
+    await Get.dialog(ModalScreenViewSkeleton(
+      modalNavigationData: modalNavigationData,
+    ));
   }
 
   Future to(
@@ -136,16 +150,19 @@ class NavigationController extends GetxController {
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
+    ModalNavigationData? modalNavigationData,
   }) async {
-    if (Get.find<PlatformController>().isMobile) {
+    if (platformController.isMobile) {
       await Get.to(
         () => widget,
         popGesture: popGesture,
         fullscreenDialog: fullscreenDialog,
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
-        transition: transition ?? Transition.rightToLeft,
+        transition: transition ?? Transition.native,
       );
+    } else if (modalNavigationData != null) {
+      await toModalScreen(modalNavigationData: modalNavigationData);
     } else {
       treeLength++;
       await Get.to(
@@ -156,4 +173,54 @@ class NavigationController extends GetxController {
       );
     }
   }
+
+  void back({int? id}) {
+    if (id != null && !platformController.isMobile) {
+      Get.back(id: id);
+    } else {
+      Get.back();
+    }
+  }
+}
+
+class ModalNavigationData {
+  final GlobalKey<NavigatorState>? id;
+  final Route? Function(RouteSettings)? onGenerateRoute;
+
+  const ModalNavigationData({
+    required this.id,
+    this.onGenerateRoute,
+  });
+
+  ModalNavigationData.settingsRouting()
+      : this(
+            id: Get.nestedKey(SettingsRouteNames.key),
+            onGenerateRoute: (settings) {
+              if (settings.name == SettingsRouteNames.settingsScreen) {
+                return GetPageRoute(
+                  page: () => const SettingsScreen(),
+                );
+              } else if (settings.name == SettingsRouteNames.themeSettingsScreen) {
+                return GetPageRoute(
+                  page: () => const ColorThemeSelectionScreen(),
+                );
+              } else if (settings.name == SettingsRouteNames.passcodeSettingsScreen) {
+                return GetPageRoute(
+                  page: () => const PasscodeSettingsScreen(),
+                );
+              } else if (settings.name == SettingsRouteNames.analyticsSettingsScreen) {
+                return GetPageRoute(
+                  page: () => const AnalyticsScreen(),
+                );
+              } else
+                return null;
+            });
+}
+
+abstract class SettingsRouteNames {
+  static const key = 1;
+  static const settingsScreen = '/';
+  static const themeSettingsScreen = '/theme_settings';
+  static const passcodeSettingsScreen = '/passcode_settings';
+  static const analyticsSettingsScreen = '/analytics_settings';
 }
