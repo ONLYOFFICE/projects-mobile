@@ -40,38 +40,54 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 
 class LoadingHUD {
-  String text = tr('loading');
-
-  Widget? _dialog;
+  PopupRoute? _loadingHudRoute;
 
   void showLoadingHUD(bool value) {
     if (!value) {
-      _dialog = StyledAlertDialog(
-        actions: const [],
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            PlatformCircularProgressIndicator(
-              cupertino: (_, __) => CupertinoProgressIndicatorData(radius: 20),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              text,
-              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
-            ),
-          ],
-        ),
+      _loadingHudRoute = RawDialogRoute(
+        pageBuilder: (_, __, ___) => LoadingHUDContent(),
+        settings: const RouteSettings(name: LoadingHUDContent.name),
       );
-
-      Get.dialog(_dialog!);
-
+      Navigator.push(Get.context!, _loadingHudRoute!);
       return;
     }
-    if (value && _dialog != null) {
-      Get.back();
-      _dialog = null;
+    if (value && _loadingHudRoute?.isActive == true) {
+      Navigator.removeRoute(Get.context!, _loadingHudRoute!);
+      _loadingHudRoute = null;
     }
+  }
+}
+
+class LoadingHUDContent extends StatelessWidget {
+  LoadingHUDContent({Key? key}) : super(key: key);
+
+  static const name = '/LoadingHud';
+  final text = tr('loading');
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: StyledAlertDialog(
+        actions: const [],
+        content: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              PlatformCircularProgressIndicator(
+                cupertino: (_, __) => CupertinoProgressIndicatorData(radius: 20),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                text.capitalizeFirst!,
+                style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
