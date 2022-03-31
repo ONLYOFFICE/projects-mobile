@@ -35,19 +35,51 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 
 class LoadingHUD {
+  LoadingHUD({String? loadingText}) {
+    if (loadingText?.isNotEmpty == true) _loadingText = loadingText!;
+  }
+
   PopupRoute? _loadingHudRoute;
+
+  String _loadingText = tr('loading');
+  set setLoadingText(String newText) {
+    _loadingText = newText;
+  }
 
   void showLoadingHUD(bool value) {
     if (!value) {
-      _loadingHudRoute = RawDialogRoute(
-        pageBuilder: (_, __, ___) => LoadingHUDContent(),
-        settings: const RouteSettings(name: LoadingHUDContent.name),
-      );
+      if (GetPlatform.isIOS)
+        _loadingHudRoute = CupertinoDialogRoute(
+          builder: (_) => WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: Center(
+              child: CupertinoPopupSurface(
+                isSurfacePainted: false,
+                child: _LoadingHUDContent(text: _loadingText),
+              ),
+            ),
+          ),
+          settings: const RouteSettings(name: _LoadingHUDContent.name),
+          context: Get.context!,
+        );
+      else
+        _loadingHudRoute = DialogRoute(
+          builder: (_) => WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: Center(
+              child: Material(
+                type: MaterialType.card,
+                child: _LoadingHUDContent(text: _loadingText),
+              ),
+            ),
+          ),
+          settings: const RouteSettings(name: _LoadingHUDContent.name),
+          context: Get.context!,
+        );
       Navigator.push(Get.context!, _loadingHudRoute!);
       return;
     }
@@ -58,35 +90,29 @@ class LoadingHUD {
   }
 }
 
-class LoadingHUDContent extends StatelessWidget {
-  LoadingHUDContent({Key? key}) : super(key: key);
+class _LoadingHUDContent extends StatelessWidget {
+  _LoadingHUDContent({Key? key, required this.text}) : super(key: key);
 
   static const name = '/LoadingHud';
-  final text = tr('loading');
+  final String text;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => Future.value(false),
-      child: StyledAlertDialog(
-        actions: const [],
-        content: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              PlatformCircularProgressIndicator(
-                cupertino: (_, __) => CupertinoProgressIndicatorData(radius: 20),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Text(
-                text.capitalizeFirst!,
-                style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          PlatformCircularProgressIndicator(
+            cupertino: (_, __) => CupertinoProgressIndicatorData(radius: 20),
           ),
-        ),
+          const SizedBox(height: 10),
+          DefaultTextStyle(
+            style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
+            child: Text(text.capitalizeFirst!),
+          ),
+        ],
       ),
     );
   }
