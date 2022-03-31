@@ -40,7 +40,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 
 class LoadingHUD {
-  Route<Object>? _loadingHudRoute;
+  PopupRoute? _loadingHudRoute;
 
   void showLoadingHUD(bool value) {
     if (!value) {
@@ -51,7 +51,7 @@ class LoadingHUD {
       Navigator.push(Get.context!, _loadingHudRoute!);
       return;
     }
-    if (value && _loadingHudRoute != null) {
+    if (value && _loadingHudRoute?.isActive == true) {
       Navigator.removeRoute(Get.context!, _loadingHudRoute!);
       _loadingHudRoute = null;
     }
@@ -66,23 +66,26 @@ class LoadingHUDContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StyledAlertDialog(
-      actions: const [],
-      content: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            PlatformCircularProgressIndicator(
-              cupertino: (_, __) => CupertinoProgressIndicatorData(radius: 20),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(
-              text.capitalizeFirst!,
-              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
-            ),
-          ],
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: StyledAlertDialog(
+        actions: const [],
+        content: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              PlatformCircularProgressIndicator(
+                cupertino: (_, __) => CupertinoProgressIndicatorData(radius: 20),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                text.capitalizeFirst!,
+                style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
+              ),
+            ],
+          ),
         ),
       ),
     );
