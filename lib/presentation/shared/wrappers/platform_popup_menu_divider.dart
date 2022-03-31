@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 
 const double _kMenuDividerHeight = 16;
@@ -19,19 +19,20 @@ class PlatformPopupMenuDivider extends PopupMenuEntry {
 }
 
 class _PopupMenuDividerState extends State<PlatformPopupMenuDivider> {
-  final Color _kBackgroundColorPressed = Get.isDarkMode
-      ? const Color.fromRGBO(37, 37, 37, 0.8)
-      : const Color.fromRGBO(216, 216, 216, 1);
-
   Widget createMaterialWidget(BuildContext context) => Divider(
         height: widget.height,
         thickness: widget.height,
       );
-  Widget createCupertinoWidget(BuildContext context) => Divider(
-        height: _iosMenuDividerHeight,
-        thickness: _iosMenuDividerHeight,
-        color: _kBackgroundColorPressed,
-      );
+
+  Widget createCupertinoWidget(BuildContext context) {
+    final dividerColor = CupertinoDynamicColor.resolve(CupertinoColors.separator, context);
+
+    return Divider(
+      height: _iosMenuDividerHeight,
+      thickness: _iosMenuDividerHeight,
+      color: dividerColor,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
