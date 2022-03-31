@@ -40,15 +40,36 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 
 class LoadingHUD {
-  String text = tr('loading');
-
-  Widget? _dialog;
+  Route<Object>? _loadingHudRoute;
 
   void showLoadingHUD(bool value) {
     if (!value) {
-      _dialog = StyledAlertDialog(
-        actions: const [],
-        content: Column(
+      _loadingHudRoute = RawDialogRoute(
+        pageBuilder: (_, __, ___) => LoadingHUDContent(),
+        settings: const RouteSettings(name: LoadingHUDContent.name),
+      );
+      Navigator.push(Get.context!, _loadingHudRoute!);
+      return;
+    }
+    if (value && _loadingHudRoute != null) {
+      Navigator.removeRoute(Get.context!, _loadingHudRoute!);
+      _loadingHudRoute = null;
+    }
+  }
+}
+
+class LoadingHUDContent extends StatelessWidget {
+  LoadingHUDContent({Key? key}) : super(key: key);
+
+  static const name = '/LoadingHud';
+  final text = tr('loading');
+
+  @override
+  Widget build(BuildContext context) {
+    return StyledAlertDialog(
+      actions: const [],
+      content: Center(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             PlatformCircularProgressIndicator(
@@ -58,20 +79,12 @@ class LoadingHUD {
               height: 10,
             ),
             Text(
-              text,
+              text.capitalizeFirst!,
               style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
             ),
           ],
         ),
-      );
-
-      Get.dialog(_dialog!);
-
-      return;
-    }
-    if (value && _dialog != null) {
-      Get.back();
-      _dialog = null;
-    }
+      ),
+    );
   }
 }
