@@ -66,6 +66,7 @@ class AuthTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autocorrect: false,
       focusNode: focusNode,
       controller: controller,
       autofillHints: autofillHint != null ? [autofillHint!] : null,
