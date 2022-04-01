@@ -53,7 +53,7 @@ class ProjectTitleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: 16, bottom: 10, top: showCaption ? 26 : 10),
+      padding: const EdgeInsets.only(right: 16, bottom: 10, top: 10),
       child: Row(
         children: [
           Padding(

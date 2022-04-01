@@ -40,6 +40,7 @@ import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/new_task/tiles/description_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/due_date_tile.dart';
@@ -115,11 +116,13 @@ class TaskEditingView extends StatelessWidget {
               const SizedBox(height: 10),
               TaskTitle(controller: controller, showCaption: true, focusOnTitle: false),
               const SizedBox(height: 10),
+              const StyledDivider(leftPadding: 72),
               DescriptionTile(controller: controller),
               MilestoneTile(controller: controller),
               StartDateTile(controller: controller),
               DueDateTile(controller: controller),
               PriorityTile(controller: controller),
+              const StyledDivider(leftPadding: 72),
               ResponsibleTile(controller: controller, enableUnderline: false)
             ],
           ),
