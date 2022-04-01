@@ -286,21 +286,16 @@ class TaskItemController extends GetxController {
 
   Future _changeTaskStatus(
       {required int id, required int newStatusId, required int newStatusType}) async {
-    loaded.value = false;
-
     final t = await _api.updateTaskStatus(
         taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
 
     if (t != null) {
       final newTask = PortalTask.fromJson(t as Map<String, dynamic>);
-      task.value = newTask;
       unawaited(initTaskStatus(newTask));
 
       locator<EventHub>().fire('needToRefreshTasks', {'task': newTask});
     } else
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-
-    loaded.value = true;
   }
 
   Future<bool> deleteTask({required int taskId}) async {
