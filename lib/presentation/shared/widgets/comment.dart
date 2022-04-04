@@ -137,14 +137,35 @@ class _HTMLWidgetFactory extends WidgetFactory {
   @override
   Widget? buildImage(BuildMetadata meta, ImageMetadata data) {
     final url = meta.element.attributes['src'];
-    if (url != null && url.isNotEmpty && !url.contains('http')) {
+    if (url == null || url.isEmpty) return null;
+
+    if (!url.contains('http'))
       return Image.network(
         _portalInfo.portalUri! + url,
         headers: _portalInfo.headers as Map<String, String>?,
+        loadingBuilder: _imageLoadingBuilder,
       );
-    }
+
+    if (url.contains(_portalInfo.portalName!))
+      return Image.network(
+        url,
+        headers: _portalInfo.headers as Map<String, String>?,
+        loadingBuilder: _imageLoadingBuilder,
+      );
 
     return super.buildImage(meta, data);
+  }
+
+  Widget _imageLoadingBuilder(
+      BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+    if (loadingProgress == null) return child;
+    return Center(
+      child: CircularProgressIndicator.adaptive(
+        value: loadingProgress.expectedTotalBytes != null
+            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+            : null,
+      ),
+    );
   }
 }
 

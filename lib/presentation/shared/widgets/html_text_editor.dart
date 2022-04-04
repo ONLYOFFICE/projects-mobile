@@ -30,10 +30,12 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/services/comments_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -67,7 +69,11 @@ class HtmlTextEditor extends StatelessWidget {
       htmlToolbarOptions: HtmlToolbarOptions(
         mediaUploadInterceptor: (file, type) async {
           final result = await locator<CommentsService>().uploadImages(file);
-          textController.insertHtml('<img alt="" src="$result">');
+          if (result != null)
+            textController.insertHtml('<img alt="" src="$result">');
+          else
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
           return false;
         },
         linkInsertInterceptor: (text, url, isNewWindow) {
