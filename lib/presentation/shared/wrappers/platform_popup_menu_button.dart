@@ -365,11 +365,23 @@ class _PopupMenu<T> extends StatelessWidget {
                     child: child,
                   ),
                 )
-              : Align(
-                  alignment: AlignmentDirectional.topEnd,
-                  widthFactor: width.evaluate(route.animation!),
-                  heightFactor: height.evaluate(route.animation!),
-                  child: child,
+              : Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(14)),
+                    boxShadow: [
+                      BoxShadow(
+                        blurStyle: BlurStyle.outer,
+                        color: Color.fromRGBO(0, 0, 0, 0.2),
+                        blurRadius: 64,
+                      ),
+                    ],
+                  ),
+                  child: Align(
+                    alignment: AlignmentDirectional.topEnd,
+                    widthFactor: width.evaluate(route.animation!),
+                    heightFactor: height.evaluate(route.animation!),
+                    child: child,
+                  ),
                 ),
         );
       },
