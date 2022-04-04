@@ -339,7 +339,7 @@ class _PopupMenu<T> extends StatelessWidget {
             child: isMaterial(context)
                 ? ClipRRect(child: ListBody(children: children))
                 : CupertinoPopupSurface(
-                    isSurfacePainted: true,
+                    isSurfacePainted: false,
                     child: ListBody(children: children),
                   ),
           ),

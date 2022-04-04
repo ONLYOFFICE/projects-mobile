@@ -121,34 +121,32 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
       onTapCancel: onTapCancel,
       onTap: handleTap,
       behavior: HitTestBehavior.opaque,
-      child: ConstrainedBox(
-        constraints: BoxConstraints.tightFor(height: _kButtonHeight),
-        child: Semantics(
-          button: true,
-          child: Container(
-            decoration: BoxDecoration(
-              color: widget.enabled
-                  ? _isPressed
-                      ? _kBackgroundColorPressed
-                      : Colors.transparent
-                  : CupertinoColors.inactiveGray,
-            ),
-            padding: EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
-            child: DefaultTextStyle(
-              style: _textStyle,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Flexible(
-                    child: widget.child!,
+      child: Semantics(
+        button: true,
+        child: Container(
+          constraints: BoxConstraints.tightFor(height: _kButtonHeight),
+          decoration: BoxDecoration(
+            color: widget.enabled
+                ? _isPressed
+                    ? _kBackgroundColorPressed
+                    : Colors.transparent
+                : CupertinoColors.inactiveGray,
+          ),
+          padding: EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
+          child: DefaultTextStyle(
+            style: _textStyle,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(
+                  child: widget.child!,
+                ),
+                if (widget.trailingIcon != null)
+                  Icon(
+                    widget.trailingIcon,
+                    color: _textStyle.color,
                   ),
-                  if (widget.trailingIcon != null)
-                    Icon(
-                      widget.trailingIcon,
-                      color: _textStyle.color,
-                    ),
-                ],
-              ),
+              ],
             ),
           ),
         ),
