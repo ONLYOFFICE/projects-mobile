@@ -61,7 +61,6 @@ import 'package:projects/presentation/views/project_detailed/project_milestones_
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
-import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
 import 'package:projects/presentation/views/tasks/tasks_shared.dart';
 
 class ProjectDetailedTabs {
