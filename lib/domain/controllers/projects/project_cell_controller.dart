@@ -37,7 +37,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
-import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';

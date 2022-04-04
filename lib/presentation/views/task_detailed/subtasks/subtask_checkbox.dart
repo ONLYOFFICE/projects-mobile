@@ -41,26 +41,26 @@ class SubtaskCheckBox extends StatelessWidget {
     required this.subtaskController,
   }) : super(key: key);
 
-  final SubtaskController? subtaskController;
+  final SubtaskController subtaskController;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 72,
-      child: IgnorePointer(
-        ignoring: !subtaskController!.canEdit,
-        child: Checkbox(
-          shape: const CircleBorder(),
-          value: subtaskController!.subtask.value!.status == 2,
-          activeColor: Get.theme.colors().links,
-          onChanged: (value) {
-            subtaskController!.updateSubtaskStatus(
-              context: context,
-              taskId: subtaskController!.subtask.value!.taskId!,
-              subtaskId: subtaskController!.subtask.value!.id!,
-            );
-          },
-        ),
+      child: Checkbox(
+        shape: const CircleBorder(),
+        value: subtaskController.subtask.value!.status == 2,
+        activeColor: Get.theme.colors().primary,
+        fillColor:
+            !subtaskController.canEdit ? MaterialStateProperty.all(const Color(0xff9C9C9C)) : null,
+        onChanged: !subtaskController.canEdit
+            ? null
+            : (value) {
+                subtaskController.updateSubtaskStatus(
+                  taskId: subtaskController.subtask.value!.taskId!,
+                  subtaskId: subtaskController.subtask.value!.id!,
+                );
+              },
       ),
     );
   }
