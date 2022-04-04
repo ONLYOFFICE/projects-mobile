@@ -137,9 +137,9 @@ class _HTMLWidgetFactory extends WidgetFactory {
   @override
   Widget? buildImage(BuildMetadata meta, ImageMetadata data) {
     final url = meta.element.attributes['src'];
-    if (url != null && url.isNotEmpty && url.contains(_portalInfo.portalName!)) {
+    if (url != null && url.isNotEmpty && !url.contains('http')) {
       return Image.network(
-        url,
+        _portalInfo.portalUri! + url,
         headers: _portalInfo.headers as Map<String, String>?,
       );
     }
