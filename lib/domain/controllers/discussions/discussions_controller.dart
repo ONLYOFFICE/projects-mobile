@@ -98,7 +98,10 @@ class DiscussionsController extends BaseDiscussionsController {
     }));
 
     _ss.add(locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
-      if (data['all'] == true) await loadDiscussions();
+      if (data['all'] == true) {
+        await loadDiscussions();
+        return;
+      }
 
       if (data['discussion'].id != null) {
         for (var i = 0; i < itemList.length; i++)
