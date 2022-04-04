@@ -28,7 +28,7 @@ class PlatformPopupMenuButton<T> extends StatefulWidget {
     this.child,
     this.icon,
     this.iconSize,
-    this.offset = const Offset(0, 50),
+    this.offset = const Offset(25, 50),
     this.enabled = true,
     this.shape,
     this.color,

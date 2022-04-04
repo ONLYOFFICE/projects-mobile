@@ -62,7 +62,6 @@ class AppBarMenuButton extends StatelessWidget {
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 38),
       ),
-      offset: const Offset(0, 25),
       onSelected: (value) => _onSelected(controller, value as String),
       itemBuilder: (context) {
         return [

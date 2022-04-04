@@ -75,7 +75,6 @@ class SubtaskDetailedView extends StatelessWidget {
                       color: Get.theme.colors().primary,
                     ),
                   ),
-                  //offset: const Offset(0, 25),
                   onSelected: (dynamic value) => _onSelected(context, value, controller),
                   itemBuilder: (context) {
                     return [
