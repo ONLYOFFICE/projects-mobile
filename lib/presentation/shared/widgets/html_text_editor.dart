@@ -46,10 +46,10 @@ class HtmlTextEditor extends StatelessWidget {
     this.hintText,
     this.hasError = false,
     this.initialText = '',
-    this.textController,
+    required this.textController,
   }) : super(key: key);
 
-  final HtmlEditorController? textController;
+  final HtmlEditorController textController;
   final String? hintText;
   final String? initialText;
   final double? height;
@@ -59,7 +59,7 @@ class HtmlTextEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     print('has error $hasError');
     return HtmlEditor(
-      controller: textController ?? HtmlEditorController(),
+      controller: textController,
       callbacks: Callbacks(onNavigationRequestMobile: (url) {
         launch(url);
         return NavigationActionPolicy.CANCEL;
@@ -67,11 +67,11 @@ class HtmlTextEditor extends StatelessWidget {
       htmlToolbarOptions: HtmlToolbarOptions(
         mediaUploadInterceptor: (file, type) async {
           final result = await locator<CommentsService>().uploadImages(file);
-          textController!.insertHtml('<img alt="" src="$result">');
+          textController.insertHtml('<img alt="" src="$result">');
           return false;
         },
         linkInsertInterceptor: (text, url, isNewWindow) {
-          textController?.insertLink(text, url, isNewWindow);
+          textController.insertLink(text, url, isNewWindow);
           return false;
         },
         textStyle: TextStyleHelper.body2(color: Get.theme.colors().onBackground),
@@ -111,7 +111,7 @@ class HtmlTextEditor extends StatelessWidget {
             style: hasError ? BorderStyle.solid : BorderStyle.none,
           ),
         ),
-        height: Get.height - Get.bottomBarHeight - Get.statusBarHeight,
+        height: Get.height,
       ),
     );
   }
