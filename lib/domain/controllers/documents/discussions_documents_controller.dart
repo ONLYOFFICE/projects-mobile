@@ -178,8 +178,7 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
     final encodedBody = stringToBase64.encode(bodyString);
     final urlString = '${Const.Urls.openDocument}$encodedBody';
 
-    if (await canLaunch(urlString)) {
-      await launch(urlString);
+    if (await launch(urlString)) {
       await AnalyticsService.shared.logEvent(AnalyticsService.Events.openEditor, {
         AnalyticsService.Params.Key.portal: portalInfoController.portalName,
         AnalyticsService.Params.Key.extension: extension(selectedFile.title!)
