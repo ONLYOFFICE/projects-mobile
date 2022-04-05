@@ -48,7 +48,7 @@ class SplashView extends StatelessWidget {
           AppIcon(
             icon: icon,
             isPng: true,
-            height: 141,
+            height: 119,
           ),
         ],
       ),
