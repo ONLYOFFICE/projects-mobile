@@ -37,7 +37,6 @@ import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
-import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/data/services/project_service.dart';
@@ -136,24 +135,11 @@ class DiscussionItemController extends GetxController {
       try {
         await Get.delete<DiscussionCommentItemController>();
         discussion.value = result;
-        discussion.value.comments = checkImagesSrc(discussion.value.comments);
         status.value = result.status!;
       } catch (_) {}
     }
 
     if (showLoading) loaded.value = true;
-  }
-
-  List<PortalComment> checkImagesSrc(List<PortalComment>? comments) {
-    if (comments == null || comments.isEmpty) return <PortalComment>[];
-
-    for (final item in comments) {
-      if (item.commentBody == null || item.commentBody!.isEmpty) continue;
-
-      item.commentBody = item.commentBody!.replaceAll('src="/storage', 'src="$portalUri/storage');
-      item.commentList = checkImagesSrc(item.commentList);
-    }
-    return comments;
   }
 
   void tryChangingStatus(BuildContext context) async {

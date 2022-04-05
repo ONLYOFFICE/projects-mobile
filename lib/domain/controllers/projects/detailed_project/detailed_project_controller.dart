@@ -107,7 +107,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     _refreshProjectsSubscription?.cancel();
     _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      if (data['all'] == true) refreshData();
+      if (data['all'] == true) {
+        refreshData();
+        return;
+      }
+
       if (data['projectDetails'].id == _projectDetailed.id)
         _projectDetailed = data['projectDetails'] as ProjectDetailed;
     });

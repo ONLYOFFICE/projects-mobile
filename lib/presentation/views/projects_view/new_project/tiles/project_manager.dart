@@ -56,7 +56,7 @@ class ProjectManagerTile extends StatelessWidget {
         final _isNotEmpty = controller.isPMSelected.value;
 
         return NewItemTile(
-          caption: _isNotEmpty ? '${tr('project')}:' : null,
+          caption: _isNotEmpty ? '${tr('projectManager')}:' : null,
           text: _isNotEmpty ? controller.managerName.value : tr('choosePM'),
           icon: SvgIcons.user,
           textColor: controller.needToFillManager.value ? Get.theme.colors().colorError : null,

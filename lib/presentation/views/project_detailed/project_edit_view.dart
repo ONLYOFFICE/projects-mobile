@@ -112,17 +112,14 @@ class EditProjectView extends StatelessWidget {
                     controller: editProjectController,
                     showCaption: true,
                   ),
+                  const StyledDivider(leftPadding: 72),
                   ProjectDescriptionTile(controller: editProjectController),
                   ProjectManagerTile(controller: editProjectController),
                   TeamMembersTile(controller: editProjectController),
                   TagsTile(controller: editProjectController),
                   AdvancedOptions(
                     options: [
-                      const StyledDivider(
-                        leftPadding: 72,
-                        height: 1,
-                        thickness: 1,
-                      ),
+                      const StyledDivider(leftPadding: 72),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
                         child: OptionWithSwitch(
@@ -133,11 +130,7 @@ class EditProjectView extends StatelessWidget {
                           },
                         ),
                       ),
-                      const StyledDivider(
-                        leftPadding: 72,
-                        height: 1,
-                        thickness: 1,
-                      ),
+                      const StyledDivider(leftPadding: 72),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
                         child: OptionWithSwitch(

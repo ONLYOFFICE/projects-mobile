@@ -61,7 +61,6 @@ import 'package:projects/presentation/views/project_detailed/project_milestones_
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
-import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
 import 'package:projects/presentation/views/tasks/tasks_shared.dart';
 
 class ProjectDetailedTabs {
@@ -286,28 +285,12 @@ class _ProjectContextMenu extends StatelessWidget {
       onSelected: (value) => _onSelected(value as String, controller, context),
       itemBuilder: (context) {
         final items = getSortTiles();
-        if (items.isNotEmpty) items.add(const PlatformPopupMenuDivider());
-        if (controller.projectData.canEdit!)
-          items.add(PlatformPopupMenuItem(
-            value: PopupMenuItemValue.editProject,
-            child: Text(tr('editProject')),
-          ));
-        if (!(controller.projectData.security?['isInTeam'] as bool))
-          items.add(PlatformPopupMenuItem(
-            onTap: controller.followProject,
-            child: controller.projectData.isFollow as bool
-                ? Text(tr('unFollowProjectButton'))
-                : Text(tr('followProjectButton')),
-          ));
-        if (controller.projectData.canDelete as bool)
-          items.add(PlatformPopupMenuItem(
-            textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-            value: PopupMenuItemValue.deleteProject,
-            isDestructiveAction: true,
-            child: Text(tr('delete')),
-          ));
+        final projectTiles = getProjectTiles();
 
-        return items;
+        if (items.isNotEmpty && projectTiles.isNotEmpty)
+          items.add(const PlatformPopupMenuDivider());
+
+        return items + projectTiles;
       },
     );
   }
@@ -358,6 +341,30 @@ class _ProjectContextMenu extends StatelessWidget {
             },
             child: tile,
           ),
+    ];
+  }
+
+  List<PopupMenuEntry<dynamic>> getProjectTiles() {
+    return [
+      if (controller.projectData.canEdit!)
+        PlatformPopupMenuItem(
+          value: PopupMenuItemValue.editProject,
+          child: Text(tr('editProject')),
+        ),
+      if (!(controller.projectData.security?['isInTeam'] as bool))
+        PlatformPopupMenuItem(
+          onTap: controller.followProject,
+          child: controller.projectData.isFollow as bool
+              ? Text(tr('unFollowProjectButton'))
+              : Text(tr('followProjectButton')),
+        ),
+      if (controller.projectData.canDelete as bool)
+        PlatformPopupMenuItem(
+          textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+          value: PopupMenuItemValue.deleteProject,
+          isDestructiveAction: true,
+          child: Text(tr('delete')),
+        ),
     ];
   }
 }

@@ -30,10 +30,12 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/services/comments_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -46,10 +48,10 @@ class HtmlTextEditor extends StatelessWidget {
     this.hintText,
     this.hasError = false,
     this.initialText = '',
-    this.textController,
+    required this.textController,
   }) : super(key: key);
 
-  final HtmlEditorController? textController;
+  final HtmlEditorController textController;
   final String? hintText;
   final String? initialText;
   final double? height;
@@ -59,7 +61,7 @@ class HtmlTextEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     print('has error $hasError');
     return HtmlEditor(
-      controller: textController ?? HtmlEditorController(),
+      controller: textController,
       callbacks: Callbacks(onNavigationRequestMobile: (url) {
         launch(url);
         return NavigationActionPolicy.CANCEL;
@@ -67,11 +69,15 @@ class HtmlTextEditor extends StatelessWidget {
       htmlToolbarOptions: HtmlToolbarOptions(
         mediaUploadInterceptor: (file, type) async {
           final result = await locator<CommentsService>().uploadImages(file);
-          textController!.insertHtml('<img alt="" src="$result">');
+          if (result != null)
+            textController.insertHtml('<img alt="" src="$result">');
+          else
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
           return false;
         },
         linkInsertInterceptor: (text, url, isNewWindow) {
-          textController?.insertLink(text, url, isNewWindow);
+          textController.insertLink(text, url, isNewWindow);
           return false;
         },
         textStyle: TextStyleHelper.body2(color: Get.theme.colors().onBackground),
@@ -111,7 +117,7 @@ class HtmlTextEditor extends StatelessWidget {
             style: hasError ? BorderStyle.solid : BorderStyle.none,
           ),
         ),
-        height: Get.height - Get.bottomBarHeight - Get.statusBarHeight,
+        height: Get.height,
       ),
     );
   }

@@ -47,17 +47,17 @@ class SubtaskStatus {
 
 class SubtaskController extends GetxController {
   final SubtasksService _api = locator<SubtasksService>();
-  late Rx<Subtask?> subtask;
-  PortalTask? parentTask;
+  final subtask = Rxn<Subtask>();
+  final PortalTask parentTask;
   final _userController = Get.find<UserController>();
 
-  SubtaskController({Subtask? subtask, this.parentTask}) {
-    this.subtask = subtask.obs;
+  SubtaskController({required Subtask subtask, required this.parentTask}) {
+    this.subtask.value = subtask;
   }
 
-  bool get canEdit => subtask.value!.canEdit! && parentTask!.status != SubtaskStatus.CLOSED;
+  bool get canEdit => subtask.value!.canEdit! && parentTask.status != SubtaskStatus.CLOSED;
   bool get canCreateSubtask =>
-      parentTask!.canCreateSubtask! && parentTask!.status != SubtaskStatus.CLOSED;
+      parentTask.canCreateSubtask! && parentTask.status != SubtaskStatus.CLOSED;
 
   void acceptSubtask({
     required int taskId,
@@ -104,31 +104,36 @@ class SubtaskController extends GetxController {
 
       MessagesHandler.showSnackBar(context: Get.context!, text: 'Subtask deleted');
       if (closePage) Get.back();
-    }
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   void updateSubtaskStatus({
-    required BuildContext context,
     required int taskId,
     required int subtaskId,
   }) async {
-    if (subtask.value!.canEdit!) {
-      var newStatus;
-
-      if (subtask.value!.status == SubtaskStatus.OPEN)
-        newStatus = 'closed';
-      else
-        newStatus = 'open';
-
-      final data = {'status': newStatus};
-
-      final result =
-          await _api.updateSubtaskStatus(data: data, taskId: taskId, subtaskId: subtaskId);
-
-      if (result != null) subtask.value = result;
-    } else {
+    if (!subtask.value!.canEdit!) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('cantEditSubtask'));
+      return;
     }
+
+    var newStatus;
+
+    if (subtask.value!.status == SubtaskStatus.OPEN)
+      newStatus = 'closed';
+    else
+      newStatus = 'open';
+
+    final data = {'status': newStatus};
+
+    final result = await _api.updateSubtaskStatus(data: data, taskId: taskId, subtaskId: subtaskId);
+
+    if (result != null) {
+      subtask.value = result;
+
+      locator<EventHub>().fire('needToRefreshParentTask', [taskId, false]);
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   void deleteSubtaskResponsible({

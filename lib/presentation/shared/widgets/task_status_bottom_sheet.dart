@@ -96,7 +96,7 @@ void showsStatusesBS({
                         Get.back();
                       },
                       child: StatusTile(
-                          title: _statusesController.statuses[i].title,
+                          title: _statusesController.statuses[i].title!,
                           icon: StatusIcon(
                             canEditTask: taskItemController.task.value.canEdit!,
                             status: _statusesController.statuses[i],

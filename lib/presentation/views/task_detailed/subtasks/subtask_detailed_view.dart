@@ -75,7 +75,6 @@ class SubtaskDetailedView extends StatelessWidget {
                       color: Get.theme.colors().primary,
                     ),
                   ),
-                  //offset: const Offset(0, 25),
                   onSelected: (dynamic value) => _onSelected(context, value, controller),
                   itemBuilder: (context) {
                     return [
@@ -186,7 +185,7 @@ void _onSelected(BuildContext context, value, SubtaskController controller) {
       Get.find<NavigationController>().toScreen(const CreatingAndEditingSubtaskView(),
           arguments: {
             'taskId': controller.subtask.value!.taskId,
-            'projectId': controller.parentTask!.projectOwner!.id,
+            'projectId': controller.parentTask.projectOwner!.id,
             'forEditing': true,
             'itemController': controller,
           },

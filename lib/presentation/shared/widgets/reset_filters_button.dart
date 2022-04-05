@@ -39,15 +39,3 @@ class ResetFiltersButton extends StatelessWidget {
     });
   }
 }
-
-/* PlatformIconButton(
-            padding: GetPlatform.isAndroid ? EdgeInsets.zero : const EdgeInsets.only(right: 16),
-            onPressed: onActionPressed,
-            cupertinoIcon: Text(
-              GetPlatform.isAndroid ? tr('reset') : tr('reset').toLowerCase().capitalizeFirst!,
-              style: TextStyleHelper.button(),
-              softWrap: false,
-            ),
-            materialIcon: const Icon(Icons.check_rounded),
-          ),
-           */

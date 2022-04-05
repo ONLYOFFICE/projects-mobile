@@ -46,7 +46,7 @@ import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detai
 
 class SubtaskCell extends StatelessWidget {
   final Subtask subtask;
-  final PortalTask? parentTask;
+  final PortalTask parentTask;
   const SubtaskCell({
     Key? key,
     required this.subtask,

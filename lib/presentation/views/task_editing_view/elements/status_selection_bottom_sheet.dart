@@ -94,7 +94,7 @@ Future<void> statusSelectionBS(
                         Get.back();
                       },
                       child: StatusTile(
-                          title: _statusesController.statuses[i].title,
+                          title: _statusesController.statuses[i].title!,
                           icon: StatusIcon(
                             canEditTask: true,
                             status: _statusesController.statuses[i],

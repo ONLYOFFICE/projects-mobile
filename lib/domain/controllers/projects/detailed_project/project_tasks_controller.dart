@@ -83,7 +83,11 @@ class ProjectTasksController extends BaseTasksController {
     _paginationController.pullDownEnabled = true;
 
     _refreshTasksSubscription = locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
-      if (data['all'] == true) loadTasks();
+      if (data['all'] == true) {
+        loadTasks();
+        return;
+      }
+
       if (data['task'].id != null) {
         for (var i = 0; i < itemList.length; i++)
           if (itemList[i].id == data['task'].id) {

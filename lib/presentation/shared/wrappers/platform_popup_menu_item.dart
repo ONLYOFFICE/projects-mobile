@@ -4,6 +4,11 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 
+const Color _kPressedColor = CupertinoDynamicColor.withBrightness(
+  color: Color(0xFFE1E1E1),
+  darkColor: Color(0xFF2E2E2E),
+);
+
 class PlatformPopupMenuItem<T> extends PopupMenuEntry<T> {
   const PlatformPopupMenuItem({
     Key? key,
@@ -51,12 +56,6 @@ class PlatformPopupMenuItem<T> extends PopupMenuEntry<T> {
 
 class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<W> {
   final double _kMenuHorizontalPadding = 16;
-  final Color _kBackgroundColor = Get.isDarkMode
-      ? const Color.fromRGBO(37, 37, 37, 0.5)
-      : const Color.fromRGBO(237, 237, 237, 0.9);
-  final Color _kBackgroundColorPressed = Get.isDarkMode
-      ? const Color.fromRGBO(37, 37, 37, 0.8)
-      : const Color.fromRGBO(216, 216, 216, 1);
   final double _kButtonHeight = 44;
   final TextStyle _kActionSheetActionStyle = TextStyle(
     fontFamily: '.SF Pro Text',
@@ -113,6 +112,8 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
   }
 
   Widget createCupertinoWidget(BuildContext context) {
+    final _kBackgroundColorPressed = CupertinoDynamicColor.resolve(_kPressedColor, context);
+
     return GestureDetector(
       key: _globalKey,
       onTapDown: onTapDown,
@@ -120,34 +121,32 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
       onTapCancel: onTapCancel,
       onTap: handleTap,
       behavior: HitTestBehavior.opaque,
-      child: ConstrainedBox(
-        constraints: BoxConstraints.tightFor(height: _kButtonHeight),
-        child: Semantics(
-          button: true,
-          child: Container(
-            decoration: BoxDecoration(
-              color: widget.enabled
-                  ? _isPressed
-                      ? _kBackgroundColorPressed
-                      : _kBackgroundColor.withOpacity(0.4)
-                  : CupertinoColors.inactiveGray,
-            ),
-            padding: EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
-            child: DefaultTextStyle(
-              style: _textStyle,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Flexible(
-                    child: widget.child!,
+      child: Semantics(
+        button: true,
+        child: Container(
+          constraints: BoxConstraints.tightFor(height: _kButtonHeight),
+          decoration: BoxDecoration(
+            color: widget.enabled
+                ? _isPressed
+                    ? _kBackgroundColorPressed
+                    : Colors.transparent
+                : CupertinoColors.inactiveGray,
+          ),
+          padding: EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
+          child: DefaultTextStyle(
+            style: _textStyle,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Flexible(
+                  child: widget.child!,
+                ),
+                if (widget.trailingIcon != null)
+                  Icon(
+                    widget.trailingIcon,
+                    color: _textStyle.color,
                   ),
-                  if (widget.trailingIcon != null)
-                    Icon(
-                      widget.trailingIcon,
-                      color: _textStyle.color,
-                    ),
-                ],
-              ),
+              ],
             ),
           ),
         ),

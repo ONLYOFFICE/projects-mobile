@@ -1,9 +1,7 @@
-import 'dart:ui';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:get/get.dart';
 
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
@@ -30,7 +28,7 @@ class PlatformPopupMenuButton<T> extends StatefulWidget {
     this.child,
     this.icon,
     this.iconSize,
-    this.offset,
+    this.offset = const Offset(25, 50),
     this.enabled = true,
     this.shape,
     this.color,
@@ -57,7 +55,7 @@ class PlatformPopupMenuButton<T> extends StatefulWidget {
 
   final Widget? icon;
 
-  final Offset? offset;
+  final Offset offset;
 
   final bool enabled;
 
@@ -74,20 +72,9 @@ class PlatformPopupMenuButton<T> extends StatefulWidget {
 }
 
 class PlatformPopupMenuButtonState<T> extends State<PlatformPopupMenuButton<T>> {
-  ShapeBorder? _shape;
-  late Offset _offset;
-
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterialLocalizations(context));
-
-    if (isMaterial(context)) {
-      _offset = widget.offset ?? const Offset(0, 50);
-      _shape = widget.shape;
-    } else {
-      _offset = widget.offset ?? const Offset(0, 50);
-      _shape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(_kMenuBorderRadius));
-    }
 
     return PlatformIconButton(
       icon: widget.child ?? widget.icon ?? Icon(Icons.adaptive.more),
@@ -95,10 +82,10 @@ class PlatformPopupMenuButtonState<T> extends State<PlatformPopupMenuButton<T>> 
       onPressed: widget.enabled
           ? () => showButtonMenu(
               context: context,
-              offset: _offset,
+              offset: widget.offset,
               itemBuilder: widget.itemBuilder,
               elevation: widget.elevation,
-              shape: _shape,
+              shape: widget.shape,
               color: widget.color,
               onSelected: widget.onSelected,
               onCanceled: widget.onCanceled)
@@ -280,9 +267,7 @@ class _PopupMenu<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _kBackgroundColorPressed = Get.isDarkMode
-        ? const Color.fromRGBO(37, 37, 37, 0.8)
-        : const Color.fromRGBO(216, 216, 216, 1);
+    final dividerColor = CupertinoDynamicColor.resolve(CupertinoColors.separator, context);
 
     final unit =
         1.0 / (route.items.length + 1.5); // 1.0 for the width and 0.5 for the last item's fade.
@@ -312,13 +297,13 @@ class _PopupMenu<T> extends StatelessWidget {
             opacity: opacity,
             child: Container(
               decoration: BoxDecoration(
-                border: GetPlatform.isIOS &&
+                border: !isMaterial(context) &&
                         i != route.items.length - 1 &&
                         item is! PlatformPopupMenuDivider &&
                         route.items[i + 1] is! PlatformPopupMenuDivider
                     ? Border(
                         bottom: BorderSide(
-                          color: _kBackgroundColorPressed,
+                          color: dividerColor,
                           width: 0.5,
                         ),
                       )
@@ -351,12 +336,12 @@ class _PopupMenu<T> extends StatelessWidget {
             padding: EdgeInsets.symmetric(
               vertical: isMaterial(context) ? _kMenuVerticalPadding : 0,
             ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(
-                isMaterial(context) ? Radius.zero : const Radius.circular(_kMenuBorderRadius),
-              ),
-              child: ListBody(children: children),
-            ),
+            child: isMaterial(context)
+                ? ClipRRect(child: ListBody(children: children))
+                : CupertinoPopupSurface(
+                    isSurfacePainted: false,
+                    child: ListBody(children: children),
+                  ),
           ),
         ),
       ),
@@ -367,18 +352,37 @@ class _PopupMenu<T> extends StatelessWidget {
       builder: (BuildContext context, Widget? child) {
         return FadeTransition(
           opacity: opacity.animate(route.animation!),
-          child: Material(
-            shape: route.shape ?? popupMenuTheme.shape,
-            color: route.color ?? popupMenuTheme.color,
-            type: MaterialType.card,
-            elevation: route.elevation ?? popupMenuTheme.elevation ?? 8.0,
-            child: Align(
-              alignment: AlignmentDirectional.topEnd,
-              widthFactor: width.evaluate(route.animation!),
-              heightFactor: height.evaluate(route.animation!),
-              child: child,
-            ),
-          ),
+          child: isMaterial(context)
+              ? Material(
+                  shape: route.shape ?? popupMenuTheme.shape,
+                  color: route.color ?? popupMenuTheme.color,
+                  type: MaterialType.card,
+                  elevation: route.elevation ?? popupMenuTheme.elevation ?? 8.0,
+                  child: Align(
+                    alignment: AlignmentDirectional.topEnd,
+                    widthFactor: width.evaluate(route.animation!),
+                    heightFactor: height.evaluate(route.animation!),
+                    child: child,
+                  ),
+                )
+              : Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(14)),
+                    boxShadow: [
+                      BoxShadow(
+                        blurStyle: BlurStyle.outer,
+                        color: Color.fromRGBO(0, 0, 0, 0.2),
+                        blurRadius: 64,
+                      ),
+                    ],
+                  ),
+                  child: Align(
+                    alignment: AlignmentDirectional.topEnd,
+                    widthFactor: width.evaluate(route.animation!),
+                    heightFactor: height.evaluate(route.animation!),
+                    child: child,
+                  ),
+                ),
         );
       },
       child: child,
