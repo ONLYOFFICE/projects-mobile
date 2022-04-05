@@ -92,8 +92,6 @@ class ProjectDetailsController extends BaseProjectEditorController {
   bool setup({ProjectDetailed? projectDetailed}) {
     if (projectDetailed != null) _projectDetailed = projectDetailed;
 
-    setPrivate(projectDetailed?.isPrivate ?? false);
-
     projectTasksController = Get.find<ProjectTasksController>();
     projectMilestonesController = Get.find<MilestonesDataSource>();
     projectDiscussionsController = Get.find<ProjectDiscussionsController>();
@@ -143,6 +141,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
     }
 
     taskCount.value = _projectDetailed.taskCountTotal ?? 0;
+
+    setPrivate(projectDetailed.isPrivate ?? false);
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       loaded.value = true;
