@@ -98,22 +98,23 @@ class PortalInputView extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               constraints: BoxConstraints(
-                  maxWidth: 480, maxHeight: height - MediaQuery.of(context).padding.bottom),
+                maxWidth: 480,
+                maxHeight: height -
+                    MediaQuery.of(context).padding.bottom -
+                    MediaQuery.of(context).padding.top,
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  if (controller.accountManager.accounts.isEmpty)
-                    SizedBox(height: height * 0.2)
-                  else
-                    SizedBox(height: height * 0.1),
+                  const Spacer(flex: 2),
                   const AppIcon(icon: SvgIcons.app_logo),
-                  SizedBox(height: height * 0.01),
+                  const SizedBox(height: 10),
                   AppIcon(
                     icon: SvgIcons.app_title,
                     color: Get.theme.colors().onSurface,
                   ),
-                  SizedBox(height: height * 0.111),
+                  const Spacer(),
                   Obx(
                     () => AuthTextField(
                       controller: controller.portalAdressController,
@@ -124,7 +125,7 @@ class PortalInputView extends StatelessWidget {
                       onSubmitted: (_) => controller.getPortalCapabilities(),
                     ),
                   ),
-                  SizedBox(height: height * 0.033),
+                  const SizedBox(height: 26),
                   WideButton(
                     text: tr('next'),
                     textColor: controller.needAgreement && !controller.checkBoxValue.value
@@ -138,7 +139,7 @@ class PortalInputView extends StatelessWidget {
                   if (controller.needAgreement)
                     PrivacyAndTermsFooter.withCheckbox()
                   else
-                    const Spacer(),
+                    const Spacer(flex: 3),
                   if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter(),
                 ],
               ),

@@ -94,20 +94,21 @@ class LoginView extends StatelessWidget {
                   maxWidth: 480,
                   maxHeight: Get.height -
                       styledAppBar.titleHeight -
-                      styledAppBar.bottomHeight -
-                      MediaQuery.of(context).padding.bottom,
+                      styledAppBar.getBottomHeight -
+                      MediaQuery.of(context).padding.bottom -
+                      MediaQuery.of(context).padding.top,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    SizedBox(height: Get.height * 0.1),
+                    const Spacer(flex: 2),
                     Text('${tr('portalAdress')}:',
                         style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
-                    SizedBox(height: Get.height * 0.01),
+                    const SizedBox(height: 8),
                     Text(controller.portalAdress,
                         style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
-                    SizedBox(height: Get.height * 0.111),
+                    const Spacer(),
                     Obx(
                       () => Form(
                         child: Column(
@@ -123,7 +124,7 @@ class LoginView extends StatelessWidget {
                                 FocusScope.of(context).requestFocus(passwordFocusNode);
                               },
                             ),
-                            SizedBox(height: Get.height * 0.0444),
+                            const SizedBox(height: 20),
                             AuthTextField(
                               hintText: tr('password'),
                               focusNode: passwordFocusNode,
@@ -139,7 +140,7 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: Get.height * 0.0333),
+                    const SizedBox(height: 26),
                     WideButton(
                       text: tr('next'),
                       onPressed: controller.loginByPassword,
@@ -157,7 +158,7 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const Spacer(),
+                    const Spacer(flex: 3),
                     PrivacyAndTermsFooter(),
                   ],
                 ),
