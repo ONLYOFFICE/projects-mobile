@@ -71,7 +71,7 @@ dependencies:
 
   path_provider: ^2.0.9
   flutter_downloader: ^1.7.2
-  url_launcher: ^6.0.15
+  url_launcher: ^6.0.20
   # info about app version
   package_info: ^2.0.2
   # info about device
