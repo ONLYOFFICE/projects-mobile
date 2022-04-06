@@ -79,6 +79,7 @@ class FolderCell extends StatelessWidget {
             Expanded(child: FolderCellTitle(element: entity)),
             const SizedBox(width: 16),
             PlatformPopupMenuButton(
+              padding: EdgeInsets.zero,
               onSelected: (dynamic value) => _onFolderPopupMenuSelected(
                 value,
                 entity,
@@ -122,7 +123,7 @@ class FolderCell extends StatelessWidget {
                 ];
               },
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 8),
           ],
         ),
       ),

@@ -96,6 +96,7 @@ class FileCell extends StatelessWidget {
             ),
             const SizedBox(width: 16),
             PlatformPopupMenuButton(
+              padding: EdgeInsets.zero,
               onSelected: (dynamic value) =>
                   {_onFilePopupMenuSelected(value, context, documentsController, cellController)},
               icon: Icon(PlatformIcons(context).ellipsis,
@@ -139,7 +140,7 @@ class FileCell extends StatelessWidget {
                 ];
               },
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 8),
           ],
         ),
       ),
