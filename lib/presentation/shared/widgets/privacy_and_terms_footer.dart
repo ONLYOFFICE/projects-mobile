@@ -99,7 +99,7 @@ class PrivacyAndTermsFooter extends StatelessWidget {
         },
     );
     return Container(
-      margin: const EdgeInsets.only(top: 16, bottom: 36),
+      margin: needCheckbox ? const EdgeInsets.only(top: 16, bottom: 36) : null,
       child: Row(
         children: [
           if (needAgreement)

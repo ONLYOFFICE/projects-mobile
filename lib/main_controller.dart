@@ -101,7 +101,7 @@ class MainController extends GetxController {
         if (isSessionStarted)
           Get.back();
         else
-          Get.offAll(() => const MainView());
+          Get.offAll(() => const MainView(), transition: Transition.noTransition);
       }
     }));
 

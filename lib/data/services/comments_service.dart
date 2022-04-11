@@ -193,7 +193,7 @@ class CommentsService {
 
     final success = result.response != null;
     if (success) {
-      // if portal version < 12
+      // TODO if portal version < 12
       //return _portalInfo.portalUri! +
       //    result.response
       ///       .toString()

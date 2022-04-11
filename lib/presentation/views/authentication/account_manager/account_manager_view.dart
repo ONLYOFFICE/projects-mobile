@@ -64,7 +64,7 @@ class AccountManagerView extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
-              SizedBox(height: Get.height * 0.1),
+              const Spacer(flex: 1),
               const AppIcon(icon: SvgIcons.app_logo),
               SizedBox(height: Get.height * 0.01),
               AppIcon(
@@ -73,6 +73,7 @@ class AccountManagerView extends StatelessWidget {
               ),
               SizedBox(height: Get.height * 0.06),
               Expanded(
+                flex: 3,
                 child: Obx(
                   () => ListView.separated(
                     physics: const ScrollPhysics(),

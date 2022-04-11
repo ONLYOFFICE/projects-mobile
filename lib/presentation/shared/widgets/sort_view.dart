@@ -105,7 +105,7 @@ class SortTile extends StatelessWidget {
             icon: sortController.isSortAscending.value ? SvgIcons.up_arrow : SvgIcons.down_arrow,
             color: Get.theme.colors().onSurface,
           ),
-        if (_selected) const SizedBox(width: 16)
+        if (_selected) const SizedBox(width: 8)
       ],
     );
   }

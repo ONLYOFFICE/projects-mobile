@@ -43,6 +43,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double titleHeight;
   final double elevation;
   final double bottomHeight;
+  double get getBottomHeight => bottom == null ? 0 : bottomHeight;
   final bool showBackButton;
   final bool? centerTitle;
   final Widget? title;

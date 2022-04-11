@@ -65,7 +65,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
   TextEditingController get titleController => _titleController;
   @override
   FocusNode get titleFocus => _titleFocus;
-  RxList responsibles = [].obs;
+  final responsibles = [].obs;
   @override
   RxInt? status = 1.obs;
   @override
@@ -107,10 +107,9 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
 
   @override
   void addResponsible(PortalUserItemController user) {
-    // ignore: avoid_function_literals_in_foreach_calls
-    teamController.usersList.forEach((element) {
+    for (final element in teamController.usersList) {
       if (element.portalUser.id != user.id) element.isSelected.value = false;
-    });
+    }
     responsibles.clear();
     if (user.isSelected.value == true) {
       responsibles.add(user);
@@ -121,15 +120,13 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
 
   @override
   void confirmResponsiblesSelection() {
-    // ignore: invalid_use_of_protected_member
-    _previusSelectedResponsible = List.of(responsibles.value);
+    _previusSelectedResponsible = List.of(responsibles);
     Get.back();
   }
 
   @override
   void leaveResponsiblesSelectionView() {
-    // ignore: invalid_use_of_protected_member
-    if (listEquals(_previusSelectedResponsible, responsibles.value)) {
+    if (listEquals(_previusSelectedResponsible, responsibles)) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -138,7 +135,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
         acceptText: tr('delete').toUpperCase(),
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
-          responsibles.value = [_previusSelectedResponsible];
+          responsibles.value = List.of(_previusSelectedResponsible);
           Get.back();
           Get.back();
         },
@@ -148,7 +145,10 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
   }
 
   @override
-  void deleteResponsible() => responsibles.clear();
+  void deleteResponsible() {
+    responsibles.clear();
+    _previusSelectedResponsible.clear();
+  }
 
   @override
   void leavePage() {

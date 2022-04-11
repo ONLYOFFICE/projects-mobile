@@ -293,6 +293,13 @@ class ProjectTile extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
+  void _onPressed() => Get.find<NavigationController>().toScreen(
+        const SelectProjectView(),
+        arguments: {'controller': controller},
+        transition: Transition.rightToLeft,
+        isRootModalScreenView: false,
+      );
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -314,17 +321,11 @@ class ProjectTile extends StatelessWidget {
                       size: 24,
                       color: Get.theme.colors().onBackground.withOpacity(0.6),
                     ),
-                    onPressed: () => controller.changeDueDate(null))
+                    onPressed: _onPressed,
+                  )
                 : null,
-            suffixPadding: EdgeInsets.zero,
-            onTap: () => {
-                  Get.find<NavigationController>().toScreen(
-                    const SelectProjectView(),
-                    arguments: {'controller': controller},
-                    transition: Transition.rightToLeft,
-                    isRootModalScreenView: false,
-                  ),
-                });
+            suffixPadding: const EdgeInsets.only(right: 8),
+            onTap: _onPressed);
       },
     );
   }
@@ -390,6 +391,7 @@ class DueDateTile extends StatelessWidget {
             textColor: controller.needToSetDueDate.value ? Get.theme.colors().colorError : null,
             suffix: _isSelected
                 ? PlatformIconButton(
+                    padding: EdgeInsets.zero,
                     icon: Icon(
                       PlatformIcons(context).clear,
                       size: 24,
@@ -397,7 +399,7 @@ class DueDateTile extends StatelessWidget {
                     ),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
-            suffixPadding: const EdgeInsets.only(right: 13),
+            suffixPadding: const EdgeInsets.only(right: 8),
             onTap: controller.onDueDateTilePressed);
       },
     );
