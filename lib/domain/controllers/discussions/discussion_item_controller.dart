@@ -235,14 +235,13 @@ class DiscussionItemController extends GetxController {
       Get.find<DiscussionEditingController>().dispose();
     } catch (_) {}
 
-    //TODO: refactor parameters
     final controller = Get.put(
       DiscussionEditingController(
         id: discussion.value.id!,
-        title: discussion.value.title!.obs,
-        text: discussion.value.text!.obs,
+        title: discussion.value.title!,
+        text: discussion.value.text!,
         projectId: discussion.value.project!.id!,
-        selectedProjectTitle: discussion.value.project!.title!.obs,
+        selectedProjectTitle: discussion.value.project!.title!,
         initialSubscribers: discussion.value.subscribers!,
       ),
     );

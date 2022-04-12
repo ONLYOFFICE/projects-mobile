@@ -61,7 +61,7 @@ class CommentEditingController extends GetxController {
   Future<void> confirm() async {
     final text = await _textController.getText();
 
-    if (text.isEmpty) {
+    if (text.isEmpty || text == '<br>') {
       setTitleError.value = true;
       return;
     }

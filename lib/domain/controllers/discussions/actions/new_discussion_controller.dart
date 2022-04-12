@@ -39,7 +39,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
@@ -59,7 +58,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
-class NewDiscussionController extends GetxController implements DiscussionActionsController {
+class NewDiscussionController extends DiscussionActionsController {
   final DiscussionsService _api = locator<DiscussionsService>();
 
   int? _selectedProjectId;
@@ -73,21 +72,9 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   List<PortalGroupItemController> selectedGroups = <PortalGroupItemController>[];
   final _manualSelectedPersons = [];
 
-  @override
-  final title = RxString('');
-
-  @override
-  final selectedProjectTitle = RxString('');
-
-  @override
-  final text = RxString('');
-
-  @override
-  HtmlEditorController textController = HtmlEditorController();
-
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _userSearchController = TextEditingController();
-  final FocusNode _titleFocus = FocusNode();
+  final _titleController = TextEditingController();
+  final _userSearchController = TextEditingController();
+  final _titleFocus = FocusNode();
 
   @override
   TextEditingController get titleController => _titleController;
@@ -98,23 +85,8 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   @override
   FocusNode get titleFocus => _titleFocus;
 
-  @override
-  final otherUsers = <PortalUserItemController>[].obs;
-
   var _team = [];
-  @override
-  final subscribers = <PortalUserItemController>[].obs;
   var _previousSelectedSubscribers = []; // to track changes
-
-  @override
-  RxBool selectProjectError = false.obs;
-  @override
-  RxBool setTitleError = false.obs;
-  @override
-  RxBool setTextError = false.obs;
-
-  @override
-  RxBool titleIsEmpty = true.obs;
 
   NewDiscussionController({int? projectId, String? projectTitle}) {
     if (projectId != null && projectTitle != null) {
@@ -184,33 +156,6 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     if (_projectIsLocked) return;
     _selectedProjectId = null;
     selectedProjectTitle.value = '';
-  }
-
-  @override
-  Future<void> confirmText() async {
-    text.value = await textController.getText();
-    Get.back();
-  }
-
-  @override
-  Future<void> leaveTextView() async {
-    final t = await textController.getText();
-
-    if (t == text.value) {
-      Get.back();
-    } else {
-      await Get.dialog(StyledAlertDialog(
-        titleText: tr('discardChanges'),
-        contentText: tr('lostOnLeaveWarning'),
-        acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
-        onAcceptTap: () {
-          Get.back();
-          Get.back();
-        },
-        onCancelTap: Get.back,
-      ));
-    }
   }
 
   @override

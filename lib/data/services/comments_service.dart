@@ -32,7 +32,6 @@
 
 import 'dart:convert';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/comments_api.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';

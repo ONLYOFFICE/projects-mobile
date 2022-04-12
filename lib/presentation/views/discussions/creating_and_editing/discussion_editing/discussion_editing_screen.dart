@@ -56,10 +56,10 @@ class DiscussionEditingScreen extends StatelessWidget {
     final controller = Get.put(
       DiscussionEditingController(
         id: discussion.id!,
-        title: discussion.title!.obs,
-        text: discussion.text!.obs,
+        title: discussion.title!,
+        text: discussion.text!,
         projectId: discussion.project!.id!,
-        selectedProjectTitle: discussion.project!.title!.obs,
+        selectedProjectTitle: discussion.project!.title!,
         initialSubscribers: discussion.subscribers ?? <PortalUser>[],
       ),
     );

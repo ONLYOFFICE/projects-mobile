@@ -33,13 +33,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class NewTaskCommentController extends NewCommentController {
   final CommentsService _api = locator<CommentsService>();
@@ -49,21 +46,17 @@ class NewTaskCommentController extends NewCommentController {
     int? idFrom,
   }) : super(idFrom: idFrom, parentId: parentId);
 
-  final _textController = HtmlEditorController();
-
-  @override
-  HtmlEditorController get textController => _textController;
-
   @override
   Future addComment() async {
-    final text = await _textController.getText();
-    if (text.isEmpty) {
+    final text = await textController.getText();
+    if (text.isEmpty || text == '<br>') {
       await emptyTitleError();
     } else {
       setTitleError.value = false;
+
       final newComment = await _api.addTaskComment(content: text, taskId: idFrom!);
       if (newComment != null) {
-        _textController.clear();
+        textController.clear();
 
         locator<EventHub>().fire('needToRefreshParentTask', [idFrom]);
         locator<EventHub>().fire('scrollToLastComment', [idFrom]);
@@ -78,18 +71,19 @@ class NewTaskCommentController extends NewCommentController {
 
   @override
   Future addReplyComment() async {
-    final text = await _textController.getText();
-    if (text.isEmpty) {
+    final text = await textController.getText();
+    if (text.isEmpty || text == '<br>') {
       await emptyTitleError();
     } else {
       setTitleError.value = false;
+
       final newComment = await _api.addTaskReplyComment(
         content: text,
         taskId: idFrom!,
         parentId: parentId!,
       );
       if (newComment != null) {
-        _textController.clear();
+        textController.clear();
 
         locator<EventHub>().fire('needToRefreshParentTask', [idFrom, true]);
 
@@ -98,27 +92,6 @@ class NewTaskCommentController extends NewCommentController {
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('commentCreated'));
       } else
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-    }
-  }
-
-  @override
-  Future<void> leavePage() async {
-    final text = await _textController.getText();
-    if (text.isNotEmpty) {
-      await Get.dialog(StyledAlertDialog(
-        titleText: tr('discardChanges'),
-        contentText: tr('lostOnLeaveWarning'),
-        acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
-        onAcceptTap: () {
-          _textController.clear();
-          Get.back();
-          Get.back();
-        },
-        onCancelTap: Get.back,
-      ));
-    } else {
-      Get.back();
     }
   }
 }
