@@ -32,6 +32,7 @@
 
 import 'dart:async';
 
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -46,23 +47,21 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ProjectSearchController extends GetxController {
   static const PAGINATION_LENGTH = 25;
 
-  final ProjectService _api = locator<ProjectService>();
+  final _api = locator<ProjectService>();
   final bool onlyMyProjects;
 
-  final ProjectsSortController? _sortController =
-      Get.arguments['sortController'] as ProjectsSortController?;
-  final ProjectsFilterController? _filterController =
-      Get.arguments['filtersController'] as ProjectsFilterController?;
+  final _sortController = Get.arguments['sortController'] as ProjectsSortController?;
+  final _filterController = Get.arguments['filtersController'] as ProjectsFilterController?;
 
   ProjectSearchController({this.onlyMyProjects = false});
 
   var searchResult = <ProjectDetailed>[].obs;
-  RxBool loaded = true.obs;
-  TextEditingController searchInputController = TextEditingController();
+  final loaded = true.obs;
+  final searchInputController = TextEditingController();
 
-  RxBool nothingFound = false.obs;
+  final nothingFound = false.obs;
   // for select project view
-  RxBool switchToSearchView = false.obs;
+  final switchToSearchView = false.obs;
   int _startIndex = 0;
   late String _query;
   var _selfId;
@@ -71,9 +70,17 @@ class ProjectSearchController extends GetxController {
 
   Timer? _searchDebounce;
 
-  RefreshController refreshController = RefreshController();
+  final refreshController = RefreshController();
 
   int _totalProjects = 0;
+
+  StreamSubscription? _refreshProjectsSubscription;
+
+  @override
+  void onClose() {
+    _refreshProjectsSubscription?.cancel();
+    super.onClose();
+  }
 
   @override
   Future<void> onInit() async {
@@ -81,6 +88,14 @@ class ProjectSearchController extends GetxController {
       _selfId = await Get.find<UserController>().getUserId();
       _query = '&participant=$_selfId';
     }
+
+    _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (data['all'] == true) {
+        _performSearch();
+        return;
+      }
+    });
+
     super.onInit();
   }
 

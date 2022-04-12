@@ -33,6 +33,7 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
@@ -64,13 +65,20 @@ class DiscussionSearchController extends BaseDiscussionsController {
   @override
   DiscussionsSortController get sortController => _sortController!;
 
-  final int? _projectId = Get.arguments['projectId'] as int?;
-  final DiscussionsFilterController? _filterController =
+  final _projectId = Get.arguments['projectId'] as int?;
+  final _filterController =
       Get.arguments['discussionsFilterController'] as DiscussionsFilterController?;
-  final DiscussionsSortController? _sortController =
-      Get.arguments['discussionsSortController'] as DiscussionsSortController?;
+  final _sortController = Get.arguments['discussionsSortController'] as DiscussionsSortController?;
 
   final searchInputController = TextEditingController();
+
+  StreamSubscription? _refreshDiscussionsSubscription;
+
+  @override
+  void onClose() {
+    _refreshDiscussionsSubscription?.cancel();
+    super.onClose();
+  }
 
   @override
   void onInit() {
@@ -78,6 +86,14 @@ class DiscussionSearchController extends BaseDiscussionsController {
     paginationController.startIndex = 0;
     _paginationController.loadDelegate = () => _performSearch(needToClear: false);
     paginationController.refreshDelegate = () => newSearch(_query!);
+
+    _refreshDiscussionsSubscription =
+        locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) {
+      if (data['all'] == true) {
+        _performSearch();
+        return;
+      }
+    });
 
     loaded.value = true;
     super.onInit();

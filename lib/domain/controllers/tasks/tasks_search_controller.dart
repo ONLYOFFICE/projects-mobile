@@ -33,6 +33,7 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
@@ -51,6 +52,8 @@ class TasksSearchController extends BaseController {
   final _paginationController = PaginationController<PortalTask>();
   @override
   PaginationController<PortalTask> get paginationController => _paginationController;
+  @override
+  RxList get itemList => _paginationController.data;
 
   final searchInputController = TextEditingController();
 
@@ -60,10 +63,16 @@ class TasksSearchController extends BaseController {
   Timer? _searchDebounce;
 
   final int? _projectId = Get.arguments['projectId'] as int?;
-  final BaseTaskFilterController? _filterController =
-      Get.arguments['tasksFilterController'] as BaseTaskFilterController?;
-  final TasksSortController? _sortController =
-      Get.arguments['tasksSortController'] as TasksSortController?;
+  final _filterController = Get.arguments['tasksFilterController'] as BaseTaskFilterController?;
+  final _sortController = Get.arguments['tasksSortController'] as TasksSortController?;
+
+  StreamSubscription? _refreshTasksSubscription;
+
+  @override
+  void onClose() {
+    _refreshTasksSubscription?.cancel();
+    super.onClose();
+  }
 
   @override
   void onInit() {
@@ -72,12 +81,16 @@ class TasksSearchController extends BaseController {
     _paginationController.loadDelegate = () => _performSearch(needToClear: false);
     paginationController.refreshDelegate = () => newSearch(_query);
 
+    _refreshTasksSubscription = locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+      if (data['all'] == true) {
+        _performSearch();
+        return;
+      }
+    });
+
     loaded.value = true;
     super.onInit();
   }
-
-  @override
-  RxList get itemList => _paginationController.data;
 
   void newSearch(String query, {bool needToClear = true}) async {
     _searchDebounce?.cancel();
