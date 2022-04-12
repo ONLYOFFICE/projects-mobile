@@ -61,6 +61,7 @@ import 'package:projects/presentation/views/project_detailed/project_detailed_vi
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:synchronized/synchronized.dart';
 
 class TaskItemController extends GetxController {
   final _api = locator<TaskItemService>();
@@ -108,6 +109,7 @@ class TaskItemController extends GetxController {
   final commentsListController = ScrollController();
 
   final _ss = <StreamSubscription>[];
+  final _toProjectOverviewLock = Lock();
 
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
@@ -315,15 +317,19 @@ class TaskItemController extends GetxController {
   }
 
   Future<void> toProjectOverview() async {
-    final projectService = locator<ProjectService>();
-    final project = await projectService.getProjectById(
-      projectId: task.value.projectOwner!.id!,
-    );
-    if (project != null) {
-      await Get.find<NavigationController>().to(
-        ProjectDetailedView(),
-        arguments: {'projectDetailed': project},
+    if (_toProjectOverviewLock.locked) return;
+
+    unawaited(_toProjectOverviewLock.synchronized(() async {
+      final projectService = locator<ProjectService>();
+      final project = await projectService.getProjectById(
+        projectId: task.value.projectOwner!.id!,
       );
-    }
+      if (project != null) {
+        await Get.find<NavigationController>().to(
+          ProjectDetailedView(),
+          arguments: {'projectDetailed': project},
+        );
+      }
+    }));
   }
 }
