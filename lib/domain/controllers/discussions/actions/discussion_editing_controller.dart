@@ -43,6 +43,7 @@ import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
@@ -141,7 +142,7 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
   void changeTitle(String newText) => title.value = newText;
 
   @override
-  void changeProjectSelection() {}
+  void changeProjectSelection(ProjectDetailed? _details) {}
 
   @override
   void confirmText() async {

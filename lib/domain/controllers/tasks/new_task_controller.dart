@@ -105,10 +105,10 @@ class NewTaskController extends TaskActionsController {
   @override
   void changeTitle(String newText) => title.value = newText;
 
-  void changeProjectSelection({int? id, String? title}) {
-    if (id != null && title != null) {
-      selectedProjectTitle.value = title;
-      _selectedProjectId = id;
+  void changeProjectSelection(ProjectDetailed? _details) {
+    if (_details != null) {
+      selectedProjectTitle.value = _details.title!;
+      _selectedProjectId = _details.id;
       _clearState();
       needToSelectProject.value = false;
     } else {

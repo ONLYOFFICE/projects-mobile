@@ -160,7 +160,7 @@ class _ProjectCell extends StatelessWidget {
           : Get.theme.colors().surface,
       child: InkWell(
         onTap: () {
-          controller.changeProjectSelection(id: item.id, title: item.title);
+          controller.changeProjectSelection(item);
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

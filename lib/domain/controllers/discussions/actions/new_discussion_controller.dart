@@ -43,6 +43,7 @@ import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
@@ -145,11 +146,11 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   void changeTitle(String newText) => title.value = newText;
 
   @override
-  void changeProjectSelection({int? id, String? title}) {
+  void changeProjectSelection(ProjectDetailed? _details) {
     if (_projectIsLocked) return;
-    if (id != null && title != null) {
-      selectedProjectTitle.value = title;
-      _selectedProjectId = id;
+    if (_details != null) {
+      selectedProjectTitle.value = _details.title!;
+      _selectedProjectId = _details.id;
       selectProjectError.value = false;
 
       saveManualSelectedPersons();

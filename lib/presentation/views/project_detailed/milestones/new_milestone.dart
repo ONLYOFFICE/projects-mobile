@@ -124,7 +124,7 @@ class NewMilestoneView extends StatelessWidget {
                   MilestoneInput(controller: newMilestoneController),
                   const StyledDivider(leftPadding: 72.5),
                   ProjectTile(controller: newMilestoneController),
-                  Obx(() => newMilestoneController.slectedProjectTitle.value.isNotEmpty
+                  Obx(() => newMilestoneController.selectedProjectTitle.value.isNotEmpty
                       ? ResponsibleTile(controller: newMilestoneController)
                       : const SizedBox()),
                   DescriptionTile(newMilestoneController: newMilestoneController),
@@ -307,9 +307,9 @@ class ProjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        final _isSelected = controller.slectedProjectTitle.value.isNotEmpty;
+        final _isSelected = controller.selectedProjectTitle.value.isNotEmpty;
         return NewItemTile(
-            text: _isSelected ? controller.slectedProjectTitle.value : tr('selectProject'),
+            text: _isSelected ? controller.selectedProjectTitle.value : tr('selectProject'),
             icon: SvgIcons.project,
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
             selectedIconColor: Get.theme.colors().onBackground,

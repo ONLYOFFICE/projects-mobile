@@ -33,6 +33,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
@@ -60,7 +61,7 @@ abstract class DiscussionActionsController {
   void removeSubscriber(PortalUserItemController user);
 
   void changeTitle(String newText);
-  void changeProjectSelection();
+  void changeProjectSelection(ProjectDetailed? _details);
 
   void clearUserSearch();
   void confirmText();
