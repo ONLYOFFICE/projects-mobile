@@ -45,6 +45,7 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -88,10 +89,29 @@ class NewMilestoneController extends GetxController {
   final responsible = Rxn<PortalUserItemController>();
   final teamMembers = <PortalUserItemController>[].obs;
 
+  late PortalUserItemController selfUserItem;
+
   @override
   void dispose() {
     titleController.dispose();
     super.dispose();
+  }
+
+  @override
+  void onInit() {
+    final _userController = Get.find<UserController>();
+
+    if (_userController.user.value != null)
+      selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
+    else
+      _userController.updateData();
+
+    _userController.user.listen((user) {
+      if (user == null) return;
+      selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
+    });
+
+    super.onInit();
   }
 
   Future<void> setup(ProjectDetailed? projectDetailed) async {
@@ -214,7 +234,14 @@ class NewMilestoneController extends GetxController {
   void addResponsible(PortalUserItemController user) {
     responsible.value = user;
 
+    if (responsible.value?.id == selfUserItem.id!)
+      notificationEnabled.value = false;
+    else
+      notificationEnabled.value = true;
+
     needToSelectResponsible.value = false;
+    _previusSelectedResponsible = responsible.value;
+
     Get.back();
   }
 

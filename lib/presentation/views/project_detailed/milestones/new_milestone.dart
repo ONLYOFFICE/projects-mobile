@@ -169,12 +169,15 @@ class NewMilestoneView extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
-                        child: OptionWithSwitch(
-                          title: tr('notifyResponsible'),
-                          switchValue: newMilestoneController.notificationEnabled,
-                          switchOnChanged: (bool value) {
-                            newMilestoneController.enableNotification(value);
-                          },
+                        child: Obx(
+                          () => OptionWithSwitch(
+                            title: tr('notifyResponsible'),
+                            switchValue: newMilestoneController.notificationEnabled,
+                            switchOnChanged: newMilestoneController.responsible.value?.id !=
+                                    newMilestoneController.selfUserItem.id!
+                                ? newMilestoneController.enableNotification
+                                : null,
+                          ),
                         ),
                       ),
                     ],
