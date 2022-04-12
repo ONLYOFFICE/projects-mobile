@@ -88,12 +88,7 @@ class TaskCommentItemController extends GetxController implements CommentItemCon
 
           locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
 
-          MessagesHandler.showSnackBar(
-            context: Get.context!,
-            text: tr('commentDeleted'),
-            buttonText: tr('confirm'),
-            buttonOnTap: ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar,
-          );
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('commentDeleted'));
         }
       },
     ));

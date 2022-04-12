@@ -92,12 +92,7 @@ class DiscussionCommentItemController extends GetxController implements CommentI
             unawaited(Get.find<DiscussionItemController>(tag: discussionId.toString())
                 .onRefresh(showLoading: false));
           Get.back();
-          MessagesHandler.showSnackBar(
-            context: Get.context!,
-            text: tr('commentDeleted'),
-            buttonText: tr('confirm'),
-            buttonOnTap: ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar,
-          );
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('commentDeleted'));
         }
       },
     ));

@@ -400,12 +400,7 @@ class TaskEditingController extends TaskActionsController {
 
     if (updatedTask != null) {
       _taskItemController.task.value = updatedTask;
-      MessagesHandler.showSnackBar(
-        context: Get.context!,
-        text: tr('taskAccepted'),
-        buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)?.hideCurrentSnackBar,
-      );
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('taskAccepted'));
     }
   }
 }

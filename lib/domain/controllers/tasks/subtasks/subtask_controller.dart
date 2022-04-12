@@ -71,12 +71,7 @@ class SubtaskController extends GetxController {
 
     if (result != null) {
       subtask.value = result;
-      MessagesHandler.showSnackBar(
-        context: Get.context!,
-        text: tr('subtaskAccepted'),
-        buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)?.hideCurrentSnackBar,
-      );
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('subtaskAccepted'));
     }
   }
 
