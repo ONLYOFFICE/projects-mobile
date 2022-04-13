@@ -99,7 +99,7 @@ class FileCell extends StatelessWidget {
             PlatformPopupMenuButton(
               padding: EdgeInsets.zero,
               onSelected: (dynamic value) =>
-                  {_onFilePopupMenuSelected(value, context, documentsController, cellController)},
+                  _onFilePopupMenuSelected(value, documentsController, cellController),
               icon: Icon(PlatformIcons(context).ellipsis,
                   color: Get.theme.colors().onSurface.withOpacity(0.5)),
               itemBuilder: (context) {
@@ -152,8 +152,8 @@ class FileCell extends StatelessWidget {
   }
 }
 
-Future<void> _onFilePopupMenuSelected(value, BuildContext context,
-    BaseDocumentsController documentsController, FileCellController cellController) async {
+Future<void> _onFilePopupMenuSelected(
+    value, BaseDocumentsController documentsController, FileCellController cellController) async {
   switch (value) {
     case 'copyLink':
       final portalDomain = documentsController.portalInfoController.portalUri;
@@ -200,7 +200,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
       );
       break;
     case 'rename':
-      _renameFile(documentsController, cellController, context);
+      _renameFile(documentsController, cellController);
       break;
     case 'delete':
       final success = await cellController.deleteFile(cellController.file);
@@ -217,7 +217,6 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
 void _renameFile(
   BaseDocumentsController docController,
   FileCellController cellController,
-  BuildContext context,
 ) {
   final inputController = TextEditingController();
   inputController.text = cellController.file.title!.replaceAll(cellController.file.fileExst!, '');

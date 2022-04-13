@@ -30,30 +30,17 @@
  *
  */
 
-import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:launch_review/launch_review.dart';
-import 'package:path/path.dart';
-import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
-import 'package:projects/data/services/analytics_service.dart';
-import 'package:projects/data/services/download_service.dart';
-import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
-import 'package:projects/internal/constants.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class DiscussionsDocumentsController extends BaseDocumentsController {
-  final FilesService _api = locator<FilesService>();
-
   final _userController = Get.find<UserController>();
 
   TextEditingController searchInputController = TextEditingController();
@@ -123,81 +110,6 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
     paginationController.data.clear();
     paginationController.data.addAll(files);
     loaded.value = true;
-  }
-
-  void onFilePopupMenuSelected(value, PortalFile element) {}
-
-  Future<bool> renameFolder(Folder element, String newName) async {
-    final result = await _api.renameFolder(
-      folderId: element.id.toString(),
-      newTitle: newName,
-    );
-
-    return result != null;
-  }
-
-  void downloadFolder() {}
-
-  Future<bool> deleteFolder(Folder element) async {
-    final result = await _api.deleteFolder(
-      folderId: element.id.toString(),
-    );
-
-    return result != null;
-  }
-
-  Future<bool> deleteFile(PortalFile element) async {
-    final result = await _api.deleteFile(
-      fileId: element.id.toString(),
-    );
-
-    return result != null;
-  }
-
-  Future<void> downloadFile(String viewUrl) async {
-    await locator<DocumentsDownloadService>().downloadDocument(viewUrl);
-  }
-
-  Future openFile(PortalFile selectedFile) async {
-    final userController = Get.find<UserController>();
-
-    await userController.getUserInfo();
-    final body = <String, dynamic>{
-      'portal': portalInfoController.portalName,
-      'email': userController.user.value!.email,
-      'file': <String, int?>{'id': selectedFile.id},
-      'folder': {
-        'id': selectedFile.folderId,
-        'parentId': null,
-        'rootFolderType': selectedFile.rootFolderType
-      }
-    };
-
-    final bodyString = jsonEncode(body);
-    final stringToBase64 = utf8.fuse(base64);
-    final encodedBody = stringToBase64.encode(bodyString);
-    final urlString = '${Const.Urls.openDocument}$encodedBody';
-
-    var canOpen = false;
-    if (GetPlatform.isAndroid) {
-      canOpen = await canLaunch(urlString);
-      if (canOpen) await launch(urlString);
-    } else {
-      canOpen = await launch(urlString);
-    }
-
-    if (canOpen) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.openEditor, {
-        AnalyticsService.Params.Key.portal: portalInfoController.portalName,
-        AnalyticsService.Params.Key.extension: extension(selectedFile.title!)
-      });
-    } else {
-      await LaunchReview.launch(
-        androidAppId: Const.Identificators.documentsAndroidAppBundle,
-        iOSAppId: Const.Identificators.documentsAppStore,
-        writeReview: false,
-      );
-    }
   }
 
   @override
