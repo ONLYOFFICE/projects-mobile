@@ -207,6 +207,7 @@ class FileCellController extends GetxController {
     final body = <String, dynamic>{
       'portal': portalInfoController.portalName,
       'email': userController.user.value!.email,
+      'originalUrl': selectedFile.viewUrl,
       'file': <String, int?>{'id': selectedFile.id},
       'folder': {
         'id': selectedFile.folderId,
