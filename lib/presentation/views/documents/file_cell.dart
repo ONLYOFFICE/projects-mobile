@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
+import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 
 import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
@@ -115,17 +116,20 @@ class FileCell extends StatelessWidget {
                     value: 'download',
                     child: Text(tr('download')),
                   ),
-                  if (Security.files.canEdit(cellController.file))
+                  if (Security.files.canEdit(cellController.file) &&
+                      documentsController is! DiscussionsDocumentsController)
                     PlatformPopupMenuItem(
                       value: 'copy',
                       child: Text(tr('copy')),
                     ),
-                  if (Security.files.canDelete(cellController.file))
+                  if (Security.files.canDelete(cellController.file) &&
+                      documentsController is! DiscussionsDocumentsController)
                     PlatformPopupMenuItem(
                       value: 'move',
                       child: Text(tr('move')),
                     ),
-                  if (Security.files.canEdit(cellController.file))
+                  if (Security.files.canEdit(cellController.file) &&
+                      documentsController is! DiscussionsDocumentsController)
                     PlatformPopupMenuItem(
                       value: 'rename',
                       child: Text(tr('rename')),
