@@ -170,6 +170,7 @@ class DocumentsController extends BaseDocumentsController {
     if (result.total != null) paginationController.total.value = result.total!;
 
     if (_currentFolderId != null && result.current != null) _screenName = result.current!.title;
+    if (result.current != null) parentId = result.current!.parentId;
 
     if (result.folders != null) _paginationController.data.addAll(result.folders!);
     if (result.files != null) _paginationController.data.addAll(result.files!);

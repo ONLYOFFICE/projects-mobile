@@ -200,7 +200,7 @@ class FileCellController extends GetxController {
     await locator<DocumentsDownloadService>().downloadDocument(viewUrl);
   }
 
-  Future openFile(PortalFile selectedFile) async {
+  Future openFile({required PortalFile selectedFile, int? parentId}) async {
     final userController = Get.find<UserController>();
 
     await userController.getUserInfo();
@@ -211,7 +211,7 @@ class FileCellController extends GetxController {
       'file': <String, int?>{'id': selectedFile.id},
       'folder': {
         'id': selectedFile.folderId,
-        'parentId': null,
+        'parentId': parentId,
         'rootFolderType': selectedFile.rootFolderType
       }
     };

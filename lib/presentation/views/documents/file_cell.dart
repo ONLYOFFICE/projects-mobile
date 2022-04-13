@@ -64,7 +64,8 @@ class FileCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        await cellController.openFile(cellController.file);
+        await cellController.openFile(
+            selectedFile: cellController.file, parentId: documentsController.parentId);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
@@ -170,7 +171,8 @@ Future<void> _onFilePopupMenuSelected(
       }
       break;
     case 'open':
-      await cellController.openFile(cellController.file);
+      await cellController.openFile(
+          selectedFile: cellController.file, parentId: documentsController.parentId);
       break;
     case 'download':
       await cellController.downloadFile(cellController.file.viewUrl!);

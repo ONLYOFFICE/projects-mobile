@@ -49,6 +49,8 @@ abstract class BaseDocumentsController extends BaseController {
 
   int? get currentFolderID;
 
+  int? parentId;
+
   final nothingFound = false.obs;
   final searchMode = false.obs;
 
