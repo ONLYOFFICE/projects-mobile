@@ -69,7 +69,7 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
 
     controller
         .getDiscussionDetailed()
-        .then((value) => documentsController.setupFiles(controller.discussion.value.files!));
+        .then((value) => documentsController.setup(controller.discussion.value));
 
     _tabController.addListener(() {
       if (_tabController.indexIsChanging) {
@@ -117,7 +117,7 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex == 2,
-                      count: controller.discussion.value.files?.length ?? 0),
+                      count: documentsController.filesCount.value),
                   Tab(text: tr('overview')),
                 ]),
           ),

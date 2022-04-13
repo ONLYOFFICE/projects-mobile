@@ -177,14 +177,12 @@ class FileCellController extends GetxController {
     fileIcon.value = AppIcon(width: 20, height: 20, icon: iconString);
   }
 
-  Future<bool> deleteFile(PortalFile element) async {
+  Future<String?> deleteFile(PortalFile element) async {
     final result = await _api.deleteFile(
       fileId: element.id.toString(),
     );
 
-    locator<EventHub>().fire('needToRefreshDocuments');
-
-    return result != null;
+    return result?[0]?['error'] as String? ?? result?[1]?['error'] as String?;
   }
 
   Future<bool> renameFile(PortalFile element, String newName) async {
@@ -192,7 +190,7 @@ class FileCellController extends GetxController {
       fileId: element.id.toString(),
       newTitle: newName,
     );
-    locator<EventHub>().fire('needToRefreshDocuments');
+
     return result != null;
   }
 

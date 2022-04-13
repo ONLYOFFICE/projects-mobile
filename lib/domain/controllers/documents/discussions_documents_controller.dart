@@ -30,18 +30,27 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/internal/locator.dart';
 
 class DiscussionsDocumentsController extends BaseDocumentsController {
   final _userController = Get.find<UserController>();
+  final _api = locator<DiscussionItemService>();
+
+  final _discussion = Rxn<Discussion>();
 
   TextEditingController searchInputController = TextEditingController();
 
@@ -83,24 +92,62 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
 
   bool get canDelete => !_userController.user.value!.isVisitor!;
 
+  @override
+  int countFiles() => filesCount.value = _discussion.value?.files?.length ?? 0;
+
+  late StreamSubscription _refreshDocumentsSubscription;
+
   DiscussionsDocumentsController() {
     screenName = tr('documents');
 
     _filterController.applyFiltersDelegate = () async => {}; // await refreshContent();
     sortController.updateSortDelegate = () async => {}; //await refreshContent();
     paginationController.loadDelegate = () async => {}; //await _getDocuments();
-    paginationController.refreshDelegate = () async => {}; //await refreshContent();
+    paginationController.refreshDelegate = () async => await refreshContent();
 
     paginationController.pullDownEnabled = true;
 
     portalInfoController.setup();
+
+    _discussion.listen((discussion) {
+      if (discussion == null) return;
+      _setupFiles(discussion.files!);
+    });
+
+    _refreshDocumentsSubscription =
+        locator<EventHub>().on('needToRefreshDocuments', (dynamic data) {
+      refreshContent();
+    });
   }
 
-  void setupFiles(List<PortalFile> files) {
-    loaded.value = false;
+  @override
+  void onClose() {
+    _refreshDocumentsSubscription.cancel();
+
+    super.onClose();
+  }
+
+  void setup(Discussion disc) {
+    _discussion.value = disc;
+    _setupFiles(disc.files!);
+
+    loaded.value = true;
+  }
+
+  void _setupFiles(List<PortalFile> files) {
     paginationController.data.clear();
     paginationController.data.addAll(files);
-    loaded.value = true;
+
+    countFiles();
+  }
+
+  Future<void> refreshContent({bool showLoading = true}) async {
+    if (showLoading) loaded.value = false;
+    final result = await _api.getMessageDetailed(id: _discussion.value!.id!);
+
+    if (result != null) _discussion.value = result;
+
+    if (showLoading) loaded.value = true;
   }
 
   @override

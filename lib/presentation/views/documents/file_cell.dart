@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -44,6 +45,7 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
 import 'package:projects/internal/extentions.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
@@ -205,12 +207,14 @@ Future<void> _onFilePopupMenuSelected(
       _renameFile(documentsController, cellController);
       break;
     case 'delete':
-      final success = await cellController.deleteFile(cellController.file);
+      final error = await cellController.deleteFile(cellController.file);
 
-      if (success) {
+      if (error == null) {
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileDeleted'));
+
+        locator<EventHub>().fire('needToRefreshDocuments');
       } else
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+        MessagesHandler.showSnackBar(context: Get.context!, text: error);
       break;
     default:
   }
@@ -254,6 +258,8 @@ void _renameFile(
             if (success) {
               Get.back();
               MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
+
+              locator<EventHub>().fire('needToRefreshDocuments');
             } else
               MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
           }
@@ -329,6 +335,8 @@ class _NewFileTextFieldWidget extends StatelessWidget {
             if (success) {
               Get.back();
               MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
+
+              locator<EventHub>().fire('needToRefreshDocuments');
             } else
               MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
           }
