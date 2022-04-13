@@ -81,7 +81,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
 
   Folder? get currentFolder => _currentFolder;
 
-  final _paginationController = Get.find<PaginationController>();
+  final _paginationController = PaginationController();
   @override
   PaginationController get paginationController => _paginationController;
   @override

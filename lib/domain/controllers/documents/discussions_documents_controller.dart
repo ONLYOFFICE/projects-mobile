@@ -45,7 +45,7 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
 
   TextEditingController searchInputController = TextEditingController();
 
-  late PaginationController _paginationController;
+  final _paginationController = PaginationController();
 
   @override
   PaginationController get paginationController => _paginationController;
@@ -64,18 +64,16 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
   @override
   int? get currentFolderID => _currentFolderId;
 
-  late DocumentsSortController _sortController;
-
+  final _sortController = DocumentsSortController();
   @override
   DocumentsSortController get sortController => _sortController;
 
-  late DocumentsFilterController _filterController;
+  final _filterController = DocumentsFilterController();
+  @override
+  DocumentsFilterController get filterController => _filterController;
 
   @override
   RxBool get hasFilters => _filterController.hasFilters;
-
-  @override
-  DocumentsFilterController get filterController => _filterController;
 
   bool get canCopy => false;
 
@@ -85,16 +83,9 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
 
   bool get canDelete => !_userController.user.value!.isVisitor!;
 
-  DiscussionsDocumentsController(
-    DocumentsFilterController filterController,
-    PaginationController paginationController,
-    DocumentsSortController sortController,
-  ) {
+  DiscussionsDocumentsController() {
     screenName = tr('documents');
 
-    _sortController = sortController;
-    _paginationController = paginationController;
-    _filterController = filterController;
     _filterController.applyFiltersDelegate = () async => {}; // await refreshContent();
     sortController.updateSortDelegate = () async => {}; //await refreshContent();
     paginationController.loadDelegate = () async => {}; //await _getDocuments();

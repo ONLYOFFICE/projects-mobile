@@ -172,9 +172,9 @@ void setupGetX() {
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
 
   Get.create<DiscussionsFilterController>(() => DiscussionsFilterController());
-  Get.create<PaginationController>(() => PaginationController());
-  Get.create<PaginationController<PortalTask>>(() => PaginationController<PortalTask>());
-  Get.create<PaginationController<ProjectDetailed>>(() => PaginationController<ProjectDetailed>());
+  //Get.create<PaginationController>(() => PaginationController());
+  ///Get.create<PaginationController<PortalTask>>(() => PaginationController<PortalTask>());
+  //Get.create<PaginationController<ProjectDetailed>>(() => PaginationController<ProjectDetailed>());
 
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
@@ -212,11 +212,7 @@ void setupGetX() {
   Get.create<DocumentsController>(() => DocumentsController());
   Get.create<DocumentsMoveOrCopyController>(() => DocumentsMoveOrCopyController());
 
-  Get.create<DiscussionsDocumentsController>(() => DiscussionsDocumentsController(
-        Get.find<DocumentsFilterController>(),
-        Get.find<PaginationController>(),
-        Get.find<DocumentsSortController>(),
-      ));
+  Get.create<DiscussionsDocumentsController>(() => DiscussionsDocumentsController());
 
   Get.create<NewProjectController>(() => NewProjectController());
   Get.create<NewTaskController>(() => NewTaskController());
