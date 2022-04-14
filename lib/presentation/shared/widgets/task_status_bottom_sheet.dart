@@ -123,7 +123,6 @@ void showsStatusesPM({
 
   showButtonMenu(
       context: context,
-      offset: const Offset(25, 50),
       itemBuilder: (_) {
         return [
           for (var i = 0; i < _statusesController.statuses.length; i++)

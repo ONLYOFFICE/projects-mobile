@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:html_editor_enhanced/utils/shims/dart_ui_real.dart';
 
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
@@ -15,6 +16,14 @@ const double _kMenuVerticalPadding = 8;
 const double _kMenuWidthStep = 50;
 const double _kMenuScreenPadding = 14;
 const double _kMenuBorderRadius = 20;
+
+const double _kBlurAmount = 5;
+const double _kCornerRadius = 12;
+
+const Color _kDialogColor = CupertinoDynamicColor.withBrightness(
+  color: Color(0xCCF2F2F2),
+  darkColor: Color(0xBF1E1E1E),
+);
 
 class PlatformPopupMenuButton<T> extends StatefulWidget {
   PlatformPopupMenuButton({
@@ -96,7 +105,7 @@ class PlatformPopupMenuButtonState<T> extends State<PlatformPopupMenuButton<T>> 
 
 void showButtonMenu({
   required BuildContext context,
-  Offset offset = Offset.zero,
+  Offset offset = const Offset(25, 50),
   required PopupMenuItemBuilder itemBuilder,
   double? elevation,
   ShapeBorder? shape,
@@ -338,7 +347,7 @@ class _PopupMenu<T> extends StatelessWidget {
             ),
             child: isMaterial(context)
                 ? ClipRRect(child: ListBody(children: children))
-                : CupertinoPopupSurface(
+                : _CustomCupertinoPopupSurface(
                     isSurfacePainted: true,
                     child: ListBody(children: children),
                   ),
@@ -386,6 +395,32 @@ class _PopupMenu<T> extends StatelessWidget {
         );
       },
       child: child,
+    );
+  }
+}
+
+class _CustomCupertinoPopupSurface extends StatelessWidget {
+  const _CustomCupertinoPopupSurface({
+    Key? key,
+    this.isSurfacePainted = true,
+    this.child,
+  }) : super(key: key);
+
+  final bool isSurfacePainted;
+
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(_kCornerRadius)),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: _kBlurAmount, sigmaY: _kBlurAmount),
+        child: Container(
+          color: isSurfacePainted ? CupertinoDynamicColor.resolve(_kDialogColor, context) : null,
+          child: child,
+        ),
+      ),
     );
   }
 }

@@ -171,7 +171,6 @@ Future<void> showsDiscussionStatusesPM({
 
   showButtonMenu(
     context: context,
-    offset: const Offset(25, 50),
     itemBuilder: (_) => items,
   );
 }
