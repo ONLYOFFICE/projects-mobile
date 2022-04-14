@@ -185,17 +185,13 @@ class FileCellController extends GetxController {
   }
 
   Future<void> downloadFile() async {
-    /* await launch(
-      file.viewUrl!,
-      headers: portalInfoController.headers!..removeWhere((key, value) => key != 'Authorization'),
-    ); TODO garanin*/
     await locator<DocumentsDownloadService>().downloadDocument(file.viewUrl!);
   }
 
   Future openFile({int? parentId}) async {
     final userController = Get.find<UserController>();
-
     await userController.getUserInfo();
+
     final body = <String, dynamic>{
       'portal': portalInfoController.portalName,
       'email': userController.user.value!.email,

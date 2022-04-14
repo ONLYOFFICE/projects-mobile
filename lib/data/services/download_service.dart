@@ -41,11 +41,12 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:http_client_helper/http_client_helper.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/api/download_api.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class DownloadService {
@@ -111,14 +112,18 @@ class DocumentsDownloadService {
       return;
     }
 
-    final headers = await locator.get<CoreApi>().getHeaders();
-    headers.removeWhere((key, value) => !key.startsWith('Auth'));
+    final finalUrl = await getRedirectedUrl(url);
+
+    Map<String, String>? headers;
+    if (finalUrl.contains(Get.find<PortalInfoController>().portalName!))
+      headers = Get.find<PortalInfoController>().getAuthHeader;
 
     taskId = await FlutterDownloader.enqueue(
-      url: url,
+      url: finalUrl,
       headers: headers,
       savedDir: path,
       saveInPublicStorage: true,
+      openFileFromNotification: false,
     );
 
     if (taskId == null || taskId!.isEmpty) {
@@ -127,6 +132,31 @@ class DocumentsDownloadService {
     }
 
     await FlutterDownloader.loadTasks();
+  }
+
+  Future<String> getRedirectedUrl(String initialUrl) async {
+    final headers = Get.find<PortalInfoController>().getAuthHeader;
+
+    final client = Client();
+    var statusCode = 302;
+    var finalUrl = Uri.parse(initialUrl);
+
+    while (statusCode == 302) {
+      if (!finalUrl.hasAuthority)
+        finalUrl = Uri.parse(Get.find<PortalInfoController>().portalUri! + finalUrl.toString());
+
+      final request = Request('GET', finalUrl)..followRedirects = false;
+
+      if (finalUrl.authority.contains(Get.find<PortalInfoController>().portalName!))
+        request.headers.addAll(headers!);
+
+      final response = await client.send(request);
+
+      statusCode = response.statusCode;
+      if (statusCode == 302) finalUrl = Uri.parse(response.headers['location'].toString());
+    }
+
+    return finalUrl.toString();
   }
 
   Future<String?> getPath() async {

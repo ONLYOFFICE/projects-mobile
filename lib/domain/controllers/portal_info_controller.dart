@@ -43,6 +43,8 @@ class PortalInfoController extends GetxController {
   String? get portalUri => _portalUri;
   String? get portalName => _portalName;
   Map<String, String>? get headers => _headers;
+  Map<String, String>? get getAuthHeader =>
+      _headers!..removeWhere((key, value) => !key.startsWith('Auth'));
 
   @override
   void onInit() async {
