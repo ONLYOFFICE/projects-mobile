@@ -44,7 +44,7 @@ class PlatformPopupMenuItem<T> extends PopupMenuEntry<T> {
 
   final bool isDefaultAction;
   final bool isDestructiveAction;
-  final IconData? trailingIcon;
+  final Widget? trailingIcon;
 
   @override
   bool represents(T? value) => value == this.value;
@@ -86,9 +86,6 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
       _isPressed = false;
     });
   }
-
-  @protected
-  Widget? buildChild() => widget.child;
 
   @protected
   void handleTap() {
@@ -141,11 +138,9 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
                 Flexible(
                   child: widget.child!,
                 ),
-                if (widget.trailingIcon != null)
-                  Icon(
-                    widget.trailingIcon,
-                    color: _textStyle.color,
-                  ),
+                if (widget.trailingIcon != null) const SizedBox(width: 8),
+                if (widget.trailingIcon != null) widget.trailingIcon!,
+                if (widget.trailingIcon != null) const SizedBox(width: 8),
               ],
             ),
           ),
@@ -168,7 +163,17 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
         alignment: AlignmentDirectional.centerStart,
         constraints: BoxConstraints(minHeight: widget.height),
         padding: widget.padding ?? EdgeInsets.symmetric(horizontal: _kMenuHorizontalPadding),
-        child: buildChild(),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Flexible(
+              child: widget.child!,
+            ),
+            if (widget.trailingIcon != null) const SizedBox(width: 8),
+            if (widget.trailingIcon != null) widget.trailingIcon!,
+            if (widget.trailingIcon != null) const SizedBox(width: 8),
+          ],
+        ),
       ),
     );
 

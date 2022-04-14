@@ -380,14 +380,13 @@ void showsStatusesPM(
 
                 Get.back();
               },
+              trailingIcon: AppIcon(
+                  icon: _statusesController.getStatusImageString(i),
+                  color: Get.theme.colors().onSurface),
               child: StatusTileTablet(
-                  title: _statusesController.getStatusName(i),
-                  icon: AppIcon(
-                      icon: _statusesController.getStatusImageString(i),
-                      color: itemController.projectData!.canEdit!
-                          ? Get.theme.colors().primary
-                          : Get.theme.colors().onBackground),
-                  selected: _statusesController.statuses[i] == itemController.projectData!.status),
+                title: _statusesController.getStatusName(i),
+                selected: _statusesController.statuses[i] == itemController.projectData!.status,
+              ),
             ),
         ];
       });

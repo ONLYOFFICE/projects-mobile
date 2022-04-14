@@ -134,12 +134,12 @@ void showsStatusesPM({
                     newStatusType: _statusesController.statuses[i].statusType!);
                 Get.back();
               },
+              trailingIcon: StatusIcon(
+                canEditTask: taskItemController.task.value.canEdit!,
+                status: _statusesController.statuses[i],
+              ),
               child: StatusTileTablet(
                   title: _statusesController.statuses[i].title!,
-                  icon: StatusIcon(
-                    canEditTask: taskItemController.task.value.canEdit!,
-                    status: _statusesController.statuses[i],
-                  ),
                   selected: _statusesController.statuses[i].title ==
                       taskItemController.status.value.title),
             ),

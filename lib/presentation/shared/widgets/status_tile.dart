@@ -91,12 +91,10 @@ class StatusTile extends StatelessWidget {
 
 class StatusTileTablet extends StatelessWidget {
   final String title;
-  final Widget icon;
   final bool selected;
 
   const StatusTileTablet({
     Key? key,
-    required this.icon,
     required this.title,
     this.selected = false,
   }) : super(key: key);
@@ -105,23 +103,22 @@ class StatusTileTablet extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Container(
-          margin: const EdgeInsets.only(right: 17),
-          child: icon,
-        ),
+        if (selected)
+          Icon(
+            PlatformIcons(context).checkMark,
+            color: Get.theme.colors().primary,
+            size: 16,
+          )
+        else
+          const SizedBox(width: 16),
+        const SizedBox(width: 8),
         Expanded(
           child: Text(
             title,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
-            style: TextStyleHelper.body2(),
           ),
         ),
-        if (selected)
-          Icon(
-            PlatformIcons(context).checkMark,
-            color: Get.theme.colors().primary,
-          )
       ],
     );
   }

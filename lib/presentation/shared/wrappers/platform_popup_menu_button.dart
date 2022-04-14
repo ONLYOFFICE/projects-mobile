@@ -17,7 +17,7 @@ const double _kMenuWidthStep = 50;
 const double _kMenuScreenPadding = 14;
 const double _kMenuBorderRadius = 20;
 
-const double _kBlurAmount = 5;
+const double _kBlurAmount = 20;
 const double _kCornerRadius = 12;
 
 const Color _kDialogColor = CupertinoDynamicColor.withBrightness(
@@ -105,7 +105,7 @@ class PlatformPopupMenuButtonState<T> extends State<PlatformPopupMenuButton<T>> 
 
 void showButtonMenu({
   required BuildContext context,
-  Offset offset = const Offset(25, 50),
+  Offset offset = const Offset(16, 50),
   required PopupMenuItemBuilder itemBuilder,
   double? elevation,
   ShapeBorder? shape,
