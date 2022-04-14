@@ -81,7 +81,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
                   onPressed: controller.confirmResponsiblesSelection as Function()))
         ],
         leading: PlatformIconButton(
-          icon: Icon(PlatformIcons(context).back),
+          icon: const BackButtonIcon(),
           onPressed: controller.leaveResponsiblesSelectionView as Function(),
         ),
       ),

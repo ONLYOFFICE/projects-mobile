@@ -56,7 +56,7 @@ class NewProjectDescription extends StatelessWidget {
         titleText: tr('description'),
         leading: PlatformIconButton(
             icon: Get.put(PlatformController()).isMobile
-                ? Icon(PlatformIcons(context).back)
+                ? const BackButtonIcon()
                 : Icon(PlatformIcons(context).clear),
             onPressed: () =>
                 controller.leaveDescriptionView(controller.descriptionController.value.text)),

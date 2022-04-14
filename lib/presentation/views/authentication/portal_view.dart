@@ -73,7 +73,8 @@ class PortalInputView extends StatelessWidget {
       appBar: controller.accountManager.accounts.isEmpty
           ? null
           : StyledAppBar(
-              backButtonIcon: Platform.isAndroid ? Icon(PlatformIcons(context).clear) : null,
+              backButtonIcon:
+                  Platform.isAndroid ? Icon(PlatformIcons(context).clear) : const BackButtonIcon(),
               leading: Platform.isIOS
                   ? Align(
                       alignment: Alignment.centerLeft,

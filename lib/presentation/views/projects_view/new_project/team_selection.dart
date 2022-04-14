@@ -71,7 +71,7 @@ class GroupMembersSelectionView extends StatelessWidget {
         centerTitle: GetPlatform.isIOS,
         leadingWidth: GetPlatform.isIOS ? 100 : null,
         leading: PlatformIconButton(
-          icon: Icon(PlatformIcons(context).back),
+          icon: const BackButtonIcon(),
           onPressed: Get.back,
           cupertino: (_, __) => CupertinoIconButtonData(
             padding: const EdgeInsets.only(left: 16),

@@ -60,9 +60,8 @@ class SettingsScreen extends StatelessWidget {
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       titleText: tr('settings'),
       onLeadingPressed: controller.leave,
-      backButtonIcon: platformController.isMobile
-          ? Icon(PlatformIcons(context).back)
-          : Icon(PlatformIcons(context).clear),
+      backButtonIcon:
+          platformController.isMobile ? const BackButtonIcon() : Icon(PlatformIcons(context).clear),
     );
 
     final tabletAppBar = StyledAppBar(

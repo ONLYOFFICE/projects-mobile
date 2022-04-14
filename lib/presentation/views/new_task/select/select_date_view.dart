@@ -55,7 +55,6 @@ class SelectDateView extends StatelessWidget {
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-          backButtonIcon: Icon(PlatformIcons(context).back),
           titleText: startDate ? tr('selectStartDate') : tr('selectDueDate')),
       body: CalendarDatePicker(
           initialDate: initialDate ?? DateTime.now(),

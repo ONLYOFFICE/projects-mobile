@@ -59,7 +59,7 @@ class NewMilestoneDescription extends StatelessWidget {
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('description'),
         leading: PlatformIconButton(
-            icon: Icon(PlatformIcons(context).back),
+            icon: const BackButtonIcon(),
             onPressed: () => newMilestoneController
                 .leaveDescriptionView(newMilestoneController.descriptionController.value.text)),
         actions: [

@@ -68,7 +68,6 @@ class ProjectManagerSelectionView extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('selectPM'),
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        backButtonIcon: Icon(PlatformIcons(context).back),
         bottom: SearchField(
           controller: usersDataSource.searchInputController,
           hintText: tr('usersSearch'),

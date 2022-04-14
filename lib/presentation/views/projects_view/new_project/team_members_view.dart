@@ -73,7 +73,6 @@ class TeamMembersSelectionView extends StatelessWidget {
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        backButtonIcon: Icon(PlatformIcons(context).back),
         title: TeamMembersSelectionHeader(
           controller: controller,
           title: tr('addTeamMembers'),
