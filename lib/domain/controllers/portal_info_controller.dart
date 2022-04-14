@@ -38,11 +38,11 @@ class PortalInfoController extends GetxController {
   var lock = Lock();
   String? _portalName;
   String? _portalUri;
-  Map? _headers;
+  Map<String, String>? _headers;
 
   String? get portalUri => _portalUri;
   String? get portalName => _portalName;
-  Map? get headers => _headers;
+  Map<String, String>? get headers => _headers;
 
   @override
   void onInit() async {

@@ -33,13 +33,11 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:event_hub/event_hub.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:projects/data/enums/file_type.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:projects/data/services/analytics_service.dart';
@@ -54,25 +52,17 @@ import 'package:projects/internal/locator.dart';
 class FileCellController extends GetxController {
   final FilesService _api = locator<FilesService>();
 
-  PortalInfoController portalInfoController = Get.find<PortalInfoController>();
+  final portalInfoController = Get.find<PortalInfoController>();
 
-  RxBool loaded = false.obs;
-
-  TextEditingController searchInputController = TextEditingController();
-
-  var file = PortalFile();
-  var fileIcon = AppIcon(
+  late final PortalFile file;
+  final fileIcon = AppIcon(
           width: 20,
           height: 20,
           icon: SvgIcons.documents,
           color: Get.theme.colors().onSurface.withOpacity(0.6))
       .obs;
 
-  void onFilePopupMenuSelected(value, PortalFile element) {}
-
-  FileCellController({required PortalFile portalFile}) {
-    file = portalFile;
-
+  FileCellController({required this.file}) {
     setupFileIcon();
   }
 
@@ -177,40 +167,44 @@ class FileCellController extends GetxController {
     fileIcon.value = AppIcon(width: 20, height: 20, icon: iconString);
   }
 
-  Future<String?> deleteFile(PortalFile element) async {
+  Future<String?> deleteFile() async {
     final result = await _api.deleteFile(
-      fileId: element.id.toString(),
+      fileId: file.id.toString(),
     );
 
     return result?[0]?['error'] as String? ?? result?[1]?['error'] as String?;
   }
 
-  Future<bool> renameFile(PortalFile element, String newName) async {
+  Future<bool> renameFile(String newName) async {
     final result = await _api.renameFile(
-      fileId: element.id.toString(),
+      fileId: file.id.toString(),
       newTitle: newName,
     );
 
     return result != null;
   }
 
-  Future<void> downloadFile(String viewUrl) async {
-    await locator<DocumentsDownloadService>().downloadDocument(viewUrl);
+  Future<void> downloadFile() async {
+    /* await launch(
+      file.viewUrl!,
+      headers: portalInfoController.headers!..removeWhere((key, value) => key != 'Authorization'),
+    ); TODO garanin*/
+    await locator<DocumentsDownloadService>().downloadDocument(file.viewUrl!);
   }
 
-  Future openFile({required PortalFile selectedFile, int? parentId}) async {
+  Future openFile({int? parentId}) async {
     final userController = Get.find<UserController>();
 
     await userController.getUserInfo();
     final body = <String, dynamic>{
       'portal': portalInfoController.portalName,
       'email': userController.user.value!.email,
-      'originalUrl': selectedFile.viewUrl,
-      'file': <String, int?>{'id': selectedFile.id},
+      'originalUrl': file.viewUrl,
+      'file': <String, int?>{'id': file.id},
       'folder': {
-        'id': selectedFile.folderId,
+        'id': file.folderId,
         'parentId': parentId,
-        'rootFolderType': selectedFile.rootFolderType
+        'rootFolderType': file.rootFolderType,
       }
     };
 
@@ -230,7 +224,7 @@ class FileCellController extends GetxController {
     if (canOpen) {
       await AnalyticsService.shared.logEvent(AnalyticsService.Events.openEditor, {
         AnalyticsService.Params.Key.portal: portalInfoController.portalName,
-        AnalyticsService.Params.Key.extension: extension(selectedFile.title!)
+        AnalyticsService.Params.Key.extension: extension(file.title!)
       });
     } else {
       await LaunchReview.launch(

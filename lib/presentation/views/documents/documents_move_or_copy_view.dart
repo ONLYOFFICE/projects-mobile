@@ -241,7 +241,7 @@ class MoveOrCopyFolderContent extends StatelessWidget {
                             controller: controller,
                           )
                         : _FileCell(
-                            cellController: FileCellController(portalFile: element as PortalFile),
+                            cellController: FileCellController(file: element as PortalFile),
                           );
                   },
                 );

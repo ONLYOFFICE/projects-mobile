@@ -66,8 +66,7 @@ class FileCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        await cellController.openFile(
-            selectedFile: cellController.file, parentId: documentsController.parentId);
+        await cellController.openFile(parentId: documentsController.parentId);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),
@@ -173,11 +172,10 @@ Future<void> _onFilePopupMenuSelected(
       }
       break;
     case 'open':
-      await cellController.openFile(
-          selectedFile: cellController.file, parentId: documentsController.parentId);
+      await cellController.openFile(parentId: documentsController.parentId);
       break;
     case 'download':
-      await cellController.downloadFile(cellController.file.viewUrl!);
+      await cellController.downloadFile();
       break;
     case 'copy':
       await Get.find<NavigationController>().toScreen(
@@ -186,7 +184,7 @@ Future<void> _onFilePopupMenuSelected(
         arguments: {
           'mode': MoveOrCopyMode.CopyDocument,
           'target': cellController.file.id,
-          'initialFolderId': documentsController.currentFolderID,
+          'initialFolderId': cellController.file.folderId,
         },
         transition: Transition.rightToLeft,
       );
@@ -198,16 +196,16 @@ Future<void> _onFilePopupMenuSelected(
         arguments: {
           'mode': MoveOrCopyMode.MoveDocument,
           'target': cellController.file.id,
-          'initialFolderId': documentsController.currentFolderID,
+          'initialFolderId': cellController.file.folderId,
         },
         transition: Transition.rightToLeft,
       );
       break;
     case 'rename':
-      _renameFile(documentsController, cellController);
+      _renameFile(cellController);
       break;
     case 'delete':
-      final error = await cellController.deleteFile(cellController.file);
+      final error = await cellController.deleteFile();
 
       if (error == null) {
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileDeleted'));
@@ -220,14 +218,33 @@ Future<void> _onFilePopupMenuSelected(
   }
 }
 
-void _renameFile(
-  BaseDocumentsController docController,
-  FileCellController cellController,
-) {
+void _renameFile(FileCellController cellController) {
   final inputController = TextEditingController();
   inputController.text = cellController.file.title!.replaceAll(cellController.file.fileExst!, '');
 
   final isErrorInputText = ValueNotifier<bool>(false);
+
+  Future onSubmitted() async {
+    inputController.text = inputController.text.trim();
+    inputController.selection = TextSelection.fromPosition(
+      TextPosition(offset: inputController.text.length),
+    );
+
+    if (inputController.text.isEmpty) {
+      isErrorInputText.value = true;
+    } else {
+      if (inputController.text != cellController.file.title) {
+        final success = await cellController.renameFile(inputController.text);
+        if (success) {
+          Get.back();
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
+
+          locator<EventHub>().fire('needToRefreshDocuments');
+        } else
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+      }
+    }
+  }
 
   Get.dialog(
     StyledAlertDialog(
@@ -236,35 +253,14 @@ void _renameFile(
         valueListenable: isErrorInputText,
         builder: (_, __, ___) => _NewFileTextFieldWidget(
           inputController: inputController,
-          docController: docController,
           isErrorInputText: isErrorInputText,
           cellController: cellController,
+          onSubmited: onSubmitted,
         ),
       ),
       acceptText: tr('confirm'),
       cancelText: tr('cancel'),
-      onAcceptTap: () async {
-        inputController.text = inputController.text.trim();
-        inputController.selection = TextSelection.fromPosition(
-          TextPosition(offset: inputController.text.length),
-        );
-
-        if (inputController.text.isEmpty) {
-          isErrorInputText.value = true;
-        } else {
-          if (inputController.text != cellController.file.title) {
-            final success =
-                await cellController.renameFile(cellController.file, inputController.text);
-            if (success) {
-              Get.back();
-              MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
-
-              locator<EventHub>().fire('needToRefreshDocuments');
-            } else
-              MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-          }
-        }
-      },
+      onAcceptTap: onSubmitted,
       onCancelTap: Get.back,
     ),
   );
@@ -274,15 +270,15 @@ class _NewFileTextFieldWidget extends StatelessWidget {
   const _NewFileTextFieldWidget({
     Key? key,
     required this.inputController,
-    required this.docController,
     required this.isErrorInputText,
     required this.cellController,
+    required this.onSubmited,
   }) : super(key: key);
 
   final TextEditingController inputController;
-  final BaseDocumentsController docController;
   final ValueNotifier<bool> isErrorInputText;
   final FileCellController cellController;
+  final Function onSubmited;
 
   @override
   Widget build(BuildContext context) {
@@ -320,28 +316,7 @@ class _NewFileTextFieldWidget extends StatelessWidget {
           isErrorInputText.value = false;
         }
       },
-      onSubmitted: (_) async {
-        inputController.text = inputController.text.trim();
-        inputController.selection = TextSelection.fromPosition(
-          TextPosition(offset: inputController.text.length),
-        );
-
-        if (inputController.text.isEmpty) {
-          isErrorInputText.value = true;
-        } else {
-          if (inputController.text != cellController.file.title) {
-            final success =
-                await cellController.renameFile(cellController.file, inputController.text);
-            if (success) {
-              Get.back();
-              MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
-
-              locator<EventHub>().fire('needToRefreshDocuments');
-            } else
-              MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-          }
-        }
-      },
+      onSubmitted: (_) => onSubmited(),
     );
   }
 }
