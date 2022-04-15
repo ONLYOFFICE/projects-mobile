@@ -130,6 +130,11 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.window.onPlatformBrightnessChanged = () {
+      if (ThemeService.savedThemeMode() == ThemeMode.system)
+        Get.rootController.restartApp(); // TODO change brightness without restart
+    };
+
     print(context.locale.toString());
     print(context.deviceLocale.toString());
 
@@ -148,7 +153,7 @@ class App extends StatelessWidget {
         darkTheme: darkTheme.copyWith(
           splashFactory: GetPlatform.isIOS ? NoSplash.splashFactory : null,
         ),
-        themeMode: ThemeService().savedThemeMode(),
+        themeMode: ThemeService.savedThemeMode(),
       ),
     );
   }
