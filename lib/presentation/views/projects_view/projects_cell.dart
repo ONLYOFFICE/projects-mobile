@@ -381,8 +381,11 @@ void showsStatusesPM(
                 Get.back();
               },
               trailingIcon: AppIcon(
-                  icon: _statusesController.getStatusImageString(i),
-                  color: Get.theme.colors().onSurface),
+                icon: _statusesController.getStatusImageString(i),
+                color: itemController.projectData!.canEdit!
+                    ? Get.theme.colors().primary
+                    : Get.theme.colors().onBackground,
+              ),
               child: StatusTileTablet(
                 title: _statusesController.getStatusName(i),
                 selected: _statusesController.statuses[i] == itemController.projectData!.status,

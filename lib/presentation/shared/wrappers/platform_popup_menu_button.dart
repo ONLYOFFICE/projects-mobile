@@ -21,7 +21,7 @@ const double _kBlurAmount = 20;
 const double _kCornerRadius = 12;
 
 const Color _kDialogColor = CupertinoDynamicColor.withBrightness(
-  color: Color(0xCCF2F2F2),
+  color: Color(0xFFEDEDED),
   darkColor: Color(0xBF1E1E1E),
 );
 
@@ -417,7 +417,9 @@ class _CustomCupertinoPopupSurface extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: _kBlurAmount, sigmaY: _kBlurAmount),
         child: Container(
-          color: isSurfacePainted ? CupertinoDynamicColor.resolve(_kDialogColor, context) : null,
+          color: isSurfacePainted
+              ? CupertinoDynamicColor.resolve(_kDialogColor, context).withOpacity(0.9)
+              : null,
           child: child,
         ),
       ),
