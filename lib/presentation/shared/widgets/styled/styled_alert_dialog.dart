@@ -189,7 +189,7 @@ class SingleButtonDialog extends StatelessWidget {
             : null,
         actions: [
           PlatformDialogAction(
-            onPressed: onAcceptTap,
+            onPressed: onAcceptTap ?? Get.back,
             child: Text(
               platformAcceptText ?? defaultAcceptText,
               style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().primary),
