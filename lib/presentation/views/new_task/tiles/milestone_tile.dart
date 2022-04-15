@@ -65,7 +65,7 @@ class MilestoneTile extends StatelessWidget {
             const SelectMilestoneView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
-            isRootModalScreenView: false,
+            initialPage: '/SelectMilestoneView',
           ),
         );
       },

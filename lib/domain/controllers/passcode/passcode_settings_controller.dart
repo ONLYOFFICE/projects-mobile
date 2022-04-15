@@ -160,7 +160,7 @@ class PasscodeSettingsController extends GetxController {
   void leavePasscodeSettingsScreen() {
     clear();
     Get.find<SettingsController>().onInit();
-    Get.find<NavigationController>().back(id: SettingsRouteNames.key);
+    Get.find<NavigationController>().back();
   }
 
   void leave() {

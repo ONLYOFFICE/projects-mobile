@@ -108,12 +108,15 @@ class Comment extends StatelessWidget {
               PlatformTextButton(
                 padding: const EdgeInsets.only(top: 8),
                 onPressed: () async {
-                  return await Get.find<NavigationController>()
-                      .toScreen(const ReplyCommentView(), arguments: {
-                    'comment': controller.comment!.value,
-                    'discussionId': discussionId,
-                    'taskId': taskId,
-                  });
+                  return await Get.find<NavigationController>().toScreen(
+                    const ReplyCommentView(),
+                    arguments: {
+                      'comment': controller.comment!.value,
+                      'discussionId': discussionId,
+                      'taskId': taskId,
+                    },
+                    initialPage: '/ReplyCommentView',
+                  );
                 },
                 alignment: Alignment.centerLeft,
                 cupertino: (_, __) => CupertinoTextButtonData(minSize: 0),

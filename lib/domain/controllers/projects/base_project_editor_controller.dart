@@ -220,7 +220,7 @@ abstract class BaseProjectEditorController extends GetxController {
       Get.find<NavigationController>().toScreen(
         const TeamMembersSelectionView(),
         arguments: {'controller': this},
-        isRootModalScreenView: false,
+        initialPage: '/TeamMembersSelectionView',
       );
     }
   }

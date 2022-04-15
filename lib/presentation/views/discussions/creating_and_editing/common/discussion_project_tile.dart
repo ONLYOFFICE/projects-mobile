@@ -67,7 +67,7 @@ class DiscussionProjectTile extends StatelessWidget {
             const SelectProjectView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
-            isRootModalScreenView: false,
+            initialPage: '/SelectProjectView',
           ),
         ),
       ),

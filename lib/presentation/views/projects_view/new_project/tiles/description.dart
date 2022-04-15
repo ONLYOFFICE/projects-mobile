@@ -112,7 +112,7 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
             const NewProjectDescription(),
             arguments: {'controller': widget.controller},
             transition: Transition.rightToLeft,
-            isRootModalScreenView: false,
+            initialPage: '/NewProjectDescription',
           ),
           child: Column(
             children: [

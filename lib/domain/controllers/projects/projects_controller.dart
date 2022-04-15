@@ -184,8 +184,12 @@ class ProjectsController extends BaseController {
   }
 
   void createNewProject() {
-    Get.find<NavigationController>().toScreen(const NewProject(),
-        transition: Transition.cupertinoDialog, fullscreenDialog: true);
+    Get.find<NavigationController>().toScreen(
+      const NewProject(),
+      transition: Transition.cupertinoDialog,
+      fullscreenDialog: true,
+      initialPage: '/NewProject',
+    );
   }
 
   void getFabVisibility(bool _) {

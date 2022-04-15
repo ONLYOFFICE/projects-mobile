@@ -56,6 +56,7 @@ class _CreatingDate extends StatelessWidget {
               title: tr('customPeriod'),
               isSelected: filterController!.creationDate['custom']['selected'] as bool,
               onTap: () async {
+                // TODO: refact DI
                 final pickedRange = await Get.find<NavigationController>().toScreen(
                   StyledDateRangePickerDialog(
                     initialDateRange: DateTimeRange(
@@ -64,7 +65,6 @@ class _CreatingDate extends StatelessWidget {
                     ),
                   ),
                   transition: Transition.rightToLeft,
-                  isRootModalScreenView: false,
                 );
                 if (pickedRange != null) {
                   await filterController!.changeCreationDate(

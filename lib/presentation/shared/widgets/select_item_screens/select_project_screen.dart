@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
@@ -55,11 +56,12 @@ class SelectProjectScreen extends StatelessWidget {
 
   final searchFieldController = TextEditingController();
   final searchController = Get.put(ProjectSearchController());
+  final navigationController = Get.find<NavigationController>();
 
   final _projectsController = Get.put(ProjectsController(), tag: '7');
 
   void onSelect(ProjectDetailed project) {
-    Get.back(result: {
+    navigationController.back(result: {
       'id': project.id,
       'title': project.title,
     });
@@ -81,6 +83,7 @@ class SelectProjectScreen extends StatelessWidget {
       appBar: StyledAppBar(
         backgroundColor: _platformController.isMobile ? null : Get.theme.colors().surface,
         showBackButton: true,
+        onLeadingPressed: navigationController.back,
         centerTitle: !GetPlatform.isAndroid,
         title: Obx(
           () => AnimatedSwitcher(

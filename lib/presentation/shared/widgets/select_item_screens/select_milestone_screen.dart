@@ -64,6 +64,10 @@ class SelectMilestoneScreen extends StatelessWidget with SelectItemWithSearchMix
   @override
   Widget get searchResult =>
       _SearchResult(paginationController: searchController.paginationController);
+
+  @override
+  // TODO: implement onLeadingPressed
+  VoidCallback get onLeadingPressed => throw UnimplementedError();
 }
 
 class _MilestoneList extends StatelessWidget with SelectItemListMixin {

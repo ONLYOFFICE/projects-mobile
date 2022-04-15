@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -79,7 +78,7 @@ class AnalyticsScreen extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('analytics'),
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        onLeadingPressed: () => controller.back(id: SettingsRouteNames.key),
+        onLeadingPressed: () => controller.back(),
       ),
       body: GetPlatform.isAndroid
           ? Padding(
@@ -125,9 +124,13 @@ class AnalyticsScreen extends StatelessWidget {
                           ),
                           tiles: [
                             SettingsTile.switchTile(
-                                initialValue: controller.shareAnalytics.value,
-                                onToggle: controller.changeAnalyticsSharingEnability,
-                                title: Text(tr('shareAnalytics'))),
+                              initialValue: controller.shareAnalytics.value,
+                              onToggle: controller.changeAnalyticsSharingEnability,
+                              title: Text(
+                                tr('shareAnalytics'),
+                              ),
+                              activeSwitchColor: Get.theme.colors().primary,
+                            ),
                           ],
                         )
                       ],

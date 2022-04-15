@@ -62,6 +62,7 @@ class _DueDate extends StatelessWidget {
               isSelected: filterController.deadline['custom']['selected'] as bool,
               onTap: () async {
                 final pickedRange = await Get.find<NavigationController>().toScreen(
+                  // TODO: refactor DI
                   StyledDateRangePickerDialog(
                     initialDateRange: DateTimeRange(
                       start: filterController.deadline['custom']['startDate'] as DateTime,
@@ -69,7 +70,6 @@ class _DueDate extends StatelessWidget {
                     ),
                   ),
                   transition: Transition.rightToLeft,
-                  isRootModalScreenView: false,
                 );
                 if (pickedRange != null) {
                   filterController.changeDeadline('custom',

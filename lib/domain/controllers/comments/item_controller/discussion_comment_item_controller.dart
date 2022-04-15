@@ -105,10 +105,12 @@ class DiscussionCommentItemController extends GetxController implements CommentI
 
   @override
   void toCommentEditingView() {
-    Get.find<NavigationController>().toScreen(const CommentEditingView(), arguments: {
-      'commentId': comment.value.commentId,
-      'commentBody': comment.value.commentBody,
-      'itemController': this,
-    });
+    Get.find<NavigationController>().toScreen(const CommentEditingView(),
+        arguments: {
+          'commentId': comment.value.commentId,
+          'commentBody': comment.value.commentBody,
+          'itemController': this,
+        },
+        initialPage: '/CommentEditingView');
   }
 }

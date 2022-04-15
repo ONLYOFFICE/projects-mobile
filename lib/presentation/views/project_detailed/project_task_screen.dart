@@ -60,8 +60,11 @@ class ProjectTaskScreen extends StatelessWidget {
               () => Visibility(
                 visible: projectTasksController.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: () => Get.find<NavigationController>().toScreen(const NewTaskView(),
-                      arguments: {'projectDetailed': projectTasksController.projectDetailed}),
+                  onPressed: () => Get.find<NavigationController>().toScreen(
+                    const NewTaskView(),
+                    arguments: {'projectDetailed': projectTasksController.projectDetailed},
+                    initialPage: '/NewTaskView',
+                  ),
                   child: AppIcon(
                     icon: SvgIcons.add_fab,
                     color: Get.theme.colors().onPrimarySurface,

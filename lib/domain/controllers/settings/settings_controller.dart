@@ -257,17 +257,23 @@ class SettingsController extends GetxController {
         RemoteConfigService.getString(RemoteConfigService.Keys.linkPrivacyPolicy),
       );
 
-  void onAnalyticsPressed() => platformController.isMobile
-      ? navigationController.to(const AnalyticsScreen())
-      : Get.toNamed(SettingsRouteNames.analyticsSettingsScreen, id: SettingsRouteNames.key);
+  void onAnalyticsPressed() => navigationController.to(
+        const AnalyticsScreen(),
+        page: '/AnalyticsScreen',
+        // navigatorKey: SettingsRouteNames.key,
+      );
 
-  void onPasscodePressed() => platformController.isMobile
-      ? navigationController.to(const PasscodeSettingsScreen())
-      : Get.toNamed(SettingsRouteNames.passcodeSettingsScreen, id: SettingsRouteNames.key);
+  void onPasscodePressed() => navigationController.to(
+        const PasscodeSettingsScreen(),
+        page: '/PasscodeSettingsScreen',
+        // navigatorKey: SettingsRouteNames.key,
+      );
 
-  void onThemePressed() => platformController.isMobile
-      ? navigationController.to(const ColorThemeSelectionScreen())
-      : Get.toNamed(SettingsRouteNames.themeSettingsScreen, id: SettingsRouteNames.key);
+  void onThemePressed() =>
+      navigationController.to(const ColorThemeSelectionScreen(), page: '/ColorThemeSelectionScreen'
+          // navigatorKey: SettingsRouteNames.key,
+          );
 
-  void back({int? id}) => Get.find<NavigationController>().back(id: id);
+  void back({bool closeTabletModalScreen = false}) =>
+      Get.find<NavigationController>().back(closeTabletModalScreen: closeTabletModalScreen);
 }

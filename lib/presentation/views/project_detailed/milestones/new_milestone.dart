@@ -269,18 +269,19 @@ class DescriptionTile extends StatelessWidget {
             icon: SvgIcons.description,
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
             selectedIconColor: Get.theme.colors().onBackground,
-            caption: _isSletected ? tr('description') : null,
-            isSelected: _isSletected,
-            suffix: _isSletected
-                ? Icon(PlatformIcons(context).rightChevron,
-                    size: 24, color: Get.theme.colors().onBackground)
-                : null,
-            onTap: () => Get.find<NavigationController>().toScreen(
-                  const NewMilestoneDescription(),
-                  arguments: {'newMilestoneController': newMilestoneController},
-                  transition: Transition.rightToLeft,
-                  isRootModalScreenView: false,
-                ));
+          caption: _isSletected ? tr('description') : null,
+          isSelected: _isSletected,
+          suffix: _isSletected
+              ? Icon(PlatformIcons(context).rightChevron,
+                  size: 24, color: Get.theme.colors().onBackground)
+              : null,
+          onTap: () => Get.find<NavigationController>().toScreen(
+            const NewMilestoneDescription(),
+            arguments: {'newMilestoneController': newMilestoneController},
+            transition: Transition.rightToLeft,
+            initialPage: '/NewMilestoneDescription',
+          ),
+        );
       },
     );
   }
@@ -294,10 +295,10 @@ class ProjectTile extends StatelessWidget {
   }) : super(key: key);
 
   void _onPressed() => Get.find<NavigationController>().toScreen(
-        const SelectProjectView(),
+    const SelectProjectView(),
         arguments: {'controller': controller},
         transition: Transition.rightToLeft,
-        isRootModalScreenView: false,
+        initialPage: '/SelectProjectView',
       );
 
   @override
@@ -361,7 +362,7 @@ class ResponsibleTile extends StatelessWidget {
             const ProjectTeamResponsibleSelectionView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
-            isRootModalScreenView: false,
+            initialPage: '/ProjectTeamResponsibleSelectionView',
           )
         },
       );

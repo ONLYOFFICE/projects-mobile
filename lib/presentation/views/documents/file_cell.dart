@@ -36,9 +36,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
-
 import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
-
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
@@ -181,6 +179,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
           'initialFolderId': documentsController.currentFolderID,
         },
         transition: Transition.rightToLeft,
+        initialPage: '/DocumentsMoveOrCopyView',
       );
       break;
     case 'move':
@@ -193,6 +192,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
           'initialFolderId': documentsController.currentFolderID,
         },
         transition: Transition.rightToLeft,
+        initialPage: '/DocumentsMoveOrCopyView',
       );
       break;
     case 'rename':

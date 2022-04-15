@@ -35,6 +35,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/base/base_search_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/users/user_search_controller.dart';
 import 'package:projects/domain/controllers/users/users_controller.dart';
@@ -45,12 +47,16 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/common/select_item_template.dart';
 
-part 'user_tile.dart';
 part 'search_result.dart';
+
 part 'user_list.dart';
 
+part 'user_tile.dart';
+
 class SelectUserScreen extends StatelessWidget with SelectItemWithSearchMixin {
-  const SelectUserScreen({Key? key}) : super(key: key);
+  const SelectUserScreen({Key? key, int? this.navigatorId}) : super(key: key);
+
+  final int? navigatorId;
 
   @override
   String get appBarText => tr('selectUser');
@@ -73,4 +79,9 @@ class SelectUserScreen extends StatelessWidget with SelectItemWithSearchMixin {
   @override
   Widget get searchResult =>
       _SearchResult(searchController: searchController as UserSearchController);
+
+  @override
+  VoidCallback? get onLeadingPressed => () {
+        Get.find<NavigationController>().back();
+      };
 }

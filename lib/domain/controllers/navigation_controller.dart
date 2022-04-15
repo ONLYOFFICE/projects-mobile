@@ -38,12 +38,9 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
-import 'package:projects/presentation/views/settings/analytics_screen.dart';
-import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
-import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
-import 'package:projects/presentation/views/settings/settings_screen.dart';
 
 class NavigationController extends GetxController {
   final tabIndex = 0.obs;
@@ -51,13 +48,14 @@ class NavigationController extends GetxController {
   final selfUserItem = Rx(PortalUserItemController(portalUser: PortalUser()));
   final platformController = Get.find<PlatformController>();
 
+  late bool isMobile;
   int treeLength = 0;
 
   @override
   void onInit() {
     Get.find<UserController>().getUserInfo().then((value) => selfUserItem.value =
         PortalUserItemController(portalUser: Get.find<UserController>().user.value!));
-
+    isMobile = platformController.isMobile;
     super.onInit();
   }
 
@@ -112,12 +110,11 @@ class NavigationController extends GetxController {
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
-    bool isRootModalScreenView = true,
-    ModalNavigationData? modalNavigationData,
+    String? initialPage,
   }) async {
-    if (platformController.isMobile) {
+    if (isMobile) {
       assert(widget != null, 'Widget must not be null for mobile layout');
-      await Get.to(
+      return await Get.to(
         () => widget!,
         preventDuplicates: preventDuplicates ?? false,
         fullscreenDialog: fullscreenDialog,
@@ -125,22 +122,31 @@ class NavigationController extends GetxController {
         transition: transition ?? Transition.native,
         popGesture: popGesture,
       );
-    } else if (modalNavigationData != null) {
-      await toModalScreen(modalNavigationData: modalNavigationData);
-    } else {
-      await Get.dialog(
-        ModalScreenView(contentView: widget!),
-        barrierDismissible: false,
-        barrierColor: isRootModalScreenView ? null : Colors.transparent,
+    } else
+      assert(initialPage != null, '[initialPage] must not be null for tablet layout');
+    if (initialPage != null)
+      return await toModalScreen(
+        modalNavigationData: ModalNavigationData(initialPage: initialPage),
         arguments: arguments,
       );
-    }
+    //  else {
+    //   return await Get.dialog(
+    //     ModalScreenView(contentView: widget!),
+    //     barrierDismissible: false,
+    //     barrierColor: isRootModalScreenView ? null : Colors.transparent,
+    //     arguments: arguments,
+    //   );
+    // }
   }
 
-  Future<void> toModalScreen({required ModalNavigationData modalNavigationData}) async {
-    await Get.dialog(ModalScreenViewSkeleton(
-      modalNavigationData: modalNavigationData,
-    ));
+  Future<void> toModalScreen(
+      {required ModalNavigationData modalNavigationData, Map<String, dynamic>? arguments}) async {
+    await Get.dialog(
+      ModalScreenViewSkeleton(
+        modalNavigationData: modalNavigationData,
+      ),
+      arguments: arguments,
+    );
   }
 
   Future to(
@@ -150,10 +156,11 @@ class NavigationController extends GetxController {
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
-    ModalNavigationData? modalNavigationData,
+    // int? navigatorKey,
+    String? page,
   }) async {
-    if (platformController.isMobile) {
-      await Get.to(
+    if (isMobile) {
+      return await Get.to(
         () => widget,
         popGesture: popGesture,
         fullscreenDialog: fullscreenDialog,
@@ -161,11 +168,12 @@ class NavigationController extends GetxController {
         arguments: arguments,
         transition: transition ?? Transition.native,
       );
-    } else if (modalNavigationData != null) {
-      await toModalScreen(modalNavigationData: modalNavigationData);
+    } else if (page != null) {
+      return await Get.toNamed(page,
+          id: ModalNavigationData.nestedNavigatorId, arguments: arguments);
     } else {
       treeLength++;
-      await Get.to(
+      return await Get.to(
         () => TabletLayout(contentView: widget),
         transition: Transition.noTransition,
         preventDuplicates: preventDuplicates ?? false,
@@ -174,53 +182,161 @@ class NavigationController extends GetxController {
     }
   }
 
-  void back({int? id}) {
-    if (id != null && !platformController.isMobile) {
-      Get.back(id: id);
+  void back<T>({
+    bool closeTabletModalScreen = false,
+    T? result,
+  }) {
+    if (!closeTabletModalScreen && !isMobile) {
+      Get.back(id: ModalNavigationData.nestedNavigatorId, result: result);
     } else {
-      Get.back();
+      Get.back(result: result);
     }
   }
 }
 
 class ModalNavigationData {
-  final GlobalKey<NavigatorState>? id;
-  final Route? Function(RouteSettings)? onGenerateRoute;
+  static const nestedNavigatorId = 1;
 
-  const ModalNavigationData({
-    required this.id,
-    this.onGenerateRoute,
+  static Route onGenerateRoute(RouteSettings settings) {
+    final getPage = getxPages().firstWhere((getPage) => getPage.name == settings.name);
+    return GetPageRoute(page: getPage.page, settings: settings);
+  }
+
+  static List<Route<dynamic>> onGenerateInitialRoutes(_, initialRouteName) {
+    final getPage = getxPages().firstWhere((getPage) => getPage.name == initialRouteName);
+    return [GetPageRoute(page: getPage.page)];
+  }
+
+  static GlobalKey<NavigatorState>? get key => Get.nestedKey(nestedNavigatorId);
+
+  String initialPage;
+
+  ModalNavigationData({
+    required this.initialPage,
   });
-
-  ModalNavigationData.settingsRouting()
-      : this(
-            id: Get.nestedKey(SettingsRouteNames.key),
-            onGenerateRoute: (settings) {
-              if (settings.name == SettingsRouteNames.settingsScreen) {
-                return GetPageRoute(
-                  page: () => const SettingsScreen(),
-                );
-              } else if (settings.name == SettingsRouteNames.themeSettingsScreen) {
-                return GetPageRoute(
-                  page: () => const ColorThemeSelectionScreen(),
-                );
-              } else if (settings.name == SettingsRouteNames.passcodeSettingsScreen) {
-                return GetPageRoute(
-                  page: () => const PasscodeSettingsScreen(),
-                );
-              } else if (settings.name == SettingsRouteNames.analyticsSettingsScreen) {
-                return GetPageRoute(
-                  page: () => const AnalyticsScreen(),
-                );
-              } else
-                return null;
-            });
 }
 
-abstract class SettingsRouteNames {
-  static const key = 1;
-  static const settingsScreen = '/';
-  static const themeSettingsScreen = '/theme_settings';
-  static const passcodeSettingsScreen = '/passcode_settings';
-  static const analyticsSettingsScreen = '/analytics_settings';
+mixin NavigationMixin {
+  final navigationController = Get.find<NavigationController>();
+
+  void back<T>({
+    bool closeTabletModalScreen = false,
+    T? result,
+  }) =>
+      navigationController.back(closeTabletModalScreen: closeTabletModalScreen, result: result);
 }
+
+// const ModalNavigationData({
+//   required this.id,
+//   required this.onGenerateRoute,
+// });
+
+// ModalNavigationData.general()
+//     : this(
+//           id: Get.nestedKey(1),
+//           onGenerateRoute: (settings) {
+//             final getPage = getxPages().firstWhere((getPage) => getPage.name == settings.name);
+//             return GetPageRoute(page: getPage.page);
+//           });
+
+//   ModalNavigationData.settingsRouting()
+//       : this(
+//             id: Get.nestedKey(SettingsRouteNames.key),
+//             onGenerateRoute: (settings) {
+//               if (settings.name == SettingsRouteNames.settingsScreen) {
+//                 return GetPageRoute(
+//                   page: () => const SettingsScreen(),
+//                 );
+//               } else if (settings.name == SettingsRouteNames.themeSettingsScreen) {
+//                 return GetPageRoute(
+//                   page: () => const ColorThemeSelectionScreen(),
+//                 );
+//               } else if (settings.name == SettingsRouteNames.passcodeSettingsScreen) {
+//                 return GetPageRoute(
+//                   page: () => const PasscodeSettingsScreen(),
+//                 );
+//               } else if (settings.name == SettingsRouteNames.analyticsSettingsScreen) {
+//                 return GetPageRoute(
+//                   page: () => const AnalyticsScreen(),
+//                 );
+//               } else
+//                 return null;
+//             });
+//
+//   ModalNavigationData.documentsFilterRouting()
+//       : this(
+//             id: Get.nestedKey(DocumentsFilterRouteNames.key),
+//             onGenerateRoute: (settings) {
+//               if (settings.name == DocumentsFilterRouteNames.filter) {
+//                 return GetPageRoute(
+//                   page: () => const DocumentsFilterScreen(),
+//                 );
+//               } else if (settings.name == DocumentsFilterRouteNames.filterGroups) {
+//                 return GetPageRoute(
+//                   page: () => const SelectGroupScreen(),
+//                 );
+//               } else if (settings.name == DocumentsFilterRouteNames.filterUsers) {
+//                 return GetPageRoute(
+//                   page: () => const SelectUserScreen(),
+//                 );
+//               } else
+//                 return null;
+//             });
+//
+//   ModalNavigationData.discussionsFilterRouting()
+//       : this(
+//             id: Get.nestedKey(DiscussionsFilterRouteNames.key),
+//             onGenerateRoute: (settings) {
+//               if (settings.name == DiscussionsFilterRouteNames.filter) {
+//                 return GetPageRoute(
+//                   page: () => const DiscussionsFilterScreen(),
+//                 );
+//               } else if (settings.name == DiscussionsFilterRouteNames.filterAuthor) {
+//                 return GetPageRoute(
+//                   page: () => const SelectUserScreen(navigatorId: DiscussionsFilterRouteNames.key),
+//                 );
+//               } else if (settings.name == DiscussionsFilterRouteNames.filterCustomPeriod) {
+//                 return GetPageRoute(
+//                   page: () => const PasscodeSettingsScreen(),
+//                 );
+//               } else if (settings.name == DiscussionsFilterRouteNames.filterOtherProjects) {
+//                 return GetPageRoute(
+//                   page: () => const AnalyticsScreen(),
+//                 );
+//               } else if (settings.name == DiscussionsFilterRouteNames.filterWithTag) {
+//                 return GetPageRoute(
+//                   page: () => const AnalyticsScreen(),
+//                 );
+//               } else
+//                 return null;
+//             });
+//
+// }
+//
+// mixin NestedNavigatorId {
+//   static const key = 0;
+// }
+//
+// abstract class SettingsRouteNames with NestedNavigatorId{
+//   static const key = 1;
+//   static const settingsScreen = '/';
+//   static const themeSettingsScreen = '/theme_settings';
+//   static const passcodeSettingsScreen = '/passcode_settings';
+//   static const analyticsSettingsScreen = '/analytics_settings';
+// }
+//
+// abstract class DocumentsFilterRouteNames with NestedNavigatorId {
+//   static const key = 2;
+//   static const filter = '/';
+//   static const filterUsers = '/filter_users';
+//   static const filterGroups = '/filter_groups';
+// }
+//
+// abstract class DiscussionsFilterRouteNames with NestedNavigatorId {
+//   static const key = 3;
+//   static const filter = '/';
+//   static const filterAuthor = '/author';
+//   static const filterCustomPeriod = '/custom_period';
+//   static const filterOtherProjects = '/other_projects';
+//   static const filterWithTag = '/with_tag';
+// }

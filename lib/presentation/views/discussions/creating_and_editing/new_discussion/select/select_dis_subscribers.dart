@@ -118,7 +118,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                   arguments: {'controller': controller},
                   transition: Transition.cupertinoDialog,
                   fullscreenDialog: true,
-                  isRootModalScreenView: false,
+                  initialPage: '/UsersFromGroups',
                 ),
                 icon: const AppIcon(icon: SvgIcons.preferences),
               )

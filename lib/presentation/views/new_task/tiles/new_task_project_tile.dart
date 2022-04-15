@@ -61,10 +61,11 @@ class NewTaskProjectTile extends StatelessWidget {
           selectedIconColor: Get.theme.colors().onBackground,
           isSelected: _isNotEmpty,
           caption: _isNotEmpty ? '${tr('project')}:' : null,
-          onTap: () => Get.find<NavigationController>().toScreen(
+          onTap: () => Get.find<NavigationController>().to(
             const SelectProjectView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
+            page: '/SelectProjectView',
           ),
         );
       },

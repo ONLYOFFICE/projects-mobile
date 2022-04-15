@@ -57,7 +57,7 @@ class _MilestoneResponsible extends StatelessWidget {
               final newUser = await Get.find<NavigationController>().toScreen(
                 const SelectUserScreen(),
                 transition: Transition.rightToLeft,
-                isRootModalScreenView: false,
+                initialPage: '/SelectUserScreen',
               );
               await filterController.changeResponsible('other', newUser);
             },

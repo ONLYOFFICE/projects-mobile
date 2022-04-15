@@ -115,15 +115,17 @@ class _FAB extends StatelessWidget {
       right: 16,
       bottom: 24,
       child: StyledFloatingActionButton(
-        onPressed: () =>
-            Get.find<NavigationController>().toScreen(const CreatingAndEditingSubtaskView(),
-                arguments: {
-                  'taskId': _task.id,
-                  'projectId': _task.projectOwner!.id,
-                  'forEditing': false,
-                },
-                transition: Transition.cupertinoDialog,
-                fullscreenDialog: true),
+        onPressed: () => Get.find<NavigationController>().toScreen(
+          const CreatingAndEditingSubtaskView(),
+          arguments: {
+            'taskId': _task.id,
+            'projectId': _task.projectOwner!.id,
+            'forEditing': false,
+          },
+          transition: Transition.cupertinoDialog,
+          fullscreenDialog: true,
+          initialPage: '/CreatingAndEditingSubtaskView',
+        ),
         child: AppIcon(
           icon: SvgIcons.add_fab,
           color: Get.theme.colors().onPrimarySurface,

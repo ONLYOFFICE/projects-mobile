@@ -44,13 +44,13 @@ import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 class NewDiscussionTextScreen extends StatelessWidget {
   const NewDiscussionTextScreen({
     Key? key,
-    required this.controller,
   }) : super(key: key);
 
-  final DiscussionActionsController controller;
 
   @override
   Widget build(BuildContext context) {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final controller = arguments['controller'] as DiscussionActionsController;
     final platformController = Get.find<PlatformController>();
 
     return WillPopScope(

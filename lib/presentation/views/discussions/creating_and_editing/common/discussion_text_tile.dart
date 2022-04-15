@@ -59,11 +59,11 @@ class DiscussionTextTile extends StatelessWidget {
         isSelected: controller.text.value.isNotEmpty,
         icon: SvgIcons.description,
         selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
-        onTap: () => Get.find<NavigationController>().toScreen(
-          NewDiscussionTextScreen(controller: controller),
+        onTap: () => Get.find<NavigationController>().to(
+          const NewDiscussionTextScreen(),
           arguments: {'controller': controller},
           transition: Transition.rightToLeft,
-          isRootModalScreenView: false,
+          page: '/NewDiscussionTextScreen',
         ),
       ),
     );

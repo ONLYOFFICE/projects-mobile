@@ -119,7 +119,7 @@ class TasksFilterButton extends StatelessWidget {
             arguments: {'filterController': controller.filterController},
             transition: Transition.cupertinoDialog,
             fullscreenDialog: true,
-          ),
+            initialPage: '/TasksFilterScreen'),
           padding: EdgeInsets.zero,
           cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
         );

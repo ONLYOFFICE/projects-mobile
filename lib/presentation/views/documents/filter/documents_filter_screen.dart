@@ -35,7 +35,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -43,8 +42,6 @@ import 'package:projects/presentation/shared/widgets/filters/confirm_filters_but
 import 'package:projects/presentation/shared/widgets/filters/filter_element_widget.dart';
 import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
 import 'package:projects/presentation/shared/widgets/reset_filters_button.dart';
-import 'package:projects/presentation/shared/widgets/select_item_screens/select_group_screen.dart';
-import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
@@ -61,7 +58,7 @@ class DocumentsFilterScreen extends StatelessWidget {
 
     void onLeadingPressed() {
       filterController.restoreFilters();
-      Get.back();
+      filterController.back();
     }
 
     final backgroundColor =

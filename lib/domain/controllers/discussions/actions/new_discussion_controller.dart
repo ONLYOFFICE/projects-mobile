@@ -62,6 +62,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   final DiscussionsService _api = locator<DiscussionsService>();
 
   int? _selectedProjectId;
+
   int? get selectedProjectId => _selectedProjectId;
 
   bool _projectIsLocked = false;
@@ -69,6 +70,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   // final _userController = Get.find<UserController>();
   final UserService _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
+  final navigationController = Get.find<NavigationController>();
   List<PortalGroupItemController> selectedGroups = <PortalGroupItemController>[];
   final _manualSelectedPersons = [];
 
@@ -158,7 +160,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     } else {
       removeProjectSelection();
     }
-    Get.back();
+    navigationController.back();
   }
 
   void addTeam() {
@@ -188,7 +190,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   @override
   Future<void> confirmText() async {
     text.value = await textController.getText();
-    Get.back();
+    navigationController.back();
   }
 
   @override
@@ -196,7 +198,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     final t = await textController.getText();
 
     if (t == text.value) {
-      Get.back();
+      navigationController.back();
     } else {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -205,7 +207,8 @@ class NewDiscussionController extends GetxController implements DiscussionAction
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+
+          navigationController.back();
         },
         onCancelTap: Get.back,
       ));
@@ -222,13 +225,13 @@ class NewDiscussionController extends GetxController implements DiscussionAction
 
     _previousSelectedSubscribers = List.of(subscribers);
     clearUserSearch();
-    Get.back();
+    navigationController.back();
   }
 
   @override
   void leaveSubscribersSelectionView() {
     if (listEquals(_previousSelectedSubscribers, subscribers)) {
-      Get.back();
+      navigationController.back();
     } else {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -239,7 +242,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
           subscribers.value = RxList.from(_previousSelectedSubscribers);
           clearUserSearch();
           Get.back();
-          Get.back();
+          navigationController.back();
         },
         onCancelTap: Get.back,
       ));
@@ -329,7 +332,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     await _getSelectedSubscribers();
     await _usersDataSource.updateUsers();
 
-    Get.back();
+    navigationController.back();
   }
 
   @override
@@ -375,7 +378,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     );
 
     if (createdDiss != null) {
-      Get.back();
+      navigationController.back();
 
       final discussionController = Get.put<DiscussionItemController>(DiscussionItemController(),
           tag: createdDiss.id.toString());
@@ -406,12 +409,12 @@ class NewDiscussionController extends GetxController implements DiscussionAction
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          navigationController.back(closeTabletModalScreen: true);
         },
         onCancelTap: Get.back,
       ));
     } else {
-      Get.back();
+      navigationController.back(closeTabletModalScreen: true);
     }
   }
 

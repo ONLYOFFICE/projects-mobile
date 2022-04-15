@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tags/tags_controller.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/common/select_item_template.dart';
@@ -52,6 +53,9 @@ class SelectTagScreen extends StatelessWidget with SelectItemMixin {
 
   @override
   Widget get itemList => const _TagList();
+
+  @override
+  VoidCallback? get onLeadingPressed => Get.find<NavigationController>().back;
 }
 
 class _TagList extends StatelessWidget with SelectItemListMixin {

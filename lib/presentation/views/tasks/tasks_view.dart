@@ -59,10 +59,13 @@ class TasksView extends StatelessWidget {
         () => Visibility(
           visible: controller.fabIsVisible.value,
           child: StyledFloatingActionButton(
-            onPressed: () => Get.find<NavigationController>().toScreen(const NewTaskView(),
-                arguments: {'projectDetailed': null},
-                transition: Transition.cupertinoDialog,
-                fullscreenDialog: true),
+            onPressed: () => Get.find<NavigationController>().toScreen(
+              const NewTaskView(),
+              arguments: {'projectDetailed': null},
+              transition: Transition.cupertinoDialog,
+              fullscreenDialog: true,
+              initialPage: '/NewTaskView',
+            ),
             child: AppIcon(
               icon: SvgIcons.add_fab,
               color: Get.theme.colors().onPrimarySurface,

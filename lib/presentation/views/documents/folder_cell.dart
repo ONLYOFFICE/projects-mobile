@@ -156,6 +156,7 @@ class MoveFolderCell extends StatelessWidget {
             'nestingCounter': controller.nestingCounter,
           },
           transition: Transition.rightToLeft,
+          initialPage: '/DocumentsMoveOrCopyView',
         );
       },
       child: Container(
@@ -270,6 +271,7 @@ Future<void> _onFolderPopupMenuSelected(
           'initialFolderId': controller.currentFolderID,
         },
         transition: Transition.rightToLeft,
+        initialPage: '/DocumentsMoveOrCopyView',
       );
       break;
     case 'move':
@@ -282,6 +284,7 @@ Future<void> _onFolderPopupMenuSelected(
           'initialFolderId': controller.currentFolderID,
         },
         transition: Transition.rightToLeft,
+        initialPage: '/DocumentsMoveOrCopyView',
       );
 
       break;

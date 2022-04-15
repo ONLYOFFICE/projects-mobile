@@ -55,7 +55,6 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
   String get appBarText;
 
   BaseSearchController get searchController;
-
   dynamic get controller;
 
   Widget get itemList;
@@ -63,6 +62,8 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
   Widget get nothingFound;
 
   VoidCallback get getItemsFunction;
+
+  VoidCallback? get onLeadingPressed;
 
   Key get _searchIconKey => const Key('srch');
   Key get _clearIconKey => const Key('clr');
@@ -88,6 +89,7 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
             clearIconKey: _clearIconKey,
           )
         ],
+        onLeadingPressed: onLeadingPressed,
       ),
       body: Obx(
         () {
@@ -114,6 +116,8 @@ mixin SelectItemMixin on StatelessWidget {
 
   VoidCallback get getItemsFunction;
 
+  VoidCallback? get onLeadingPressed;
+
   @override
   Widget build(BuildContext context) {
     getItemsFunction();
@@ -124,6 +128,7 @@ mixin SelectItemMixin on StatelessWidget {
       appBar: StyledAppBar(
         titleText: appBarText,
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        onLeadingPressed: onLeadingPressed,
       ),
       body: Obx(
         () {

@@ -76,9 +76,11 @@ class ModalScreenViewSkeleton extends StatelessWidget {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 540, maxHeight: 620),
             child: Navigator(
-              key: modalNavigationData.id,
-              // initialRoute: widget.setupPageRoute,
-              onGenerateRoute: modalNavigationData.onGenerateRoute,
+              key: ModalNavigationData.key,
+              initialRoute: modalNavigationData.initialPage,
+              onGenerateInitialRoutes: ModalNavigationData.onGenerateInitialRoutes,
+              // (_, initialRouteName) => [ModalNavigationData.onGenerateRoute(RouteSettings(name: modalNavigationData.initialRoute, arguments: null))],
+              onGenerateRoute: ModalNavigationData.onGenerateRoute,
             ),
           ),
         ),
