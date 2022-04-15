@@ -117,7 +117,7 @@ class NavigationController extends GetxController {
   }) async {
     if (platformController.isMobile) {
       assert(widget != null, 'Widget must not be null for mobile layout');
-      await Get.to(
+      return await Get.to(
         () => widget!,
         preventDuplicates: preventDuplicates ?? false,
         fullscreenDialog: fullscreenDialog,
@@ -128,7 +128,7 @@ class NavigationController extends GetxController {
     } else if (modalNavigationData != null) {
       await toModalScreen(modalNavigationData: modalNavigationData);
     } else {
-      await Get.dialog(
+      return await Get.dialog(
         ModalScreenView(contentView: widget!),
         barrierDismissible: false,
         barrierColor: isRootModalScreenView ? null : Colors.transparent,
@@ -153,7 +153,7 @@ class NavigationController extends GetxController {
     ModalNavigationData? modalNavigationData,
   }) async {
     if (platformController.isMobile) {
-      await Get.to(
+      return await Get.to(
         () => widget,
         popGesture: popGesture,
         fullscreenDialog: fullscreenDialog,
@@ -165,7 +165,7 @@ class NavigationController extends GetxController {
       await toModalScreen(modalNavigationData: modalNavigationData);
     } else {
       treeLength++;
-      await Get.to(
+      return await Get.to(
         () => TabletLayout(contentView: widget),
         transition: Transition.noTransition,
         preventDuplicates: preventDuplicates ?? false,
