@@ -47,7 +47,6 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 
@@ -77,9 +76,6 @@ class TeamMembersSelectionView extends StatelessWidget {
           controller: controller,
           title: tr('addTeamMembers'),
         ),
-        actions: [
-          _DoneButton(controller: controller),
-        ],
         bottom: TeamMembersSearchBar(
           usersDataSource: usersDataSource,
           controller: controller,
@@ -146,38 +142,6 @@ class TeamMembersSelectionHeader extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _DoneButton extends StatelessWidget {
-  const _DoneButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Obx(
-          () {
-            if (controller.selectedTeamMembers.isNotEmpty as bool) {
-              return PlatformIconButton(
-                onPressed: () {
-                  controller.confirmTeamMembers();
-                },
-                icon: Icon(PlatformIcons(context).checkMark),
-                padding: EdgeInsets.zero,
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-        const SizedBox(width: 4),
-      ],
     );
   }
 }
