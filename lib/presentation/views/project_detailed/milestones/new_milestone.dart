@@ -327,7 +327,6 @@ class ProjectTile extends StatelessWidget {
                     onPressed: _onPressed,
                   )
                 : null,
-            suffixPadding: const EdgeInsets.only(right: 8),
             onTap: _onPressed);
       },
     );
@@ -402,7 +401,6 @@ class DueDateTile extends StatelessWidget {
                     ),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
-            suffixPadding: const EdgeInsets.only(right: 8),
             onTap: controller.onDueDateTilePressed);
       },
     );
