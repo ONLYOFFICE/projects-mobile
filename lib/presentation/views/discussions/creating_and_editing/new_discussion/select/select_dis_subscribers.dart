@@ -66,7 +66,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        controller.leaveSubscribersSelectionView();
+        controller.confirmSubscribersSelection();
         return false;
       },
       child: Scaffold(
@@ -87,14 +87,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
               ],
             ),
           ),
-          onLeadingPressed: controller.leaveSubscribersSelectionView,
-          actions: [
-            PlatformIconButton(
-              onPressed: controller.confirmSubscribersSelection,
-              icon: Icon(PlatformIcons(context).checkMark),
-            ),
-          ],
-          // bottom: CustomSearchBar(controller: controller),
+          onLeadingPressed: controller.confirmSubscribersSelection,
           bottom: Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
