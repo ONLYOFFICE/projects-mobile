@@ -188,9 +188,12 @@ class UsersDefault extends StatelessWidget {
                   const SizedBox(height: 20),
                   Container(
                     padding: const EdgeInsets.only(left: 16),
-                    child: Text(tr('me'),
-                        style: TextStyleHelper.body2(
-                            color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                    child: Text(
+                      tr('me'),
+                      style: TextStyleHelper.body2(
+                        color: Get.theme.colors().onSurface.withOpacity(0.6),
+                      ),
+                    ),
                   ),
                   PortalUserItem(
                     onTapFunction: onTapFunction,
@@ -204,8 +207,12 @@ class UsersDefault extends StatelessWidget {
           }),
           Container(
             padding: const EdgeInsets.only(left: 16),
-            child: Text(tr('users'),
-                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6))),
+            child: Text(
+              tr('users'),
+              style: TextStyleHelper.body2(
+                color: Get.theme.colors().onSurface.withOpacity(0.6),
+              ),
+            ),
           ),
           ListView.separated(
             physics: const NeverScrollableScrollPhysics(),

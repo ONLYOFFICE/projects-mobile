@@ -58,7 +58,7 @@ class TeamMembersSelectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.arguments['controller'];
-    final usersDataSource = Get.find<UsersDataSource>();
+    final usersDataSource = Get.find<UsersDataSource>()..loaded.value = false;
 
     usersDataSource.selectedProjectManager = controller.selectedProjectManager.value as PortalUser?;
     controller.selectionMode = UserSelectionMode.Multiple;
@@ -175,7 +175,7 @@ class TeamMembersSearchBar extends StatelessWidget {
               onSubmitted: usersDataSource.searchUsers,
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 8),
           PlatformIconButton(
             padding: EdgeInsets.zero,
             onPressed: () {

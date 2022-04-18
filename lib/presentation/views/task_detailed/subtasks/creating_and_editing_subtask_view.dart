@@ -131,8 +131,8 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                           width: 72,
                           child: Icon(
                             controller.status!.value == 1
-                                ? PlatformIcons(context).checkBoxBlankOutlineRounded
-                                : PlatformIcons(context).checkBoxCheckedOutlineRounded,
+                                ? PlatformIcons(context).unchecked
+                                : PlatformIcons(context).checked,
                             color: const Color(0xFF666666),
                           ),
                         ),
