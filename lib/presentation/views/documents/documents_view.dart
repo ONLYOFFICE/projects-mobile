@@ -32,7 +32,6 @@
 
 import 'dart:core';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -191,32 +190,6 @@ class DocumentsMoreButton extends StatelessWidget {
             ),
         ];
       },
-    );
-  }
-}
-
-class DocsBottom extends StatelessWidget {
-  DocsBottom({Key? key, required this.controller}) : super(key: key);
-  final BaseDocumentsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Obx(
-            () => Text(
-              tr('total', args: [controller.foldersCount.value.toString()]),
-              style: TextStyleHelper.body2(
-                color: Get.theme.colors().onSurface.withOpacity(0.6),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

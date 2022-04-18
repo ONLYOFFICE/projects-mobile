@@ -87,7 +87,6 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
               controller.documentsScreenName.value,
               style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
             )),
-        bottom: DocsBottom(controller: controller),
         actions: [
           SearchButton(controller: controller),
           DocumentsFilterButton(controller: controller),
