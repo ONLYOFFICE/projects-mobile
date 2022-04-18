@@ -272,16 +272,24 @@ class TaskItemController extends GetxController {
   }) async {
     if (newStatusId == status.value.id) return;
 
-    if (newStatusType == 2 && task.value.status != newStatusType && task.value.hasOpenSubtasks) {
-      await Get.dialog(StyledAlertDialog(
-        titleText: tr('closingTask'),
-        contentText: tr('closingTaskWithActiveSubtasks'),
-        acceptText: tr('closeTask').toUpperCase(),
-        onAcceptTap: () async {
+    if (newStatusType == 2) {
+      await reloadTask();
+
+      if (task.value.status != newStatusType) {
+        if (task.value.hasOpenSubtasks) {
+          await Get.dialog(StyledAlertDialog(
+            titleText: tr('closingTask'),
+            contentText: tr('closingTaskWithActiveSubtasks'),
+            acceptText: tr('closeTask').toUpperCase(),
+            onAcceptTap: () async {
+              await _changeTaskStatus(
+                  id: id, newStatusId: newStatusId, newStatusType: newStatusType);
+              Get.back();
+            },
+          ));
+        } else
           await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
-          Get.back();
-        },
-      ));
+      }
     } else
       await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
   }

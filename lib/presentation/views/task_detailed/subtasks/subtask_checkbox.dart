@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class SubtaskCheckBox extends StatelessWidget {
   const SubtaskCheckBox({
@@ -47,20 +48,29 @@ class SubtaskCheckBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: 72,
-      child: Checkbox(
-        shape: const CircleBorder(),
-        value: subtaskController.subtask.value!.status == 2,
-        activeColor: Get.theme.colors().primary,
-        fillColor:
-            !subtaskController.canEdit ? MaterialStateProperty.all(const Color(0xff9C9C9C)) : null,
-        onChanged: !subtaskController.canEdit
+      child: GestureDetector(
+        onTap: !subtaskController.canEdit
             ? null
-            : (value) {
+            : () {
                 subtaskController.updateSubtaskStatus(
                   taskId: subtaskController.subtask.value!.taskId!,
                   subtaskId: subtaskController.subtask.value!.id!,
                 );
               },
+        child: Obx(() {
+          if (subtaskController.subtask.value!.status == 2)
+            return Icon(
+              PlatformIcons(context).checked,
+              color: !subtaskController.canEdit
+                  ? Get.theme.colors().inactiveGrey
+                  : Get.theme.colors().primary,
+            );
+          else
+            return Icon(
+              PlatformIcons(context).unchecked,
+              color: Get.theme.colors().inactiveGrey,
+            );
+        }),
       ),
     );
   }

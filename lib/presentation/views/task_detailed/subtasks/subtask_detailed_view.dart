@@ -112,7 +112,7 @@ class SubtaskDetailedView extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 10),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -127,7 +127,7 @@ class SubtaskDetailedView extends StatelessWidget {
                         const SizedBox(width: 4),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 10),
                     const StyledDivider(leftPadding: 72)
                   ],
                 ),
@@ -155,7 +155,7 @@ class SubtaskDetailedView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (_subtask.responsible != null && _subtask.canEdit!)
+                    if (_subtask.responsible != null && controller.canEdit && _subtask.status != 2)
                       PlatformIconButton(
                         icon: Icon(PlatformIcons(context).clear,
                             color: Get.theme.colors().onSurface.withOpacity(0.6)),

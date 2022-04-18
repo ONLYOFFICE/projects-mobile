@@ -113,6 +113,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
     responsibles.clear();
     if (user.isSelected.value == true) {
       responsibles.add(user);
+      Get.back();
     } else {
       responsibles.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }

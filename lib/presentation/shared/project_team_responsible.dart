@@ -42,7 +42,6 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -73,16 +72,9 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
           onSubmitted: (value) => controller.teamController.searchUsers(value),
           onChanged: (value) => controller.teamController.searchUsers(value),
         ),
-        actions: [
-          Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: PlatformIconButton(
-                  icon: Icon(PlatformIcons(context).checkMark),
-                  onPressed: controller.confirmResponsiblesSelection as Function()))
-        ],
         leading: PlatformIconButton(
           icon: const BackButtonIcon(),
-          onPressed: controller.leaveResponsiblesSelectionView as Function(),
+          onPressed: controller.confirmResponsiblesSelection as Function(),
         ),
       ),
       body: Obx(
