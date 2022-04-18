@@ -36,7 +36,6 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class SelectDateView extends StatelessWidget {
   const SelectDateView({

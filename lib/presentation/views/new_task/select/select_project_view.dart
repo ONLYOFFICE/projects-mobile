@@ -51,7 +51,6 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class SelectProjectView extends StatelessWidget {
   const SelectProjectView({Key? key}) : super(key: key);
