@@ -318,14 +318,10 @@ class ProjectTile extends StatelessWidget {
             isSelected: _isSelected,
             caption: _isSelected ? tr('project') : null,
             suffix: _isSelected
-                ? PlatformIconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      PlatformIcons(context).rightChevron,
-                      size: 24,
-                      color: Get.theme.colors().onBackground.withOpacity(0.6),
-                    ),
-                    onPressed: _onPressed,
+                ? Icon(
+                    PlatformIcons(context).rightChevron,
+                    size: 24,
+                    color: Get.theme.colors().onBackground.withOpacity(0.6),
                   )
                 : null,
             onTap: _onPressed);
@@ -353,8 +349,11 @@ class ResponsibleTile extends StatelessWidget {
             : tr('addResponsible'),
         textColor: controller.needToSelectResponsible.value ? Get.theme.colors().colorError : null,
         suffix: _isSelected
-            ? Icon(PlatformIcons(context).rightChevron,
-                size: 24, color: Get.theme.colors().onBackground)
+            ? Icon(
+                PlatformIcons(context).rightChevron,
+                size: 24,
+                color: Get.theme.colors().onBackground.withOpacity(0.6),
+              )
             : null,
         icon: SvgIcons.person,
         iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
