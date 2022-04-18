@@ -138,7 +138,7 @@ class PortalUserItem extends StatelessWidget {
               if (userController.selectionMode.value == UserSelectionMode.Single &&
                   userController.isSelected.value == true)
                 return Icon(
-                  PlatformIcons(context).checkMark,
+                  PlatformIcons(context).checkMarkAlt,
                   color: Get.theme.colors().primary,
                 );
 

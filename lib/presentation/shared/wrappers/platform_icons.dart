@@ -101,6 +101,8 @@ class PlatformIcons {
   IconData get car => isMaterial(context) ? Icons.directions_car : CupertinoIcons.car;
 
   IconData get checkMark => isMaterial(context) ? Icons.check_rounded : CupertinoIcons.checkmark;
+  IconData get checkMarkAlt =>
+      isMaterial(context) ? Icons.check_rounded : CupertinoIcons.checkmark_alt;
 
   // checkboxes
   IconData get unchecked =>
