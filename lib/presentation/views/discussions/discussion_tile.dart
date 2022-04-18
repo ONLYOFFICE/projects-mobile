@@ -66,9 +66,9 @@ class DiscussionTile extends StatelessWidget {
             const SizedBox(width: 16),
             _Image(avatarUrl: controller.avatarUrl),
             const SizedBox(width: 16),
-            Expanded(child: _DiscussionInfo(discussion: discussion.value)),
+            Expanded(child: _DiscussionInfo(controller: controller)),
             const SizedBox(width: 8),
-            _CommentsCount(commentsCount: discussion.value.commentsCount),
+            _CommentsCount(commentsCount: discussion.value.commentsCount ?? 0),
             const SizedBox(width: 16),
           ],
         ),
@@ -103,10 +103,10 @@ class _Image extends StatelessWidget {
 }
 
 class _DiscussionInfo extends StatelessWidget {
-  final Discussion? discussion;
+  final DiscussionItemController controller;
   const _DiscussionInfo({
     Key? key,
-    required this.discussion,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -115,32 +115,40 @@ class _DiscussionInfo extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
-          discussion!.title!.trim(),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyleHelper.subtitle1(
-              color: discussion!.status == 1
-                  ? Get.theme.colors().onBackground.withOpacity(0.6)
-                  : null),
-        ),
-        RichText(
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          text: TextSpan(
-            style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
-            children: [
-              if (discussion!.status == 1)
-                TextSpan(
-                    text: '${tr('archived')} • ',
-                    style: TextStyleHelper.status(color: Get.theme.colors().onBackground)),
-              TextSpan(text: formatedDate(discussion!.created!)),
-              const TextSpan(text: ' • '),
-              TextSpan(
-                text: NameFormatter.formateName(discussion!.createdBy!),
-              )
-            ],
+        Obx(
+          () => Text(
+            controller.discussion.value.title!.trim(),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyleHelper.subtitle1(
+                color: controller.discussion.value.status == 1
+                    ? Get.theme.colors().onBackground.withOpacity(0.6)
+                    : null),
           ),
+        ),
+        Obx(
+          () {
+            final discussion = controller.discussion.value;
+            return RichText(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              text: TextSpan(
+                style:
+                    TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                children: [
+                  if (discussion.status == 1)
+                    TextSpan(
+                        text: '${tr('archived')} • ',
+                        style: TextStyleHelper.status(color: Get.theme.colors().onBackground)),
+                  TextSpan(text: formatedDate(discussion.created!)),
+                  const TextSpan(text: ' • '),
+                  TextSpan(
+                    text: NameFormatter.formateName(discussion.createdBy!),
+                  )
+                ],
+              ),
+            );
+          },
         ),
       ],
     );
@@ -148,7 +156,7 @@ class _DiscussionInfo extends StatelessWidget {
 }
 
 class _CommentsCount extends StatelessWidget {
-  final int? commentsCount;
+  final int commentsCount;
   const _CommentsCount({
     Key? key,
     required this.commentsCount,

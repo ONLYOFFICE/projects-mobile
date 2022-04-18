@@ -108,8 +108,9 @@ class DiscussionsContent extends StatelessWidget {
                     discussionItemController = Get.put<DiscussionItemController>(
                         DiscussionItemController(),
                         tag: discussion.id.toString());
-                    discussionItemController.setup(discussion);
                   }
+
+                  discussionItemController.setup(discussion);
 
                   return DiscussionTile(
                     controller: discussionItemController,
