@@ -37,6 +37,7 @@ import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -77,13 +78,12 @@ class TeamMembersSelectionView extends StatelessWidget {
           controller: controller,
           title: tr('addTeamMembers'),
         ),
-        actions: [
-          _DoneButton(controller: controller),
-        ],
         bottom: TeamMembersSearchBar(
           usersDataSource: usersDataSource,
           controller: controller,
         ),
+        onLeadingPressed:
+            controller is ProjectDetailsController ? controller.confirmTeamMembers : null,
       ),
       body: Obx(
         () {
@@ -146,38 +146,6 @@ class TeamMembersSelectionHeader extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class _DoneButton extends StatelessWidget {
-  const _DoneButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Obx(
-          () {
-            if (controller.selectedTeamMembers.isNotEmpty as bool) {
-              return PlatformIconButton(
-                onPressed: () {
-                  controller.confirmTeamMembers();
-                },
-                icon: Icon(PlatformIcons(context).checkMark),
-                padding: EdgeInsets.zero,
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-        const SizedBox(width: 4),
-      ],
     );
   }
 }

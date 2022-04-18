@@ -203,16 +203,13 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   @override
   Future<void> confirmTeamMembers() async {
-    Get.find<UsersDataSource>().loaded.value = false;
     final users = <String>[];
-
     for (final user in selectedTeamMembers) {
       users.add(user.id!);
     }
 
     await _projectService.addToProjectTeam(_projectDetailed.id!, users);
-    await refreshData();
-    Get.find<UsersDataSource>().loaded.value = true;
+    unawaited(projectTeamDataSource!.getTeam());
 
     Get.back();
   }
