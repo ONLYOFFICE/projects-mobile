@@ -125,6 +125,7 @@ class AnalyticsScreen extends StatelessWidget {
                           ),
                           tiles: [
                             SettingsTile.switchTile(
+                                activeSwitchColor: Get.theme.colors().primary,
                                 initialValue: controller.shareAnalytics.value,
                                 onToggle: controller.changeAnalyticsSharingEnability,
                                 title: Text(tr('shareAnalytics'))),
