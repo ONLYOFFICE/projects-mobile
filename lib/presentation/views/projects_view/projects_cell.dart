@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -78,7 +79,9 @@ class ProjectCell extends StatelessWidget {
         tag: projectDetails.id.toString(),
       );
     }
-    projectController.fillProjectInfo(projectDetails);
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      projectController.fillProjectInfo(projectDetails);
+    });
 
     return InkWell(
       onTap: () {
