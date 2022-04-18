@@ -125,6 +125,8 @@ class _DiscussionInfo extends StatelessWidget {
                   : null),
         ),
         RichText(
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
           text: TextSpan(
             style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
             children: [
