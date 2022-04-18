@@ -56,22 +56,4 @@ abstract class BaseDocumentsController extends BaseController {
 
   final filesCount = 0.obs;
   final foldersCount = 0.obs;
-
-  int countFiles() {
-    var counter = 0;
-    for (final item in itemList) {
-      if (item is PortalFile) counter++;
-    }
-    filesCount.value = counter;
-    return counter;
-  }
-
-  int countFolders() {
-    var counter = 0;
-    for (final item in itemList) {
-      if (item is Folder) counter++;
-    }
-    foldersCount.value = counter;
-    return counter;
-  }
 }

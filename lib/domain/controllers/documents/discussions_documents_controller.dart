@@ -138,7 +138,7 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
     paginationController.data.clear();
     paginationController.data.addAll(files);
 
-    countFiles();
+    filesCount.value = _discussion.value?.files?.length ?? 0;
   }
 
   Future<void> refreshContent({bool showLoading = true}) async {

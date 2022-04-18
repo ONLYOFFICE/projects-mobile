@@ -170,11 +170,10 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     paginationController.total.value = result.total!;
 
     if (_currentFolder != null && result.current != null) _screenName = result.current!.title;
+    if (result.current != null) foldersCount.value = result.current!.foldersCount!;
 
     paginationController.data.addAll(result.folders!);
     paginationController.data.addAll(result.files!);
-
-    countFolders();
 
     documentsScreenName.value = _screenName ?? tr('chooseSection');
     screenName = _screenName ?? tr('chooseSection');
