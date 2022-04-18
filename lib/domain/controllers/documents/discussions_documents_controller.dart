@@ -92,9 +92,6 @@ class DiscussionsDocumentsController extends BaseDocumentsController {
 
   bool get canDelete => !_userController.user.value!.isVisitor!;
 
-  @override
-  int countFiles() => filesCount.value = _discussion.value?.files?.length ?? 0;
-
   late StreamSubscription _refreshDocumentsSubscription;
 
   DiscussionsDocumentsController() {

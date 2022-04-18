@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/utils/name_formatter.dart';

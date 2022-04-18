@@ -48,7 +48,6 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 
