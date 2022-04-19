@@ -32,11 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 
 class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({
@@ -52,31 +48,15 @@ class CustomSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: PlatformTextField(
-              style: TextStyle(color: Get.theme.colors().onBackground),
-              autofocus: true,
-              textInputAction: TextInputAction.search,
-              controller: controller.searchInputController as TextEditingController?,
-              hintText: tr('enterQuery'),
-              material: (_, __) => MaterialTextFieldData(
-                decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
-              ),
-              onSubmitted: searchFunction ?? controller.newSearch as Function(String)?,
-              onChanged: searchFunction ?? controller.newSearch as Function(String)?,
-            ),
-          ),
-          PlatformIconButton(
-            padding: EdgeInsets.zero,
-            onPressed: clearFunction ?? controller.clearSearch as Function()?,
-            icon: Icon(PlatformIcons(context).clear),
-          )
-        ],
-      ),
+    return SearchField(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      autofocus: true,
+      textInputAction: TextInputAction.search,
+      controller: controller.searchInputController as TextEditingController?,
+      hintText: tr('enterQuery'),
+      onSubmitted: searchFunction ?? controller.newSearch as Function(String)?,
+      onChanged: searchFunction ?? controller.newSearch as Function(String)?,
+      onClearPressed: clearFunction ?? controller.clearSearch as Function()?,
     );
   }
 }

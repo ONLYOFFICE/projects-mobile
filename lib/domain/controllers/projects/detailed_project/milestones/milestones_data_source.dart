@@ -40,10 +40,12 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/milestones_search_screen.dart';
 
 class MilestonesDataSource extends BaseController {
   final MilestoneService _api = locator<MilestoneService>();
@@ -177,4 +179,12 @@ class MilestonesDataSource extends BaseController {
 
     locator<EventHub>().fire('needToRefreshProjects', {'projectDetails': response});
   }
+
+  @override
+  void showSearch() =>
+      Get.find<NavigationController>().to(const MileStonesSearchScreen(), arguments: {
+        'projectId': projectDetailed.id,
+        'tasksFilterController': filterController,
+        'tasksSortController': sortController
+      });
 }
