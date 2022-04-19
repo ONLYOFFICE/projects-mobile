@@ -62,7 +62,7 @@ platform :ios do
   desc "Build the application"
   lane :make_app do
     Dir.chdir "../.." do
-      sh("flutter", "build", "ios", "--release", "--no-codesign", "--build-name=#{version_name}", "--build-number=#{increase_version_code}")
+      sh("flutter", "build", "ios", "--release", "--no-codesign", "--bundle-sksl-path=ios/shaders/ios-shaders.sksl.json", "--build-name=#{version_name}", "--build-number=#{increase_version_code}")
     end
   end
 
