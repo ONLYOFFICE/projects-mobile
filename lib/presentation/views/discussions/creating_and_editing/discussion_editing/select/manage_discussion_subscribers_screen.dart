@@ -79,17 +79,16 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
           ),
           onLeadingPressed: controller.leaveSubscribersSelectionView,
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: PlatformIconButton(
-                onPressed: onConfirm ?? controller.confirmSubscribersSelection,
-                icon: Icon(PlatformIcons(context).checkMark),
-              ),
+            PlatformIconButton(
+              padding: EdgeInsets.zero,
+              onPressed: onConfirm ?? controller.confirmSubscribersSelection,
+              icon: Icon(PlatformIcons(context).checkMark),
             )
           ],
-          // bottom: CustomSearchBar(controller: controller),
-          bottom: _DiscussionSubscribersSearchBar(
-              usersDataSource: usersDataSource, controller: controller),
+          bottom: DiscussionSubscribersSearchBar(
+            usersDataSource: usersDataSource,
+            controller: controller,
+          ),
         ),
         body: Obx(
           () {
@@ -135,8 +134,8 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
   }
 }
 
-class _DiscussionSubscribersSearchBar extends StatelessWidget {
-  const _DiscussionSubscribersSearchBar({
+class DiscussionSubscribersSearchBar extends StatelessWidget {
+  const DiscussionSubscribersSearchBar({
     Key? key,
     required this.usersDataSource,
     required this.controller,
@@ -147,9 +146,8 @@ class _DiscussionSubscribersSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 32,
-      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 4),
+    return Padding(
+      padding: const EdgeInsets.only(left: 16, right: 0, bottom: 8, top: 8),
       child: Row(
         children: [
           Obx(
@@ -166,7 +164,6 @@ class _DiscussionSubscribersSearchBar extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(width: 16),
           PlatformIconButton(
             padding: EdgeInsets.zero,
             onPressed: () => Get.find<NavigationController>().toScreen(
@@ -198,7 +195,7 @@ class _DiscussionSubscribersSelectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             title,

@@ -138,7 +138,9 @@ class GroupsOverview extends StatelessWidget {
         },
         itemBuilder: (BuildContext c, int i) {
           return PortalGroupItem(
-              groupController: groupsDataSource.groupsList[i], onTapFunction: onTapFunction);
+            groupController: groupsDataSource.groupsList[i],
+            onTapFunction: onTapFunction,
+          );
         },
       ),
     );

@@ -70,9 +70,15 @@ class PortalUserItemController extends GetxController {
   String? get displayName => portalUser.displayName;
   String? get id => portalUser.id;
 
-  PortalUserItemController({required this.portalUser, bool isSelected = false}) {
-    setupUser();
+  PortalUserItemController({
+    required this.portalUser,
+    bool isSelected = false,
+    UserSelectionMode selectionMode = UserSelectionMode.None,
+  }) {
     this.isSelected.value = isSelected;
+    this.selectionMode.value = selectionMode;
+
+    setupUser();
   }
 
   Future<void> loadAvatar() async {

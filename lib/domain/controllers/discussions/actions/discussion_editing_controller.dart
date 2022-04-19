@@ -225,7 +225,9 @@ class DiscussionEditingController extends DiscussionActionsController {
 
   @override
   void selectGroupMembers(PortalGroupItemController group) {
-    if (group.isSelected.value == true) {
+    if (selectedGroups.any((element) => element.displayName == group.displayName)) return;
+
+    if (group.isSelected.value) {
       selectedGroups.add(group);
     } else {
       selectedGroups.removeWhere((element) => group.portalGroup!.id == element.portalGroup!.id);
@@ -241,8 +243,9 @@ class DiscussionEditingController extends DiscussionActionsController {
       if (groupMembers != null) {
         if (groupMembers.response!.isNotEmpty) {
           for (final element in groupMembers.response!) {
-            final user = PortalUserItemController(portalUser: element);
-            user.isSelected.value = true;
+            final user = PortalUserItemController(
+                portalUser: element, isSelected: true, selectionMode: UserSelectionMode.Multiple);
+
             subscribers.add(user);
           }
         }
