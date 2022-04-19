@@ -79,7 +79,7 @@ class StatusTile extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Icon(
-                PlatformIcons(context).checkMark,
+                PlatformIcons(context).checkMarkAlt,
                 color: Get.theme.colors().primary,
               ),
             )
@@ -105,7 +105,7 @@ class StatusTileTablet extends StatelessWidget {
       children: [
         if (selected)
           Icon(
-            PlatformIcons(context).checkMark,
+            PlatformIcons(context).checkMarkAlt,
             color: Get.theme.colors().primary,
             size: 16,
           )
