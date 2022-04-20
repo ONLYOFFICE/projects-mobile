@@ -33,8 +33,11 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:projects/data/enums/file_type.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -61,6 +64,8 @@ class FileCellController extends GetxController {
           icon: SvgIcons.documents,
           color: Get.theme.colors().onSurface.withOpacity(0.6))
       .obs;
+
+  String? downloadTaskId;
 
   FileCellController({required this.file}) {
     setupFileIcon();
@@ -184,8 +189,18 @@ class FileCellController extends GetxController {
     return result != null;
   }
 
+  /* void downloadCallback(String id, DownloadTaskStatus status, int progress) async {
+    if (downloadTaskId != null && id == downloadTaskId && status == DownloadTaskStatus.complete)
+      await FlutterDownloader.open(taskId: downloadTaskId!);
+  } */
+
   Future<void> downloadFile() async {
-    await locator<DocumentsDownloadService>().downloadDocument(file.viewUrl!);
+    final downloadService = locator<DocumentsDownloadService>();
+
+    downloadTaskId = await downloadService.downloadDocument(file.viewUrl!);
+    if (downloadTaskId == null) return;
+
+    //downloadService.registerCallback(taskId: downloadTaskId!, callback: downloadCallback);
   }
 
   Future openFile({int? parentId}) async {
@@ -222,12 +237,7 @@ class FileCellController extends GetxController {
         AnalyticsService.Params.Key.portal: portalInfoController.portalName,
         AnalyticsService.Params.Key.extension: extension(file.title!)
       });
-    } else {
-      await LaunchReview.launch(
-        androidAppId: Const.Identificators.documentsAndroidAppBundle,
-        iOSAppId: Const.Identificators.documentsAppStore,
-        writeReview: false,
-      );
-    }
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 }

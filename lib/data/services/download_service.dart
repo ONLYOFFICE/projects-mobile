@@ -31,7 +31,7 @@
  */
 
 import 'dart:async';
-import 'dart:io' show Platform;
+import 'dart:io' show Directory, Platform;
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -39,6 +39,7 @@ import 'dart:ui';
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:http_client_helper/http_client_helper.dart';
@@ -79,16 +80,27 @@ class DownloadService {
 
 class DocumentsDownloadService {
   DocumentsDownloadService() {
-    IsolateNameServer.registerPortWithName(_port.sendPort, _portName);
+    if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName)) {
+      IsolateNameServer.removePortNameMapping(_portName);
+      if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName))
+        debugPrint('error register port');
+    }
+
     _port.listen((dynamic data) {
       final id = data[0] as String;
       final status = data[1] as DownloadTaskStatus;
-      //final progress = data[2] as int;
+      final progress = data[2] as int;
+
+      debugPrint('Downloading: task ($id), status: ($status), progress: ($progress)');
+
+      _callbacksList.forEach((key, value) {
+        if (key == id) value.call(id, status, progress);
+      });
 
       if (id == taskId) {
-        if (status == DownloadTaskStatus.complete)
+        if (status == DownloadTaskStatus.complete) {
           MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
-        else if (status == DownloadTaskStatus.failed)
+        } else if (status == DownloadTaskStatus.failed)
           MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       }
     });
@@ -100,16 +112,34 @@ class DocumentsDownloadService {
   static const _portName = 'downloader_send_port';
   String? taskId;
 
-  Future<void> downloadDocument(String url) async {
+  final _callbacksList = <String, Function(String id, DownloadTaskStatus status, int progress)>{};
+
+  bool registerCallback({
+    required String taskId,
+    required Function(String id, DownloadTaskStatus status, int progress) callback,
+  }) {
+    _callbacksList[taskId] = callback;
+
+    return true;
+  }
+
+  bool deleteCallback(String taskId) {
+    _callbacksList.remove(taskId);
+
+    return true;
+  }
+
+  Future<String?> downloadDocument(String url) async {
     final path = await getPath();
+
     if (path == null || path.isEmpty) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-      return;
+      return null;
     }
 
     if (!(await _checkPermission())) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('noPermission'));
-      return;
+      return null;
     }
 
     final finalUrl = await getRedirectedUrl(url);
@@ -123,15 +153,14 @@ class DocumentsDownloadService {
       headers: headers,
       savedDir: path,
       saveInPublicStorage: true,
-      openFileFromNotification: false,
     );
 
     if (taskId == null || taskId!.isEmpty) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-      return;
+      return null;
     }
 
-    await FlutterDownloader.loadTasks();
+    return taskId;
   }
 
   Future<String> getRedirectedUrl(String initialUrl) async {
@@ -161,7 +190,7 @@ class DocumentsDownloadService {
 
   Future<String?> getPath() async {
     String? path;
-    if (Platform.isAndroid) {
+    if (GetPlatform.isAndroid) {
       try {
         path = await AndroidPathProvider.downloadsPath;
       } catch (e) {
@@ -170,6 +199,14 @@ class DocumentsDownloadService {
     } else {
       path = (await getApplicationDocumentsDirectory()).absolute.path;
     }
+
+    final savedDir = Directory(path!);
+    // ignore: avoid_slow_async_io
+    final hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      await savedDir.create();
+    }
+
     return path;
   }
 

@@ -60,7 +60,7 @@ void main() async {
     statusBarIconBrightness: Brightness.light,
   ));
 
-  await FlutterDownloader.initialize(debug: true);
+  await FlutterDownloader.initialize(debug: false);
 
   await EasyLocalization.ensureInitialized();
 
