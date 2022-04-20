@@ -76,47 +76,48 @@ class ProjectSearchController extends BaseSearchController {
   @override
   Future<void> onInit() async {
     paginationController.startIndex = 0;
-    _paginationController.loadDelegate = () => _performSearch(needToClear: false);
-    _paginationController.refreshDelegate = () => newSearch(_query);
+    _paginationController.loadDelegate = () async => await _performSearch(needToClear: false);
+    _paginationController.refreshDelegate = () async => await refreshData();
 
     if (onlyMyProjects) {
       _selfId = (await Get.find<UserController>().getUserId())!;
-      _query = '&participant=$_selfId';
+      _searchQuery = '&participant=$_selfId';
     }
 
     _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       if (data['all'] == true) {
-        _performSearch();
+        newSearch(_searchQuery);
         return;
       }
     });
 
-    unawaited(_performSearch());
-
     super.onInit();
+  }
+
+  @override
+  Future<void> refreshData() async {
+    await _performSearch(needToClear: true);
   }
 
   void newSearch(String query, {bool needToClear = true}) {
     _searchDebounce?.cancel();
     _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
       _query = query.toLowerCase();
-      if (_searchQuery != query) {
-        _searchQuery = query;
-        if (needToClear) paginationController.startIndex = 0;
-        if (onlyMyProjects) _searchQuery += '&participant=$_selfId';
-        if (query.isEmpty) {
-          clearSearch();
-        } else {
-          await _performSearch(needToClear: needToClear);
-        }
 
-        loaded.value = true;
+      if (_searchQuery != _query) {
+        _searchQuery = _query;
+
+        if (onlyMyProjects) _searchQuery += '&participant=$_selfId';
+
+        await _performSearch(needToClear: needToClear);
       }
     });
   }
 
   Future<void> _performSearch({bool needToClear = true}) async {
     if (needToClear) loaded.value = false;
+
+    if (needToClear) paginationController.startIndex = 0;
 
     final result = await _api.getProjectsByParams(
       startIndex: paginationController.startIndex,
@@ -126,7 +127,7 @@ class ProjectSearchController extends BaseSearchController {
       participantFilter: _filterController?.teamMemberFilter,
       otherFilter: _filterController?.otherFilter,
       statusFilter: _filterController?.statusFilter,
-      query: _query.toLowerCase(),
+      query: _searchQuery.toLowerCase(),
     );
 
     if (result != null) {
@@ -141,10 +142,10 @@ class ProjectSearchController extends BaseSearchController {
 
   @override
   void clearSearch() {
-    _query = onlyMyProjects ? '&participant=$_selfId' : '';
+    _searchQuery = onlyMyProjects ? '&participant=$_selfId' : '';
     textController.clear();
-
-    unawaited(_performSearch());
+    paginationController.clear();
+    loaded.value = false;
   }
 
   @override

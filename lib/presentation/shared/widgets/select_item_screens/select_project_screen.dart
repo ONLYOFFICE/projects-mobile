@@ -63,6 +63,8 @@ class SelectProjectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    searchController.refreshData();
+
     return Scaffold(
       backgroundColor: _platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
@@ -89,25 +91,23 @@ class SelectProjectScreen extends StatelessWidget {
 
                 if (searchController.nothingFound) return const NothingFound();
 
-                if (!searchController.nothingFound)
-                  return ListView.separated(
-                    controller: scrollController,
-                    itemCount: searchController.itemList.length,
-                    padding: const EdgeInsets.only(bottom: 16),
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const StyledDivider(
-                        leftPadding: 16,
-                        rightPadding: 16,
-                      );
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      return _ProjectTile(
-                        project: searchController.itemList[index],
-                        onPressed: () => onSelect(searchController.itemList[index]),
-                      );
-                    },
-                  );
-                return const SizedBox();
+                return ListView.separated(
+                  controller: scrollController,
+                  itemCount: searchController.itemList.length,
+                  padding: const EdgeInsets.only(bottom: 16),
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const StyledDivider(
+                      leftPadding: 16,
+                      rightPadding: 16,
+                    );
+                  },
+                  itemBuilder: (BuildContext context, int index) {
+                    return _ProjectTile(
+                      project: searchController.itemList[index],
+                      onPressed: () => onSelect(searchController.itemList[index]),
+                    );
+                  },
+                );
               }());
         },
       ),

@@ -76,4 +76,11 @@ class PaginationController<T> extends GetxController {
     total.value = 0;
     startIndex = 0;
   }
+
+  void clear() {
+    startIndex = 0;
+    total.value = 0;
+
+    data.clear();
+  }
 }
