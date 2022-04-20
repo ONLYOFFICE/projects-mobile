@@ -60,7 +60,7 @@ class GroupSearchController extends BaseSearchController {
   }
 
   @override
-  Future search({bool needToClear = true, String? query}) async {
+  Future search(String? query, {bool needToClear = true}) async {
     paginationController.startIndex = 0;
     loaded.value = false;
     _query = query;

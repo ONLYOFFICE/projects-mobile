@@ -61,7 +61,7 @@ class UserSearchController extends BaseSearchController {
   String? _query;
 
   @override
-  Future search({bool needToClear = true, String? query}) async {
+  Future search(String? query, {bool needToClear = true}) async {
     paginationController.startIndex = 0;
     loaded.value = false;
     _query = query;
@@ -81,7 +81,7 @@ class UserSearchController extends BaseSearchController {
   @override
   Future<void> refreshData() async {
     loaded.value = false;
-    await search(needToClear: true, query: _query);
+    await search(_query, needToClear: true);
     loaded.value = true;
   }
 }

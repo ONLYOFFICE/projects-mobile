@@ -90,7 +90,7 @@ class SelectProjectView extends StatelessWidget {
         bottomHeight: 44,
         bottom: SearchField(
           hintText: tr('searchProjects'),
-          controller: searchController.searchInputController,
+          controller: searchController.textController,
           showClearIcon: true,
           onChanged: searchController.newSearch,
           onSubmitted: searchController.newSearch,
@@ -100,28 +100,25 @@ class SelectProjectView extends StatelessWidget {
       body: Obx(() {
         final scrollController = ScrollController();
 
-        if (searchController.switchToSearchView.value == true &&
-            searchController.searchResult.isNotEmpty) {
+        if (!searchController.nothingFound) {
           return StyledSmartRefresher(
             scrollController: scrollController,
             enablePullDown: false,
-            enablePullUp: searchController.pullUpEnabled,
-            controller: searchController.refreshController,
-            onLoading: searchController.onLoading,
+            enablePullUp: searchController.paginationController.pullUpEnabled,
+            controller: searchController.paginationController.refreshController,
+            onLoading: searchController.paginationController.onLoading,
             child: ListView.separated(
               controller: scrollController,
-              itemCount: searchController.searchResult.length,
+              itemCount: searchController.itemList.length,
               separatorBuilder: (BuildContext context, int index) {
                 return const StyledDivider(leftPadding: 16, rightPadding: 16);
               },
               itemBuilder: (c, i) =>
-                  _ProjectCell(item: searchController.searchResult[i], controller: controller),
+                  _ProjectCell(item: searchController.itemList[i], controller: controller),
             ),
           );
         }
-        if (searchController.switchToSearchView.value == true &&
-            searchController.searchResult.isEmpty &&
-            searchController.loaded.value == true) {
+        if (searchController.nothingFound) {
           return const NothingFound();
         }
         if (projectsController.loaded.value == true &&

@@ -30,14 +30,15 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_search_controller.dart';
-import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
@@ -51,7 +52,17 @@ class TasksSearchScreen extends StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
+      appBar: StyledAppBar(
+        title: SearchField(
+          controller: controller.searchInputController,
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+          autofocus: true,
+          hintText: tr('enterQuery'),
+          onSubmitted: controller.newSearch,
+          onChanged: controller.newSearch,
+          onClearPressed: controller.clearSearch,
+        ),
+      ),
       body: Obx(
         () {
           if (!controller.loaded.value) return const ListLoadingSkeleton();

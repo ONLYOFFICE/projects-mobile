@@ -32,8 +32,6 @@
 
 import 'dart:async';
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/services/milestone_service.dart';
@@ -48,10 +46,6 @@ class MilestoneSearchController extends BaseSearchController {
 
   final _paginationController = PaginationController<Milestone>();
 
-  final searchNothingFound = false.obs;
-
-  String screenName = tr('tasksSearch');
-
   @override
   PaginationController get paginationController => _paginationController;
   RxList<Milestone> get itemList => _paginationController.data;
@@ -60,11 +54,9 @@ class MilestoneSearchController extends BaseSearchController {
   String _searchQuery = '';
   Timer? _searchDebounce;
 
-  final searchInputController = TextEditingController();
-
-  final int? _projectId = Get.arguments['projectId'] as int?;
-  final _filterController = Get.arguments['tasksFilterController'] as MilestonesFilterController?;
-  final _sortController = Get.arguments['tasksSortController'] as MilestonesSortController?;
+  final int? _projectId = Get.arguments?['projectId'] as int?;
+  final _filterController = Get.arguments?['tasksFilterController'] as MilestonesFilterController?;
+  final _sortController = Get.arguments?['tasksSortController'] as MilestonesSortController?;
 
   @override
   void onInit() {
@@ -76,7 +68,7 @@ class MilestoneSearchController extends BaseSearchController {
     super.onInit();
   }
 
-  void newSearch(String query, {bool needToClear = true}) async {
+  void newSearch(String query, {bool needToClear = true}) {
     _searchDebounce?.cancel();
     _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
       _query = query.toLowerCase();
@@ -99,8 +91,6 @@ class MilestoneSearchController extends BaseSearchController {
   }
 
   Future<void> _performSearch({bool needToClear = true}) async {
-    searchNothingFound.value = false;
-
     final result = await _service.milestonesByFilterPaginated(
       startIndex: paginationController.startIndex,
       sortBy: _sortController?.currentSortfilter,
@@ -116,8 +106,6 @@ class MilestoneSearchController extends BaseSearchController {
     if (result != null) {
       paginationController.total.value = result.total;
 
-      if (result.response!.isEmpty) searchNothingFound.value = true;
-
       if (needToClear) paginationController.data.clear();
 
       paginationController.data.addAll(result.response ?? <Milestone>[]);
@@ -126,14 +114,10 @@ class MilestoneSearchController extends BaseSearchController {
 
   @override
   void clearSearch() {
-    searchNothingFound.value = false;
-    searchInputController.clear();
+    textController.clear();
     paginationController.data.clear();
   }
 
   @override
-  Future search({bool needToClear = true, String? query}) {
-    // TODO: implement search
-    throw UnimplementedError();
-  }
+  Future<void> search(String? query, {bool needToClear = true}) async => newSearch(query ?? '');
 }

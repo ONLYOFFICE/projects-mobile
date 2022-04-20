@@ -53,23 +53,23 @@ class SearchField extends StatefulWidget {
   final Function()? onClearPressed;
   final TextInputAction? textInputAction;
 
-  const SearchField(
-      {Key? key,
-      this.autofocus = false,
-      this.color,
-      this.controller,
-      this.height = 32,
-      this.hintText,
-      this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
-      this.onChanged,
-      this.onClearPressed,
-      this.onSubmitted,
-      this.onSuffixTap,
-      this.showClearIcon = false,
-      this.suffixIcon,
-      this.width,
-      this.textInputAction = TextInputAction.search})
-      : super(key: key);
+  const SearchField({
+    Key? key,
+    this.autofocus = false,
+    this.color,
+    this.controller,
+    this.height = 32,
+    this.hintText,
+    this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+    this.onChanged,
+    this.onClearPressed,
+    this.onSubmitted,
+    this.onSuffixTap,
+    this.showClearIcon = false,
+    this.suffixIcon,
+    this.width,
+    this.textInputAction = TextInputAction.search,
+  }) : super(key: key);
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -95,6 +95,9 @@ class _SearchFieldState extends State<SearchField> {
             autofocus: widget.autofocus,
             prefixInsets: const EdgeInsetsDirectional.fromSTEB(6, 1, 0, 4),
             padding: const EdgeInsetsDirectional.fromSTEB(3.8, 6, 5, 8),
+            suffixMode:
+                widget.showClearIcon ? OverlayVisibilityMode.always : OverlayVisibilityMode.editing,
+            onSuffixTap: widget.onClearPressed ?? widget.onSuffixTap,
           );
         },
         material: (_, __) {

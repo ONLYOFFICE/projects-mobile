@@ -41,11 +41,11 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/search_button.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
@@ -126,7 +126,15 @@ class DocumentsMoveSearchView extends StatelessWidget {
 
     return Scaffold(
       appBar: StyledAppBar(
-        title: CustomSearchBar(controller: controller),
+        title: SearchField(
+          controller: controller.searchInputController,
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+          autofocus: true,
+          hintText: tr('enterQuery'),
+          onSubmitted: controller.newSearch,
+          onChanged: controller.newSearch,
+          onClearPressed: controller.clearSearch,
+        ),
       ),
       body: MoveOrCopyFolderContent(controller: controller),
     );

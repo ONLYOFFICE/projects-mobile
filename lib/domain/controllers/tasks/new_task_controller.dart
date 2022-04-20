@@ -153,8 +153,8 @@ class NewTaskController extends TaskActionsController {
   }
 
   @override
-  void confirmDescription(String newText) {
-    descriptionText.value = newText;
+  void confirmDescription(String typedText) {
+    descriptionText.value = typedText;
     Get.back();
   }
 

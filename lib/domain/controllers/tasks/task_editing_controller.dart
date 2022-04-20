@@ -158,9 +158,9 @@ class TaskEditingController extends TaskActionsController {
   }
 
   @override
-  void confirmDescription(String newText) {
-    descriptionController.value.text = newText;
-    descriptionText.value = newText;
+  void confirmDescription(String typedText) {
+    descriptionController.value.text = typedText;
+    descriptionText.value = typedText;
     Get.back();
   }
 

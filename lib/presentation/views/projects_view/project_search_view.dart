@@ -30,13 +30,14 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
-import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
@@ -53,23 +54,33 @@ class ProjectSearchView extends StatelessWidget {
     controller.clearSearch();
 
     return Scaffold(
-      appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
+      appBar: StyledAppBar(
+        title: SearchField(
+          controller: controller.textController,
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+          autofocus: true,
+          hintText: tr('enterQuery'),
+          onSubmitted: controller.newSearch,
+          onChanged: controller.newSearch,
+          onClearPressed: controller.clearSearch,
+        ),
+      ),
       body: Obx(() {
         if (!controller.loaded.value) return const ListLoadingSkeleton();
-        if (controller.nothingFound.value)
+        if (controller.nothingFound)
           return const NothingFound();
         else
           return StyledSmartRefresher(
             enablePullDown: false,
-            enablePullUp: controller.pullUpEnabled,
-            controller: controller.refreshController,
-            onLoading: controller.onLoading,
+            enablePullUp: controller.paginationController.pullUpEnabled,
+            controller: controller.paginationController.refreshController,
+            onLoading: controller.paginationController.onLoading,
             child: ListView.separated(
               separatorBuilder: (_, i) => !platformController.isMobile
                   ? const StyledDivider(leftPadding: 72)
                   : const SizedBox(),
-              itemBuilder: (c, i) => ProjectCell(projectDetails: controller.searchResult[i]),
-              itemCount: controller.searchResult.length,
+              itemBuilder: (c, i) => ProjectCell(projectDetails: controller.itemList[i]),
+              itemCount: controller.itemList.length,
             ),
           );
       }),

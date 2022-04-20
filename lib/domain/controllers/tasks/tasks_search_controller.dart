@@ -92,7 +92,7 @@ class TasksSearchController extends BaseController {
     super.onInit();
   }
 
-  void newSearch(String query, {bool needToClear = true}) async {
+  void newSearch(String query, {bool needToClear = true}) {
     _searchDebounce?.cancel();
     _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
       _query = query.toLowerCase();
