@@ -62,7 +62,6 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectResponsible'),
         bottom: SearchField(
-          showClearIcon: true,
           controller: searchTextEditingController,
           hintText: tr('usersSearch'),
           onClearPressed: () {

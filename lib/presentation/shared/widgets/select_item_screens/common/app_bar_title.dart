@@ -57,10 +57,10 @@ class AppBarTitleWithSearch extends StatelessWidget {
           () => searchController.switchToSearchView.value
               ? Expanded(
                   child: SearchField(
-                    showClearIcon: true,
                     controller: searchController.textController,
                     margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
                     autofocus: true,
+                    alwaysShowSuffixIcon: true,
                     hintText: tr('enterQuery'),
                     onSubmitted: searchController.search,
                     onChanged: searchController.search,

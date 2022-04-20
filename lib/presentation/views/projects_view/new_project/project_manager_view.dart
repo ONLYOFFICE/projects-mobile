@@ -71,7 +71,6 @@ class ProjectManagerSelectionView extends StatelessWidget {
           controller: usersDataSource.searchInputController,
           hintText: tr('usersSearch'),
           textInputAction: TextInputAction.search,
-          showClearIcon: true,
           onClearPressed: usersDataSource.clearSearch,
           onChanged: usersDataSource.searchUsers,
           onSubmitted: usersDataSource.searchUsers,

@@ -150,18 +150,15 @@ class DiscussionSubscribersSearchBar extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16, right: 0, bottom: 8, top: 8),
       child: Row(
         children: [
-          Obx(
-            () => Expanded(
-              child: SearchField(
-                hintText: tr('usersSearch'),
-                textInputAction: TextInputAction.search,
-                margin: EdgeInsets.zero,
-                onSubmitted: usersDataSource.searchUsers,
-                showClearIcon: usersDataSource.isSearchResult.value == true,
-                onChanged: usersDataSource.searchUsers,
-                onClearPressed: controller.clearUserSearch,
-                controller: controller.userSearchController,
-              ),
+          Expanded(
+            child: SearchField(
+              hintText: tr('usersSearch'),
+              textInputAction: TextInputAction.search,
+              margin: EdgeInsets.zero,
+              onSubmitted: usersDataSource.searchUsers,
+              onChanged: usersDataSource.searchUsers,
+              onClearPressed: controller.clearUserSearch,
+              controller: controller.userSearchController,
             ),
           ),
           PlatformIconButton(
