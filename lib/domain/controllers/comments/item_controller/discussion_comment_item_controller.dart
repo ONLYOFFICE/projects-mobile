@@ -111,6 +111,6 @@ class DiscussionCommentItemController extends GetxController implements CommentI
           'commentBody': comment.value.commentBody,
           'itemController': this,
         },
-        initialPage: '/CommentEditingView');
+        page: '/CommentEditingView');
   }
 }

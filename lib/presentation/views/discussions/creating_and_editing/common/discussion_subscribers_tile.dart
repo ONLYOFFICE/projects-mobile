@@ -66,7 +66,7 @@ class DiscussionSubscribersTile extends StatelessWidget {
                 : const ManageDiscussionSubscribersScreen(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
-            initialPage: controller is NewDiscussionController
+            page: controller is NewDiscussionController
                 ? '/SelectDiscussionSubscribers'
                 : '/ManageDiscussionSubscribersScreen',
           );

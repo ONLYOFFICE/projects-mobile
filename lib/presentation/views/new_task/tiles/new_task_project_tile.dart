@@ -61,7 +61,7 @@ class NewTaskProjectTile extends StatelessWidget {
           selectedIconColor: Get.theme.colors().onBackground,
           isSelected: _isNotEmpty,
           caption: _isNotEmpty ? '${tr('project')}:' : null,
-          onTap: () => Get.find<NavigationController>().to(
+          onTap: () => Get.find<NavigationController>().toScreen(
             const SelectProjectView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,

@@ -163,7 +163,7 @@ class TaskOverviewScreen extends StatelessWidget {
                       onTap: () {
                         Get.find<NavigationController>().toScreen(
                           TaskTeamView(controller: taskController!),
-                          initialPage: '/TaskTeamView',
+                          page: '/TaskTeamView',
                         );
                       },
                       icon: AppIcon(
@@ -182,7 +182,7 @@ class TaskOverviewScreen extends StatelessWidget {
                             // TODO: refact DI
                             Get.find<NavigationController>().toScreen(
                               TaskTeamView(controller: taskController!),
-                              initialPage: '/TaskTeamView',
+                              page: '/TaskTeamView',
                             );
                           })),
                 const SizedBox(height: 20),

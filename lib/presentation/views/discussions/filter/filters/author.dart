@@ -55,7 +55,7 @@ class _Author extends StatelessWidget {
                 isSelected: filterController!.author['other'].isNotEmpty as bool,
                 cancelButtonEnabled: filterController!.author['other'].isNotEmpty as bool?,
                 onTap: () async {
-                  final newUser = await Get.find<NavigationController>().to(
+                  final newUser = await Get.find<NavigationController>().toScreen(
                 const SelectUserScreen(),
                 page: '/SelectUserScreen',
                 // navigatorKey: int.parse(state.widget.key.toString()),

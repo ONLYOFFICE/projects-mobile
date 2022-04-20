@@ -304,7 +304,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
         'initialFolderId': initialFolderId,
         'nestingCounter': nestingCounter,
       },
-      initialPage: '/DocumentsMoveSearchView',
+      page: '/DocumentsMoveSearchView',
     );
   }
 

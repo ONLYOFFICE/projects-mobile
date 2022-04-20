@@ -79,7 +79,7 @@ class DiscussionSubscribersView extends StatelessWidget {
                           const ProfileScreen(),
                           transition: Transition.rightToLeft,
                           arguments: {'controller': userController},
-                          initialPage: '/ProfileScreen',
+                          page: '/ProfileScreen',
                         )
                       },
                     );

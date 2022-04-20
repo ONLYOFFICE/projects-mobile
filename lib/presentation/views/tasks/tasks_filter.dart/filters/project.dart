@@ -54,7 +54,7 @@ class _Project extends StatelessWidget {
               isSelected: filterController.project['other'].isNotEmpty as bool,
               cancelButtonEnabled: filterController.project['other'].isNotEmpty as bool?,
               onTap: () async {
-                final selectedProject = await Get.find<NavigationController>().to(
+                final selectedProject = await Get.find<NavigationController>().toScreen(
                   SelectProjectScreen(),
                   transition: Transition.rightToLeft,
                   page: '/SelectProjectScreen',
@@ -69,7 +69,7 @@ class _Project extends StatelessWidget {
               isSelected: filterController.project['withTag'].isNotEmpty as bool,
               cancelButtonEnabled: filterController.project['withTag'].isNotEmpty as bool?,
               onTap: () async {
-                final selectedTag = await Get.find<NavigationController>().to(
+                final selectedTag = await Get.find<NavigationController>().toScreen(
                   const SelectTagScreen(),
                   transition: Transition.rightToLeft,
                   page: '/SelectTagScreen',

@@ -221,7 +221,7 @@ class TeamMembersSearchBar extends StatelessWidget {
                 arguments: {'controller': controller},
                 transition: Transition.rightToLeft,
                 fullscreenDialog: true,
-                initialPage: '/GroupMembersSelectionView',
+                page: '/GroupMembersSelectionView',
               );
             },
             icon: AppIcon(

@@ -72,7 +72,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
                   onPressed: () => Get.find<NavigationController>().toScreen(
                     const NewMilestoneView(),
                     arguments: {'projectDetailed': controller.projectDetailed},
-                    initialPage: '/NewMilestoneView',
+                    page: '/NewMilestoneView',
                   ),
                   child: AppIcon(
                     icon: SvgIcons.fab_milestone,
@@ -160,7 +160,7 @@ class ProjectMilestonesFilterButton extends StatelessWidget {
             arguments: {'filterController': controller.filterController},
             transition: Transition.cupertinoDialog,
             fullscreenDialog: true,
-            initialPage: '/MilestoneFilterScreen',
+            page: '/MilestoneFilterScreen',
           ),
           cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
         );

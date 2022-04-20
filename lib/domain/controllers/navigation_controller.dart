@@ -110,33 +110,29 @@ class NavigationController extends GetxController {
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
-    String? initialPage,
+    String? page, // изменить имя на page
   }) async {
     if (isMobile) {
-      assert(widget != null, 'Widget must not be null for mobile layout');
-      return await Get.to(
-        () => widget!,
-        preventDuplicates: preventDuplicates ?? false,
-        fullscreenDialog: fullscreenDialog,
+      if (widget != null)
+        return await Get.to(
+          () => widget,
+          preventDuplicates: preventDuplicates ?? false,
+          fullscreenDialog: fullscreenDialog,
+          arguments: arguments,
+          transition: transition ?? Transition.native,
+          popGesture: popGesture,
+        );
+      else
+        // почему бы для универсальности не добавить?
+        return await Get.toNamed(page!);
+    } else if (ModalNavigationData.key!.currentState == null) {
+      return await toModalScreen(
+        modalNavigationData: ModalNavigationData(initialPage: page!),
         arguments: arguments,
-        transition: transition ?? Transition.native,
-        popGesture: popGesture,
       );
     } else
-      assert(initialPage != null, '[initialPage] must not be null for tablet layout');
-    if (initialPage != null)
-      return await toModalScreen(
-        modalNavigationData: ModalNavigationData(initialPage: initialPage),
-        arguments: arguments,
-      );
-    //  else {
-    //   return await Get.dialog(
-    //     ModalScreenView(contentView: widget!),
-    //     barrierDismissible: false,
-    //     barrierColor: isRootModalScreenView ? null : Colors.transparent,
-    //     arguments: arguments,
-    //   );
-    // }
+      return await Get.toNamed(page!,
+          id: ModalNavigationData.nestedNavigatorId, arguments: arguments);
   }
 
   Future<void> toModalScreen(
@@ -156,8 +152,6 @@ class NavigationController extends GetxController {
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
-    // int? navigatorKey,
-    String? page,
   }) async {
     if (isMobile) {
       return await Get.to(
@@ -168,9 +162,6 @@ class NavigationController extends GetxController {
         arguments: arguments,
         transition: transition ?? Transition.native,
       );
-    } else if (page != null) {
-      return await Get.toNamed(page,
-          id: ModalNavigationData.nestedNavigatorId, arguments: arguments);
     } else {
       treeLength++;
       return await Get.to(
@@ -186,7 +177,8 @@ class NavigationController extends GetxController {
     bool closeTabletModalScreen = false,
     T? result,
   }) {
-    if (!closeTabletModalScreen && !isMobile) {
+    final canPop = ModalNavigationData.key?.currentState?.canPop();
+    if (canPop == true) {
       Get.back(id: ModalNavigationData.nestedNavigatorId, result: result);
     } else {
       Get.back(result: result);
@@ -197,13 +189,15 @@ class NavigationController extends GetxController {
 class ModalNavigationData {
   static const nestedNavigatorId = 1;
 
+  static final _pages = getxPages();
+
   static Route onGenerateRoute(RouteSettings settings) {
-    final getPage = getxPages().firstWhere((getPage) => getPage.name == settings.name);
+    final getPage = _pages.firstWhere((getPage) => getPage.name == settings.name);
     return GetPageRoute(page: getPage.page, settings: settings);
   }
 
   static List<Route<dynamic>> onGenerateInitialRoutes(_, initialRouteName) {
-    final getPage = getxPages().firstWhere((getPage) => getPage.name == initialRouteName);
+    final getPage = _pages.firstWhere((getPage) => getPage.name == initialRouteName);
     return [GetPageRoute(page: getPage.page)];
   }
 
@@ -217,13 +211,13 @@ class ModalNavigationData {
 }
 
 mixin NavigationMixin {
-  final navigationController = Get.find<NavigationController>();
+  final _navigationController = Get.find<NavigationController>();
 
   void back<T>({
     bool closeTabletModalScreen = false,
     T? result,
   }) =>
-      navigationController.back(closeTabletModalScreen: closeTabletModalScreen, result: result);
+      _navigationController.back(result: result);
 }
 
 // const ModalNavigationData({

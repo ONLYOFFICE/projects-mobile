@@ -63,7 +63,7 @@ class ProjectTaskScreen extends StatelessWidget {
                   onPressed: () => Get.find<NavigationController>().toScreen(
                     const NewTaskView(),
                     arguments: {'projectDetailed': projectTasksController.projectDetailed},
-                    initialPage: '/NewTaskView',
+                    page: '/NewTaskView',
                   ),
                   child: AppIcon(
                     icon: SvgIcons.add_fab,

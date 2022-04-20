@@ -49,6 +49,8 @@ import 'package:settings_ui/settings_ui.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
+  static String get pageName => '/SettingsScreen';
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SettingsController());

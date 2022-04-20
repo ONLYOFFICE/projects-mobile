@@ -110,7 +110,7 @@ void _onSelected(value, TaskItemController controller) async {
           TaskEditingView(task: controller.task.value),
           transition: Transition.cupertinoDialog,
           fullscreenDialog: true,
-          initialPage: '/TaskEditingView',
+          page: '/TaskEditingView',
         ),
       );
       break;

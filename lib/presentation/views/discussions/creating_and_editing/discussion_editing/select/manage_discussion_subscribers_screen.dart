@@ -175,7 +175,7 @@ class _DiscussionSubscribersSearchBar extends StatelessWidget {
               arguments: {'controller': controller},
               transition: Transition.cupertinoDialog,
               fullscreenDialog: true,
-              initialPage: '/UsersFromGroups',
+              page: '/UsersFromGroups',
             ),
             icon: const AppIcon(icon: SvgIcons.preferences),
           )

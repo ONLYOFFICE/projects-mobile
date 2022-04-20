@@ -171,7 +171,7 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
         arguments: {'projectId': projectId, 'projectTitle': projectTitle},
         transition: Transition.cupertinoDialog,
         fullscreenDialog: true,
-        initialPage: '/NewDiscussionScreen',
+        page: '/NewDiscussionScreen',
       );
 
   @override

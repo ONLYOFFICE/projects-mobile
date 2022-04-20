@@ -77,7 +77,7 @@ class TeamMembersTile extends StatelessWidget {
             const TeamMembersSelectionView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
-            initialPage: '/TeamMembersSelectionView',
+            page: '/TeamMembersSelectionView',
           ),
         );
       },

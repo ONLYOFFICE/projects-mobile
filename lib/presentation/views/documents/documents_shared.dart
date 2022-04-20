@@ -135,7 +135,7 @@ class DocumentsFilterButton extends StatelessWidget {
           icon: FiltersButton(controller: controller),
           onPressed: () async => Get.find<NavigationController>().toScreen(
             const DocumentsFilterScreen(),
-            initialPage: '/DocumentsFilterScreen',
+            page: '/DocumentsFilterScreen',
             preventDuplicates: false,
             arguments: {'filterController': controller.filterController},
             transition: Transition.cupertinoDialog,

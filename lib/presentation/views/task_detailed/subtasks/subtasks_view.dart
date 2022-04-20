@@ -124,7 +124,7 @@ class _FAB extends StatelessWidget {
           },
           transition: Transition.cupertinoDialog,
           fullscreenDialog: true,
-          initialPage: '/CreatingAndEditingSubtaskView',
+          page: '/CreatingAndEditingSubtaskView',
         ),
         child: AppIcon(
           icon: SvgIcons.add_fab,

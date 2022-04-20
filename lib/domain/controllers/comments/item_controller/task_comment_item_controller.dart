@@ -107,6 +107,6 @@ class TaskCommentItemController extends GetxController implements CommentItemCon
           'commentBody': comment!.value.commentBody,
           'itemController': this,
         },
-        initialPage: '/CommentEditingView');
+        page: '/CommentEditingView');
   }
 }

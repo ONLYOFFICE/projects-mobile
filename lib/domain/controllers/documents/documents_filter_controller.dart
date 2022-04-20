@@ -350,16 +350,14 @@ class DocumentsFilterController extends BaseFilterController {
   }
 
   // navigation
-  Future onUsersFilterPressed() async => await navigationController.to(
+  Future onUsersFilterPressed() async => await navigationController.toScreen(
         const SelectUserScreen(),
         page: '/SelectUserScreen',
-        // navigatorKey: DocumentsFilterRouteNames.key,
       );
 
-  Future onGroupsFilterPressed() async => await navigationController.to(
+  Future onGroupsFilterPressed() async => await navigationController.toScreen(
         const SelectGroupScreen(),
         page: '/SelectGroupScreen',
-        // navigatorKey: DocumentsFilterRouteNames.key,
       );
 
   void back({int? id}) => navigationController.back(closeTabletModalScreen: true);

@@ -113,7 +113,7 @@ class _Content extends StatelessWidget {
                             'controller': PortalUserItemController(
                                 portalUser: projectTeamDataSource.usersList[i].portalUser)
                           },
-                          initialPage: '/ProfileScreen',
+                          page: '/ProfileScreen',
                         )
                       }),
               itemExtent: 65,

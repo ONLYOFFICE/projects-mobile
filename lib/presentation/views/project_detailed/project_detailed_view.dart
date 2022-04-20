@@ -379,7 +379,7 @@ Future<void> _onSelected(
           transition: GetPlatform.isAndroid ? Transition.downToUp : Transition.cupertinoDialog,
           fullscreenDialog: true,
           arguments: {'projectDetailed': controller.projectData},
-          initialPage: '/EditProjectView',
+          page: '/EditProjectView',
         ),
       );
       break;

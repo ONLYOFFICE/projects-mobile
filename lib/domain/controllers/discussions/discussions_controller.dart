@@ -170,7 +170,7 @@ class DiscussionsController extends BaseDiscussionsController {
         const NewDiscussionScreen(),
         transition: Transition.cupertinoDialog,
         fullscreenDialog: true,
-        initialPage: '/NewDiscussionScreen',
+        page: '/NewDiscussionScreen',
       );
 
   @override

@@ -88,7 +88,7 @@ class ProjectsView extends StatelessWidget {
                     arguments: {'filterController': controller.filterController},
                     transition: Transition.cupertinoDialog,
                     fullscreenDialog: true,
-                    initialPage: '/ProjectsFilterScreen',
+                    page: '/ProjectsFilterScreen',
                   ),
                   icon: FiltersButton(controller: controller),
                   padding: EdgeInsets.zero,

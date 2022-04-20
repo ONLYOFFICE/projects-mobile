@@ -58,7 +58,7 @@ class _Milestone extends StatelessWidget {
                   : filterController.milestone['other'] as String,
               isSelected: filterController.milestone['other'].isNotEmpty as bool,
               onTap: () async {
-                final milestone = await Get.find<NavigationController>().to(
+                final milestone = await Get.find<NavigationController>().toScreen(
                   const SelectMilestoneScreen(),
                   transition: Transition.rightToLeft,
                   page: '/SelectMilestoneScreen',

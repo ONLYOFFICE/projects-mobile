@@ -57,7 +57,7 @@ class _Creator extends StatelessWidget {
               final newUser = await Get.find<NavigationController>().toScreen(
                 const SelectUserScreen(),
                 transition: Transition.rightToLeft,
-                initialPage: '/SelectUserScreen',
+                page: '/SelectUserScreen',
               );
               filterController.changeCreator('other', newUser);
             },

@@ -179,7 +179,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
           'initialFolderId': documentsController.currentFolderID,
         },
         transition: Transition.rightToLeft,
-        initialPage: '/DocumentsMoveOrCopyView',
+        page: '/DocumentsMoveOrCopyView',
       );
       break;
     case 'move':
@@ -192,7 +192,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
           'initialFolderId': documentsController.currentFolderID,
         },
         transition: Transition.rightToLeft,
-        initialPage: '/DocumentsMoveOrCopyView',
+        page: '/DocumentsMoveOrCopyView',
       );
       break;
     case 'rename':

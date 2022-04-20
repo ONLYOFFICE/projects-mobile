@@ -188,7 +188,7 @@ class ProjectsController extends BaseController {
       const NewProject(),
       transition: Transition.cupertinoDialog,
       fullscreenDialog: true,
-      initialPage: '/NewProject',
+      page: '/NewProject',
     );
   }
 

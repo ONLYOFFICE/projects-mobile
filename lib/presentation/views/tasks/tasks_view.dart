@@ -64,7 +64,7 @@ class TasksView extends StatelessWidget {
               arguments: {'projectDetailed': null},
               transition: Transition.cupertinoDialog,
               fullscreenDialog: true,
-              initialPage: '/NewTaskView',
+              page: '/NewTaskView',
             ),
             child: AppIcon(
               icon: SvgIcons.add_fab,

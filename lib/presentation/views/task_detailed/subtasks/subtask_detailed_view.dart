@@ -192,7 +192,7 @@ void _onSelected(BuildContext context, value, SubtaskController controller) {
         },
         transition: Transition.cupertinoDialog,
         fullscreenDialog: true,
-        initialPage: '/CreatingAndEditingSubtaskView',
+        page: '/CreatingAndEditingSubtaskView',
       );
       break;
     case 'copy':

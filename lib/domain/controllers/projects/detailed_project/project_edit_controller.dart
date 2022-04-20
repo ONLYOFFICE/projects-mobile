@@ -236,7 +236,7 @@ class ProjectEditController extends BaseProjectEditorController {
       const TagsSelectionView(),
       arguments: {'controller': this},
       transition: Transition.rightToLeft,
-      initialPage: '/TagsSelectionView',
+      page: '/TagsSelectionView',
     );
   }
 }

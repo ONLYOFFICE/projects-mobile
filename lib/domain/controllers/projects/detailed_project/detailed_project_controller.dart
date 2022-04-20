@@ -179,7 +179,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     await Get.find<NavigationController>().toScreen(
       const TeamMembersSelectionView(),
       arguments: {'controller': this},
-      initialPage: '/TeamMembersSelectionView',
+      page: '/TeamMembersSelectionView',
     );
   }
 

@@ -251,7 +251,7 @@ class TabletLayout extends StatelessWidget {
                       onPressed: () => controller.toScreen(
                         const SelfProfileScreen(),
                         arguments: {'showBackButton': true, 'showSettingsButton': false},
-                        initialPage: '/SelfProfileScreen',
+                        page: '/SelfProfileScreen',
                       ),
                     ),
                   ),
@@ -264,7 +264,7 @@ class TabletLayout extends StatelessWidget {
                       height: 24,
                       color: Get.theme.colors().onNavBar.withOpacity(0.4),
                     ),
-                    onPressed: () => controller.toScreen(null, initialPage: '/SettingsScreen'),
+                    onPressed: () => controller.toScreen(null, page: '/SettingsScreen'),
                   ),
                   const SizedBox(height: 60)
                 ],

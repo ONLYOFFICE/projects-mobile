@@ -409,7 +409,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          navigationController.back(closeTabletModalScreen: true);
+          navigationController.back();
         },
         onCancelTap: Get.back,
       ));

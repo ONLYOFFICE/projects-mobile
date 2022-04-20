@@ -174,7 +174,7 @@ class DiscussionItemController extends GetxController {
     await Get.find<NavigationController>().toScreen(
       const DiscussionEditingScreen(),
       arguments: {'discussion': discussion.value},
-      initialPage: '/DiscussionEditingScreen',
+      page: '/DiscussionEditingScreen',
     );
   }
 
@@ -226,7 +226,7 @@ class DiscussionItemController extends GetxController {
       arguments: {
         'controller': Get.put(NewDiscussionCommentController(idFrom: discussion.value.id)),
       },
-      initialPage: '/NewCommentView',
+      page: '/NewCommentView',
     );
   }
 
@@ -253,7 +253,7 @@ class DiscussionItemController extends GetxController {
         'controller': controller,
         'onConfirm': () => controller.confirm(context),
       },
-      initialPage: '/ManageDiscussionSubscribersScreen',
+      page: '/ManageDiscussionSubscribersScreen',
     );
   }
 

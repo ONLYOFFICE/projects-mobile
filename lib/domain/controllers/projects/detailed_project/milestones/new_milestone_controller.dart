@@ -305,7 +305,7 @@ class NewMilestoneController extends GetxController {
       const SelectDateView(),
       arguments: {'controller': this, 'startDate': false, 'initialDate': _dueDate},
       transition: Transition.rightToLeft,
-      initialPage: '/SelectDateView',
+      page: '/SelectDateView',
     );
   }
 

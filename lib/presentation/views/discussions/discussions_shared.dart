@@ -142,7 +142,7 @@ class DiscussionsFilterButton extends StatelessWidget {
             arguments: {'filterController': controller.filterController},
             transition: Transition.cupertinoDialog,
             fullscreenDialog: true,
-            initialPage: '/DiscussionsFilterScreen',
+            page: '/DiscussionsFilterScreen',
           ),
           cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
           padding: EdgeInsets.zero,

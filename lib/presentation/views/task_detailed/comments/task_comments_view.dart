@@ -106,7 +106,7 @@ class TaskCommentsView extends StatelessWidget {
                           'controller':
                               Get.put(NewTaskCommentController(idFrom: controller.task.value.id))
                         },
-                        initialPage: '/NewCommentView',
+                        page: '/NewCommentView',
                       ),
                       child: AppIcon(
                         icon: SvgIcons.add_fab,

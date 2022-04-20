@@ -121,7 +121,7 @@ class PortalUserItemController extends GetxController {
         const ProfileScreen(),
         transition: Transition.rightToLeft,
         arguments: {'controller': this},
-        initialPage: '/ProfileScreen',
+        page: '/ProfileScreen',
       );
   }
 }

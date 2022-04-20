@@ -60,7 +60,7 @@ class TasksDashboardMoreView extends StatelessWidget {
             onPressed: () => Get.find<NavigationController>().toScreen(
               const NewTaskView(),
               arguments: {'projectDetailed': null},
-              initialPage: '/NewTaskView',
+              page: '/NewTaskView',
             ),
             child: AppIcon(
               icon: SvgIcons.add_fab,

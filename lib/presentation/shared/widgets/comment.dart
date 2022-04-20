@@ -115,7 +115,7 @@ class Comment extends StatelessWidget {
                       'discussionId': discussionId,
                       'taskId': taskId,
                     },
-                    initialPage: '/ReplyCommentView',
+                    page: '/ReplyCommentView',
                   );
                 },
                 alignment: Alignment.centerLeft,

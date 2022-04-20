@@ -110,7 +110,7 @@ class SettingsController extends GetxController {
     super.onInit();
   }
 
-  void leave() => Get.back(); //offNamed('NavigationView');
+  void leave() => Get.find<NavigationController>().back();
 
   Future setTheme(String themeMode) async {
     await Get.dialog(StyledAlertDialog(
@@ -257,22 +257,20 @@ class SettingsController extends GetxController {
         RemoteConfigService.getString(RemoteConfigService.Keys.linkPrivacyPolicy),
       );
 
-  void onAnalyticsPressed() => navigationController.to(
+  void onAnalyticsPressed() => navigationController.toScreen(
         const AnalyticsScreen(),
         page: '/AnalyticsScreen',
         // navigatorKey: SettingsRouteNames.key,
       );
 
-  void onPasscodePressed() => navigationController.to(
+  void onPasscodePressed() => navigationController.toScreen(
         const PasscodeSettingsScreen(),
         page: '/PasscodeSettingsScreen',
         // navigatorKey: SettingsRouteNames.key,
       );
 
-  void onThemePressed() =>
-      navigationController.to(const ColorThemeSelectionScreen(), page: '/ColorThemeSelectionScreen'
-          // navigatorKey: SettingsRouteNames.key,
-          );
+  void onThemePressed() => navigationController.toScreen(const ColorThemeSelectionScreen(),
+      page: '/ColorThemeSelectionScreen');
 
   void back({bool closeTabletModalScreen = false}) =>
       Get.find<NavigationController>().back(closeTabletModalScreen: closeTabletModalScreen);
