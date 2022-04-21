@@ -57,7 +57,8 @@ class TagsSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final projController = Get.arguments['controller'] as BaseProjectEditorController;
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final projController = args['controller'] as BaseProjectEditorController;
 
     final controller = Get.put(ProjectTagsController());
     controller.setup(projController);

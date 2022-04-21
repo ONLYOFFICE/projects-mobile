@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
@@ -46,7 +47,8 @@ class NewProjectDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final controller = args['controller'] as BaseProjectEditorController;
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
@@ -71,7 +73,7 @@ class NewProjectDescription extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
         child: PlatformTextField(
           autofocus: true,
-          controller: controller.descriptionController as TextEditingController,
+          controller: controller.descriptionController,
           maxLines: null,
           style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
           hintText: tr('enterText'),

@@ -57,8 +57,9 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final usersDataSource = Get.find<UsersDataSource>();
-    final controller = Get.arguments['controller'] as DiscussionActionsController;
-    final onConfirm = Get.arguments['onConfirm'] as Function()?;
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final controller = args['controller'] as DiscussionActionsController;
+    final onConfirm = args['onConfirm'] as Function()?;
 
     final platformController = Get.find<PlatformController>();
 

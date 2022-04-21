@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
@@ -44,24 +45,24 @@ class TagsTile extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
-  final controller;
+  final BaseProjectEditorController controller;
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        final _isNotEmpty = controller.tags.isNotEmpty as bool;
+        final _isNotEmpty = controller.tags.isNotEmpty;
 
         return NewItemTile(
           caption: _isNotEmpty ? '${tr('tags')}:' : null,
-          text: _isNotEmpty ? controller.tagsText.value as String : tr('addTag'),
+          text: _isNotEmpty ? controller.tagsText.value : tr('addTag'),
           icon: SvgIcons.tag,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(
-                  onTap: controller.showTags as Function(),
+                  onTap: controller.showTags,
                   child: Icon(
                     PlatformIcons(context).rightChevron,
                     size: 24,
@@ -69,7 +70,7 @@ class TagsTile extends StatelessWidget {
                   ),
                 )
               : null,
-          onTap: controller.showTags as Function(),
+          onTap: controller.showTags,
         );
       },
     );

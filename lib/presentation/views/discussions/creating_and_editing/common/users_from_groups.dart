@@ -50,8 +50,8 @@ class UsersFromGroups extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final platformController = Get.find<PlatformController>();
-
-    final controller = Get.arguments['controller'] as DiscussionActionsController;
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final controller = args['controller'] as DiscussionActionsController;
 
     final groupsDataSource = Get.find<GroupsDataSource>();
     groupsDataSource.getGroups();

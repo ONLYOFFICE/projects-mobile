@@ -32,16 +32,15 @@
 
 import 'dart:convert';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:projects/data/api/comments_api.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 
 class CommentsService {
   final CommentsApi _api = locator<CommentsApi>();

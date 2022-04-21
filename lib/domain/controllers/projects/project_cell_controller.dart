@@ -85,4 +85,10 @@ class ProjectCellController extends BaseProjectEditorController {
 
     return resp;
   }
+
+  @override
+  Future<void> showTags() {
+    // TODO: implement showTags
+    throw UnimplementedError();
+  }
 }

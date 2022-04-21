@@ -216,4 +216,10 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     Get.back();
   }
+
+  @override
+  Future<void> showTags() {
+    // TODO: implement showTags
+    throw UnimplementedError();
+  }
 }

@@ -39,7 +39,6 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
-import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -60,7 +59,7 @@ class SelectProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
-    final controller = arguments['controller'] as TaskActionsController;
+    final controller = arguments['controller'];
 
     final projectsWithPresets = locator<ProjectsWithPresets>();
 
@@ -153,7 +152,7 @@ class SelectProjectView extends StatelessWidget {
 class _ProjectCell extends StatelessWidget {
   const _ProjectCell({Key? key, required this.item, required this.controller}) : super(key: key);
   final ProjectDetailed item;
-  final TaskActionsController controller;
+  final controller;
 
   @override
   Widget build(BuildContext context) {

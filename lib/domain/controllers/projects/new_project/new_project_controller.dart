@@ -132,6 +132,7 @@ class NewProjectController extends BaseProjectEditorController {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
+  @override
   Future<void> showTags() async {
     // ignore: unawaited_futures
     Get.find<NavigationController>().toScreen(

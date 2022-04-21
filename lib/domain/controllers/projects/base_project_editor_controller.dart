@@ -113,18 +113,20 @@ abstract class BaseProjectEditorController extends GetxController {
     super.dispose();
   }
 
+  Future<void> showTags();
+
   String? get teamMembersTitle => selectedTeamMembers.length == 1
       ? selectedTeamMembers.first.displayName
       : plural('members', selectedTeamMembers.length);
 
   void confirmDescription(String newText) {
     descriptionText.value = descriptionController.text;
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   void leaveDescriptionView(String typedText) {
     if (typedText == descriptionText.value) {
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -134,7 +136,7 @@ abstract class BaseProjectEditorController extends GetxController {
         onAcceptTap: () {
           descriptionController.text = descriptionText.value;
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
