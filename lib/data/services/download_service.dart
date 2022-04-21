@@ -93,16 +93,7 @@ class DocumentsDownloadService {
 
       debugPrint('Downloading: task ($id), status: ($status), progress: ($progress)');
 
-      _callbacksList.forEach((key, value) {
-        if (key == id) value.call(id, status, progress);
-      });
-
-      if (id == taskId) {
-        if (status == DownloadTaskStatus.complete) {
-          MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
-        } else if (status == DownloadTaskStatus.failed)
-          MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
-      }
+      _callbacksList[id]?.call(id, status, progress);
     });
 
     FlutterDownloader.registerCallback(downloadCallback);
@@ -110,7 +101,6 @@ class DocumentsDownloadService {
 
   final _port = ReceivePort();
   static const _portName = 'downloader_send_port';
-  String? taskId;
 
   final _callbacksList = <String, Function(String id, DownloadTaskStatus status, int progress)>{};
 
@@ -148,19 +138,12 @@ class DocumentsDownloadService {
     if (finalUrl.contains(Get.find<PortalInfoController>().portalName!))
       headers = Get.find<PortalInfoController>().getAuthHeader;
 
-    taskId = await FlutterDownloader.enqueue(
+    return await FlutterDownloader.enqueue(
       url: finalUrl,
       headers: headers,
       savedDir: path,
       saveInPublicStorage: true,
     );
-
-    if (taskId == null || taskId!.isEmpty) {
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-      return null;
-    }
-
-    return taskId;
   }
 
   Future<String> getRedirectedUrl(String initialUrl) async {

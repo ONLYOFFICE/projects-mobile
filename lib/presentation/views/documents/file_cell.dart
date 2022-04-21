@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
@@ -49,6 +50,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
@@ -76,7 +78,33 @@ class FileCell extends StatelessWidget {
             SizedBox(
               width: 72,
               child: Center(
-                child: Obx(() => cellController.fileIcon.value),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Obx(() => cellController.fileIcon.value),
+                    Obx(() {
+                      if (cellController.status.value == DownloadTaskStatus.running ||
+                          cellController.status.value == DownloadTaskStatus.enqueued)
+                        return GestureDetector(
+                          onTap: cellController.cancelDownloadFile,
+                          child: SizedBox(
+                            width: 48,
+                            height: 48,
+                            child: Obx(() {
+                              final value = cellController.progress.value ?? 1;
+                              return PlatformCircularProgressIndicator(
+                                material: (_, __) =>
+                                    MaterialProgressIndicatorData(value: value / 100),
+                                cupertino: (_, __) => CupertinoProgressIndicatorData(radius: 20),
+                              );
+                            }),
+                          ),
+                        );
+                      else
+                        return const SizedBox();
+                    }),
+                  ],
+                ),
               ),
             ),
             Expanded(
@@ -116,7 +144,8 @@ class FileCell extends StatelessWidget {
                   ),
                   PlatformPopupMenuItem(
                     value: 'download',
-                    child: Text(tr('download')),
+                    child: Text(
+                        cellController.downloadInProgress ? tr('cancelDownload') : tr('download')),
                   ),
                   if (Security.files.canEdit(cellController.file) &&
                       documentsController is! DiscussionsDocumentsController)
@@ -175,7 +204,9 @@ Future<void> _onFilePopupMenuSelected(
       await cellController.openFile(parentId: documentsController.parentId);
       break;
     case 'download':
-      await cellController.downloadFile();
+      cellController.downloadInProgress
+          ? await cellController.cancelDownloadFile()
+          : await cellController.downloadFile();
       break;
     case 'copy':
       await Get.find<NavigationController>().toScreen(
