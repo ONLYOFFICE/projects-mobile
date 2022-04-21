@@ -123,8 +123,11 @@ class NavigationController extends GetxController {
           popGesture: popGesture,
         );
       else
-        // почему бы для универсальности не добавить?
-        return await Get.toNamed(page!);
+        return await Get.toNamed(
+          page!,
+          arguments: arguments,
+          preventDuplicates: preventDuplicates ?? false,
+        );
     } else if (ModalNavigationData.key!.currentState == null) {
       return await toModalScreen(
         modalNavigationData: ModalNavigationData(initialPage: page!),

@@ -181,7 +181,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
       selectedTeamMembers.removeWhere((element) => user.portalUser.id == element.portalUser.id);
 
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       selectedTeamMembers.removeWhere((element) => user.portalUser.id == element.portalUser.id);
       removeManager();
@@ -283,7 +283,7 @@ abstract class BaseProjectEditorController extends GetxController {
   }
 
   void confirmTeamMembers() {
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   Future<void> confirmGroupSelection() async {

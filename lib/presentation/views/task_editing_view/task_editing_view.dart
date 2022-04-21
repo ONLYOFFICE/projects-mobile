@@ -53,13 +53,12 @@ import 'package:projects/presentation/views/new_task/tiles/task_title.dart';
 class TaskEditingView extends StatelessWidget {
   const TaskEditingView({
     Key? key,
-    required this.task,
   }) : super(key: key);
 
-  final PortalTask task;
 
   @override
   Widget build(BuildContext context) {
+    final task = Get.arguments['task'] as PortalTask;
     final controller = Get.put(TaskEditingController(task: task), permanent: false);
     final platformController = Get.find<PlatformController>();
 

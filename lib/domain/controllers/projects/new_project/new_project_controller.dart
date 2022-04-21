@@ -69,7 +69,7 @@ class NewProjectController extends BaseProjectEditorController {
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -117,7 +117,7 @@ class NewProjectController extends BaseProjectEditorController {
 
     final result = await _api.createProject(project: newProject);
     if (result != null) {
-      Get.back();
+      Get.find<NavigationController>().back();
 
       locator<EventHub>().fire('needToRefreshProjects', {'all': true});
 

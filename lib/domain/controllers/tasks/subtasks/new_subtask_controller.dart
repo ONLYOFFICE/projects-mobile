@@ -56,6 +56,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
 
   final SubtasksService _api = locator<SubtasksService>();
 
+  @override
   late ProjectTeamController teamController;
 
   final _titleController = TextEditingController();
@@ -65,6 +66,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
   TextEditingController get titleController => _titleController;
   @override
   FocusNode get titleFocus => _titleFocus;
+  @override
   final responsibles = [].obs;
   @override
   RxInt? status = 1.obs;
@@ -81,6 +83,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
     setupResponsibleSelection(projectId);
   }
 
+  @override
   void setupResponsibleSelection([int? projectId]) async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(projectId: projectId, withoutVisitors: true, withoutBlocked: true);
@@ -160,7 +163,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -182,7 +185,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
       if (newSubtask != null) {
         final taskController = Get.find<TaskItemController>(tag: taskId.toString());
 
-        Get.back();
+        Get.find<NavigationController>().back();
         locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
 
         MessagesHandler.showSnackBar(
@@ -198,5 +201,10 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
             });
       }
     }
+  }
+
+  @override
+  set responsibles(RxList _responsibles) {
+    // TODO: implement responsibles
   }
 }

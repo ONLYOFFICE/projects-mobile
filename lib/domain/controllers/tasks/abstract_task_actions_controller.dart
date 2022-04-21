@@ -32,6 +32,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
 abstract class TaskActionsController extends GetxController {
   final title = ''.obs;
@@ -41,28 +43,52 @@ abstract class TaskActionsController extends GetxController {
   final responsibles = [].obs;
   final startDateText = ''.obs;
   final dueDateText = ''.obs;
+  late ProjectTeamController teamController;
+  int? newMilestoneId;
+
+  Rx<TextEditingController> descriptionController = TextEditingController().obs;
 
   DateTime? get dueDate;
 
   DateTime? get startDate;
 
+  int? get selectedProjectId;
+
   final highPriority = false.obs;
   final titleIsEmpty = false.obs;
 
   TextEditingController? _titleController;
+
   TextEditingController? get titleController => _titleController;
+
   FocusNode? get titleFocus => FocusNode();
 
   final setTitleError = false.obs;
   final needToSelectProject = false.obs;
 
-  void changeMilestoneSelection();
+  void changeMilestoneSelection({int? id, String? title});
+
   void leaveDescriptionView(String typedText);
 
-  void confirmDescription(String typedText);
+  void confirmResponsiblesSelection();
+
+  void leaveResponsiblesSelectionView();
+
+  void confirmDescription(String newText);
+
   void changeTitle(String newText);
+
   void changeStartDate(DateTime? newDate);
+
   void changeDueDate(DateTime? newDate);
+
   void changePriority(bool value);
+
   void checkDate(DateTime startDate, DateTime dueDate);
+
+  void changeProjectSelection({int? id, String? title});
+
+  void setupResponsibleSelection();
+
+  void addResponsible(PortalUserItemController user);
 }

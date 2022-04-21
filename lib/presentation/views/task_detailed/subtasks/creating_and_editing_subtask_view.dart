@@ -182,7 +182,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                         controller.titleFocus!.hasFocus) controller.titleFocus!.unfocus();
                   }
                 },
-                child: ResponsibleTile(
+                child: SubtaskResponsibleTile(
                   controller: controller,
                   enableUnderline: false,
                   suffixIcon: PlatformIconButton(

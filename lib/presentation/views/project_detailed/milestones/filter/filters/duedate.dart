@@ -63,13 +63,15 @@ class _DueDate extends StatelessWidget {
               onTap: () async {
                 // TODO: refact DI
                 final pickedRange = await Get.find<NavigationController>().toScreen(
-                  StyledDateRangePickerDialog(
-                    initialDateRange: DateTimeRange(
+                  const StyledDateRangePickerDialog(),
+                  transition: Transition.rightToLeft,
+                  page: '/StyledDateRangePickerDialog',
+                  arguments: {
+                    'initialDateRange': DateTimeRange(
                       start: filterController.deadline['custom']['startDate'] as DateTime,
                       end: filterController.deadline['custom']['stopDate'] as DateTime,
                     ),
-                  ),
-                  transition: Transition.rightToLeft,
+                  },
                 );
                 if (pickedRange != null) {
                   await filterController.changeDeadline('custom',

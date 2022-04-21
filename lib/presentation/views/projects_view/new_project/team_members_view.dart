@@ -58,7 +58,8 @@ class TeamMembersSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final controller = args['controller'];
     final usersDataSource = Get.find<UsersDataSource>();
 
     usersDataSource.selectedProjectManager = controller.selectedProjectManager.value as PortalUser?;

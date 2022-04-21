@@ -162,9 +162,9 @@ class TaskOverviewScreen extends StatelessWidget {
                   InfoTile(
                       onTap: () {
                         Get.find<NavigationController>().toScreen(
-                          TaskTeamView(controller: taskController!),
-                          page: '/TaskTeamView',
-                        );
+                          const TaskTeamView(), page: '/TaskTeamView', arguments: {
+                          'controller': taskController,
+                        });
                       },
                       icon: AppIcon(
                           icon: SvgIcons.person,
@@ -179,10 +179,12 @@ class TaskOverviewScreen extends StatelessWidget {
                           icon: Icon(PlatformIcons(context).rightChevron,
                               size: 24, color: Get.theme.colors().onBackground.withOpacity(0.6)),
                           onPressed: () {
-                            // TODO: refact DI
                             Get.find<NavigationController>().toScreen(
-                              TaskTeamView(controller: taskController!),
+                              const TaskTeamView(),
                               page: '/TaskTeamView',
+                              arguments: {
+                                'controller': taskController,
+                              },
                             );
                           })),
                 const SizedBox(height: 20),

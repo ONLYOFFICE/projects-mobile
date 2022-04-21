@@ -33,6 +33,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
@@ -95,9 +96,9 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: leadingWidth,
       leading: leading == null && showBackButton
           ? PlatformIconButton(
-              padding: EdgeInsets.zero,
+        padding: EdgeInsets.zero,
               icon: _backButtonIcon,
-              onPressed: onLeadingPressed ?? Get.back,
+              onPressed: onLeadingPressed ?? Get.find<NavigationController>().back,
             )
           : leading,
       toolbarTextStyle: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),

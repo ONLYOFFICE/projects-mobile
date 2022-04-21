@@ -59,8 +59,6 @@ class SelectProjectView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final controller = Get.arguments['controller'];
-
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
     final controller = arguments['controller'] as TaskActionsController;
 
@@ -155,7 +153,8 @@ class SelectProjectView extends StatelessWidget {
 class _ProjectCell extends StatelessWidget {
   const _ProjectCell({Key? key, required this.item, required this.controller}) : super(key: key);
   final ProjectDetailed item;
-  final controller;
+  final TaskActionsController controller;
+
   @override
   Widget build(BuildContext context) {
     return Material(

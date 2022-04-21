@@ -103,13 +103,13 @@ void _onSelected(value, TaskItemController controller) async {
       await controller.copyLink(taskId: task.id!, projectId: task.projectOwner!.id!);
       break;
 
-      //TODO: refact DI
     case 'editTask':
       unawaited(
         Get.find<NavigationController>().toScreen(
-          TaskEditingView(task: controller.task.value),
+          const TaskEditingView(),
           transition: Transition.cupertinoDialog,
           fullscreenDialog: true,
+          arguments: {'task': controller.task.value},
           page: '/TaskEditingView',
         ),
       );

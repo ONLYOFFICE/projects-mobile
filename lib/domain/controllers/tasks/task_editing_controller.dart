@@ -42,6 +42,7 @@ import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
@@ -57,19 +58,14 @@ class TaskEditingController extends TaskActionsController {
   PortalTask task;
   final TaskService _api = locator<TaskService>();
 
-  late ProjectTeamController teamController;
-
   TaskEditingController({required this.task});
-
-  Rx<TextEditingController> descriptionController = TextEditingController().obs;
 
   final TextEditingController _titleController = TextEditingController();
 
   late TaskItemController _taskItemController;
 
+  @override
   int? get selectedProjectId => task.projectOwner!.id;
-
-  int? newMilestoneId;
 
   // to track changes.
   DateTime? _newStartDate;
@@ -161,13 +157,13 @@ class TaskEditingController extends TaskActionsController {
   void confirmDescription(String newText) {
     descriptionController.value.text = newText;
     descriptionText.value = newText;
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   @override
   void leaveDescriptionView(String typedText) {
     if (typedText == descriptionText.value) {
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -177,7 +173,7 @@ class TaskEditingController extends TaskActionsController {
         onAcceptTap: () {
           descriptionController.value.text = task.description!;
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -192,7 +188,7 @@ class TaskEditingController extends TaskActionsController {
     } else {
       removeMilestoneSelection();
     }
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   void removeMilestoneSelection() {
@@ -207,7 +203,7 @@ class TaskEditingController extends TaskActionsController {
       if (verificationResult) {
         startDateText.value = formatedDate(newDate);
         _newStartDate = newDate;
-        Get.back();
+        Get.find<NavigationController>().back();
       }
     } else {
       startDateText.value = '';
@@ -222,7 +218,7 @@ class TaskEditingController extends TaskActionsController {
       if (verificationResult) {
         dueDateText.value = formatedDate(newDate);
         _newDueDate = newDate;
-        Get.back();
+        Get.find<NavigationController>().back();
       }
     } else {
       dueDateText.value = '';
@@ -243,12 +239,14 @@ class TaskEditingController extends TaskActionsController {
   @override
   void changePriority(bool value) => highPriority.value = value;
 
+  @override
   void confirmResponsiblesSelection() {
     // ignore: invalid_use_of_protected_member
     _previusSelectedResponsibles = List.of(responsibles.value);
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
+  @override
   void leaveResponsiblesSelectionView() {
     // ignore: invalid_use_of_protected_member
     if (listEquals(_previusSelectedResponsibles, responsibles.value)) {
@@ -262,13 +260,14 @@ class TaskEditingController extends TaskActionsController {
         onAcceptTap: () {
           responsibles.value = List.of(_previusSelectedResponsibles!);
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
     }
   }
 
+  @override
   void setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
@@ -294,6 +293,7 @@ class TaskEditingController extends TaskActionsController {
     }
   }
 
+  @override
   void addResponsible(PortalUserItemController user) {
     if (user.isSelected.value == true) {
       responsibles.add(user);
@@ -328,7 +328,7 @@ class TaskEditingController extends TaskActionsController {
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -377,7 +377,7 @@ class TaskEditingController extends TaskActionsController {
 
     if (updatedTask != null) {
       unawaited(_taskItemController.reloadTask(showLoading: true));
-      Get.back();
+      Get.find<NavigationController>().back();
     } else
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
@@ -407,5 +407,10 @@ class TaskEditingController extends TaskActionsController {
         buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)?.hideCurrentSnackBar,
       );
     }
+  }
+
+  @override
+  void changeProjectSelection({int? id, String? title}) {
+    // TODO: implement changeProjectSelection
   }
 }

@@ -68,6 +68,8 @@ class _TagList extends StatelessWidget with SelectItemListMixin {
   Widget Function(BuildContext context, int index) get itemBuilder => (_, i) {
         final tag = paginationController.data[i] as ProjectTag;
         return SelectItemTile(
-            title: tag.title, onSelect: () => Get.back(result: {'id': tag.id, 'title': tag.title}));
+            title: tag.title,
+            onSelect: () =>
+                Get.find<NavigationController>().back(result: {'id': tag.id, 'title': tag.title}));
       };
 }

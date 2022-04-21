@@ -207,7 +207,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'] as PortalUserItemController;
+    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final controller = args['controller'] as PortalUserItemController;
     final portalUser = controller.portalUser;
     final portalInfoController = Get.find<PortalInfoController>();
     portalInfoController.setup();

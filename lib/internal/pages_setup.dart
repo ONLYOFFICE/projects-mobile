@@ -88,11 +88,14 @@ import 'package:projects/presentation/views/task_detailed/comments/reply_comment
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
+import 'package:projects/presentation/views/task_detailed/task_team.dart';
+import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
-List<GetPage> getxPages() =>
-    [
+import '../presentation/shared/widgets/styled/styled_date_range_picker.dart';
+
+List<GetPage> getxPages() => [
       GetPage(name: '/MainView', page: () => const MainView()),
       GetPage(name: '/LoginView', page: LoginView.new),
       GetPage(name: '/CodeView', page: CodeView.new),
@@ -116,7 +119,9 @@ List<GetPage> getxPages() =>
       GetPage(name: '/SelectTagScreen', page: () => const SelectTagScreen()),
       GetPage(name: '/SelectGroupScreen', page: () => const SelectGroupScreen()),
       GetPage(name: '/NewCommentView', page: () => const NewCommentView()),
-      GetPage(name: '/NewSubtaskView', page: () => const CreatingAndEditingSubtaskView()),
+      GetPage(
+          name: '/CreatingAndEditingSubtaskView',
+          page: () => const CreatingAndEditingSubtaskView()),
       GetPage(name: '/TaskDescription', page: () => const TaskDescription()),
       GetPage(
           name: '/SelectDiscussionSubscribers', page: () => const SelectDiscussionSubscribers()),
@@ -160,4 +165,8 @@ List<GetPage> getxPages() =>
       GetPage(name: '/UsersFromGroups', page: () => const UsersFromGroups()),
       GetPage(name: '/ProfileScreen', page: () => const ProfileScreen()),
       GetPage(name: '/SelfProfileScreen', page: () => const SelfProfileScreen()),
+      GetPage(
+          name: '/StyledDateRangePickerDialog', page: () => const StyledDateRangePickerDialog()),
+      GetPage(name: '/TaskTeamView', page: () => const TaskTeamView()),
+      GetPage(name: '/TaskEditingView', page: () => const TaskEditingView()),
     ];
