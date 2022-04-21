@@ -50,7 +50,6 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
@@ -66,118 +65,114 @@ class FileCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        await cellController.openFile(parentId: documentsController.parentId);
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        height: 72,
-        child: Row(
-          children: [
-            SizedBox(
-              width: 72,
-              child: Center(
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Obx(() => cellController.fileIcon.value),
-                    Obx(() {
-                      if (cellController.status.value == DownloadTaskStatus.running ||
-                          cellController.status.value == DownloadTaskStatus.enqueued)
-                        return GestureDetector(
-                          onTap: cellController.cancelDownloadFile,
-                          child: SizedBox(
-                            width: 48,
-                            height: 48,
-                            child: Obx(() {
-                              final value = cellController.progress.value ?? 1;
-                              return PlatformCircularProgressIndicator(
-                                material: (_, __) =>
-                                    MaterialProgressIndicatorData(value: value / 100),
-                                cupertino: (_, __) => CupertinoProgressIndicatorData(radius: 20),
-                              );
-                            }),
-                          ),
-                        );
-                      else
-                        return const SizedBox();
-                    }),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      height: 72,
+      child: Column(
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: () async {
+                await cellController.openFile(parentId: documentsController.parentId);
+              },
+              child: Row(
                 children: [
-                  Flexible(
-                    child: Text(cellController.file.title!.replaceAll(' ', '\u00A0'),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyleHelper.subtitle1()),
+                  SizedBox(
+                    width: 72,
+                    child: Center(
+                      child: Obx(() => cellController.fileIcon.value),
+                    ),
                   ),
-                  Text(
-                      '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',
-                      style: TextStyleHelper.caption(
-                          color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(cellController.file.title!.replaceAll(' ', '\u00A0'),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyleHelper.subtitle1()),
+                        ),
+                        Text(
+                            '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',
+                            style: TextStyleHelper.caption(
+                                color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  PlatformPopupMenuButton(
+                    padding: EdgeInsets.zero,
+                    onSelected: (dynamic value) =>
+                        _onFilePopupMenuSelected(value, documentsController, cellController),
+                    icon: Icon(PlatformIcons(context).ellipsis,
+                        color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                    itemBuilder: (context) {
+                      return [
+                        PlatformPopupMenuItem(
+                          value: 'open',
+                          child: Text(tr('open')),
+                        ),
+                        PlatformPopupMenuItem(
+                          value: 'copyLink',
+                          child: Text(tr('copyLink')),
+                        ),
+                        PlatformPopupMenuItem(
+                          value: 'download',
+                          child: Text(cellController.downloadInProgress
+                              ? tr('cancelDownload')
+                              : tr('download')),
+                        ),
+                        if (Security.files.canEdit(cellController.file) &&
+                            documentsController is! DiscussionsDocumentsController)
+                          PlatformPopupMenuItem(
+                            value: 'copy',
+                            child: Text(tr('copy')),
+                          ),
+                        if (Security.files.canDelete(cellController.file) &&
+                            documentsController is! DiscussionsDocumentsController)
+                          PlatformPopupMenuItem(
+                            value: 'move',
+                            child: Text(tr('move')),
+                          ),
+                        if (Security.files.canEdit(cellController.file) &&
+                            documentsController is! DiscussionsDocumentsController)
+                          PlatformPopupMenuItem(
+                            value: 'rename',
+                            child: Text(tr('rename')),
+                          ),
+                        if (Security.files.canDelete(cellController.file))
+                          PlatformPopupMenuItem(
+                            value: 'delete',
+                            isDestructiveAction: true,
+                            textStyle:
+                                TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                            child: Text(tr('delete')),
+                          ),
+                      ];
+                    },
+                  ),
+                  const SizedBox(width: 8),
                 ],
               ),
             ),
-            const SizedBox(width: 16),
-            PlatformPopupMenuButton(
-              padding: EdgeInsets.zero,
-              onSelected: (dynamic value) =>
-                  _onFilePopupMenuSelected(value, documentsController, cellController),
-              icon: Icon(PlatformIcons(context).ellipsis,
-                  color: Get.theme.colors().onSurface.withOpacity(0.5)),
-              itemBuilder: (context) {
-                return [
-                  PlatformPopupMenuItem(
-                    value: 'open',
-                    child: Text(tr('open')),
-                  ),
-                  PlatformPopupMenuItem(
-                    value: 'copyLink',
-                    child: Text(tr('copyLink')),
-                  ),
-                  PlatformPopupMenuItem(
-                    value: 'download',
-                    child: Text(
-                        cellController.downloadInProgress ? tr('cancelDownload') : tr('download')),
-                  ),
-                  if (Security.files.canEdit(cellController.file) &&
-                      documentsController is! DiscussionsDocumentsController)
-                    PlatformPopupMenuItem(
-                      value: 'copy',
-                      child: Text(tr('copy')),
-                    ),
-                  if (Security.files.canDelete(cellController.file) &&
-                      documentsController is! DiscussionsDocumentsController)
-                    PlatformPopupMenuItem(
-                      value: 'move',
-                      child: Text(tr('move')),
-                    ),
-                  if (Security.files.canEdit(cellController.file) &&
-                      documentsController is! DiscussionsDocumentsController)
-                    PlatformPopupMenuItem(
-                      value: 'rename',
-                      child: Text(tr('rename')),
-                    ),
-                  if (Security.files.canDelete(cellController.file))
-                    PlatformPopupMenuItem(
-                      value: 'delete',
-                      isDestructiveAction: true,
-                      textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                      child: Text(tr('delete')),
-                    ),
-                ];
-              },
-            ),
-            const SizedBox(width: 8),
-          ],
-        ),
+          ),
+          Obx(() {
+            if (cellController.status.value == DownloadTaskStatus.running ||
+                cellController.status.value == DownloadTaskStatus.enqueued)
+              return Obx(() {
+                final value = cellController.progress.value ?? 1;
+                return LinearProgressIndicator(
+                  value: value / 100,
+                  color: Get.theme.colors().primary,
+                  backgroundColor: Get.theme.colors().surface,
+                );
+              });
+            else
+              return const SizedBox();
+          }),
+        ],
       ),
     );
   }
