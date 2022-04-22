@@ -34,12 +34,14 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:projects/data/enums/file_type.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
@@ -213,6 +215,7 @@ class FileCellController extends GetxController {
       this.progress.value = progress;
 
       if (status == DownloadTaskStatus.complete) {
+        Get.back();
         if (!(await FlutterDownloader.open(taskId: downloadTaskId!)))
           MessagesHandler.showSnackBar(context: Get.context!, text: tr('openFileError'));
       } else if (status == DownloadTaskStatus.failed)
@@ -244,6 +247,26 @@ class FileCellController extends GetxController {
     if (downloadInProgress) return;
 
     if (downloadTaskId != null && await tryToOpenAlreadyDownloadedFile()) return;
+
+    unawaited(Get.dialog(
+      SingleButtonDialog(
+        titleText: tr('uploading'),
+        acceptText: tr('cancel'),
+        onAcceptTap: () {
+          cancelDownloadFile();
+          Get.back();
+        },
+        content: Obx(() {
+          final value = progress.value;
+          return LinearProgressIndicator(
+            value: (value ?? 0) < 5 ? 0.05 : value! / 100,
+            color: Get.theme.colors().primary,
+            backgroundColor: Get.theme.colors().surface,
+          );
+        }),
+      ),
+      barrierDismissible: false,
+    ));
 
     downloadTaskId = await downloadService.downloadDocument(file.viewUrl!, temp: true);
     if (downloadTaskId == null) {

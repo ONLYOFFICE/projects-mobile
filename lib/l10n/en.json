@@ -494,5 +494,6 @@
   "clearCacheQuestion": "Очистить кэш?",
   "clearCacheQuestionDescription": "Эта операция освободит место на устройстве за счет удаления временных файлов. Автономные файлы и персональные данные не будут удалены.",
   "openFileError": "Невозможно открыть файл",
-  "cancelDownload": "Отменить скачивание"
+  "cancelDownload": "Отменить скачивание",
+  "uploading": "Uploading..."
 }

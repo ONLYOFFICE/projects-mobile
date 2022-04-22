@@ -162,9 +162,9 @@ class FileCell extends StatelessWidget {
             if (cellController.status.value == DownloadTaskStatus.running ||
                 cellController.status.value == DownloadTaskStatus.enqueued)
               return Obx(() {
-                final value = cellController.progress.value ?? 1;
+                final value = cellController.progress.value;
                 return LinearProgressIndicator(
-                  value: value < 5 ? 0.05 : value / 100,
+                  value: (value ?? 0) < 5 ? 0.05 : value! / 100,
                   color: Get.theme.colors().primary,
                   backgroundColor: Get.theme.colors().surface,
                 );
