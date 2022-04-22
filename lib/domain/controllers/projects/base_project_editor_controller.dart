@@ -309,6 +309,6 @@ abstract class BaseProjectEditorController extends GetxController {
 
     await usersDataSourse.updateUsers();
 
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 }

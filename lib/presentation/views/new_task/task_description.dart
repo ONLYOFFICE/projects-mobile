@@ -47,7 +47,7 @@ class TaskDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final controller = args['controller'] as TaskActionsController;
 
     final platformController = Get.find<PlatformController>();

@@ -57,7 +57,7 @@ class SelectMilestoneView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _milestoneController = Get.find<MilestonesDataSource>();
     final platformController = Get.find<PlatformController>();
-    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final _controller = args['controller'] as TaskActionsController;
     _milestoneController.setup(projectId: _controller.selectedProjectId);
     return Scaffold(

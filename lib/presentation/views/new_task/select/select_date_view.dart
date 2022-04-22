@@ -45,7 +45,7 @@ class SelectDateView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final controller = args['controller'];
     final startDate = args['startDate'] as bool;
     final initialDate = args['initialDate'] as DateTime?;

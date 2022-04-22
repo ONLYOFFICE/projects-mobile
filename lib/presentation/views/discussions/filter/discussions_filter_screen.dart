@@ -62,7 +62,8 @@ class DiscussionsFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filterController = Get.arguments['filterController'] as BaseFilterController;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final filterController = args['filterController'] as BaseFilterController;
 
     void onLeadingPressed() {
       filterController.restoreFilters();

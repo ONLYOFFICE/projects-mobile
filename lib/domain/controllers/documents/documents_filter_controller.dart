@@ -360,5 +360,5 @@ class DocumentsFilterController extends BaseFilterController {
         page: '/SelectGroupScreen',
       );
 
-  void back({int? id}) => navigationController.back(closeTabletModalScreen: true);
+  void back() => navigationController.back();
 }

@@ -54,7 +54,8 @@ class DocumentsFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filterController = Get.arguments['filterController'] as DocumentsFilterController;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final filterController = args['filterController'] as DocumentsFilterController;
 
     void onLeadingPressed() {
       filterController.restoreFilters();

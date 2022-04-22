@@ -47,7 +47,7 @@ class NewMilestoneDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as Map;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final newMilestoneController = args['newMilestoneController'] as NewMilestoneController;
 
     final platformController = Get.find<PlatformController>();
