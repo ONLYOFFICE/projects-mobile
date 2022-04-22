@@ -138,7 +138,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 28),
-                      if (controller.isFingerprintAvailable.value == true ||
+                      if (controller.isFingerprintAvailable.value == true &&
                           controller.isPasscodeEnable.value == true)
                         OptionWithSwitch(
                             title: tr('fingerprint'),

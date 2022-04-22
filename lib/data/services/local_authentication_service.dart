@@ -30,8 +30,9 @@
  *
  */
 
-import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_ios/local_auth_ios.dart';
 
 class LocalAuthenticationService {
   final _localAuth = LocalAuthentication();
@@ -50,19 +51,20 @@ class LocalAuthenticationService {
   Future<bool> authenticate({String? signInTitle}) async {
     return _localAuth.authenticate(
       localizedReason: ' ',
-      androidAuthStrings: AndroidAuthMessages(
-        biometricHint: '',
-        biometricNotRecognized: '',
-        biometricRequiredTitle: '',
-        biometricSuccess: '',
-        deviceCredentialsRequiredTitle: '',
-        deviceCredentialsSetupDescription: '',
-        goToSettingsButton: '',
-        goToSettingsDescription: '',
-        signInTitle: signInTitle,
-      ),
-      stickyAuth: true,
-      biometricOnly: true,
+      authMessages: [
+        AndroidAuthMessages(
+          biometricHint: '',
+          biometricNotRecognized: '',
+          biometricRequiredTitle: '',
+          biometricSuccess: '',
+          deviceCredentialsRequiredTitle: '',
+          deviceCredentialsSetupDescription: '',
+          goToSettingsButton: '',
+          goToSettingsDescription: '',
+          signInTitle: signInTitle,
+        ),
+      ],
+      options: const AuthenticationOptions(stickyAuth: true, biometricOnly: true),
     );
   }
 }
