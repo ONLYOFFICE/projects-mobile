@@ -260,13 +260,11 @@ class SettingsController extends GetxController {
   void onAnalyticsPressed() => navigationController.toScreen(
         const AnalyticsScreen(),
         page: '/AnalyticsScreen',
-        // navigatorKey: SettingsRouteNames.key,
       );
 
   void onPasscodePressed() => navigationController.toScreen(
         const PasscodeSettingsScreen(),
         page: '/PasscodeSettingsScreen',
-        // navigatorKey: SettingsRouteNames.key,
       );
 
   void onThemePressed() => navigationController.toScreen(const ColorThemeSelectionScreen(),

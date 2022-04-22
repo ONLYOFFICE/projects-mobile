@@ -35,6 +35,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -75,14 +76,14 @@ abstract class DiscussionActionsController extends GetxController {
     else
       text.value = '';
 
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   void leaveTextView() async {
     final t = await textController.getText();
 
     if (t == text.value || t == '<br>') {
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -91,7 +92,7 @@ abstract class DiscussionActionsController extends GetxController {
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));

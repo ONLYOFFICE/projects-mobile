@@ -57,11 +57,8 @@ import 'package:projects/presentation/views/task_detailed/task_detailed_view.dar
 
 class NewTaskController extends TaskActionsController {
   final TaskService _api = locator<TaskService>();
-  late ProjectTeamController teamController;
 
   int? _selectedProjectId;
-  int? newMilestoneId;
-  // for dateTime format
   DateTime? _startDate;
   DateTime? _dueDate;
 
@@ -76,7 +73,6 @@ class NewTaskController extends TaskActionsController {
   @override
   DateTime? get dueDate => _dueDate;
 
-  Rx<TextEditingController> descriptionController = TextEditingController().obs;
   final TextEditingController _titleController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
 
@@ -106,6 +102,7 @@ class NewTaskController extends TaskActionsController {
   @override
   void changeTitle(String newText) => title.value = newText;
 
+  @override
   void changeProjectSelection(ProjectDetailed? _details) {
     if (_details != null) {
       selectedProjectTitle.value = _details.title!;

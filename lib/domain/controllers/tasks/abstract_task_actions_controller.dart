@@ -32,6 +32,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
@@ -74,7 +75,7 @@ abstract class TaskActionsController extends GetxController {
 
   void leaveResponsiblesSelectionView();
 
-  void confirmDescription(String newText);
+  void confirmDescription(String typedText);
 
   void changeTitle(String newText);
 
@@ -86,7 +87,7 @@ abstract class TaskActionsController extends GetxController {
 
   void checkDate(DateTime startDate, DateTime dueDate);
 
-  void changeProjectSelection({int? id, String? title});
+  void changeProjectSelection(ProjectDetailed? _details);
 
   void setupResponsibleSelection();
 

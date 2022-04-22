@@ -79,7 +79,12 @@ class SelectProjectView extends StatelessWidget {
 
     final platformController = Get.find<PlatformController>();
 
-    final searchController = Get.put(ProjectSearchController(onlyMyProjects: true));
+    final searchController = Get.put(
+      ProjectSearchController(
+          sortController: projectsController.sortController,
+          filterController: projectsController.filterController,
+          onlyMyProjects: true),
+    );
     searchController.textController.addListener(() {
       if (searchController.textController.text.isNotEmpty)
         searchController.switchToSearchView.value = true;

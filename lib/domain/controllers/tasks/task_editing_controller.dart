@@ -38,6 +38,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task/task_service.dart';
@@ -58,11 +59,8 @@ class TaskEditingController extends TaskActionsController {
   PortalTask task;
   final TaskService _api = locator<TaskService>();
 
-  late ProjectTeamController teamController;
 
   TaskEditingController({required this.task});
-
-  Rx<TextEditingController> descriptionController = TextEditingController().obs;
 
   final TextEditingController _titleController = TextEditingController();
 
@@ -71,13 +69,9 @@ class TaskEditingController extends TaskActionsController {
   @override
   int? get selectedProjectId => task.projectOwner!.id;
 
-  int? newMilestoneId;
-
-  // to track changes.
   DateTime? _newStartDate;
   DateTime? _newDueDate;
 
-  // to track changes
   List? _previusSelectedResponsibles;
 
   Status? initialStatus;
@@ -411,7 +405,7 @@ class TaskEditingController extends TaskActionsController {
   }
 
   @override
-  void changeProjectSelection({int? id, String? title}) {
+  void changeProjectSelection(ProjectDetailed? _details) {
     // TODO: implement changeProjectSelection
   }
 }
