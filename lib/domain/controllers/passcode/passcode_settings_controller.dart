@@ -32,6 +32,7 @@
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
@@ -54,6 +55,7 @@ class PasscodeSettingsController extends GetxController {
   final isFingerprintEnable = false.obs;
   final isFingerprintAvailable = false.obs;
 
+  late final BiometricType? biometricType;
   RxInt enteredPasscodeLen = 0.obs;
   RxInt passcodeCheckLen = 0.obs;
 
@@ -63,11 +65,12 @@ class PasscodeSettingsController extends GetxController {
 
     isPasscodeEnable.value = await _service.isPasscodeEnable;
 
-    final isFinEnable = await _service.isFingerprintEnable;
-    final isFinAvailable = await _service.isFingerprintAvailable;
+    final isBiometricEnable = await _service.isBiometricEnable;
+    final isBiometricAvailable = await _service.isBiometricAvailable;
+    biometricType = await _service.getBiometricType();
 
-    if (isFinAvailable) {
-      isFingerprintEnable.value = isFinEnable;
+    if (isBiometricAvailable) {
+      isFingerprintEnable.value = isBiometricEnable;
       isFingerprintAvailable.value = true;
     } else {
       isFingerprintEnable.value = false;
@@ -137,7 +140,7 @@ class PasscodeSettingsController extends GetxController {
     await _service.deletePasscode();
     isPasscodeEnable.value = false;
     if (isFingerprintEnable.value == true) {
-      await _service.setFingerprintStatus(false);
+      await _service.setBiometricStatus(false);
       isFingerprintEnable.value = false;
     }
     leave();
@@ -220,7 +223,7 @@ class PasscodeSettingsController extends GetxController {
   void _toggleFingerprintStatus(bool value) {
     if (isFingerprintAvailable.value == true) {
       isFingerprintEnable.value = value;
-      _service.setFingerprintStatus(value);
+      _service.setBiometricStatus(value);
     }
     Get.back();
   }

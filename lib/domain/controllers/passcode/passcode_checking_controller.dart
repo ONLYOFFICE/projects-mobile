@@ -157,8 +157,8 @@ class PasscodeCheckingController extends GetxController {
       isFingerprintAvailable = false;
       isFingerprintEnable = false;
     } else {
-      isFingerprintAvailable = await _authService.isFingerprintAvailable;
-      isFingerprintEnable = await _service.isFingerprintEnable;
+      isFingerprintAvailable = await _authService.isBiometricAvailable;
+      isFingerprintEnable = await _service.isBiometricEnable;
     }
     loaded.value = true;
   }

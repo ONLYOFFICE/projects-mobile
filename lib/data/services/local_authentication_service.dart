@@ -39,13 +39,13 @@ class LocalAuthenticationService {
 
   Future<List<BiometricType>> get availableBiometrics async => _localAuth.getAvailableBiometrics();
 
-  Future<bool> get isFingerprintAvailable async {
+  Future<bool> get isBiometricAvailable async {
     final canCheckBiometrics = await _localAuth.canCheckBiometrics;
     final biometrics = await availableBiometrics;
-    final isFingerprintAvailable = biometrics.contains(BiometricType.fingerprint);
+    final isBiometricAvailable =
+        biometrics.contains(BiometricType.fingerprint) || biometrics.contains(BiometricType.face);
     final isDeviceSupported = await _localAuth.isDeviceSupported();
-
-    return canCheckBiometrics && isFingerprintAvailable && isDeviceSupported;
+    return canCheckBiometrics && isBiometricAvailable && isDeviceSupported;
   }
 
   Future<bool> authenticate({String? signInTitle}) async {
