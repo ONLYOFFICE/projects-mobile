@@ -36,7 +36,6 @@ import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:android_path_provider/android_path_provider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -86,14 +85,18 @@ class DocumentsDownloadService {
         debugPrint('error register port');
     }
 
-    _port.listen((dynamic data) {
+    _port.listen((dynamic data) async {
       final id = data[0] as String;
       final status = data[1] as DownloadTaskStatus;
       final progress = data[2] as int;
 
       debugPrint('Downloading: task ($id), status: ($status), progress: ($progress)');
 
-      _callbacksList[id]?.call(id, status, progress);
+      await _callbacksList[id]?.call(id, status, progress);
+
+      if (status == DownloadTaskStatus.complete ||
+          status == DownloadTaskStatus.canceled ||
+          status == DownloadTaskStatus.failed) _callbacksList.remove(id);
     });
 
     FlutterDownloader.registerCallback(downloadCallback);
@@ -113,14 +116,8 @@ class DocumentsDownloadService {
     return true;
   }
 
-  bool deleteCallback(String taskId) {
-    _callbacksList.remove(taskId);
-
-    return true;
-  }
-
-  Future<String?> downloadDocument(String url) async {
-    final path = await getPath();
+  Future<String?> downloadDocument(String url, {bool temp = false}) async {
+    final path = await getPath(temp: temp);
 
     if (path == null || path.isEmpty) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
@@ -143,6 +140,7 @@ class DocumentsDownloadService {
       headers: headers,
       savedDir: path,
       saveInPublicStorage: true,
+      showNotification: !temp,
     );
   }
 
@@ -171,22 +169,21 @@ class DocumentsDownloadService {
     return finalUrl.toString();
   }
 
-  Future<String?> getPath() async {
+  Future<String?> getPath({bool temp = false}) async {
     String? path;
+    /*  if (temp)
+      path = (await getTemporaryDirectory()).absolute.path;
+    else */ // TODO @garanin save to cache
     if (GetPlatform.isAndroid) {
-      try {
-        path = await AndroidPathProvider.downloadsPath;
-      } catch (e) {
-        path = (await getExternalStorageDirectory())?.path;
-      }
+      path = (await getExternalStorageDirectory())?.absolute.path;
     } else {
       path = (await getApplicationDocumentsDirectory()).absolute.path;
     }
 
     final savedDir = Directory(path!);
     // ignore: avoid_slow_async_io
-    final hasExisted = await savedDir.exists();
-    if (!hasExisted) {
+    final existed = await savedDir.exists();
+    if (!existed) {
       await savedDir.create();
     }
 

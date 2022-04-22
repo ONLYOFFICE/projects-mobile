@@ -164,7 +164,7 @@ class FileCell extends StatelessWidget {
               return Obx(() {
                 final value = cellController.progress.value ?? 1;
                 return LinearProgressIndicator(
-                  value: value / 100,
+                  value: value < 5 ? 0.05 : value / 100,
                   color: Get.theme.colors().primary,
                   backgroundColor: Get.theme.colors().surface,
                 );

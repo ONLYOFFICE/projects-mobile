@@ -35,6 +35,7 @@ import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:projects/data/enums/file_type.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -199,13 +200,10 @@ class FileCellController extends GetxController {
       this.status.value = status;
       this.progress.value = progress;
 
-      if (status == DownloadTaskStatus.complete) {
+      if (status == DownloadTaskStatus.complete)
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
-        //downloadService.deleteCallback(downloadTaskId!); TODO @garanin
-      } else if (status == DownloadTaskStatus.failed) {
+      else if (status == DownloadTaskStatus.failed)
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
-        //downloadService.deleteCallback(downloadTaskId!); TODO @garanin
-      }
     }
   }
 
@@ -217,11 +215,8 @@ class FileCellController extends GetxController {
       if (status == DownloadTaskStatus.complete) {
         if (!(await FlutterDownloader.open(taskId: downloadTaskId!)))
           MessagesHandler.showSnackBar(context: Get.context!, text: tr('openFileError'));
-        //downloadService.deleteCallback(downloadTaskId!); TODO @garanin
-      } else if (status == DownloadTaskStatus.failed) {
+      } else if (status == DownloadTaskStatus.failed)
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
-        //downloadService.deleteCallback(downloadTaskId!); TODO @garanin
-      }
     }
   }
 
@@ -250,7 +245,7 @@ class FileCellController extends GetxController {
 
     if (downloadTaskId != null && await tryToOpenAlreadyDownloadedFile()) return;
 
-    downloadTaskId = await downloadService.downloadDocument(file.viewUrl!);
+    downloadTaskId = await downloadService.downloadDocument(file.viewUrl!, temp: true);
     if (downloadTaskId == null) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       return;
@@ -301,6 +296,10 @@ class FileCellController extends GetxController {
         AnalyticsService.Params.Key.extension: extension(file.title!)
       });
     } else
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('openFileError'));
+      await LaunchReview.launch(
+        androidAppId: Const.Identificators.documentsAndroidAppBundle,
+        iOSAppId: Const.Identificators.documentsAppStore,
+        writeReview: false,
+      );
   }
 }
