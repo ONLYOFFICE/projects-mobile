@@ -31,16 +31,20 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
+import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
 import 'package:projects/internal/extentions.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
@@ -59,95 +63,121 @@ class FileCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        await cellController.openFile(cellController.file);
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4),
-        height: 72,
-        child: Row(
-          children: [
-            SizedBox(
-              width: 72,
-              child: Center(
-                child: Obx(() => cellController.fileIcon.value),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      height: 72,
+      child: Column(
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: () async {
+                await cellController.openFile(parentId: documentsController.parentId);
+              },
+              child: Row(
                 children: [
-                  Flexible(
-                    child: Text(cellController.file.title!.replaceAll(' ', '\u00A0'),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyleHelper.subtitle1()),
+                  SizedBox(
+                    width: 72,
+                    child: Center(
+                      child: Obx(() => cellController.fileIcon.value),
+                    ),
                   ),
-                  Text(
-                      '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',
-                      style: TextStyleHelper.caption(
-                          color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(cellController.file.title!.replaceAll(' ', '\u00A0'),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyleHelper.subtitle1()),
+                        ),
+                        Text(
+                            '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',
+                            style: TextStyleHelper.caption(
+                                color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  PlatformPopupMenuButton(
+                    padding: EdgeInsets.zero,
+                    onSelected: (dynamic value) =>
+                        _onFilePopupMenuSelected(value, documentsController, cellController),
+                    icon: Icon(PlatformIcons(context).ellipsis,
+                        color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                    itemBuilder: (context) {
+                      return [
+                        PlatformPopupMenuItem(
+                          value: 'open',
+                          child: Text(tr('open')),
+                        ),
+                        PlatformPopupMenuItem(
+                          value: 'copyLink',
+                          child: Text(tr('copyLink')),
+                        ),
+                        PlatformPopupMenuItem(
+                          value: 'download',
+                          child: Text(cellController.downloadInProgress
+                              ? tr('cancelDownload')
+                              : tr('download')),
+                        ),
+                        if (Security.files.canEdit(cellController.file) &&
+                            documentsController is! DiscussionsDocumentsController)
+                          PlatformPopupMenuItem(
+                            value: 'copy',
+                            child: Text(tr('copy')),
+                          ),
+                        if (Security.files.canDelete(cellController.file) &&
+                            documentsController is! DiscussionsDocumentsController)
+                          PlatformPopupMenuItem(
+                            value: 'move',
+                            child: Text(tr('move')),
+                          ),
+                        if (Security.files.canEdit(cellController.file) &&
+                            documentsController is! DiscussionsDocumentsController)
+                          PlatformPopupMenuItem(
+                            value: 'rename',
+                            child: Text(tr('rename')),
+                          ),
+                        if (Security.files.canDelete(cellController.file))
+                          PlatformPopupMenuItem(
+                            value: 'delete',
+                            isDestructiveAction: true,
+                            textStyle:
+                                TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                            child: Text(tr('delete')),
+                          ),
+                      ];
+                    },
+                  ),
+                  const SizedBox(width: 8),
                 ],
               ),
             ),
-            const SizedBox(width: 16),
-            PlatformPopupMenuButton(
-              padding: EdgeInsets.zero,
-              onSelected: (dynamic value) =>
-                  {_onFilePopupMenuSelected(value, context, documentsController, cellController)},
-              icon: Icon(PlatformIcons(context).ellipsis,
-                  color: Get.theme.colors().onSurface.withOpacity(0.5)),
-              itemBuilder: (context) {
-                return [
-                  PlatformPopupMenuItem(
-                    value: 'open',
-                    child: Text(tr('open')),
-                  ),
-                  PlatformPopupMenuItem(
-                    value: 'copyLink',
-                    child: Text(tr('copyLink')),
-                  ),
-                  PlatformPopupMenuItem(
-                    value: 'download',
-                    child: Text(tr('download')),
-                  ),
-                  if (Security.files.canEdit(cellController.file))
-                    PlatformPopupMenuItem(
-                      value: 'copy',
-                      child: Text(tr('copy')),
-                    ),
-                  if (Security.files.canDelete(cellController.file))
-                    PlatformPopupMenuItem(
-                      value: 'move',
-                      child: Text(tr('move')),
-                    ),
-                  if (Security.files.canEdit(cellController.file))
-                    PlatformPopupMenuItem(
-                      value: 'rename',
-                      child: Text(tr('rename')),
-                    ),
-                  if (Security.files.canDelete(cellController.file))
-                    PlatformPopupMenuItem(
-                      value: 'delete',
-                      isDestructiveAction: true,
-                      textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                      child: Text(tr('delete')),
-                    ),
-                ];
-              },
-            ),
-            const SizedBox(width: 8),
-          ],
-        ),
+          ),
+          Obx(() {
+            if (cellController.status.value == DownloadTaskStatus.running ||
+                cellController.status.value == DownloadTaskStatus.enqueued)
+              return Obx(() {
+                final value = cellController.progress.value;
+                return LinearProgressIndicator(
+                  value: (value ?? 0) < 5 ? 0.05 : value! / 100,
+                  color: Get.theme.colors().primary,
+                  backgroundColor: Get.theme.colors().surface,
+                );
+              });
+            else
+              return const SizedBox();
+          }),
+        ],
       ),
     );
   }
 }
 
-Future<void> _onFilePopupMenuSelected(value, BuildContext context,
-    BaseDocumentsController documentsController, FileCellController cellController) async {
+Future<void> _onFilePopupMenuSelected(
+    value, BaseDocumentsController documentsController, FileCellController cellController) async {
   switch (value) {
     case 'copyLink':
       final portalDomain = documentsController.portalInfoController.portalUri;
@@ -164,10 +194,12 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
       }
       break;
     case 'open':
-      await cellController.openFile(cellController.file);
+      await cellController.openFile(parentId: documentsController.parentId);
       break;
     case 'download':
-      await cellController.downloadFile(cellController.file.viewUrl!);
+      cellController.downloadInProgress
+          ? await cellController.cancelDownloadFile()
+          : await cellController.downloadFile();
       break;
     case 'copy':
       await Get.find<NavigationController>().toScreen(
@@ -176,7 +208,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
         arguments: {
           'mode': MoveOrCopyMode.CopyDocument,
           'target': cellController.file.id,
-          'initialFolderId': documentsController.currentFolderID,
+          'initialFolderId': cellController.file.folderId,
         },
         transition: Transition.rightToLeft,
         page: '/DocumentsMoveOrCopyView',
@@ -189,36 +221,56 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
         arguments: {
           'mode': MoveOrCopyMode.MoveDocument,
           'target': cellController.file.id,
-          'initialFolderId': documentsController.currentFolderID,
+          'initialFolderId': cellController.file.folderId,
         },
         transition: Transition.rightToLeft,
         page: '/DocumentsMoveOrCopyView',
       );
       break;
     case 'rename':
-      _renameFile(documentsController, cellController, context);
+      _renameFile(cellController);
       break;
     case 'delete':
-      final success = await cellController.deleteFile(cellController.file);
+      final error = await cellController.deleteFile();
 
-      if (success) {
+      if (error == null) {
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileDeleted'));
+
+        locator<EventHub>().fire('needToRefreshDocuments');
       } else
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+        MessagesHandler.showSnackBar(context: Get.context!, text: error);
       break;
     default:
   }
 }
 
-void _renameFile(
-  BaseDocumentsController docController,
-  FileCellController cellController,
-  BuildContext context,
-) {
+void _renameFile(FileCellController cellController) {
   final inputController = TextEditingController();
   inputController.text = cellController.file.title!.replaceAll(cellController.file.fileExst!, '');
 
   final isErrorInputText = ValueNotifier<bool>(false);
+
+  Future onSubmitted() async {
+    inputController.text = inputController.text.trim();
+    inputController.selection = TextSelection.fromPosition(
+      TextPosition(offset: inputController.text.length),
+    );
+
+    if (inputController.text.isEmpty) {
+      isErrorInputText.value = true;
+    } else {
+      if (inputController.text != cellController.file.title) {
+        final success = await cellController.renameFile(inputController.text);
+        if (success) {
+          Get.back();
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
+
+          locator<EventHub>().fire('needToRefreshDocuments');
+        } else
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+      }
+    }
+  }
 
   Get.dialog(
     StyledAlertDialog(
@@ -227,33 +279,14 @@ void _renameFile(
         valueListenable: isErrorInputText,
         builder: (_, __, ___) => _NewFileTextFieldWidget(
           inputController: inputController,
-          docController: docController,
           isErrorInputText: isErrorInputText,
           cellController: cellController,
+          onSubmited: onSubmitted,
         ),
       ),
       acceptText: tr('confirm'),
       cancelText: tr('cancel'),
-      onAcceptTap: () async {
-        inputController.text = inputController.text.trim();
-        inputController.selection = TextSelection.fromPosition(
-          TextPosition(offset: inputController.text.length),
-        );
-
-        if (inputController.text.isEmpty) {
-          isErrorInputText.value = true;
-        } else {
-          if (inputController.text != cellController.file.title) {
-            final success =
-                await cellController.renameFile(cellController.file, inputController.text);
-            if (success) {
-              Get.back();
-              MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
-            } else
-              MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-          }
-        }
-      },
+      onAcceptTap: onSubmitted,
       onCancelTap: Get.back,
     ),
   );
@@ -263,15 +296,15 @@ class _NewFileTextFieldWidget extends StatelessWidget {
   const _NewFileTextFieldWidget({
     Key? key,
     required this.inputController,
-    required this.docController,
     required this.isErrorInputText,
     required this.cellController,
+    required this.onSubmited,
   }) : super(key: key);
 
   final TextEditingController inputController;
-  final BaseDocumentsController docController;
   final ValueNotifier<bool> isErrorInputText;
   final FileCellController cellController;
+  final Function onSubmited;
 
   @override
   Widget build(BuildContext context) {
@@ -309,26 +342,7 @@ class _NewFileTextFieldWidget extends StatelessWidget {
           isErrorInputText.value = false;
         }
       },
-      onSubmitted: (_) async {
-        inputController.text = inputController.text.trim();
-        inputController.selection = TextSelection.fromPosition(
-          TextPosition(offset: inputController.text.length),
-        );
-
-        if (inputController.text.isEmpty) {
-          isErrorInputText.value = true;
-        } else {
-          if (inputController.text != cellController.file.title) {
-            final success =
-                await cellController.renameFile(cellController.file, inputController.text);
-            if (success) {
-              Get.back();
-              MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
-            } else
-              MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-          }
-        }
-      },
+      onSubmitted: (_) => onSubmited(),
     );
   }
 }

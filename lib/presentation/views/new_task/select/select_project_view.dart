@@ -50,8 +50,6 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class SelectProjectView extends StatelessWidget {
   const SelectProjectView({Key? key}) : super(key: key);
@@ -79,22 +77,28 @@ class SelectProjectView extends StatelessWidget {
       projectsController = projectsWithPresets.myManagedProjectController;
     }
 
-    final searchController = Get.put(ProjectSearchController(onlyMyProjects: true));
-
     final platformController = Get.find<PlatformController>();
+
+    final searchController = Get.put(ProjectSearchController(onlyMyProjects: true));
+    searchController.textController.addListener(() {
+      if (searchController.textController.text.isNotEmpty)
+        searchController.switchToSearchView.value = true;
+      else {
+        searchController.switchToSearchView.value = false;
+        searchController.clearSearch();
+      }
+    });
 
     return Scaffold(
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectProject'),
-        // centerTitle: true,
-        backButtonIcon: Icon(PlatformIcons(context).back),
+        centerTitle: GetPlatform.isIOS,
         bottomHeight: 44,
         bottom: SearchField(
           hintText: tr('searchProjects'),
-          controller: searchController.searchInputController,
-          showClearIcon: true,
+          controller: searchController.textController,
           onChanged: searchController.newSearch,
           onSubmitted: searchController.newSearch,
           onClearPressed: searchController.clearSearch,
@@ -103,32 +107,26 @@ class SelectProjectView extends StatelessWidget {
       body: Obx(() {
         final scrollController = ScrollController();
 
-        if (searchController.switchToSearchView.value == true &&
-            searchController.searchResult.isNotEmpty) {
-          return StyledSmartRefresher(
-            scrollController: scrollController,
-            enablePullDown: false,
-            enablePullUp: searchController.pullUpEnabled,
-            controller: searchController.refreshController,
-            onLoading: searchController.onLoading,
-            child: ListView.separated(
-              controller: scrollController,
-              itemCount: searchController.searchResult.length,
-              separatorBuilder: (BuildContext context, int index) {
-                return const StyledDivider(leftPadding: 16, rightPadding: 16);
-              },
-              itemBuilder: (c, i) =>
-                  _ProjectCell(item: searchController.searchResult[i], controller: controller),
-            ),
-          );
-        }
-        if (searchController.switchToSearchView.value == true &&
-            searchController.searchResult.isEmpty &&
-            searchController.loaded.value == true) {
-          return const NothingFound();
-        }
-        if (projectsController.loaded.value == true &&
-            searchController.switchToSearchView.value == false) {
+        if (searchController.switchToSearchView.value) {
+          if (!searchController.loaded.value) return const ListLoadingSkeleton();
+
+          return PaginationListView(
+              scrollController: scrollController,
+              paginationController: searchController.paginationController,
+              child: () {
+                if (searchController.nothingFound) return const NothingFound();
+
+                return ListView.separated(
+                  controller: scrollController,
+                  itemCount: searchController.itemList.length,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const StyledDivider(leftPadding: 16, rightPadding: 16);
+                  },
+                  itemBuilder: (c, i) =>
+                      _ProjectCell(item: searchController.itemList[i], controller: controller),
+                );
+              }());
+        } else if (projectsController.loaded.value) {
           return PaginationListView(
             scrollController: scrollController,
             paginationController: projectsController.paginationController,
@@ -143,6 +141,7 @@ class SelectProjectView extends StatelessWidget {
             ),
           );
         }
+
         return const ListLoadingSkeleton();
       }),
     );
@@ -162,7 +161,7 @@ class _ProjectCell extends StatelessWidget {
           : Get.theme.colors().surface,
       child: InkWell(
         onTap: () {
-          controller.changeProjectSelection(id: item.id, title: item.title);
+          controller.changeProjectSelection(item);
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

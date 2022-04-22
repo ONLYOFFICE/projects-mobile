@@ -190,7 +190,7 @@ class MainController extends GetxController {
       await cookieManager.setCookies([
         Cookie('asc_auth_key', token)
           ..domain = Uri.parse(portalName).authority
-          ..expires = DateTime.now().add(const Duration(days: 10))
+          ..expires = expiration
           ..httpOnly = false
       ]);
 

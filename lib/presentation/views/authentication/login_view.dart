@@ -54,7 +54,8 @@ class LoginView extends StatelessWidget {
   final passwordFocusNode = FocusNode();
 
   final styledAppBar = StyledAppBar(
-    backButtonIcon: Platform.isAndroid ? Icon(PlatformIcons(Get.context!).clear) : null,
+    backButtonIcon:
+        Platform.isAndroid ? Icon(PlatformIcons(Get.context!).clear) : const BackButtonIcon(),
     leading: Platform.isIOS
         ? Align(
             alignment: Alignment.centerLeft,

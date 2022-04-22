@@ -32,8 +32,8 @@
 
 part of 'select_item_template.dart';
 
-class _AppBarTitle extends StatelessWidget {
-  const _AppBarTitle({
+class AppBarTitleWithSearch extends StatelessWidget {
+  const AppBarTitleWithSearch({
     Key? key,
     required this.appBarText,
     required this.searchController,
@@ -44,28 +44,35 @@ class _AppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          reverseDuration: const Duration(milliseconds: 300),
-          switchInCurve: Curves.easeOutSine,
-          switchOutCurve: Curves.fastOutSlowIn,
-          child: searchController.switchToSearchView.value == true
-              ? PlatformTextField(
-                  autofocus: true,
-                  controller: searchController.textController,
-                  hintText: tr('enterQuery'),
-                  material: (_, __) => MaterialTextFieldData(
-                    decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
+    void _clearFunction() {
+      if (searchController.switchToSearchView.value) searchController.clearSearch();
+
+      searchController.switchToSearchView.value = !searchController.switchToSearchView.value;
+    }
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Obx(
+          () => searchController.switchToSearchView.value
+              ? Expanded(
+                  child: SearchField(
+                    controller: searchController.textController,
+                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+                    autofocus: true,
+                    alwaysShowSuffixIcon: true,
+                    hintText: tr('enterQuery'),
+                    onSubmitted: searchController.search,
+                    onChanged: searchController.search,
+                    onClearPressed: _clearFunction,
                   ),
-                  style: TextStyleHelper.headline6(
-                    color: Get.theme.colors().onSurface,
-                  ),
-                  onSubmitted: (value) async => await searchController.search(query: value),
                 )
               : Text(
                   appBarText,
                   style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                 ),
-        ));
+        ),
+      ],
+    );
   }
 }

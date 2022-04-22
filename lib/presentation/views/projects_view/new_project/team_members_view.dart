@@ -37,6 +37,7 @@ import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -47,7 +48,6 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 
@@ -60,7 +60,7 @@ class TeamMembersSelectionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final controller = args['controller'];
-    final usersDataSource = Get.find<UsersDataSource>();
+    final usersDataSource = Get.find<UsersDataSource>()..loaded.value = false;
 
     usersDataSource.selectedProjectManager = controller.selectedProjectManager.value as PortalUser?;
     controller.selectionMode = UserSelectionMode.Multiple;
@@ -74,18 +74,16 @@ class TeamMembersSelectionView extends StatelessWidget {
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        backButtonIcon: Icon(PlatformIcons(context).back),
         title: TeamMembersSelectionHeader(
           controller: controller,
           title: tr('addTeamMembers'),
         ),
-        actions: [
-          _DoneButton(controller: controller),
-        ],
         bottom: TeamMembersSearchBar(
           usersDataSource: usersDataSource,
           controller: controller,
         ),
+        onLeadingPressed:
+            controller is ProjectDetailsController ? controller.confirmTeamMembers : null,
       ),
       body: Obx(
         () {
@@ -152,38 +150,6 @@ class TeamMembersSelectionHeader extends StatelessWidget {
   }
 }
 
-class _DoneButton extends StatelessWidget {
-  const _DoneButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Obx(
-          () {
-            if (controller.selectedTeamMembers.isNotEmpty as bool) {
-              return PlatformIconButton(
-                onPressed: () {
-                  controller.confirmTeamMembers();
-                },
-                icon: Icon(PlatformIcons(context).checkMark),
-                padding: EdgeInsets.zero,
-              );
-            }
-            return const SizedBox.shrink();
-          },
-        ),
-        const SizedBox(width: 4),
-      ],
-    );
-  }
-}
-
 class TeamMembersSearchBar extends StatelessWidget {
   const TeamMembersSearchBar({
     Key? key,
@@ -207,13 +173,12 @@ class TeamMembersSearchBar extends StatelessWidget {
               hintText: tr('usersSearch'),
               margin: EdgeInsets.zero,
               textInputAction: TextInputAction.search,
-              showClearIcon: true,
               onClearPressed: usersDataSource.clearSearch,
               onChanged: usersDataSource.searchUsers,
               onSubmitted: usersDataSource.searchUsers,
             ),
           ),
-          const SizedBox(width: 16),
+          const SizedBox(width: 8),
           PlatformIconButton(
             padding: EdgeInsets.zero,
             onPressed: () {

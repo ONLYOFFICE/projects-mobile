@@ -37,28 +37,21 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/common/select_item_template.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class SelectProjectScreen extends StatelessWidget {
   SelectProjectScreen({Key? key}) : super(key: key);
 
-  final searchFieldController = TextEditingController();
   final searchController = Get.put(ProjectSearchController());
   final navigationController = Get.find<NavigationController>();
-
-  final _projectsController = Get.put(ProjectsController(), tag: '7');
 
   void onSelect(ProjectDetailed project) {
     navigationController.back(result: {
@@ -66,17 +59,13 @@ class SelectProjectScreen extends StatelessWidget {
       'title': project.title,
     });
     searchController.clearSearch();
-    searchFieldController.clear();
   }
 
   final _platformController = Get.find<PlatformController>();
 
   @override
   Widget build(BuildContext context) {
-    _projectsController.loadProjects();
-
-    const searchIconKey = Key('srh');
-    const clearIconKey = Key('clr');
+    searchController.refreshData();
 
     return Scaffold(
       backgroundColor: _platformController.isMobile ? null : Get.theme.colors().surface,
@@ -85,119 +74,44 @@ class SelectProjectScreen extends StatelessWidget {
         showBackButton: true,
         onLeadingPressed: navigationController.back,
         centerTitle: !GetPlatform.isAndroid,
-        title: Obx(
-          () => AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            reverseDuration: const Duration(milliseconds: 300),
-            switchInCurve: Curves.easeOutSine,
-            switchOutCurve: Curves.fastOutSlowIn,
-            child: searchController.switchToSearchView.isTrue
-                ? PlatformTextField(
-                    autofocus: true,
-                    controller: searchFieldController,
-                    hintText: tr('enterQuery'),
-                    material: (_, __) => MaterialTextFieldData(
-                      decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
-                    ),
-                    style: TextStyleHelper.headline6(
-                      color: Get.theme.colors().onSurface,
-                    ),
-                    onSubmitted: searchController.newSearch,
-                  )
-                : Text(
-                    tr('selectProject'),
-                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                  ),
-          ),
+        title: AppBarTitleWithSearch(
+          appBarText: tr('selectProject'),
+          searchController: searchController,
         ),
         actions: [
-          Obx(
-            () => AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              reverseDuration: const Duration(milliseconds: 300),
-              switchInCurve: Curves.easeOutSine,
-              switchOutCurve: Curves.fastOutSlowIn,
-              child: searchController.switchToSearchView.isTrue
-                  ? PlatformIconButton(
-                      key: searchIconKey,
-                      onPressed: () {
-                        searchController.switchToSearchView.toggle();
-                        searchFieldController.clear();
-                        searchController.clearSearch();
-                      },
-                      icon: Icon(PlatformIcons(context).clear),
-                    )
-                  : PlatformIconButton(
-                      key: clearIconKey,
-                      onPressed: () => searchController.switchToSearchView.toggle(),
-                      icon: Icon(PlatformIcons(context).search),
-                    ),
-            ),
-          ),
+          AppBarSearchItem(searchController: searchController),
         ],
       ),
       body: Obx(
         () {
           final scrollController = ScrollController();
 
-          if (searchController.switchToSearchView.value == true &&
-              searchController.searchResult.isNotEmpty) {
-            return StyledSmartRefresher(
+          return PaginationListView(
               scrollController: scrollController,
-              enablePullDown: false,
-              enablePullUp: searchController.pullUpEnabled,
-              controller: searchController.refreshController,
-              onLoading: searchController.onLoading,
-              child: ListView.separated(
-                controller: scrollController,
-                itemCount: searchController.searchResult.length,
-                padding: const EdgeInsets.only(bottom: 16),
-                separatorBuilder: (BuildContext context, int index) {
-                  return const StyledDivider(
-                    leftPadding: 16,
-                    rightPadding: 16,
-                  );
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  return _ProjectTile(
-                    project: searchController.searchResult[index],
-                    onPressed: () => onSelect(searchController.searchResult[index]),
-                  );
-                },
-              ),
-            );
-          }
-          if (searchController.switchToSearchView.value == true &&
-              searchController.searchResult.isEmpty &&
-              searchController.loaded.value == true &&
-              searchFieldController.text.isNotEmpty) {
-            return const NothingFound();
-          }
-          if (_projectsController.loaded.value == true) {
-            return PaginationListView(
-              scrollController: scrollController,
-              paginationController: _projectsController.paginationController,
-              child: ListView.separated(
-                controller: scrollController,
-                itemCount: _projectsController.paginationController.data.length,
-                padding: const EdgeInsets.only(bottom: 16),
-                separatorBuilder: (BuildContext context, int index) {
-                  return const StyledDivider(
-                    leftPadding: 16,
-                    rightPadding: 16,
-                  );
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  final project = _projectsController.paginationController.data[index];
-                  return _ProjectTile(
-                    project: project,
-                    onPressed: () => onSelect(project),
-                  );
-                },
-              ),
-            );
-          }
-          return const ListLoadingSkeleton();
+              paginationController: searchController.paginationController,
+              child: () {
+                if (!searchController.loaded.value) return const ListLoadingSkeleton();
+
+                if (searchController.nothingFound) return const NothingFound();
+
+                return ListView.separated(
+                  controller: scrollController,
+                  itemCount: searchController.itemList.length,
+                  padding: const EdgeInsets.only(bottom: 16),
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const StyledDivider(
+                      leftPadding: 16,
+                      rightPadding: 16,
+                    );
+                  },
+                  itemBuilder: (BuildContext context, int index) {
+                    return _ProjectTile(
+                      project: searchController.itemList[index],
+                      onPressed: () => onSelect(searchController.itemList[index]),
+                    );
+                  },
+                );
+              }());
         },
       ),
     );

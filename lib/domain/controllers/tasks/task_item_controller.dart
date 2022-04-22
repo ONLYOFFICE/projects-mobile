@@ -61,6 +61,7 @@ import 'package:projects/presentation/views/project_detailed/project_detailed_vi
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:synchronized/synchronized.dart';
 
 class TaskItemController extends GetxController {
   final _api = locator<TaskItemService>();
@@ -108,6 +109,7 @@ class TaskItemController extends GetxController {
   final commentsListController = ScrollController();
 
   final _ss = <StreamSubscription>[];
+  final _toProjectOverviewLock = Lock();
 
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
@@ -270,16 +272,24 @@ class TaskItemController extends GetxController {
   }) async {
     if (newStatusId == status.value.id) return;
 
-    if (newStatusType == 2 && task.value.status != newStatusType && task.value.hasOpenSubtasks) {
-      await Get.dialog(StyledAlertDialog(
-        titleText: tr('closingTask'),
-        contentText: tr('closingTaskWithActiveSubtasks'),
-        acceptText: tr('closeTask').toUpperCase(),
-        onAcceptTap: () async {
+    if (newStatusType == 2) {
+      await reloadTask();
+
+      if (task.value.status != newStatusType) {
+        if (task.value.hasOpenSubtasks) {
+          await Get.dialog(StyledAlertDialog(
+            titleText: tr('closingTask'),
+            contentText: tr('closingTaskWithActiveSubtasks'),
+            acceptText: tr('closeTask').toUpperCase(),
+            onAcceptTap: () async {
+              await _changeTaskStatus(
+                  id: id, newStatusId: newStatusId, newStatusType: newStatusType);
+              Get.back();
+            },
+          ));
+        } else
           await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
-          Get.back();
-        },
-      ));
+      }
     } else
       await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
   }
@@ -315,15 +325,19 @@ class TaskItemController extends GetxController {
   }
 
   Future<void> toProjectOverview() async {
-    final projectService = locator<ProjectService>();
-    final project = await projectService.getProjectById(
-      projectId: task.value.projectOwner!.id!,
-    );
-    if (project != null) {
-      await Get.find<NavigationController>().to(
-        ProjectDetailedView(),
-        arguments: {'projectDetailed': project},
+    if (_toProjectOverviewLock.locked) return;
+
+    unawaited(_toProjectOverviewLock.synchronized(() async {
+      final projectService = locator<ProjectService>();
+      final project = await projectService.getProjectById(
+        projectId: task.value.projectOwner!.id!,
       );
-    }
+      if (project != null) {
+        await Get.find<NavigationController>().to(
+          ProjectDetailedView(),
+          arguments: {'projectDetailed': project},
+        );
+      }
+    }));
   }
 }

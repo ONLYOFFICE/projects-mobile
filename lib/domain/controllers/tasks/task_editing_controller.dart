@@ -58,7 +58,11 @@ class TaskEditingController extends TaskActionsController {
   PortalTask task;
   final TaskService _api = locator<TaskService>();
 
+  late ProjectTeamController teamController;
+
   TaskEditingController({required this.task});
+
+  Rx<TextEditingController> descriptionController = TextEditingController().obs;
 
   final TextEditingController _titleController = TextEditingController();
 
@@ -66,6 +70,8 @@ class TaskEditingController extends TaskActionsController {
 
   @override
   int? get selectedProjectId => task.projectOwner!.id;
+
+  int? newMilestoneId;
 
   // to track changes.
   DateTime? _newStartDate;
@@ -154,9 +160,9 @@ class TaskEditingController extends TaskActionsController {
   }
 
   @override
-  void confirmDescription(String newText) {
-    descriptionController.value.text = newText;
-    descriptionText.value = newText;
+  void confirmDescription(String typedText) {
+    descriptionController.value.text = typedText;
+    descriptionText.value = typedText;
     Get.find<NavigationController>().back();
   }
 
@@ -400,12 +406,7 @@ class TaskEditingController extends TaskActionsController {
 
     if (updatedTask != null) {
       _taskItemController.task.value = updatedTask;
-      MessagesHandler.showSnackBar(
-        context: Get.context!,
-        text: tr('taskAccepted'),
-        buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)?.hideCurrentSnackBar,
-      );
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('taskAccepted'));
     }
   }
 

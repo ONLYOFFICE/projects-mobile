@@ -45,6 +45,7 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -70,7 +71,7 @@ class NewMilestoneController extends GetxController {
 
   late ProjectTeamController teamController;
 
-  final slectedProjectTitle = ''.obs;
+  final selectedProjectTitle = ''.obs;
   final slectedMilestoneTitle = ''.obs;
 
   final descriptionText = ''.obs;
@@ -88,46 +89,66 @@ class NewMilestoneController extends GetxController {
   final responsible = Rxn<PortalUserItemController>();
   final teamMembers = <PortalUserItemController>[].obs;
 
+  late PortalUserItemController selfUserItem;
+
   @override
   void dispose() {
     titleController.dispose();
     super.dispose();
   }
 
-  Future<void> setup(ProjectDetailed? projectDetailed) async {
-    if (projectDetailed != null) {
-      slectedProjectTitle.value = projectDetailed.title!;
-      _selectedProjectId = projectDetailed.id;
-      needToSelectProject.value = false;
+  @override
+  void onInit() {
+    final _userController = Get.find<UserController>();
 
-      teamController = Get.find<ProjectTeamController>()
-        ..setup(projectDetailed: projectDetailed, withoutVisitors: true, withoutBlocked: true);
+    if (_userController.user.value != null)
+      selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
+    else
+      _userController.updateData();
 
-      await teamController.getTeam();
+    _userController.user.listen((user) {
+      if (user == null) return;
+      selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
+    });
 
-      for (final user in teamController.usersList) {
-        teamMembers.add(user);
-      }
-
-      titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
-    }
+    super.onInit();
   }
 
-  void changeProjectSelection({int? id, String? title}) {
-    if (id != null && title != null) {
-      slectedProjectTitle.value = title;
-      _selectedProjectId = id;
+  Future<void> setup(ProjectDetailed projectDetailed) async {
+    selectedProjectTitle.value = projectDetailed.title!;
+    _selectedProjectId = projectDetailed.id;
+    needToSelectProject.value = false;
+
+    responsible.value = PortalUserItemController(portalUser: projectDetailed.responsible!);
+    needToSelectResponsible.value = false;
+
+    teamController = Get.find<ProjectTeamController>()
+      ..setup(projectDetailed: projectDetailed, withoutVisitors: true, withoutBlocked: true);
+
+    await teamController.getTeam();
+
+    for (final user in teamController.usersList) {
+      teamMembers.add(user);
+    }
+
+    titleController.addListener(() {
+      titleIsEmpty.value = titleController.text.isEmpty;
+    });
+  }
+
+  void changeProjectSelection(ProjectDetailed? _details) {
+    if (_details != null) {
+      selectedProjectTitle.value = _details.title!;
+      _selectedProjectId = _details.id;
       needToSelectProject.value = false;
 
-      teamController.setup(
-          projectDetailed: ProjectDetailed(id: id, title: title),
-          withoutVisitors: true,
-          withoutBlocked: true);
+      responsible.value = PortalUserItemController(portalUser: _details.responsible!);
+      checkNeedNotification();
+      needToSelectResponsible.value = false;
+      _previusSelectedResponsible = responsible.value;
 
+      teamController.setup(projectDetailed: _details, withoutVisitors: true, withoutBlocked: true);
       teamMembers.clear();
-      responsible.value = null;
-      _previusSelectedResponsible = null;
-
       teamController.getTeam().then((value) {
         for (final user in teamController.usersList) {
           teamMembers.add(user);
@@ -141,7 +162,7 @@ class NewMilestoneController extends GetxController {
 
   void removeProjectSelection() {
     _selectedProjectId = null;
-    slectedProjectTitle.value = '';
+    selectedProjectTitle.value = '';
   }
 
   void confirmDescription(String newText) {
@@ -214,7 +235,11 @@ class NewMilestoneController extends GetxController {
   void addResponsible(PortalUserItemController user) {
     responsible.value = user;
 
+    checkNeedNotification();
+
     needToSelectResponsible.value = false;
+    _previusSelectedResponsible = responsible.value;
+
     Get.back();
   }
 
@@ -311,5 +336,12 @@ class NewMilestoneController extends GetxController {
 
   void enableNotification(bool value) {
     notificationEnabled.value = value;
+  }
+
+  void checkNeedNotification() {
+    if (responsible.value?.id == selfUserItem.id!)
+      notificationEnabled.value = false;
+    else
+      notificationEnabled.value = true;
   }
 }

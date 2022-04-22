@@ -71,12 +71,7 @@ class SubtaskController extends GetxController {
 
     if (result != null) {
       subtask.value = result;
-      MessagesHandler.showSnackBar(
-        context: Get.context!,
-        text: tr('subtaskAccepted'),
-        buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)?.hideCurrentSnackBar,
-      );
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('subtaskAccepted'));
     }
   }
 
@@ -130,8 +125,6 @@ class SubtaskController extends GetxController {
 
     if (result != null) {
       subtask.value = result;
-
-      locator<EventHub>().fire('needToRefreshParentTask', [taskId, false]);
     } else
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }

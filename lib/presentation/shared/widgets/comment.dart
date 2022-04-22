@@ -145,14 +145,14 @@ class _HTMLWidgetFactory extends WidgetFactory {
     if (!url.contains('http'))
       return Image.network(
         _portalInfo.portalUri! + url,
-        headers: _portalInfo.headers as Map<String, String>?,
+        headers: _portalInfo.headers,
         loadingBuilder: _imageLoadingBuilder,
       );
 
     if (url.contains(_portalInfo.portalName!))
       return Image.network(
         url,
-        headers: _portalInfo.headers as Map<String, String>?,
+        headers: _portalInfo.headers,
         loadingBuilder: _imageLoadingBuilder,
       );
 

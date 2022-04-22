@@ -31,21 +31,22 @@
  */
 
 import 'dart:async';
-import 'dart:io' show Platform;
+import 'dart:io' show Directory, Platform;
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
 
-import 'package:android_path_provider/android_path_provider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:http_client_helper/http_client_helper.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/api/download_api.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class DownloadService {
@@ -78,18 +79,24 @@ class DownloadService {
 
 class DocumentsDownloadService {
   DocumentsDownloadService() {
-    IsolateNameServer.registerPortWithName(_port.sendPort, _portName);
-    _port.listen((dynamic data) {
+    if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName)) {
+      IsolateNameServer.removePortNameMapping(_portName);
+      if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName))
+        debugPrint('error register port');
+    }
+
+    _port.listen((dynamic data) async {
       final id = data[0] as String;
       final status = data[1] as DownloadTaskStatus;
-      //final progress = data[2] as int;
+      final progress = data[2] as int;
 
-      if (id == taskId) {
-        if (status == DownloadTaskStatus.complete)
-          MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
-        else if (status == DownloadTaskStatus.failed)
-          MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
-      }
+      debugPrint('Downloading: task ($id), status: ($status), progress: ($progress)');
+
+      await _callbacksList[id]?.call(id, status, progress);
+
+      if (status == DownloadTaskStatus.complete ||
+          status == DownloadTaskStatus.canceled ||
+          status == DownloadTaskStatus.failed) _callbacksList.remove(id);
     });
 
     FlutterDownloader.registerCallback(downloadCallback);
@@ -97,49 +104,89 @@ class DocumentsDownloadService {
 
   final _port = ReceivePort();
   static const _portName = 'downloader_send_port';
-  String? taskId;
 
-  Future<void> downloadDocument(String url) async {
-    final path = await getPath();
+  final _callbacksList = <String, Function(String id, DownloadTaskStatus status, int progress)>{};
+
+  bool registerCallback({
+    required String taskId,
+    required Function(String id, DownloadTaskStatus status, int progress) callback,
+  }) {
+    _callbacksList[taskId] = callback;
+
+    return true;
+  }
+
+  Future<String?> downloadDocument(String url, {bool temp = false}) async {
+    final path = await getPath(temp: temp);
+
     if (path == null || path.isEmpty) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-      return;
+      return null;
     }
 
     if (!(await _checkPermission())) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('noPermission'));
-      return;
+      return null;
     }
 
-    final headers = await locator.get<CoreApi>().getHeaders();
-    headers.removeWhere((key, value) => !key.startsWith('Auth'));
+    final finalUrl = await getRedirectedUrl(url);
 
-    taskId = await FlutterDownloader.enqueue(
-      url: url,
+    Map<String, String>? headers;
+    if (finalUrl.contains(Get.find<PortalInfoController>().portalName!))
+      headers = Get.find<PortalInfoController>().getAuthHeader;
+
+    return await FlutterDownloader.enqueue(
+      url: finalUrl,
       headers: headers,
       savedDir: path,
       saveInPublicStorage: true,
+      showNotification: !temp,
     );
-
-    if (taskId == null || taskId!.isEmpty) {
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-      return;
-    }
-
-    await FlutterDownloader.loadTasks();
   }
 
-  Future<String?> getPath() async {
+  Future<String> getRedirectedUrl(String initialUrl) async {
+    final headers = Get.find<PortalInfoController>().getAuthHeader;
+
+    final client = Client();
+    var statusCode = 302;
+    var finalUrl = Uri.parse(initialUrl);
+
+    while (statusCode == 302) {
+      if (!finalUrl.hasAuthority)
+        finalUrl = Uri.parse(Get.find<PortalInfoController>().portalUri! + finalUrl.toString());
+
+      final request = Request('GET', finalUrl)..followRedirects = false;
+
+      if (finalUrl.authority.contains(Get.find<PortalInfoController>().portalName!))
+        request.headers.addAll(headers!);
+
+      final response = await client.send(request);
+
+      statusCode = response.statusCode;
+      if (statusCode == 302) finalUrl = Uri.parse(response.headers['location'].toString());
+    }
+
+    return finalUrl.toString();
+  }
+
+  Future<String?> getPath({bool temp = false}) async {
     String? path;
-    if (Platform.isAndroid) {
-      try {
-        path = await AndroidPathProvider.downloadsPath;
-      } catch (e) {
-        path = (await getExternalStorageDirectory())?.path;
-      }
+    /*  if (temp)
+      path = (await getTemporaryDirectory()).absolute.path;
+    else */ // TODO @garanin save to cache
+    if (GetPlatform.isAndroid) {
+      path = (await getExternalStorageDirectory())?.absolute.path;
     } else {
       path = (await getApplicationDocumentsDirectory()).absolute.path;
     }
+
+    final savedDir = Directory(path!);
+    // ignore: avoid_slow_async_io
+    final existed = await savedDir.exists();
+    if (!existed) {
+      await savedDir.create();
+    }
+
     return path;
   }
 

@@ -80,7 +80,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
 
   Folder? get currentFolder => _currentFolder;
 
-  final _paginationController = Get.find<PaginationController>();
+  final _paginationController = PaginationController();
   @override
   PaginationController get paginationController => _paginationController;
   @override
@@ -169,11 +169,10 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     paginationController.total.value = result.total!;
 
     if (_currentFolder != null && result.current != null) _screenName = result.current!.title;
+    if (result.current != null) foldersCount.value = result.current!.foldersCount!;
 
     paginationController.data.addAll(result.folders!);
     paginationController.data.addAll(result.files!);
-
-    countFolders();
 
     documentsScreenName.value = _screenName ?? tr('chooseSection');
     screenName = _screenName ?? tr('chooseSection');

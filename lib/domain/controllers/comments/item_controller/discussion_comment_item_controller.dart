@@ -33,7 +33,6 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
@@ -92,12 +91,7 @@ class DiscussionCommentItemController extends GetxController implements CommentI
             unawaited(Get.find<DiscussionItemController>(tag: discussionId.toString())
                 .onRefresh(showLoading: false));
           Get.back();
-          MessagesHandler.showSnackBar(
-            context: Get.context!,
-            text: tr('commentDeleted'),
-            buttonText: tr('confirm'),
-            buttonOnTap: ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar,
-          );
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('commentDeleted'));
         }
       },
     ));

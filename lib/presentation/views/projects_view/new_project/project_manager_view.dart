@@ -46,7 +46,6 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 
 class ProjectManagerSelectionView extends StatelessWidget {
@@ -69,12 +68,10 @@ class ProjectManagerSelectionView extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('selectPM'),
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        backButtonIcon: Icon(PlatformIcons(context).back),
         bottom: SearchField(
           controller: usersDataSource.searchInputController,
           hintText: tr('usersSearch'),
           textInputAction: TextInputAction.search,
-          showClearIcon: true,
           onClearPressed: usersDataSource.clearSearch,
           onChanged: usersDataSource.searchUsers,
           onSubmitted: usersDataSource.searchUsers,
@@ -190,9 +187,12 @@ class UsersDefault extends StatelessWidget {
                   const SizedBox(height: 20),
                   Container(
                     padding: const EdgeInsets.only(left: 16),
-                    child: Text(tr('me'),
-                        style: TextStyleHelper.body2(
-                            color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                    child: Text(
+                      tr('me'),
+                      style: TextStyleHelper.body2(
+                        color: Get.theme.colors().onSurface.withOpacity(0.6),
+                      ),
+                    ),
                   ),
                   PortalUserItem(
                     onTapFunction: onTapFunction,
@@ -206,8 +206,12 @@ class UsersDefault extends StatelessWidget {
           }),
           Container(
             padding: const EdgeInsets.only(left: 16),
-            child: Text(tr('users'),
-                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6))),
+            child: Text(
+              tr('users'),
+              style: TextStyleHelper.body2(
+                color: Get.theme.colors().onSurface.withOpacity(0.6),
+              ),
+            ),
           ),
           ListView.separated(
             physics: const NeverScrollableScrollPhysics(),

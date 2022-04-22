@@ -49,8 +49,6 @@ import 'package:projects/data/api/subtasks_api.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/api/user_api.dart';
 import 'package:projects/data/api/user_photo_api.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/data/services/device_info_service.dart';
@@ -88,7 +86,6 @@ import 'package:projects/domain/controllers/groups/groups_controller.dart';
 import 'package:projects/domain/controllers/images_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
@@ -172,9 +169,9 @@ void setupGetX() {
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
 
   Get.create<DiscussionsFilterController>(() => DiscussionsFilterController());
-  Get.create<PaginationController>(() => PaginationController());
-  Get.create<PaginationController<PortalTask>>(() => PaginationController<PortalTask>());
-  Get.create<PaginationController<ProjectDetailed>>(() => PaginationController<ProjectDetailed>());
+  //Get.create<PaginationController>(() => PaginationController());
+  ///Get.create<PaginationController<PortalTask>>(() => PaginationController<PortalTask>());
+  //Get.create<PaginationController<ProjectDetailed>>(() => PaginationController<ProjectDetailed>());
 
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
@@ -212,11 +209,7 @@ void setupGetX() {
   Get.create<DocumentsController>(() => DocumentsController());
   Get.create<DocumentsMoveOrCopyController>(() => DocumentsMoveOrCopyController());
 
-  Get.create<DiscussionsDocumentsController>(() => DiscussionsDocumentsController(
-        Get.find<DocumentsFilterController>(),
-        Get.find<PaginationController>(),
-        Get.find<DocumentsSortController>(),
-      ));
+  Get.create<DiscussionsDocumentsController>(() => DiscussionsDocumentsController());
 
   Get.create<NewProjectController>(() => NewProjectController());
   Get.create<NewTaskController>(() => NewTaskController());

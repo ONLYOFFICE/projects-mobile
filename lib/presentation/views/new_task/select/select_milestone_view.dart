@@ -66,13 +66,12 @@ class SelectMilestoneView extends StatelessWidget {
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectMilestone'),
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? Icon(PlatformIcons(context).back)
+            ? const BackButtonIcon()
             : Icon(PlatformIcons(context).clear),
         bottomHeight: 44,
         bottom: SearchField(
           hintText: tr('searchMilestone'),
           controller: _milestoneController.searchTextEditingController,
-          showClearIcon: true,
           onChanged: _milestoneController.loadMilestonesWithFilterByName,
           onSubmitted: _milestoneController.loadMilestonesWithFilterByName,
           onClearPressed: _milestoneController.clearSearchAndReloadMilestones,

@@ -113,6 +113,8 @@ class SettingsController extends GetxController {
   void leave() => Get.find<NavigationController>().back();
 
   Future setTheme(String themeMode) async {
+    if (themeMode == currentTheme.value) return;
+
     await Get.dialog(StyledAlertDialog(
       titleText: tr('reloadDialogTitle'),
       acceptText: tr('reload').toUpperCase(),
@@ -126,9 +128,7 @@ class SettingsController extends GetxController {
             Get.changeThemeMode(ThemeMode.light);
             break;
           case 'sameAsSystem':
-            Get.isPlatformDarkMode
-                ? Get.changeThemeMode(ThemeMode.dark)
-                : Get.changeThemeMode(ThemeMode.light);
+            Get.changeThemeMode(ThemeMode.system);
             break;
           default:
             Get.changeThemeMode(ThemeMode.system);

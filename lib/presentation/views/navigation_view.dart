@@ -68,7 +68,7 @@ class NavigationView extends StatelessWidget {
 
     return GetBuilder<NavigationController>(
       builder: (controller) {
-        if (platformController.isMobile) {
+        if (platformController.isMobilePlatform(context: context)) {
           //TODO: navigation on more screen is brocken if return premade instance
           return MobileLayout();
         } else {

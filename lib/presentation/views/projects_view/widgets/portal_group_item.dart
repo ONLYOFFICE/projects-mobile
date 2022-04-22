@@ -37,6 +37,7 @@ import 'package:projects/domain/controllers/projects/new_project/portal_group_it
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class PortalGroupItem extends StatelessWidget {
   const PortalGroupItem({
@@ -50,42 +51,56 @@ class PortalGroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => CheckboxListTile(
-        activeColor: Get.theme.colors().primary,
-        value: groupController.isSelected.value == true,
-        onChanged: (value) {
-          groupController.isSelected.value = !groupController.isSelected.value;
-          onTapFunction!(groupController);
-        },
-        title: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle, color: Get.theme.colors().onSurface.withOpacity(0.06)),
-              child: Center(
-                child: AppIcon(
-                  icon: SvgIcons.group,
-                  color: Get.theme.colors().onSurface.withOpacity(0.4),
-                  height: 22,
-                  width: 14,
+    return GestureDetector(
+      onTap: () {
+        groupController.isSelected.value = !groupController.isSelected.value;
+        onTapFunction!(groupController);
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Obx(() {
+            if (groupController.isSelected.value)
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Icon(
+                  PlatformIcons(context).checked,
+                  color: Get.theme.colors().primary,
                 ),
+              );
+            else
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Icon(
+                  PlatformIcons(context).unchecked,
+                  color: Get.theme.colors().inactiveGrey,
+                ),
+              );
+          }),
+          Container(
+            height: 40,
+            width: 40,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle, color: Get.theme.colors().onSurface.withOpacity(0.06)),
+            child: Center(
+              child: AppIcon(
+                icon: SvgIcons.group,
+                color: Get.theme.colors().onSurface.withOpacity(0.4),
+                height: 22,
+                width: 14,
               ),
             ),
-            const SizedBox(width: 16),
-            Flexible(
-              child: Text(
-                groupController.displayName!,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                style: TextStyleHelper.subtitle1(),
-              ),
-            )
-          ],
-        ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              groupController.displayName!,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              style: TextStyleHelper.subtitle1(),
+            ),
+          )
+        ],
       ),
     );
   }

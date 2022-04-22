@@ -38,11 +38,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
@@ -56,29 +56,32 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
-class DiscussionEditingController extends GetxController implements DiscussionActionsController {
+class DiscussionEditingController extends DiscussionActionsController {
   int id;
   int projectId;
 
-  @override
-  RxString selectedProjectTitle;
-
-  @override
-  RxString title = RxString('');
   String _previusTitle = '';
-
-  @override
-  RxString text = RxString('');
   String _previusText = '';
-
-  @override
-  RxList<PortalUserItemController> subscribers = <PortalUserItemController>[].obs;
-
-  @override
-  RxList<PortalUserItemController> otherUsers = <PortalUserItemController>[].obs;
 
   List<PortalUser> initialSubscribers = <PortalUser>[];
   List<PortalUserItemController> _previusSelectedSubscribers = <PortalUserItemController>[];
+
+  final _api = locator<DiscussionItemService>();
+
+  final _userService = locator<UserService>();
+  final _usersDataSource = Get.find<UsersDataSource>();
+  final selectedGroups = <PortalGroupItemController>[];
+
+  final _titleController = TextEditingController();
+  final _userSearchController = TextEditingController();
+  final _titleFocus = FocusNode();
+
+  @override
+  TextEditingController get titleController => _titleController;
+  @override
+  TextEditingController get userSearchController => _userSearchController;
+  @override
+  FocusNode get titleFocus => _titleFocus;
 
   @override
   void onInit() {
@@ -92,47 +95,22 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
     _previusSelectedSubscribers = List.from(subscribers);
     _previusText = text.value;
     _previusTitle = title.value;
+
     super.onInit();
   }
 
-  final DiscussionItemService _api = locator<DiscussionItemService>();
-
-  final UserService _userService = locator<UserService>();
-  final _usersDataSource = Get.find<UsersDataSource>();
-  final selectedGroups = <PortalGroupItemController>[];
-
-  @override
-  HtmlEditorController textController = HtmlEditorController();
-
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _userSearchController = TextEditingController();
-  final FocusNode _titleFocus = FocusNode();
-
-  @override
-  TextEditingController get titleController => _titleController;
-  @override
-  TextEditingController get userSearchController => _userSearchController;
-  @override
-  FocusNode get titleFocus => _titleFocus;
-
-  @override
-  RxBool selectProjectError = false.obs;
-  @override
-  RxBool setTitleError = false.obs;
-  @override
-  RxBool setTextError = false.obs;
-
-  @override
-  RxBool titleIsEmpty = true.obs;
-
   DiscussionEditingController({
     this.id = -1,
-    required this.title,
-    required this.text,
+    required String title,
+    required String text,
     this.projectId = -1,
-    required this.selectedProjectTitle,
+    required String selectedProjectTitle,
     required this.initialSubscribers,
   }) {
+    this.title.value = title;
+    this.text.value = text;
+    this.selectedProjectTitle.value = selectedProjectTitle;
+
     _usersDataSource.selectionMode = UserSelectionMode.Multiple;
 
     titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
@@ -142,32 +120,7 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
   void changeTitle(String newText) => title.value = newText;
 
   @override
-  void changeProjectSelection() {}
-
-  @override
-  void confirmText() async {
-    text.value = await textController.getText();
-    Get.find<NavigationController>().back();
-  }
-
-  @override
-  void leaveTextView() async {
-    if (await textController.getText() == text.value) {
-      Get.find<NavigationController>().back();
-    } else {
-      await Get.dialog(StyledAlertDialog(
-        titleText: tr('discardChanges'),
-        contentText: tr('lostOnLeaveWarning'),
-        acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
-        onAcceptTap: () {
-          Get.back();
-          Get.find<NavigationController>().back();
-        },
-        onCancelTap: Get.back,
-      ));
-    }
-  }
+  void changeProjectSelection(ProjectDetailed? _details) {}
 
   @override
   void confirmSubscribersSelection() {
@@ -213,7 +166,8 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
     _usersDataSource.usersList
         .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
 
-    otherUsers = RxList(_usersDataSource.usersList
+    otherUsers.clear();
+    otherUsers.addAll(_usersDataSource.usersList
         .where((element) => !subscribers.any((it) => it.id == element.id))
         .toList());
 
@@ -272,7 +226,9 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
 
   @override
   void selectGroupMembers(PortalGroupItemController group) {
-    if (group.isSelected.value == true) {
+    if (selectedGroups.any((element) => element.displayName == group.displayName)) return;
+
+    if (group.isSelected.value) {
       selectedGroups.add(group);
     } else {
       selectedGroups.removeWhere((element) => group.portalGroup!.id == element.portalGroup!.id);
@@ -288,8 +244,9 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
       if (groupMembers != null) {
         if (groupMembers.response!.isNotEmpty) {
           for (final element in groupMembers.response!) {
-            final user = PortalUserItemController(portalUser: element);
-            user.isSelected.value = true;
+            final user = PortalUserItemController(
+                portalUser: element, isSelected: true, selectionMode: UserSelectionMode.Multiple);
+
             subscribers.add(user);
           }
         }

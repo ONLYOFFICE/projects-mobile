@@ -43,6 +43,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/shared/widgets/option_with_switch.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
@@ -124,7 +125,7 @@ class NewMilestoneView extends StatelessWidget {
                   MilestoneInput(controller: newMilestoneController),
                   const StyledDivider(leftPadding: 72.5),
                   ProjectTile(controller: newMilestoneController),
-                  Obx(() => newMilestoneController.slectedProjectTitle.value.isNotEmpty
+                  Obx(() => newMilestoneController.selectedProjectTitle.value.isNotEmpty
                       ? ResponsibleTile(controller: newMilestoneController)
                       : const SizedBox()),
                   DescriptionTile(newMilestoneController: newMilestoneController),
@@ -169,12 +170,15 @@ class NewMilestoneView extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
-                        child: OptionWithSwitch(
-                          title: tr('notifyResponsible'),
-                          switchValue: newMilestoneController.notificationEnabled,
-                          switchOnChanged: (bool value) {
-                            newMilestoneController.enableNotification(value);
-                          },
+                        child: Obx(
+                          () => OptionWithSwitch(
+                            title: tr('notifyResponsible'),
+                            switchValue: newMilestoneController.notificationEnabled,
+                            switchOnChanged: newMilestoneController.responsible.value?.id !=
+                                    newMilestoneController.selfUserItem.id!
+                                ? newMilestoneController.enableNotification
+                                : null,
+                          ),
                         ),
                       ),
                     ],
@@ -305,9 +309,9 @@ class ProjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        final _isSelected = controller.slectedProjectTitle.value.isNotEmpty;
+        final _isSelected = controller.selectedProjectTitle.value.isNotEmpty;
         return NewItemTile(
-            text: _isSelected ? controller.slectedProjectTitle.value : tr('selectProject'),
+            text: _isSelected ? controller.selectedProjectTitle.value : tr('selectProject'),
             icon: SvgIcons.project,
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
             selectedIconColor: Get.theme.colors().onBackground,
@@ -315,17 +319,12 @@ class ProjectTile extends StatelessWidget {
             isSelected: _isSelected,
             caption: _isSelected ? tr('project') : null,
             suffix: _isSelected
-                ? PlatformIconButton(
-                    padding: EdgeInsets.zero,
-                    icon: Icon(
-                      PlatformIcons(context).rightChevron,
-                      size: 24,
-                      color: Get.theme.colors().onBackground.withOpacity(0.6),
-                    ),
-                    onPressed: _onPressed,
+                ? Icon(
+                    PlatformIcons(context).rightChevron,
+                    size: 24,
+                    color: Get.theme.colors().onBackground.withOpacity(0.6),
                   )
                 : null,
-            suffixPadding: const EdgeInsets.only(right: 8),
             onTap: _onPressed);
       },
     );
@@ -351,8 +350,11 @@ class ResponsibleTile extends StatelessWidget {
             : tr('addResponsible'),
         textColor: controller.needToSelectResponsible.value ? Get.theme.colors().colorError : null,
         suffix: _isSelected
-            ? Icon(PlatformIcons(context).rightChevron,
-                size: 24, color: Get.theme.colors().onBackground)
+            ? Icon(
+                PlatformIcons(context).rightChevron,
+                size: 24,
+                color: Get.theme.colors().onBackground.withOpacity(0.6),
+              )
             : null,
         icon: SvgIcons.person,
         iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
@@ -400,7 +402,6 @@ class DueDateTile extends StatelessWidget {
                     ),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
-            suffixPadding: const EdgeInsets.only(right: 8),
             onTap: controller.onDueDateTilePressed);
       },
     );

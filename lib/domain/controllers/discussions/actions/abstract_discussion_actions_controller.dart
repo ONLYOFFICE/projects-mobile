@@ -30,13 +30,17 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
-abstract class DiscussionActionsController {
+abstract class DiscussionActionsController extends GetxController {
   final text = RxString('');
   final title = RxString('');
   final selectedProjectTitle = RxString('');
@@ -48,23 +52,52 @@ abstract class DiscussionActionsController {
   late TextEditingController _userSearchController;
   TextEditingController get titleController => _titleController;
   TextEditingController get userSearchController => _userSearchController;
-  late HtmlEditorController textController;
+  final textController = HtmlEditorController();
 
-  late RxBool setTitleError;
-  late RxBool setTextError;
-  late RxBool selectProjectError;
-  late RxBool titleIsEmpty;
+  final setTitleError = false.obs;
+  final setTextError = false.obs;
+  final selectProjectError = false.obs;
+  final titleIsEmpty = true.obs;
 
   void setupSubscribersSelection();
   void addSubscriber(PortalUserItemController user, {bool fromUsersDataSource = false});
   void removeSubscriber(PortalUserItemController user);
 
   void changeTitle(String newText);
-  void changeProjectSelection();
+  void changeProjectSelection(ProjectDetailed? _details);
 
   void clearUserSearch();
-  void confirmText();
-  void leaveTextView();
+  void confirmText() async {
+    final _text = await textController.getText();
+
+    if (_text.isNotEmpty && _text != '<br>')
+      text.value = _text;
+    else
+      text.value = '';
+
+    Get.back();
+  }
+
+  void leaveTextView() async {
+    final t = await textController.getText();
+
+    if (t == text.value || t == '<br>') {
+      Get.back();
+    } else {
+      await Get.dialog(StyledAlertDialog(
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
+        onAcceptTap: () {
+          Get.back();
+          Get.back();
+        },
+        onCancelTap: Get.back,
+      ));
+    }
+  }
+
   void confirmSubscribersSelection();
   void leaveSubscribersSelectionView();
 

@@ -42,11 +42,12 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 part 'app_bar_icon.dart';
 part 'app_bar_title.dart';
@@ -55,6 +56,7 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
   String get appBarText;
 
   BaseSearchController get searchController;
+
   dynamic get controller;
 
   Widget get itemList;
@@ -65,9 +67,6 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
 
   VoidCallback? get onLeadingPressed;
 
-  Key get _searchIconKey => const Key('srch');
-  Key get _clearIconKey => const Key('clr');
-
   @override
   Widget build(BuildContext context) {
     getItemsFunction();
@@ -77,19 +76,12 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        title: _AppBarTitle(
+        title: AppBarTitleWithSearch(
           appBarText: appBarText,
           searchController: searchController,
         ),
         centerTitle: !GetPlatform.isAndroid,
-        actions: [
-          _AppBarIcon(
-            searchController: searchController,
-            searchIconKey: _searchIconKey,
-            clearIconKey: _clearIconKey,
-          )
-        ],
-        onLeadingPressed: onLeadingPressed,
+        actions: [AppBarSearchItem(searchController: searchController)],
       ),
       body: Obx(
         () {

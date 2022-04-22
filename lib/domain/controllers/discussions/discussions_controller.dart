@@ -56,7 +56,7 @@ class DiscussionsController extends BaseDiscussionsController {
 
   @override
   RxList get itemList => paginationController.data;
-  final _paginationController = Get.find<PaginationController>();
+  final _paginationController = PaginationController<Discussion>();
   @override
   PaginationController get paginationController => _paginationController;
 

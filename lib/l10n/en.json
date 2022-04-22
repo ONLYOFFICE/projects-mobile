@@ -492,5 +492,8 @@
   "downloadError": "Download error",
   "noPermission": "No permission",
   "clearCacheQuestion": "Очистить кэш?",
-  "clearCacheQuestionDescription": "Эта операция освободит место на устройстве за счет удаления временных файлов. Автономные файлы и персональные данные не будут удалены."
+  "clearCacheQuestionDescription": "Эта операция освободит место на устройстве за счет удаления временных файлов. Автономные файлы и персональные данные не будут удалены.",
+  "openFileError": "Невозможно открыть файл",
+  "cancelDownload": "Отменить скачивание",
+  "uploading": "Uploading..."
 }

@@ -100,43 +100,16 @@ class PlatformIcons {
   /// Icons: Icons.directions_car : CupertinoIcons.car
   IconData get car => isMaterial(context) ? Icons.directions_car : CupertinoIcons.car;
 
-  // IconData get carDetailed =>
-  //     isMaterial(context) ? Icons.book : CupertinoIcons.car_detailed;
+  IconData get checkMark => isMaterial(context) ? Icons.check_rounded : CupertinoIcons.checkmark;
+  IconData get checkMarkAlt =>
+      isMaterial(context) ? Icons.check_rounded : CupertinoIcons.checkmark_alt;
 
-  /// Icons: Icons.check_box_outline_blank_rounded : CupertinoIcons.square
-  IconData get checkBoxBlankOutlineRounded =>
-      isMaterial(context) ? Icons.check_box_outline_blank_rounded : CupertinoIcons.square;
+  // checkboxes
+  IconData get unchecked =>
+      isMaterial(context) ? Icons.check_box_outline_blank_rounded : CupertinoIcons.circle;
+  IconData get checked =>
+      isMaterial(context) ? Icons.check_box_rounded : CupertinoIcons.check_mark_circled_solid;
 
-  /// Icons: Icons.indeterminate_check_box_outlined : CupertinoIcons.minus_square
-  IconData get checkBoxIndeterminateOutlineRounded =>
-      isMaterial(context) ? Icons.indeterminate_check_box_outlined : CupertinoIcons.minus_square;
-
-  /// Icons: Icons.indeterminate_check_box_outlined : CupertinoIcons.checkmark_square
-  IconData get checkBoxCheckedOutlineRounded =>
-      isMaterial(context) ? Icons.check_box_outlined : CupertinoIcons.checkmark_square;
-
-  /// Icons: Icons.check : CupertinoIcons.check_mark
-  IconData get checkMark => isMaterial(context) ? Icons.check_rounded : CupertinoIcons.check_mark;
-
-  /// Icons: Icons.check_circle : CupertinoIcons.check_mark_circled
-  IconData get checkMarkCircled =>
-      isMaterial(context) ? Icons.check_circle : CupertinoIcons.check_mark_circled;
-
-  /// Icons: Icons.check_circle_outline : CupertinoIcons.check_mark_circled
-  IconData get checkMarkCircledOutline =>
-      isMaterial(context) ? Icons.check_circle_outline : CupertinoIcons.check_mark_circled;
-
-  /// Icons: Icons.check_circle : CupertinoIcons.check_mark_circled_solid
-  IconData get checkMarkCircledSolid =>
-      isMaterial(context) ? Icons.check_circle : CupertinoIcons.check_mark_circled_solid;
-
-  // IconData get circle =>
-  //     isMaterial(context) ? Icons. : CupertinoIcons.circle;
-
-  // IconData get circleFilled =>
-  //     isMaterial(context) ? Icons.book : CupertinoIcons.circle_filled;
-
-  /// Icons: Icons.clear : CupertinoIcons.clear
   IconData get clear => isMaterial(context) ? Icons.clear : CupertinoIcons.clear;
 
   // IconData get clearCircled =>

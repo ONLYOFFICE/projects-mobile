@@ -265,7 +265,7 @@ class LoginController extends GetxController {
     await cookieManager.setCookies([
       Cookie('asc_auth_key', token)
         ..domain = portalAdress
-        ..expires = DateTime.now().add(const Duration(days: 10))
+        ..expires = DateTime.parse(expires)
         ..httpOnly = false
     ]);
 

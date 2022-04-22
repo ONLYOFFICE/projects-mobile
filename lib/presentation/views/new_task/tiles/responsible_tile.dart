@@ -124,7 +124,6 @@ class SubtaskResponsibleTile extends StatelessWidget {
                   Icon(PlatformIcons(context).rightChevron,
                       size: 24, color: Get.theme.colors().onBackground.withOpacity(0.6))
               : null,
-          suffixPadding: const EdgeInsets.only(right: 8),
           icon: SvgIcons.person,
           onTap: () => Get.find<NavigationController>().toScreen(
             const ProjectTeamResponsibleSelectionView(),

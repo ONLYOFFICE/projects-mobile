@@ -34,21 +34,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
-import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 
@@ -67,65 +62,32 @@ class SelectDiscussionSubscribers extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        controller.leaveSubscribersSelectionView();
+        controller.confirmSubscribersSelection();
         return false;
       },
       child: Scaffold(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-
-          backButtonIcon: Icon(PlatformIcons(context).back),
-
-          title: Obx(
-            () => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  tr('selectSubscribers'),
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                ),
-                if (controller.subscribers.isNotEmpty)
-                  Text(plural('selected', controller.subscribers.length),
-                      style: TextStyleHelper.caption(color: Get.theme.colors().onSurface))
-              ],
+            backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+            title: Obx(
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    tr('selectSubscribers'),
+                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                  ),
+                  if (controller.subscribers.isNotEmpty)
+                    Text(plural('selected', controller.subscribers.length),
+                        style: TextStyleHelper.caption(color: Get.theme.colors().onSurface))
+                ],
+              ),
             ),
-          ),
-          onLeadingPressed: controller.leaveSubscribersSelectionView,
-          actions: [
-            PlatformIconButton(
-              onPressed: controller.confirmSubscribersSelection,
-              icon: Icon(PlatformIcons(context).checkMark),
-            ),
-          ],
-          // bottom: CustomSearchBar(controller: controller),
-          bottom: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Obx(() => Expanded(
-                    child: SearchField(
-                      hintText: tr('usersSearch'),
-                      onSubmitted: usersDataSource.searchUsers,
-                      showClearIcon: usersDataSource.isSearchResult.value == true,
-                      onChanged: usersDataSource.searchUsers,
-                      onClearPressed: controller.clearUserSearch,
-                      controller: controller.userSearchController,
-                    ),
-                  )),
-              PlatformIconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () => Get.find<NavigationController>().toScreen(
-                  const UsersFromGroups(),
-                  arguments: {'controller': controller},
-                  transition: Transition.cupertinoDialog,
-                  fullscreenDialog: true,
-                  page: '/UsersFromGroups',
-                ),
-                icon: const AppIcon(icon: SvgIcons.preferences),
-              )
-            ],
-          ),
-        ),
+            onLeadingPressed: controller.confirmSubscribersSelection,
+            bottom: DiscussionSubscribersSearchBar(
+              controller: controller,
+              usersDataSource: usersDataSource,
+            )),
         body: Obx(
           () {
             if (usersDataSource.loaded.value == true &&

@@ -47,7 +47,6 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -69,15 +68,27 @@ class ProjectDetailsController extends BaseProjectEditorController {
   final creationDateText = ''.obs;
 
   final taskCount = 0.obs;
+  final milestoneCount = 0.obs;
+  final discussionCount = 0.obs;
 
   @override
-  ProjectDetailed get projectData => _projectDetailed;
-  ProjectDetailed _projectDetailed = ProjectDetailed();
+  ProjectDetailed get projectData => _projectDetailed.value!;
+  final _projectDetailed = Rxn<ProjectDetailed>();
 
   StreamSubscription? _refreshProjectsSubscription;
   StreamSubscription? _taskCountSubscription;
 
   final _userController = Get.find<UserController>();
+
+  ProjectDetailsController() {
+    _projectDetailed.listen((details) {
+      if (details == null) return;
+
+      taskCount.value = details.taskCount ?? 0;
+      milestoneCount.value = details.milestoneCount ?? 0;
+      discussionCount.value = details.discussionCount ?? 0;
+    });
+  }
 
   @override
   void onClose() {
@@ -87,18 +98,13 @@ class ProjectDetailsController extends BaseProjectEditorController {
   }
 
   bool setup({ProjectDetailed? projectDetailed}) {
-    if (projectDetailed != null) _projectDetailed = projectDetailed;
+    if (projectDetailed != null) _projectDetailed.value = projectDetailed;
 
     projectTasksController = Get.find<ProjectTasksController>();
     projectMilestonesController = Get.find<MilestonesDataSource>();
     projectDiscussionsController = Get.find<ProjectDiscussionsController>();
     projectDocumentsController = Get.find<DocumentsController>();
     projectTeamDataSource = Get.find<ProjectTeamController>();
-
-    _taskCountSubscription?.cancel();
-    _taskCountSubscription = projectTasksController!.itemList.listen((taskList) {
-      taskCount.value = taskList.length;
-    });
 
     _refreshProjectsSubscription?.cancel();
     _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
@@ -107,8 +113,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
         return;
       }
 
-      if (data['projectDetails'].id == _projectDetailed.id)
-        _projectDetailed = data['projectDetails'] as ProjectDetailed;
+      if (data['projectDetails'].id == _projectDetailed.value!.id)
+        _projectDetailed.value = data['projectDetails'] as ProjectDetailed;
     });
 
     _userController.getUserInfo().then((res) {
@@ -121,23 +127,22 @@ class ProjectDetailsController extends BaseProjectEditorController {
   }
 
   void fillProjectInfo(ProjectDetailed projectDetailed) {
-    _projectDetailed = projectDetailed;
+    _projectDetailed.value = projectDetailed;
 
-    statusText.value = tr('projectStatus', args: [ProjectStatus.toName(_projectDetailed.status)]);
+    statusText.value =
+        tr('projectStatus', args: [ProjectStatus.toName(_projectDetailed.value!.status)]);
 
-    projectTitleText.value = _projectDetailed.title!;
-    descriptionText.value = _projectDetailed.description!;
-    managerText.value = _projectDetailed.responsible!.displayName!;
+    projectTitleText.value = _projectDetailed.value!.title!;
+    descriptionText.value = _projectDetailed.value!.description!;
+    managerText.value = _projectDetailed.value!.responsible!.displayName!;
 
     final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
-    creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.created!));
+    creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.value!.created!));
 
-    if (_projectDetailed.tags != null) {
-      tags.addAll(_projectDetailed.tags!);
-      tagsText.value = _projectDetailed.tags!.join(', ');
+    if (_projectDetailed.value!.tags != null) {
+      tags.addAll(_projectDetailed.value!.tags!);
+      tagsText.value = _projectDetailed.value!.tags!.join(', ');
     }
-
-    taskCount.value = _projectDetailed.taskCountTotal ?? 0;
 
     setPrivate(projectDetailed.isPrivate ?? false);
 
@@ -150,26 +155,26 @@ class ProjectDetailsController extends BaseProjectEditorController {
     if (!hidden) loaded.value = false;
 
     final response = await _projectService.getProjectById(
-        projectId: _projectDetailed.id!); // TODO move to new method
-    if (response != null) _projectDetailed = response;
+        projectId: _projectDetailed.value!.id!); // TODO move to new method
+    if (response != null) _projectDetailed.value = response;
 
-    fillProjectInfo(_projectDetailed);
+    fillProjectInfo(_projectDetailed.value!);
 
-    projectTasksController!.setup(_projectDetailed);
-    projectMilestonesController!.setup(projectDetailed: _projectDetailed);
-    projectDiscussionsController!.setup(_projectDetailed);
+    projectTasksController!.setup(_projectDetailed.value!);
+    projectMilestonesController!.setup(projectDetailed: _projectDetailed.value);
+    projectDiscussionsController!.setup(_projectDetailed.value!);
     unawaited(projectDocumentsController!.setupFolder(
-      folderName: _projectDetailed.title!,
-      folderId: _projectDetailed.projectFolder,
+      folderName: _projectDetailed.value!.title!,
+      folderId: _projectDetailed.value!.projectFolder,
     ));
-    projectTeamDataSource!.setup(projectDetailed: _projectDetailed);
+    projectTeamDataSource!.setup(projectDetailed: _projectDetailed.value);
     unawaited(projectTeamDataSource!.getTeam());
 
     loaded.value = true;
   }
 
   Future manageTeamMembers() async {
-    selectedProjectManager.value = _projectDetailed.responsible;
+    selectedProjectManager.value = _projectDetailed.value!.responsible;
 
     selectedTeamMembers.clear();
 
@@ -186,7 +191,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   Future<void> copyLink() async {}
 
   Future deleteProject() async {
-    final responce = await _projectService.deleteProject(projectId: _projectDetailed.id!);
+    final responce = await _projectService.deleteProject(projectId: _projectDetailed.value!.id!);
     if (responce) await _refreshProjectsSubscription?.cancel();
 
     return responce;
@@ -194,25 +199,22 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   @override
   Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
-      .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed);
+      .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed.value!);
 
   Future followProject() async {
-    await _projectService.followProject(projectId: _projectDetailed.id!);
+    await _projectService.followProject(projectId: _projectDetailed.value!.id!);
     await refreshData();
   }
 
   @override
   Future<void> confirmTeamMembers() async {
-    Get.find<UsersDataSource>().loaded.value = false;
     final users = <String>[];
-
     for (final user in selectedTeamMembers) {
       users.add(user.id!);
     }
 
-    await _projectService.addToProjectTeam(_projectDetailed.id!, users);
-    await refreshData();
-    Get.find<UsersDataSource>().loaded.value = true;
+    await _projectService.addToProjectTeam(_projectDetailed.value!.id!, users);
+    unawaited(projectTeamDataSource!.getTeam());
 
     Get.back();
   }

@@ -32,44 +32,25 @@
 
 part of 'select_item_template.dart';
 
-class _AppBarIcon extends StatelessWidget {
-  const _AppBarIcon({
+class AppBarSearchItem extends StatelessWidget {
+  const AppBarSearchItem({
     Key? key,
     required this.searchController,
-    required this.searchIconKey,
-    required this.clearIconKey,
   }) : super(key: key);
 
   final BaseSearchController searchController;
-  final Key searchIconKey;
-  final Key clearIconKey;
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        reverseDuration: const Duration(milliseconds: 300),
-        switchInCurve: Curves.easeOutSine,
-        switchOutCurve: Curves.fastOutSlowIn,
-        child: searchController.switchToSearchView.value == true
-            ? PlatformIconButton(
-                key: searchIconKey,
-                onPressed: () {
-                  searchController.switchToSearchView.value =
-                      !searchController.switchToSearchView.value;
-                  searchController.textController.clear();
-                  searchController.clearSearch();
-                },
-                icon: Icon(PlatformIcons(context).clear),
-              )
-            : PlatformIconButton(
-                key: clearIconKey,
-                onPressed: () => searchController.switchToSearchView.value =
-                    !searchController.switchToSearchView.value,
-                icon: Icon(PlatformIcons(context).search),
-              ),
-      ),
+      () => searchController.switchToSearchView.value == true
+          ? const SizedBox()
+          : PlatformIconButton(
+              padding: EdgeInsets.zero,
+              onPressed: () => searchController.switchToSearchView.value =
+                  !searchController.switchToSearchView.value,
+              icon: Icon(PlatformIcons(context).search),
+            ),
     );
   }
 }

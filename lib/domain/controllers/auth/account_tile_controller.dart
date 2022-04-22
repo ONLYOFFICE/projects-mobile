@@ -30,6 +30,7 @@
  *
  */
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -49,6 +50,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
+import 'package:synchronized/synchronized.dart';
 
 class AccountTileController extends GetxController {
   final _downloadService = locator<DownloadService>();
@@ -73,6 +75,8 @@ class AccountTileController extends GetxController {
           .obs;
 
   String? get displayName => accountData!.name;
+
+  final _onTapLock = Lock();
 
   Future<void> loadAvatar() async {
     try {
@@ -142,7 +146,13 @@ class AccountTileController extends GetxController {
     }
   }
 
-  Future<void> onTap() async => loginToSavedAccount();
+  Future<void> onTap() async {
+    if (_onTapLock.locked) return;
+
+    unawaited(_onTapLock.synchronized(() async {
+      await loginToSavedAccount();
+    }));
+  }
 
   Future<void> deleteAccount() async {
     await Get.dialog(

@@ -518,7 +518,7 @@ packages:
       name: flutter_downloader
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.2"
+    version: "1.7.3"
   flutter_inappwebview:
     dependency: transitive
     description:

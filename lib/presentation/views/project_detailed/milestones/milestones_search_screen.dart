@@ -34,27 +34,27 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_search_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestone_search_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
 
-class TasksSearchScreen extends StatelessWidget {
-  const TasksSearchScreen({Key? key}) : super(key: key);
+class MileStonesSearchScreen extends StatelessWidget {
+  const MileStonesSearchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TasksSearchController());
+    final controller = Get.put(MilestoneSearchController());
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
       appBar: StyledAppBar(
         title: SearchField(
-          controller: controller.searchInputController,
+          controller: controller.textController,
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
           autofocus: true,
           hintText: tr('enterQuery'),
@@ -67,7 +67,7 @@ class TasksSearchScreen extends StatelessWidget {
         () {
           if (!controller.loaded.value) return const ListLoadingSkeleton();
 
-          if (controller.nothingFound.value) return const NothingFound();
+          if (controller.nothingFound) return const NothingFound();
 
           final scrollController = ScrollController();
           return PaginationListView(
@@ -81,7 +81,7 @@ class TasksSearchScreen extends StatelessWidget {
                     : const SizedBox(),
                 itemCount: controller.paginationController.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return TaskCell(task: controller.paginationController.data[index]);
+                  return MilestoneCell(milestone: controller.itemList[index]);
                 },
               );
             }(),

@@ -45,7 +45,6 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_group_item.dart';
 
@@ -73,7 +72,7 @@ class GroupMembersSelectionView extends StatelessWidget {
         centerTitle: GetPlatform.isIOS,
         leadingWidth: GetPlatform.isIOS ? 100 : null,
         leading: PlatformIconButton(
-          icon: Icon(PlatformIcons(context).back),
+          icon: const BackButtonIcon(),
           onPressed: Get.find<NavigationController>().back,
           cupertino: (_, __) => CupertinoIconButtonData(
             padding: const EdgeInsets.only(left: 16),
@@ -141,7 +140,9 @@ class GroupsOverview extends StatelessWidget {
         },
         itemBuilder: (BuildContext c, int i) {
           return PortalGroupItem(
-              groupController: groupsDataSource.groupsList[i], onTapFunction: onTapFunction);
+            groupController: groupsDataSource.groupsList[i],
+            onTapFunction: onTapFunction,
+          );
         },
       ),
     );

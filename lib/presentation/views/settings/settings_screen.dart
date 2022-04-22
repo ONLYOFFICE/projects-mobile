@@ -62,9 +62,8 @@ class SettingsScreen extends StatelessWidget {
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       titleText: tr('settings'),
       onLeadingPressed: controller.leave,
-      backButtonIcon: platformController.isMobile
-          ? Icon(PlatformIcons(context).back)
-          : Icon(PlatformIcons(context).clear),
+      backButtonIcon:
+          platformController.isMobile ? const BackButtonIcon() : Icon(PlatformIcons(context).clear),
     );
 
     final tabletAppBar = StyledAppBar(
@@ -127,12 +126,10 @@ class SettingsScreen extends StatelessWidget {
                             // content: Text(tr('clearCacheQuestionDescription')),
                             cancelText: tr('cancel').toLowerCase().capitalizeFirst,
                             acceptText: tr('clearCache'),
-                            onCancelTap: () {
-                              Navigator.pop(context);
-                            },
+                            onCancelTap: Get.back,
                             onAcceptTap: () {
                               controller.onClearCachePressed();
-                              Navigator.pop(context);
+                              Get.back();
                             },
                           ),
                         );
@@ -268,7 +265,7 @@ class SettingsScreen extends StatelessWidget {
                                   CupertinoActionSheetAction(
                                     onPressed: () {
                                       controller.onClearCachePressed();
-                                      Navigator.pop(context);
+                                      Get.back();
                                     },
                                     isDestructiveAction: true,
                                     child: Text(tr('clearCache')),
@@ -276,10 +273,8 @@ class SettingsScreen extends StatelessWidget {
                                 ],
                                 cancelButton: CupertinoActionSheetAction(
                                   isDefaultAction: true,
+                                  onPressed: Get.back,
                                   child: Text(tr('cancel').toLowerCase().capitalizeFirst!),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
                                 ),
                               ),
                             );
@@ -291,16 +286,14 @@ class SettingsScreen extends StatelessWidget {
                                 content: Text(tr('clearCacheQuestionDescription')),
                                 actions: <CupertinoDialogAction>[
                                   CupertinoDialogAction(
+                                    onPressed: Get.back,
                                     child: Text(tr('cancel').toLowerCase().capitalizeFirst!),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
                                   ),
                                   CupertinoDialogAction(
                                     isDestructiveAction: true,
                                     onPressed: () {
                                       controller.onClearCachePressed();
-                                      Navigator.pop(context);
+                                      Get.back();
                                     },
                                     child: Text(tr('clearCache')),
                                   )

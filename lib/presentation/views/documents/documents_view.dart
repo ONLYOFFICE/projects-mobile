@@ -41,8 +41,8 @@ import 'package:projects/domain/controllers/documents/base_documents_controller.
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/search_button.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
@@ -102,7 +102,15 @@ class DocumentsSearchView extends StatelessWidget {
     return ProjectDocumentsScreen(
       controller: documentsController,
       appBar: StyledAppBar(
-        title: CustomSearchBar(controller: documentsController),
+        title: SearchField(
+          controller: documentsController.searchInputController,
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+          autofocus: true,
+          hintText: tr('enterQuery'),
+          onSubmitted: documentsController.newSearch,
+          onChanged: documentsController.newSearch,
+          onClearPressed: documentsController.clearSearch,
+        ),
         showBackButton: true,
         titleHeight: 50,
       ),
@@ -191,32 +199,6 @@ class DocumentsMoreButton extends StatelessWidget {
             ),
         ];
       },
-    );
-  }
-}
-
-class DocsBottom extends StatelessWidget {
-  DocsBottom({Key? key, required this.controller}) : super(key: key);
-  final BaseDocumentsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
-          Obx(
-            () => Text(
-              tr('total', args: [controller.foldersCount.value.toString()]),
-              style: TextStyleHelper.body2(
-                color: Get.theme.colors().onSurface.withOpacity(0.6),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

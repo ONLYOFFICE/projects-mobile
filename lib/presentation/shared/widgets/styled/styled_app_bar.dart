@@ -37,7 +37,6 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
 class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -55,20 +54,19 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function()? onLeadingPressed;
   final Color? backgroundColor;
   final double? leadingWidth;
-
-  final Icon? backButtonIcon;
+  final Widget backButtonIcon;
 
   StyledAppBar({
     Key? key,
     this.actions,
     this.bottom,
     this.bottomHeight = 44,
-    this.centerTitle,
+    this.centerTitle = false,
     this.elevation = 1,
     this.leading,
     this.onLeadingPressed,
     this.showBackButton = true,
-    this.backButtonIcon,
+    this.backButtonIcon = const BackButtonIcon(),
     this.title,
     this.titleHeight = 56,
     this.titleText,
@@ -84,8 +82,6 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _backButtonIcon = backButtonIcon ?? Icon(PlatformIcons(context).back);
-
     return AppBar(
       centerTitle: centerTitle,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
@@ -97,7 +93,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: leading == null && showBackButton
           ? PlatformIconButton(
         padding: EdgeInsets.zero,
-              icon: _backButtonIcon,
+              icon: backButtonIcon,
               onPressed: onLeadingPressed ?? Get.find<NavigationController>().back,
             )
           : leading,

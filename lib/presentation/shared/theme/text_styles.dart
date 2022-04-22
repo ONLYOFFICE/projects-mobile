@@ -117,7 +117,7 @@ class TextStyleHelper {
   static TextStyle _iosCaption({Color? color}) {
     return TextStyle(
       fontFamily: '.SF Pro Display',
-      fontSize: 12,
+      fontSize: 13,
       fontWeight: FontWeight.w400,
       height: 1.333,
       color: color,

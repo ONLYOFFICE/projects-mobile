@@ -64,6 +64,7 @@ class PortalUserItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (GetPlatform.isIOS) _MultipleSelection(userController: userController),
             SizedBox(
               width: 72,
               child: SizedBox(
@@ -132,35 +133,53 @@ class PortalUserItem extends StatelessWidget {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 54),
-              child: Obx(() {
-                if (userController.selectionMode.value == UserSelectionMode.Multiple) {
-                  if (userController.isSelected.value == true) {
-                    return Icon(PlatformIcons(context).checkBoxCheckedOutlineRounded,
-                        color: Get.theme.colors().primary);
-                  } else {
-                    return Icon(
-                      PlatformIcons(context).checkBoxBlankOutlineRounded,
-                      color: Get.theme.colors().inactiveGrey,
-                    );
-                  }
-                } else {
-                  if (userController.isSelected.value == true) {
-                    return Icon(
-                      PlatformIcons(context).checkMark,
-                      color: Get.theme.colors().primary,
-                    );
-                  } else {
-                    return const SizedBox(width: 72);
-                  }
-                }
-              }),
-            ),
+            if (GetPlatform.isAndroid) _MultipleSelection(userController: userController),
+            Obx(() {
+              if (userController.selectionMode.value == UserSelectionMode.Single &&
+                  userController.isSelected.value == true)
+                return Icon(
+                  PlatformIcons(context).checkMarkAlt,
+                  color: Get.theme.colors().primary,
+                );
+
+              return const SizedBox();
+            }),
             const SizedBox(width: 16),
           ],
         ),
       ),
     );
+  }
+}
+
+class _MultipleSelection extends StatelessWidget {
+  const _MultipleSelection({Key? key, required this.userController}) : super(key: key);
+
+  final PortalUserItemController userController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      if (userController.selectionMode.value == UserSelectionMode.Multiple) {
+        if (userController.isSelected.value == true) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Icon(
+              PlatformIcons(context).checked,
+              color: Get.theme.colors().primary,
+            ),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Icon(
+              PlatformIcons(context).unchecked,
+              color: Get.theme.colors().inactiveGrey,
+            ),
+          );
+        }
+      }
+      return const SizedBox();
+    });
   }
 }

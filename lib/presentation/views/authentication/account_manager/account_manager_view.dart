@@ -61,39 +61,47 @@ class AccountManagerView extends StatelessWidget {
       body: Center(
         child: Container(
           constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              const Spacer(flex: 1),
-              const AppIcon(icon: SvgIcons.app_logo),
-              SizedBox(height: Get.height * 0.01),
-              AppIcon(
-                icon: SvgIcons.app_title,
-                color: Get.theme.colors().onSurface,
-              ),
-              SizedBox(height: Get.height * 0.06),
-              Expanded(
-                flex: 3,
-                child: Obx(
-                  () => ListView.separated(
-                    physics: const ScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (c, i) {
-                      if (i == accountController.accounts.length) {
-                        return const _NewAccountButton();
-                      } else
-                        return AccountTile(
-                          userController:
-                              AccountTileController(accountData: accountController.accounts[i]),
-                        );
-                    },
-                    separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
-                    itemCount: accountController.accounts.length + 1,
+          child: OrientationBuilder(builder: (context, orientation) {
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                if (orientation == Orientation.portrait)
+                  const Spacer(flex: 1)
+                else
+                  const SizedBox(height: 20),
+                const AppIcon(icon: SvgIcons.app_logo),
+                SizedBox(height: Get.height * 0.01),
+                AppIcon(
+                  icon: SvgIcons.app_title,
+                  color: Get.theme.colors().onSurface,
+                ),
+                if (orientation == Orientation.portrait)
+                  SizedBox(height: Get.height * 0.06)
+                else
+                  const SizedBox(height: 20),
+                Expanded(
+                  flex: 3,
+                  child: Obx(
+                    () => ListView.separated(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (c, i) {
+                        if (i == accountController.accounts.length) {
+                          return const _NewAccountButton();
+                        } else
+                          return AccountTile(
+                            userController:
+                                AccountTileController(accountData: accountController.accounts[i]),
+                          );
+                      },
+                      separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
+                      itemCount: accountController.accounts.length + 1,
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            );
+          }),
         ),
       ),
     );
