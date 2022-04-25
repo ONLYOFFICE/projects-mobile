@@ -218,8 +218,10 @@ class FileCellController extends GetxController {
         Get.back();
         if (!(await FlutterDownloader.open(taskId: downloadTaskId!)))
           MessagesHandler.showSnackBar(context: Get.context!, text: tr('openFileError'));
-      } else if (status == DownloadTaskStatus.failed)
+      } else if (status == DownloadTaskStatus.failed) {
+        Get.back();
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
+      }
     }
   }
 
