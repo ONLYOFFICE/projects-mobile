@@ -275,6 +275,7 @@ class FileCellController extends GetxController {
 
     downloadTaskId = await downloadService.downloadDocument(file.viewUrl!, temp: true);
     if (downloadTaskId == null) {
+      Get.back();
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       return;
     }
