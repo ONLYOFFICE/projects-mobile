@@ -47,7 +47,7 @@ class EnterCurrentPasscodeScreen extends StatelessWidget with PasscodeScreenMixi
   final VoidCallback? onBack;
 
   final passcodeCheckingController = Get.find<PasscodeCheckingController>()
-    ..setup(canUseFingerprint: false);
+    ..setup(canUseBiometric: false);
 
   @override
   String get title => tr('enterCurrentPasscode');

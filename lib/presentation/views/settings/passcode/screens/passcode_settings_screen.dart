@@ -239,7 +239,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                                 initialValue: controller.isFingerprintEnable.value,
                                 onToggle: controller.tryTogglingFingerprintStatus,
                                 title: Text(
-                                  tr('fingerprint'),
+                                  controller.biometricTypeDescription,
                                   overflow: TextOverflow.ellipsis,
                                   style:
                                       TextStyleHelper.subtitle1(color: Get.theme.colors().primary),

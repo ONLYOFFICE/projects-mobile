@@ -32,27 +32,29 @@
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:projects/data/services/local_authentication_service.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/main_view.dart';
 
 class PasscodeCheckingController extends GetxController {
-  void setup({bool canUseFingerprint = false}) {
-    _canUseFingerprint = canUseFingerprint;
+  void setup({bool canUseBiometric = false}) {
+    _canUseBiometric = canUseBiometric;
   }
 
-  bool _canUseFingerprint = false;
+  bool _canUseBiometric = false;
 
   final _service = locator<PasscodeService>();
   final _authService = locator<LocalAuthenticationService>();
+  late bool isFingerprint;
 
   final passcodeCheckFailed = false.obs;
   final passcodeLen = 0.obs;
   final loaded = false.obs;
 
-  bool isFingerprintEnable = false;
-  bool isFingerprintAvailable = false;
+  bool isBiometricEnable = false;
+  bool isBiometricAvailable = false;
 
   String _enteredPasscode = '';
   String? _correctPasscode;
@@ -60,36 +62,36 @@ class PasscodeCheckingController extends GetxController {
   @override
   void onInit() async {
     if (!await locator<PasscodeService>().isPasscodeEnable) {
-      Get.offAll(() => const MainView());
+      await Get.offAll(() => const MainView());
       return;
     }
 
     _correctPasscode = await _service.getPasscode;
-    await _getFingerprintAvailability();
+    await _getBiometricAvailability();
     super.onInit();
-    if (isFingerprintEnable) await useFingerprint();
+    if (isBiometricEnable) await useBiometric();
   }
 
   // update code in main passcode controller
   Future<void> updatePasscode() async {
     _correctPasscode = await _service.getPasscode;
-    await _getFingerprintAvailability();
-    if (isFingerprintEnable) await useFingerprint();
+    await _getBiometricAvailability();
+    if (isBiometricEnable) await useBiometric();
   }
 
-  Future<void> useFingerprint() async {
+  Future<void> useBiometric() async {
     try {
       final didAuthenticate = await _authService.authenticate();
 
       if (!didAuthenticate) {
-        await _getFingerprintAvailability();
+        await _getBiometricAvailability();
       } else {
         await Get.offAll(() => const MainView());
       }
     } catch (_) {
       loaded.value = false;
-      isFingerprintAvailable = false;
-      isFingerprintEnable = false;
+      isBiometricAvailable = false;
+      isBiometricEnable = false;
       loaded.value = true;
     }
   }
@@ -151,14 +153,16 @@ class PasscodeCheckingController extends GetxController {
     Get.back();
   }
 
-  Future<void> _getFingerprintAvailability() async {
+  Future<void> _getBiometricAvailability() async {
     loaded.value = false;
-    if (!_canUseFingerprint) {
-      isFingerprintAvailable = false;
-      isFingerprintEnable = false;
+    if (!_canUseBiometric) {
+      isBiometricAvailable = false;
+      isBiometricEnable = false;
     } else {
-      isFingerprintAvailable = await _authService.isBiometricAvailable;
-      isFingerprintEnable = await _service.isBiometricEnable;
+      final availableBiometrics = await _authService.availableBiometrics;
+      isFingerprint = availableBiometrics == BiometricType.fingerprint;
+      isBiometricAvailable = availableBiometrics != null;
+      isBiometricEnable = await _service.isBiometricEnable;
     }
     loaded.value = true;
   }

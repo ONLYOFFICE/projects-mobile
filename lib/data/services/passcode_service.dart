@@ -49,10 +49,7 @@ class PasscodeService {
   Future<void> deletePasscode() async => await _storage.delete('passcode');
 
   Future<BiometricType?> getBiometricType() async {
-    final biometric = await _biometricService.availableBiometrics;
-    if (biometric.contains(BiometricType.face)) return BiometricType.face;
-    if (biometric.contains(BiometricType.fingerprint)) return BiometricType.fingerprint;
-    return null;
+    return await _biometricService.availableBiometrics;
   }
 
   Future<void> setBiometricStatus(bool isEnable) async {
@@ -63,14 +60,11 @@ class PasscodeService {
 
   Future<bool> get isBiometricEnable async {
     final isBiometricEnable = await _storage.getString('isBiometricEnable') ?? false;
-
     return isBiometricEnable == 'true';
   }
 
   Future<bool> get isBiometricAvailable async {
-    final isFingerprintAvailable = await _biometricService.isBiometricAvailable;
-
-    return isFingerprintAvailable;
+    return await _biometricService.availableBiometrics != null;
   }
 
   Future<bool> get isPasscodeEnable async {

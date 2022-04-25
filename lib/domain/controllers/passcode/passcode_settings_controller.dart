@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
@@ -56,6 +57,7 @@ class PasscodeSettingsController extends GetxController {
   final isFingerprintAvailable = false.obs;
 
   late final BiometricType? biometricType;
+  late final String biometricTypeDescription;
   RxInt enteredPasscodeLen = 0.obs;
   RxInt passcodeCheckLen = 0.obs;
 
@@ -68,6 +70,8 @@ class PasscodeSettingsController extends GetxController {
     final isBiometricEnable = await _service.isBiometricEnable;
     final isBiometricAvailable = await _service.isBiometricAvailable;
     biometricType = await _service.getBiometricType();
+    biometricTypeDescription =
+        biometricType == BiometricType.face ? tr('faceID') : tr('fingerprint');
 
     if (isBiometricAvailable) {
       isFingerprintEnable.value = isBiometricEnable;
