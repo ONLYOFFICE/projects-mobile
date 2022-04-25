@@ -248,8 +248,11 @@ class TabletLayout extends StatelessWidget {
                           return controller.selfUserItem.value.avatar.value;
                         }),
                       ),
-                      onPressed: () => controller.toScreen(const SelfProfileScreen(),
-                          arguments: {'showBackButton': true, 'showSettingsButton': false}),
+                      onPressed: () => controller.toScreen(
+                        const SelfProfileScreen(),
+                        arguments: {'showBackButton': true, 'showSettingsButton': false},
+                        page: '/SelfProfileScreen',
+                      ),
                     ),
                   ),
                   const SizedBox(height: 32),
@@ -261,8 +264,7 @@ class TabletLayout extends StatelessWidget {
                       height: 24,
                       color: Get.theme.colors().onNavBar.withOpacity(0.4),
                     ),
-                    onPressed: () => controller.toScreen(null,
-                        modalNavigationData: ModalNavigationData.settingsRouting()),
+                    onPressed: () => controller.toScreen(null, page: '/SettingsScreen'),
                   ),
                   const SizedBox(height: 60)
                 ],

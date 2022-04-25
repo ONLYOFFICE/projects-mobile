@@ -35,7 +35,6 @@ import 'dart:async';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base/base_search_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -51,14 +50,17 @@ class ProjectSearchController extends BaseSearchController {
   final bool onlyMyProjects;
 
   final _paginationController = PaginationController<ProjectDetailed>();
+
   @override
   PaginationController get paginationController => _paginationController;
+
   RxList<ProjectDetailed> get itemList => _paginationController.data;
 
-  final _sortController = Get.arguments['sortController'] as ProjectsSortController?;
-  final _filterController = Get.arguments['filtersController'] as ProjectsFilterController?;
+  final ProjectsSortController? sortController;
+  final ProjectsFilterController? filterController;
 
-  ProjectSearchController({this.onlyMyProjects = false});
+  ProjectSearchController(
+      {this.sortController, this.filterController, this.onlyMyProjects = false});
 
   String _query = '';
   String _searchQuery = '';
@@ -121,12 +123,12 @@ class ProjectSearchController extends BaseSearchController {
 
     final result = await _api.getProjectsByParams(
       startIndex: paginationController.startIndex,
-      sortBy: _sortController?.currentSortfilter,
-      sortOrder: _sortController?.currentSortOrder,
-      projectManagerFilter: _filterController?.projectManagerFilter,
-      participantFilter: _filterController?.teamMemberFilter,
-      otherFilter: _filterController?.otherFilter,
-      statusFilter: _filterController?.statusFilter,
+      sortBy: sortController?.currentSortfilter,
+      sortOrder: sortController?.currentSortOrder,
+      projectManagerFilter: filterController?.projectManagerFilter,
+      participantFilter: filterController?.teamMemberFilter,
+      otherFilter: filterController?.otherFilter,
+      statusFilter: filterController?.statusFilter,
       query: _searchQuery.toLowerCase(),
     );
 

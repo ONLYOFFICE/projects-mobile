@@ -48,6 +48,7 @@ import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
@@ -126,7 +127,7 @@ class DiscussionEditingController extends DiscussionActionsController {
     // ignore: invalid_use_of_protected_member
     _previusSelectedSubscribers = List.from(subscribers);
     clearUserSearch();
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   @override
@@ -134,7 +135,7 @@ class DiscussionEditingController extends DiscussionActionsController {
     // ignore: invalid_use_of_protected_member
     if (listEquals(_previusSelectedSubscribers, subscribers.value)) {
       clearUserSearch();
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -148,7 +149,7 @@ class DiscussionEditingController extends DiscussionActionsController {
           subscribers.value = List.from(_previusSelectedSubscribers);
           clearUserSearch();
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -256,7 +257,7 @@ class DiscussionEditingController extends DiscussionActionsController {
     await _getSelectedSubscribers();
     await _usersDataSource.updateUsers();
 
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   @override
@@ -298,7 +299,7 @@ class DiscussionEditingController extends DiscussionActionsController {
         final discussionsController = Get.find<DiscussionsController>(tag: 'DiscussionsView');
         unawaited(discussionsController.loadDiscussions());
 
-        Get.back();
+        Get.find<NavigationController>().back();
       }
     }
   }
@@ -312,12 +313,12 @@ class DiscussionEditingController extends DiscussionActionsController {
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
     } else {
-      Get.back();
+      Get.find<NavigationController>().back();
     }
   }
 

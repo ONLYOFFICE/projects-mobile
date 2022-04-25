@@ -157,7 +157,7 @@ class NewMilestoneController extends GetxController {
     } else {
       removeProjectSelection();
     }
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   void removeProjectSelection() {
@@ -167,12 +167,12 @@ class NewMilestoneController extends GetxController {
 
   void confirmDescription(String newText) {
     descriptionText.value = newText;
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   void leaveDescriptionView(String typedText) {
     if (typedText == descriptionText.value) {
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -182,7 +182,7 @@ class NewMilestoneController extends GetxController {
         onAcceptTap: () {
           descriptionController.value.text = descriptionText.value;
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -191,12 +191,12 @@ class NewMilestoneController extends GetxController {
 
   void confirmResponsiblesSelection() {
     _previusSelectedResponsible = responsible.value;
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   void leaveResponsiblesSelectionView() {
     if (_previusSelectedResponsible == null || _previusSelectedResponsible == responsible.value) {
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -206,7 +206,7 @@ class NewMilestoneController extends GetxController {
         onAcceptTap: () {
           responsible.value = _previusSelectedResponsible;
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -248,7 +248,7 @@ class NewMilestoneController extends GetxController {
       _dueDate = newDate;
       dueDateText.value =
           formatedDateFromString(now: DateTime.now(), stringDate: newDate.toString());
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       _dueDate = null;
       dueDateText.value = '';
@@ -279,7 +279,7 @@ class NewMilestoneController extends GetxController {
       return;
     }
 
-    Get.back();
+    Get.find<NavigationController>().back();
 
     final milestone = NewMilestoneDTO(
       title: titleController.text,
@@ -313,7 +313,7 @@ class NewMilestoneController extends GetxController {
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -330,7 +330,7 @@ class NewMilestoneController extends GetxController {
       const SelectDateView(),
       arguments: {'controller': this, 'startDate': false, 'initialDate': _dueDate},
       transition: Transition.rightToLeft,
-      isRootModalScreenView: false,
+      page: '/SelectDateView',
     );
   }
 

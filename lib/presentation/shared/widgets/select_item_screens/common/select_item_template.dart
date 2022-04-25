@@ -65,6 +65,8 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
 
   VoidCallback get getItemsFunction;
 
+  VoidCallback? get onLeadingPressed;
+
   @override
   Widget build(BuildContext context) {
     getItemsFunction();
@@ -106,6 +108,8 @@ mixin SelectItemMixin on StatelessWidget {
 
   VoidCallback get getItemsFunction;
 
+  VoidCallback? get onLeadingPressed;
+
   @override
   Widget build(BuildContext context) {
     getItemsFunction();
@@ -116,6 +120,7 @@ mixin SelectItemMixin on StatelessWidget {
       appBar: StyledAppBar(
         titleText: appBarText,
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        onLeadingPressed: onLeadingPressed,
       ),
       body: Obx(
         () {

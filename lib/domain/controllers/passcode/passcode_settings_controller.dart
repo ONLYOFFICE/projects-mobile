@@ -167,7 +167,7 @@ class PasscodeSettingsController extends GetxController {
   void leavePasscodeSettingsScreen() {
     clear();
     Get.find<SettingsController>().onInit();
-    Get.find<NavigationController>().back(id: SettingsRouteNames.key);
+    Get.find<NavigationController>().back();
   }
 
   void leave() {
@@ -241,7 +241,7 @@ class PasscodeSettingsController extends GetxController {
   @override
   void onClose() {
     clear();
-    Get.find<SettingsController>().onInit();
+    //Get.find<SettingsController>().onInit(); это тут действительно нужно?
     super.onClose();
   }
 }

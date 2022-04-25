@@ -43,15 +43,14 @@ import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 
 class TaskTeamView extends StatelessWidget {
-  final TaskItemController controller;
 
   const TaskTeamView({
     Key? key,
-    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.arguments['controller'] as TaskItemController;
     return Scaffold(
       appBar: StyledAppBar(
         titleText: tr('assignedTo'),
@@ -66,7 +65,7 @@ class TaskTeamView extends StatelessWidget {
                 shrinkWrap: true,
                 itemBuilder: (c, i) {
                   final userController =
-                      PortalUserItemController(portalUser: controller.task.value.responsibles![i]!);
+                  PortalUserItemController(portalUser: controller.task.value.responsibles![i]!);
                   return PortalUserItem(
                     userController: userController,
                     onTapFunction: (value) => {
@@ -74,7 +73,7 @@ class TaskTeamView extends StatelessWidget {
                         const ProfileScreen(),
                         transition: Transition.rightToLeft,
                         arguments: {'controller': userController},
-                        isRootModalScreenView: false,
+                        page: '/ProfileScreen',
                       )
                     },
                   );

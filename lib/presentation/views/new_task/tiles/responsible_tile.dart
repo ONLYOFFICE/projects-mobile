@@ -34,6 +34,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
 import 'package:projects/presentation/shared/project_team_responsible.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -41,9 +43,10 @@ import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class ResponsibleTile extends StatelessWidget {
-  final controller;
+  final TaskActionsController controller;
   final bool enableUnderline;
   final Widget? suffixIcon;
+
   const ResponsibleTile({
     Key? key,
     required this.controller,
@@ -56,7 +59,7 @@ class ResponsibleTile extends StatelessWidget {
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        final bool _isSelected = controller.responsibles.isNotEmpty as bool;
+        final bool _isSelected = controller.responsibles.isNotEmpty;
         return NewItemTile(
           isSelected: _isSelected,
           caption: _isSelected ? '${tr('assignedTo')}:' : null,
@@ -64,9 +67,57 @@ class ResponsibleTile extends StatelessWidget {
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground,
           text: _isSelected
-              ? controller.responsibles.length as int == 1
+              ? controller.responsibles.length == 1
                   ? controller.responsibles[0]?.displayName as String
-                  : plural('responsibles', controller.responsibles.length as int)
+                  : plural('responsibles', controller.responsibles.length)
+              : tr('addResponsible'),
+          suffix: _isSelected
+              ? suffixIcon ??
+                  Icon(PlatformIcons(context).rightChevron,
+                      size: 24, color: Get.theme.colors().onBackground.withOpacity(0.6))
+              : null,
+          suffixPadding: const EdgeInsets.only(right: 8),
+          icon: SvgIcons.person,
+          onTap: () => Get.find<NavigationController>().toScreen(
+            const ProjectTeamResponsibleSelectionView(),
+            arguments: {'controller': controller},
+            transition: Transition.rightToLeft,
+            page: '/ProjectTeamResponsibleSelectionView',
+          ),
+        );
+      },
+    );
+  }
+}
+
+class SubtaskResponsibleTile extends StatelessWidget {
+  final SubtaskActionController controller;
+  final bool enableUnderline;
+  final Widget? suffixIcon;
+
+  const SubtaskResponsibleTile({
+    Key? key,
+    required this.controller,
+    this.enableUnderline = true,
+    this.suffixIcon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () {
+        // ignore: omit_local_variable_types
+        final bool _isSelected = controller.responsibles.isNotEmpty;
+        return NewItemTile(
+          isSelected: _isSelected,
+          caption: _isSelected ? '${tr('assignedTo')}:' : null,
+          enableBorder: enableUnderline,
+          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Get.theme.colors().onBackground,
+          text: _isSelected
+              ? controller.responsibles.length == 1
+                  ? controller.responsibles[0]?.displayName as String
+                  : plural('responsibles', controller.responsibles.length)
               : tr('addResponsible'),
           suffix: _isSelected
               ? suffixIcon ??
@@ -78,7 +129,7 @@ class ResponsibleTile extends StatelessWidget {
             const ProjectTeamResponsibleSelectionView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
-            isRootModalScreenView: false,
+            page: '/ProjectTeamResponsibleSelectionView',
           ),
         );
       },

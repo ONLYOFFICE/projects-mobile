@@ -69,7 +69,7 @@ class NewProjectController extends BaseProjectEditorController {
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -117,7 +117,7 @@ class NewProjectController extends BaseProjectEditorController {
 
     final result = await _api.createProject(project: newProject);
     if (result != null) {
-      Get.back();
+      Get.find<NavigationController>().back();
 
       locator<EventHub>().fire('needToRefreshProjects', {'all': true});
 
@@ -132,13 +132,14 @@ class NewProjectController extends BaseProjectEditorController {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
+  @override
   Future<void> showTags() async {
     // ignore: unawaited_futures
     Get.find<NavigationController>().toScreen(
       const TagsSelectionView(),
       arguments: {'controller': this},
       transition: Transition.rightToLeft,
-      isRootModalScreenView: false,
+      page: '/TagsSelectionView',
     );
   }
 

@@ -59,7 +59,6 @@ class HtmlTextEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('has error $hasError');
     return HtmlEditor(
       controller: textController,
       callbacks: Callbacks(onNavigationRequestMobile: (url) {
@@ -68,15 +67,17 @@ class HtmlTextEditor extends StatelessWidget {
       }),
       htmlToolbarOptions: HtmlToolbarOptions(
         mediaUploadInterceptor: (file, type) async {
+          textController.setFocus();
           final result = await locator<CommentsService>().uploadImages(file);
           if (result != null)
-            textController.insertHtml('<img alt="" src="$result">');
+            textController.insertNetworkImage(result);
           else
             MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
 
           return false;
         },
         linkInsertInterceptor: (text, url, isNewWindow) {
+          textController.setFocus();
           textController.insertLink(text, url, isNewWindow);
           return false;
         },

@@ -36,11 +36,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/move_folder_response.dart';
-import 'package:synchronized/synchronized.dart';
-
 import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
+import 'package:projects/data/models/from_api/move_folder_response.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/conflict_resolving_dialog.dart';
@@ -51,6 +49,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
+import 'package:synchronized/synchronized.dart';
 
 enum MoveOrCopyMode { CopyDocument, CopyFolder, MoveDocument, MoveFolder }
 
@@ -293,15 +292,19 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
 
   @override
   void showSearch() {
-    Get.find<NavigationController>()
-        .toScreen(DocumentsMoveSearchView(), preventDuplicates: false, arguments: {
-      'mode': mode,
-      'folderName': documentsScreenName.value,
-      'target': target,
-      'currentFolder': currentFolder,
-      'initialFolderId': initialFolderId,
-      'nestingCounter': nestingCounter,
-    });
+    Get.find<NavigationController>().toScreen(
+      DocumentsMoveSearchView(),
+      preventDuplicates: false,
+      arguments: {
+        'mode': mode,
+        'folderName': documentsScreenName.value,
+        'target': target,
+        'currentFolder': currentFolder,
+        'initialFolderId': initialFolderId,
+        'nestingCounter': nestingCounter,
+      },
+      page: '/DocumentsMoveSearchView',
+    );
   }
 
   @override

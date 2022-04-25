@@ -38,12 +38,9 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
-import 'package:projects/presentation/views/settings/analytics_screen.dart';
-import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
-import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
-import 'package:projects/presentation/views/settings/settings_screen.dart';
 
 class NavigationController extends GetxController {
   final tabIndex = 0.obs;
@@ -51,13 +48,18 @@ class NavigationController extends GetxController {
   final selfUserItem = Rx(PortalUserItemController(portalUser: PortalUser()));
   final platformController = Get.find<PlatformController>();
 
+  late bool isMobile;
   int treeLength = 0;
 
   @override
   void onInit() {
-    Get.find<UserController>().getUserInfo().then((value) => selfUserItem.value =
-        PortalUserItemController(portalUser: Get.find<UserController>().user.value!));
+    Get.find<UserController>().user.listen((value) {
+      if (value == null) return;
 
+      selfUserItem.value = PortalUserItemController(portalUser: value);
+    });
+
+    isMobile = platformController.isMobile;
     super.onInit();
   }
 
@@ -112,35 +114,42 @@ class NavigationController extends GetxController {
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
-    bool isRootModalScreenView = true,
-    ModalNavigationData? modalNavigationData,
+    String? page, // изменить имя на page
   }) async {
-    if (platformController.isMobile) {
-      assert(widget != null, 'Widget must not be null for mobile layout');
-      return await Get.to(
-        () => widget!,
-        preventDuplicates: preventDuplicates ?? false,
-        fullscreenDialog: fullscreenDialog,
+    if (isMobile) {
+      if (widget != null)
+        return await Get.to(
+          () => widget,
+          preventDuplicates: preventDuplicates ?? false,
+          fullscreenDialog: fullscreenDialog,
+          arguments: arguments,
+          transition: transition ?? Transition.native,
+          popGesture: popGesture,
+        );
+      else
+        return await Get.toNamed(
+          page!,
+          arguments: arguments,
+          preventDuplicates: preventDuplicates ?? false,
+        );
+    } else if (ModalNavigationData.key!.currentState == null) {
+      return await toModalScreen(
+        modalNavigationData: ModalNavigationData(initialPage: page!),
         arguments: arguments,
-        transition: transition ?? Transition.native,
-        popGesture: popGesture,
       );
-    } else if (modalNavigationData != null) {
-      await toModalScreen(modalNavigationData: modalNavigationData);
-    } else {
-      return await Get.dialog(
-        ModalScreenView(contentView: widget!),
-        barrierDismissible: false,
-        barrierColor: isRootModalScreenView ? null : Colors.transparent,
-        arguments: arguments,
-      );
-    }
+    } else
+      return await Get.toNamed(page!,
+          id: ModalNavigationData.nestedNavigatorId, arguments: arguments);
   }
 
-  Future<void> toModalScreen({required ModalNavigationData modalNavigationData}) async {
-    await Get.dialog(ModalScreenViewSkeleton(
-      modalNavigationData: modalNavigationData,
-    ));
+  Future<void> toModalScreen(
+      {required ModalNavigationData modalNavigationData, Map<String, dynamic>? arguments}) async {
+    await Get.dialog(
+      ModalScreenViewSkeleton(
+        modalNavigationData: modalNavigationData,
+      ),
+      arguments: arguments,
+    );
   }
 
   Future to(
@@ -150,9 +159,8 @@ class NavigationController extends GetxController {
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
-    ModalNavigationData? modalNavigationData,
   }) async {
-    if (platformController.isMobile) {
+    if (isMobile) {
       return await Get.to(
         () => widget,
         popGesture: popGesture,
@@ -161,8 +169,6 @@ class NavigationController extends GetxController {
         arguments: arguments,
         transition: transition ?? Transition.native,
       );
-    } else if (modalNavigationData != null) {
-      await toModalScreen(modalNavigationData: modalNavigationData);
     } else {
       treeLength++;
       return await Get.to(
@@ -174,53 +180,39 @@ class NavigationController extends GetxController {
     }
   }
 
-  void back({int? id}) {
-    if (id != null && !platformController.isMobile) {
-      Get.back(id: id);
+  void back<T>({
+    bool closeTabletModalScreen = false,
+    T? result,
+  }) {
+    final canPop = ModalNavigationData.key?.currentState?.canPop();
+    if (canPop == true) {
+      Get.back(id: ModalNavigationData.nestedNavigatorId, result: result);
     } else {
-      Get.back();
+      Get.back(result: result);
     }
   }
 }
 
 class ModalNavigationData {
-  final GlobalKey<NavigatorState>? id;
-  final Route? Function(RouteSettings)? onGenerateRoute;
+  static const nestedNavigatorId = 1;
 
-  const ModalNavigationData({
-    required this.id,
-    this.onGenerateRoute,
+  static final _pages = getxPages();
+
+  static Route onGenerateRoute(RouteSettings settings) {
+    final getPage = _pages.firstWhere((getPage) => getPage.name == settings.name);
+    return GetPageRoute(page: getPage.page, settings: settings);
+  }
+
+  static List<Route<dynamic>> onGenerateInitialRoutes(_, initialRouteName) {
+    final getPage = _pages.firstWhere((getPage) => getPage.name == initialRouteName);
+    return [GetPageRoute(page: getPage.page)];
+  }
+
+  static GlobalKey<NavigatorState>? get key => Get.nestedKey(nestedNavigatorId);
+
+  String initialPage;
+
+  ModalNavigationData({
+    required this.initialPage,
   });
-
-  ModalNavigationData.settingsRouting()
-      : this(
-            id: Get.nestedKey(SettingsRouteNames.key),
-            onGenerateRoute: (settings) {
-              if (settings.name == SettingsRouteNames.settingsScreen) {
-                return GetPageRoute(
-                  page: () => const SettingsScreen(),
-                );
-              } else if (settings.name == SettingsRouteNames.themeSettingsScreen) {
-                return GetPageRoute(
-                  page: () => const ColorThemeSelectionScreen(),
-                );
-              } else if (settings.name == SettingsRouteNames.passcodeSettingsScreen) {
-                return GetPageRoute(
-                  page: () => const PasscodeSettingsScreen(),
-                );
-              } else if (settings.name == SettingsRouteNames.analyticsSettingsScreen) {
-                return GetPageRoute(
-                  page: () => const AnalyticsScreen(),
-                );
-              } else
-                return null;
-            });
-}
-
-abstract class SettingsRouteNames {
-  static const key = 1;
-  static const settingsScreen = '/';
-  static const themeSettingsScreen = '/theme_settings';
-  static const passcodeSettingsScreen = '/passcode_settings';
-  static const analyticsSettingsScreen = '/analytics_settings';
 }

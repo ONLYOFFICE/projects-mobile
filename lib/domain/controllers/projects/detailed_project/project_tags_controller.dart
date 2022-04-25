@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -109,7 +110,7 @@ class ProjectTagsController extends GetxController {
       }
     }
     _projController.tagsText.value = _projController.tags.join(', ');
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   Future changeTagSelection(TagItemDTO tag) async {

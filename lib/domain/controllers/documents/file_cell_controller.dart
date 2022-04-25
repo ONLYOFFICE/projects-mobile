@@ -200,26 +200,31 @@ class FileCellController extends GetxController {
   Future<void> downloadFileCallback(String id, DownloadTaskStatus status, int progress) async {
     if (downloadTaskId != null && id == downloadTaskId) {
       this.status.value = status;
-      this.progress.value = progress;
 
       if (status == DownloadTaskStatus.complete)
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
       else if (status == DownloadTaskStatus.failed)
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
+      else if (status == DownloadTaskStatus.running) {
+        this.progress.value = progress;
+      }
     }
   }
 
   Future<void> viewFileCallback(String id, DownloadTaskStatus status, int progress) async {
     if (downloadTaskId != null && id == downloadTaskId) {
       this.status.value = status;
-      this.progress.value = progress;
 
       if (status == DownloadTaskStatus.complete) {
         Get.back();
         if (!(await FlutterDownloader.open(taskId: downloadTaskId!)))
           MessagesHandler.showSnackBar(context: Get.context!, text: tr('openFileError'));
-      } else if (status == DownloadTaskStatus.failed)
+      } else if (status == DownloadTaskStatus.failed) {
+        Get.back();
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
+      } else if (status == DownloadTaskStatus.running) {
+        this.progress.value = progress;
+      }
     }
   }
 
@@ -270,6 +275,7 @@ class FileCellController extends GetxController {
 
     downloadTaskId = await downloadService.downloadDocument(file.viewUrl!, temp: true);
     if (downloadTaskId == null) {
+      Get.back();
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       return;
     }

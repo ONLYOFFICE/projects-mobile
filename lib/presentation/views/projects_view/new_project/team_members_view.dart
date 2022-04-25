@@ -58,7 +58,8 @@ class TeamMembersSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'];
     final usersDataSource = Get.find<UsersDataSource>()..loaded.value = false;
 
     usersDataSource.selectedProjectManager = controller.selectedProjectManager.value as PortalUser?;
@@ -186,7 +187,7 @@ class TeamMembersSearchBar extends StatelessWidget {
                 arguments: {'controller': controller},
                 transition: Transition.rightToLeft,
                 fullscreenDialog: true,
-                isRootModalScreenView: false,
+                page: '/GroupMembersSelectionView',
               );
             },
             icon: AppIcon(

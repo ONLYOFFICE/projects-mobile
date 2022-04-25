@@ -38,6 +38,7 @@ class _Author extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final state = Navigator.of(context);
     return Obx(
       () => FiltersRow(
         title: tr('author'),
@@ -49,22 +50,22 @@ class _Author extends StatelessWidget {
               onTap: () => filterController!.changeAuthor('me')),
           FilterElement(
             title: filterController!.author['other'].isEmpty as bool
-                ? tr('otherUser')
-                : filterController!.author['other'] as String,
-            isSelected: filterController!.author['other'].isNotEmpty as bool,
-            cancelButtonEnabled: filterController!.author['other'].isNotEmpty as bool?,
-            onTap: () async {
-              final newUser = await Get.find<NavigationController>().toScreen(
+                    ? tr('otherUser')
+                    : filterController!.author['other'] as String,
+                isSelected: filterController!.author['other'].isNotEmpty as bool,
+                cancelButtonEnabled: filterController!.author['other'].isNotEmpty as bool?,
+                onTap: () async {
+                  final newUser = await Get.find<NavigationController>().toScreen(
                 const SelectUserScreen(),
-                transition: Transition.rightToLeft,
-                isRootModalScreenView: false,
+                page: '/SelectUserScreen',
+                // navigatorKey: int.parse(state.widget.key.toString()),
               );
-              await filterController!.changeAuthor('other', newUser);
-            },
-            onCancelTap: () => filterController!.changeAuthor('other', null),
+                  await filterController!.changeAuthor('other', newUser);
+                },
+                onCancelTap: () => filterController!.changeAuthor('other', null),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 }

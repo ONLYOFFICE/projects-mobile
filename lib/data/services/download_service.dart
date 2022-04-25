@@ -191,13 +191,8 @@ class DocumentsDownloadService {
   }
 
   Future<bool> _checkPermission() async {
-    if (Platform.isIOS) return true;
-
-    final androidInfo = await DeviceInfoPlugin().androidInfo;
-    if (androidInfo.version.sdkInt! <= 28) {
-      if (await Permission.storage.status != PermissionStatus.granted) {
-        if (await Permission.storage.request() != PermissionStatus.granted) return false;
-      }
+    if (await Permission.storage.status != PermissionStatus.granted) {
+      if (await Permission.storage.request() != PermissionStatus.granted) return false;
     }
 
     return true;

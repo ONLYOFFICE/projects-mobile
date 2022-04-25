@@ -42,6 +42,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
+import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/internal/dev_http_overrides.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/pages_setup.dart';
@@ -96,6 +97,13 @@ List<Locale> supportedLocales() => [
     ];
 
 Future<String> _getInitPage() async {
+  final storage = locator<Storage>();
+
+  if (storage.getValue('firstStart') == null) {
+    await locator<PasscodeService>().deletePasscode();
+    await storage.write('firstStart', false);
+  }
+
   final passcode = await locator<PasscodeService>().isPasscodeEnable;
   final _isLoggedIn = await isAuthorized();
 

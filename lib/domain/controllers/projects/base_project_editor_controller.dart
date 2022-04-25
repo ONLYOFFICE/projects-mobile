@@ -113,18 +113,20 @@ abstract class BaseProjectEditorController extends GetxController {
     super.dispose();
   }
 
+  Future<void> showTags();
+
   String? get teamMembersTitle => selectedTeamMembers.length == 1
       ? selectedTeamMembers.first.displayName
       : plural('members', selectedTeamMembers.length);
 
   void confirmDescription(String newText) {
     descriptionText.value = descriptionController.text;
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   void leaveDescriptionView(String typedText) {
     if (typedText == descriptionText.value) {
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -134,7 +136,7 @@ abstract class BaseProjectEditorController extends GetxController {
         onAcceptTap: () {
           descriptionController.text = descriptionText.value;
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -181,7 +183,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
       selectedTeamMembers.removeWhere((element) => user.portalUser.id == element.portalUser.id);
 
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       selectedTeamMembers.removeWhere((element) => user.portalUser.id == element.portalUser.id);
       removeManager();
@@ -220,7 +222,7 @@ abstract class BaseProjectEditorController extends GetxController {
       Get.find<NavigationController>().toScreen(
         const TeamMembersSelectionView(),
         arguments: {'controller': this},
-        isRootModalScreenView: false,
+        page: '/TeamMembersSelectionView',
       );
     }
   }
@@ -283,7 +285,7 @@ abstract class BaseProjectEditorController extends GetxController {
   }
 
   void confirmTeamMembers() {
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   Future<void> confirmGroupSelection() async {
@@ -307,6 +309,6 @@ abstract class BaseProjectEditorController extends GetxController {
 
     await usersDataSourse.updateUsers();
 
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 }

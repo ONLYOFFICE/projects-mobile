@@ -37,6 +37,8 @@ import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/select_group_screen.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 
 class DocumentsFilterController extends BaseFilterController {
   final FilesService _api = locator<FilesService>();
@@ -346,4 +348,17 @@ class DocumentsFilterController extends BaseFilterController {
     _authorFilter = _currentAppliedAuthorFilter;
     _searchSettingsFilter = _currentAppliedSearchSettingsFilter;
   }
+
+  // navigation
+  Future onUsersFilterPressed() async => await navigationController.toScreen(
+        const SelectUserScreen(),
+        page: '/SelectUserScreen',
+      );
+
+  Future onGroupsFilterPressed() async => await navigationController.toScreen(
+        const SelectGroupScreen(),
+        page: '/SelectGroupScreen',
+      );
+
+  void back() => navigationController.back();
 }

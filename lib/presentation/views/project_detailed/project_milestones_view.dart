@@ -70,8 +70,10 @@ class ProjectMilestonesScreen extends StatelessWidget {
                 visible: controller.fabIsVisible.value,
                 child: StyledFloatingActionButton(
                   onPressed: () => Get.find<NavigationController>().toScreen(
-                      const NewMilestoneView(),
-                      arguments: {'projectDetailed': controller.projectDetailed}),
+                    const NewMilestoneView(),
+                    arguments: {'projectDetailed': controller.projectDetailed},
+                    page: '/NewMilestoneView',
+                  ),
                   child: AppIcon(
                     icon: SvgIcons.fab_milestone,
                     color: Get.theme.colors().onPrimarySurface,
@@ -158,6 +160,7 @@ class ProjectMilestonesFilterButton extends StatelessWidget {
             arguments: {'filterController': controller.filterController},
             transition: Transition.cupertinoDialog,
             fullscreenDialog: true,
+            page: '/MilestoneFilterScreen',
           ),
           cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
         );

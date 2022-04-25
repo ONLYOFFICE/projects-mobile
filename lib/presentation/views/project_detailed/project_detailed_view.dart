@@ -373,10 +373,15 @@ Future<void> _onSelected(
     String value, ProjectDetailsController controller, BuildContext context) async {
   switch (value) {
     case PopupMenuItemValue.editProject:
-      unawaited(Get.find<NavigationController>().toScreen(const EditProjectView(),
+      unawaited(
+        Get.find<NavigationController>().toScreen(
+          const EditProjectView(),
           transition: GetPlatform.isAndroid ? Transition.downToUp : Transition.cupertinoDialog,
           fullscreenDialog: true,
-          arguments: {'projectDetailed': controller.projectData}));
+          arguments: {'projectDetailed': controller.projectData},
+          page: '/EditProjectView',
+        ),
+      );
       break;
 
     case PopupMenuItemValue.deleteProject:

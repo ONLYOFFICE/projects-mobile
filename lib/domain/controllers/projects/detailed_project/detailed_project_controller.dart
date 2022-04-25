@@ -42,13 +42,10 @@ import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
-
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
-
-import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
-
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -184,8 +181,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
     for (final user in projectTeamDataSource!.usersList) {
       selectedTeamMembers.add(user);
     }
-    await Get.find<NavigationController>()
-        .toScreen(const TeamMembersSelectionView(), arguments: {'controller': this});
+    await Get.find<NavigationController>().toScreen(
+      const TeamMembersSelectionView(),
+      arguments: {'controller': this},
+      page: '/TeamMembersSelectionView',
+    );
   }
 
   Future<void> copyLink() async {}
@@ -217,5 +217,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
     unawaited(projectTeamDataSource!.getTeam());
 
     Get.back();
+  }
+
+  @override
+  Future<void> showTags() {
+    // TODO: implement showTags
+    throw UnimplementedError();
   }
 }

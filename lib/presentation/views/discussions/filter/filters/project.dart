@@ -57,7 +57,7 @@ class _Project extends StatelessWidget {
                 final selectedProject = await Get.find<NavigationController>().toScreen(
                   SelectProjectScreen(),
                   transition: Transition.rightToLeft,
-                  isRootModalScreenView: false,
+                  page: '/SelectProjectScreen',
                 );
                 await filterController!.changeProject('other', selectedProject);
               },
@@ -72,7 +72,7 @@ class _Project extends StatelessWidget {
                 final selectedTag = await Get.find<NavigationController>().toScreen(
                   const SelectTagScreen(),
                   transition: Transition.rightToLeft,
-                  isRootModalScreenView: false,
+                  page: '/SelectTagScreen',
                 );
                 await filterController!.changeProject('withTag', selectedTag);
               },

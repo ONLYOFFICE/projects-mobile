@@ -49,6 +49,8 @@ import 'package:settings_ui/settings_ui.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
+  static String get pageName => '/SettingsScreen';
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(SettingsController());
@@ -103,11 +105,6 @@ class SettingsScreen extends StatelessWidget {
                           : tr('disabled'),
                       enableIconOpacity: true,
                       icon: SvgIcons.passcode,
-                      // onTap: () => Get.find<NavigationController>().toScreen(
-                      //   const PasscodeSettingsScreen(),
-                      //   transition: Transition.rightToLeft,
-                      //   isRootModalScreenView: false,
-                      // ),
                       onTap: controller.onPasscodePressed,
                     ),
                     SettingTile(
@@ -115,11 +112,6 @@ class SettingsScreen extends StatelessWidget {
                       loverText: tr(controller.currentTheme.value),
                       enableIconOpacity: true,
                       icon: SvgIcons.color_scheme,
-                      // onTap: () => Get.find<NavigationController>().toScreen(
-                      //   const ColorThemeSelectionScreen(),
-                      //   transition: Transition.rightToLeft,
-                      //   isRootModalScreenView: false,
-                      // ),
                       onTap: controller.onThemePressed,
                     ),
                     SettingTile(
@@ -206,11 +198,6 @@ class SettingsScreen extends StatelessWidget {
                   SettingsSection(
                     tiles: [
                       SettingsTile.navigation(
-                        // onPressed: (_) => Get.find<NavigationController>().toScreen(
-                        //   const PasscodeSettingsScreen(),
-                        //   transition: Transition.rightToLeft,
-                        //   isRootModalScreenView: false,
-                        // ),
                         onPressed: (_) => controller.onPasscodePressed(),
                         title: Text(
                           tr('passcodeLock'),
@@ -240,11 +227,6 @@ class SettingsScreen extends StatelessWidget {
                   SettingsSection(
                     tiles: [
                       SettingsTile.navigation(
-                        // onPressed: (_) => Get.find<NavigationController>().toScreen(
-                        //   const ColorThemeSelectionScreen(),
-                        //   transition: Transition.rightToLeft,
-                        //   isRootModalScreenView: false,
-                        // ),
                         onPressed: (_) => controller.onThemePressed(),
                         title: Text(
                           tr('colorTheme'),

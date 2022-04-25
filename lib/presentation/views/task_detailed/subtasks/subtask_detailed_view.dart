@@ -182,15 +182,18 @@ void _onSelected(BuildContext context, value, SubtaskController controller) {
       );
       break;
     case 'edit':
-      Get.find<NavigationController>().toScreen(const CreatingAndEditingSubtaskView(),
-          arguments: {
-            'taskId': controller.subtask.value!.taskId,
-            'projectId': controller.parentTask.projectOwner!.id,
-            'forEditing': true,
-            'itemController': controller,
-          },
-          transition: Transition.cupertinoDialog,
-          fullscreenDialog: true);
+      Get.find<NavigationController>().toScreen(
+        const CreatingAndEditingSubtaskView(),
+        arguments: {
+          'taskId': controller.subtask.value!.taskId,
+          'projectId': controller.parentTask.projectOwner!.id,
+          'forEditing': true,
+          'itemController': controller,
+        },
+        transition: Transition.cupertinoDialog,
+        fullscreenDialog: true,
+        page: '/CreatingAndEditingSubtaskView',
+      );
       break;
     case 'copy':
       controller.copySubtask(
