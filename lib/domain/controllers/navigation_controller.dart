@@ -53,8 +53,12 @@ class NavigationController extends GetxController {
 
   @override
   void onInit() {
-    Get.find<UserController>().getUserInfo().then((value) => selfUserItem.value =
-        PortalUserItemController(portalUser: Get.find<UserController>().user.value!));
+    Get.find<UserController>().user.listen((value) {
+      if (value == null) return;
+
+      selfUserItem.value = PortalUserItemController(portalUser: value);
+    });
+
     isMobile = platformController.isMobile;
     super.onInit();
   }
