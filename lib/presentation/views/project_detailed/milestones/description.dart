@@ -35,7 +35,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
@@ -48,8 +47,8 @@ class NewMilestoneDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final newMilestoneController =
-        Get.arguments['newMilestoneController'] as NewMilestoneController;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final newMilestoneController = args['newMilestoneController'] as NewMilestoneController;
 
     final platformController = Get.find<PlatformController>();
 

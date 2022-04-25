@@ -48,6 +48,7 @@ class _UserTile extends StatelessWidget {
           'id': user.id,
           'displayName': user.displayName,
         },
+        id: Get.find<PlatformController>().isMobile ? null : 1,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.5),

@@ -38,12 +38,9 @@ import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/project_service.dart';
-
-import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
-
 import 'package:projects/domain/controllers/discussions/base_discussions_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
-
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -169,11 +166,13 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
       Get.find<NavigationController>()
           .to(DiscussionDetailed(), arguments: {'controller': discussionItemController});
 
-  void toNewDiscussionScreen() =>
-      Get.find<NavigationController>().toScreen(const NewDiscussionScreen(),
-          arguments: {'projectId': projectId, 'projectTitle': projectTitle},
-          transition: Transition.cupertinoDialog,
-          fullscreenDialog: true);
+  void toNewDiscussionScreen() => Get.find<NavigationController>().toScreen(
+        const NewDiscussionScreen(),
+        arguments: {'projectId': projectId, 'projectTitle': projectTitle},
+        transition: Transition.cupertinoDialog,
+        fullscreenDialog: true,
+        page: '/NewDiscussionScreen',
+      );
 
   @override
   void showSearch() =>

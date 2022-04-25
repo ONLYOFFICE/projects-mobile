@@ -65,6 +65,7 @@ class NewTaskProjectTile extends StatelessWidget {
             const SelectProjectView(),
             arguments: {'controller': controller},
             transition: Transition.rightToLeft,
+            page: '/SelectProjectView',
           ),
         );
       },

@@ -50,8 +50,8 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller']..setupResponsibleSelection();
-
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller']..setupResponsibleSelection();
     final platformController = Get.find<PlatformController>();
 
     final searchTextEditingController = TextEditingController();
@@ -91,7 +91,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
                 itemBuilder: (c, i) => PortalUserItem(
                     userController:
                         controller.teamController.usersList[i] as PortalUserItemController,
-                    onTapFunction: (v) => controller.addResponsible(v)),
+                    onTapFunction: controller.addResponsible as Function(PortalUserItemController)),
                 itemExtent: 65,
                 itemCount: controller.teamController.usersList.length as int,
               ),

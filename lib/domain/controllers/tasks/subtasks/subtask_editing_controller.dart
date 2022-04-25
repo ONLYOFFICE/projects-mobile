@@ -39,6 +39,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/subtasks_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
@@ -53,12 +54,14 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
   final SubtasksService _api = locator<SubtasksService>();
   final _titleController = TextEditingController();
   Subtask? _subtask;
+  @override
   late ProjectTeamController teamController;
 
   @override
   TextEditingController get titleController => _titleController;
   @override
   FocusNode? get titleFocus => null;
+  @override
   RxList responsibles = [].obs;
   @override
   RxInt? status;
@@ -87,6 +90,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
     setupResponsibleSelection(projectId);
   }
 
+  @override
   void setupResponsibleSelection([int? projectId]) async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(projectId: projectId, withoutVisitors: true, withoutBlocked: true);
@@ -172,7 +176,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -204,7 +208,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
 
         locator<EventHub>().fire('needToRefreshParentTask', [editedSubtask.taskId]);
 
-        Get.back();
+        Get.find<NavigationController>().back();
       }
     }
   }

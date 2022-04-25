@@ -125,7 +125,7 @@ class ProjectsController extends BaseController {
   @override
   void showSearch() {
     Get.find<NavigationController>().to(ProjectSearchView(),
-        arguments: {'filtersController': filterController, 'sortController': sortController});
+        arguments: {'filtersController': _filterController, 'sortController': _sortController});
   }
 
   Future<void> refreshData() async {
@@ -184,8 +184,12 @@ class ProjectsController extends BaseController {
   }
 
   void createNewProject() {
-    Get.find<NavigationController>().toScreen(const NewProject(),
-        transition: Transition.cupertinoDialog, fullscreenDialog: true);
+    Get.find<NavigationController>().toScreen(
+      const NewProject(),
+      transition: Transition.cupertinoDialog,
+      fullscreenDialog: true,
+      page: '/NewProject',
+    );
   }
 
   void getFabVisibility(bool _) {

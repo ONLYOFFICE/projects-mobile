@@ -35,6 +35,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -50,8 +51,8 @@ class UsersFromGroups extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final platformController = Get.find<PlatformController>();
-
-    final controller = Get.arguments['controller'] as DiscussionActionsController;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'] as DiscussionActionsController;
 
     final groupsDataSource = Get.find<GroupsDataSource>();
     groupsDataSource.getGroups();
@@ -67,14 +68,14 @@ class UsersFromGroups extends StatelessWidget {
           cupertino: (_, __) => CupertinoButton(
             padding: const EdgeInsets.only(left: 16),
             alignment: Alignment.centerLeft,
-            onPressed: Get.back,
+            onPressed: Get.find<NavigationController>().back,
             child: Text(
               tr('closeLowerCase'),
               style: TextStyleHelper.button(),
             ),
           ),
           material: (_, __) => IconButton(
-            onPressed: Get.back,
+            onPressed: Get.find<NavigationController>().back,
             icon: const Icon(Icons.close),
           ),
         ),

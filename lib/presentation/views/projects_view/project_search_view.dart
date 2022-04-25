@@ -34,7 +34,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
+import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
@@ -50,7 +52,16 @@ class ProjectSearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     final platformController = Get.find<PlatformController>();
 
-    final controller = Get.put(ProjectSearchController());
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final filtersController = args['filtersController'] as ProjectsFilterController;
+    final sortController = args['sortController'] as ProjectsSortController;
+
+    final controller = Get.put(
+      ProjectSearchController(
+        filterController: filtersController,
+        sortController: sortController,
+      ),
+    );
     controller.clearSearch();
 
     return Scaffold(

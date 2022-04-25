@@ -56,7 +56,8 @@ class ProjectManagerSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'] as BaseProjectEditorController;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'] as BaseProjectEditorController;
 
     controller.selectionMode = UserSelectionMode.Single;
     usersDataSource.selectionMode = UserSelectionMode.Single;

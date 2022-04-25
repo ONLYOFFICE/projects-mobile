@@ -69,6 +69,7 @@ class NewDiscussionController extends DiscussionActionsController {
   // final _userController = Get.find<UserController>();
   final UserService _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
+  final navigationController = Get.find<NavigationController>();
   List<PortalGroupItemController> selectedGroups = <PortalGroupItemController>[];
   final _manualSelectedPersons = [];
 
@@ -131,7 +132,7 @@ class NewDiscussionController extends DiscussionActionsController {
     } else {
       removeProjectSelection();
     }
-    Get.back();
+    navigationController.back();
   }
 
   void addTeam() {
@@ -168,13 +169,13 @@ class NewDiscussionController extends DiscussionActionsController {
 
     _previousSelectedSubscribers = List.of(subscribers);
     clearUserSearch();
-    Get.back();
+    navigationController.back();
   }
 
   @override
   void leaveSubscribersSelectionView() {
     if (listEquals(_previousSelectedSubscribers, subscribers)) {
-      Get.back();
+      navigationController.back();
     } else {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -185,7 +186,7 @@ class NewDiscussionController extends DiscussionActionsController {
           subscribers.value = RxList.from(_previousSelectedSubscribers);
           clearUserSearch();
           Get.back();
-          Get.back();
+          navigationController.back();
         },
         onCancelTap: Get.back,
       ));
@@ -275,7 +276,7 @@ class NewDiscussionController extends DiscussionActionsController {
     await _getSelectedSubscribers();
     await _usersDataSource.updateUsers();
 
-    Get.back();
+    navigationController.back();
   }
 
   @override
@@ -321,7 +322,7 @@ class NewDiscussionController extends DiscussionActionsController {
     );
 
     if (createdDiss != null) {
-      Get.back();
+      navigationController.back();
 
       final discussionController = Get.put<DiscussionItemController>(DiscussionItemController(),
           tag: createdDiss.id.toString());
@@ -352,12 +353,12 @@ class NewDiscussionController extends DiscussionActionsController {
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          navigationController.back();
         },
         onCancelTap: Get.back,
       ));
     } else {
-      Get.back();
+      navigationController.back(closeTabletModalScreen: true);
     }
   }
 

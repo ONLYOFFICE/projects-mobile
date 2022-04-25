@@ -114,12 +114,12 @@ class TasksFilterButton extends StatelessWidget {
         return PlatformIconButton(
           icon: FiltersButton(controller: controller),
           onPressed: () async => Get.find<NavigationController>().toScreen(
-            const TasksFilterScreen(),
-            preventDuplicates: false,
-            arguments: {'filterController': controller.filterController},
-            transition: Transition.cupertinoDialog,
-            fullscreenDialog: true,
-          ),
+              const TasksFilterScreen(),
+              preventDuplicates: false,
+              arguments: {'filterController': controller.filterController},
+              transition: Transition.cupertinoDialog,
+              fullscreenDialog: true,
+              page: '/TasksFilterScreen'),
           padding: EdgeInsets.zero,
           cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
         );

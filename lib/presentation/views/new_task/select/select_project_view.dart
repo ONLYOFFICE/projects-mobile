@@ -56,7 +56,8 @@ class SelectProjectView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final controller = arguments['controller'];
 
     final projectsWithPresets = locator<ProjectsWithPresets>();
 
@@ -78,7 +79,12 @@ class SelectProjectView extends StatelessWidget {
 
     final platformController = Get.find<PlatformController>();
 
-    final searchController = Get.put(ProjectSearchController(onlyMyProjects: true));
+    final searchController = Get.put(
+      ProjectSearchController(
+          sortController: projectsController.sortController,
+          filterController: projectsController.filterController,
+          onlyMyProjects: true),
+    );
     searchController.textController.addListener(() {
       if (searchController.textController.text.isNotEmpty)
         searchController.switchToSearchView.value = true;
@@ -151,6 +157,7 @@ class _ProjectCell extends StatelessWidget {
   const _ProjectCell({Key? key, required this.item, required this.controller}) : super(key: key);
   final ProjectDetailed item;
   final controller;
+
   @override
   Widget build(BuildContext context) {
     return Material(

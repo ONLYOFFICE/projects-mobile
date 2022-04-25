@@ -57,14 +57,12 @@ import 'package:projects/presentation/views/task_detailed/task_detailed_view.dar
 
 class NewTaskController extends TaskActionsController {
   final TaskService _api = locator<TaskService>();
-  late ProjectTeamController teamController;
 
   int? _selectedProjectId;
-  int? newMilestoneId;
-  // for dateTime format
   DateTime? _startDate;
   DateTime? _dueDate;
 
+  @override
   int? get selectedProjectId => _selectedProjectId;
 
   int? get selectedMilestoneId => newMilestoneId;
@@ -75,7 +73,6 @@ class NewTaskController extends TaskActionsController {
   @override
   DateTime? get dueDate => _dueDate;
 
-  Rx<TextEditingController> descriptionController = TextEditingController().obs;
   final TextEditingController _titleController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
 
@@ -105,6 +102,7 @@ class NewTaskController extends TaskActionsController {
   @override
   void changeTitle(String newText) => title.value = newText;
 
+  @override
   void changeProjectSelection(ProjectDetailed? _details) {
     if (_details != null) {
       selectedProjectTitle.value = _details.title!;
@@ -114,7 +112,7 @@ class NewTaskController extends TaskActionsController {
     } else {
       removeProjectSelection();
     }
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   void _clearState() {
@@ -137,7 +135,7 @@ class NewTaskController extends TaskActionsController {
     } else {
       removeMilestoneSelection();
     }
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   void removeMilestoneSelection() {
@@ -155,13 +153,13 @@ class NewTaskController extends TaskActionsController {
   @override
   void confirmDescription(String typedText) {
     descriptionText.value = typedText;
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   @override
   void leaveDescriptionView(String typedText) {
     if (typedText == descriptionText.value) {
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -171,23 +169,25 @@ class NewTaskController extends TaskActionsController {
         onAcceptTap: () {
           descriptionController.value.text = descriptionText.value;
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
     }
   }
 
+  @override
   void confirmResponsiblesSelection() {
     // ignore: invalid_use_of_protected_member
     _previusSelectedResponsibles = List.of(responsibles.value);
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
+  @override
   void leaveResponsiblesSelectionView() {
     // ignore: invalid_use_of_protected_member
     if (listEquals(_previusSelectedResponsibles, responsibles.value)) {
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
@@ -198,13 +198,14 @@ class NewTaskController extends TaskActionsController {
           notifyResponsibles.value = false;
           responsibles.value = List.of(_previusSelectedResponsibles);
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
     }
   }
 
+  @override
   Future<void> setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
@@ -230,6 +231,7 @@ class NewTaskController extends TaskActionsController {
     }
   }
 
+  @override
   void addResponsible(PortalUserItemController user) {
     if (user.isSelected.value == true) {
       responsibles.add(user);
@@ -246,7 +248,7 @@ class NewTaskController extends TaskActionsController {
       if (verificationResult) {
         _startDate = newDate;
         startDateText.value = formatedDate(newDate);
-        Get.back();
+        Get.find<NavigationController>().back();
       }
     } else {
       _startDate = null;
@@ -262,7 +264,7 @@ class NewTaskController extends TaskActionsController {
       if (verificationResult) {
         _dueDate = newDate;
         dueDateText.value = formatedDate(newDate);
-        Get.back();
+        Get.find<NavigationController>().back();
       }
     } else {
       _dueDate = null;
@@ -351,7 +353,7 @@ class NewTaskController extends TaskActionsController {
         acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));

@@ -231,12 +231,13 @@ class ProjectEditController extends BaseProjectEditorController {
     }
   }
 
+  @override
   Future<void> showTags() async {
     await Get.find<NavigationController>().toScreen(
       const TagsSelectionView(),
       arguments: {'controller': this},
       transition: Transition.rightToLeft,
-      isRootModalScreenView: false,
+      page: '/TagsSelectionView',
     );
   }
 }

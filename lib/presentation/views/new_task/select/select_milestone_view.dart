@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
+import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -44,30 +45,21 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
-class SelectMilestoneView extends StatefulWidget {
+class SelectMilestoneView extends StatelessWidget {
   final selectedId;
+
   const SelectMilestoneView({
     Key? key,
     this.selectedId,
   }) : super(key: key);
 
   @override
-  _SelectMilestoneViewState createState() => _SelectMilestoneViewState();
-}
-
-class _SelectMilestoneViewState extends State<SelectMilestoneView> {
-  final _controller = Get.arguments['controller'];
-  final _milestoneController = Get.find<MilestonesDataSource>();
-  final platformController = Get.find<PlatformController>();
-
-  @override
-  void initState() {
-    _milestoneController.setup(projectId: _controller.selectedProjectId as int?);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _milestoneController = Get.find<MilestonesDataSource>();
+    final platformController = Get.find<PlatformController>();
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final _controller = args['controller'] as TaskActionsController;
+    _milestoneController.setup(projectId: _controller.selectedProjectId);
     return Scaffold(
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
@@ -105,7 +97,7 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
                       itemBuilder: (BuildContext context, int index) {
                         if (index == 0) {
                           return _None(
-                            onTap: _controller.changeMilestoneSelection as Function(),
+                            onTap: _controller.changeMilestoneSelection,
                             isSelected: _controller.newMilestoneId == null,
                           );
                         }

@@ -39,9 +39,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
-
 import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
-
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
@@ -213,6 +211,7 @@ Future<void> _onFilePopupMenuSelected(
           'initialFolderId': cellController.file.folderId,
         },
         transition: Transition.rightToLeft,
+        page: '/DocumentsMoveOrCopyView',
       );
       break;
     case 'move':
@@ -225,6 +224,7 @@ Future<void> _onFilePopupMenuSelected(
           'initialFolderId': cellController.file.folderId,
         },
         transition: Transition.rightToLeft,
+        page: '/DocumentsMoveOrCopyView',
       );
       break;
     case 'rename':

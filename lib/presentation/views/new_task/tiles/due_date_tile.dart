@@ -76,7 +76,7 @@ class DueDateTile extends StatelessWidget {
               'initialDate': controller.dueDate
             },
             transition: Transition.rightToLeft,
-            isRootModalScreenView: false,
+            page: '/SelectDateView',
           ),
         );
       },

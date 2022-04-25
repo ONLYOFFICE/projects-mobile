@@ -57,7 +57,7 @@ class _TeamMember extends StatelessWidget {
               final newUser = await Get.find<NavigationController>().toScreen(
                 const SelectUserScreen(),
                 transition: Transition.rightToLeft,
-                isRootModalScreenView: false,
+                page: '/SelectUserScreen',
               );
               await filterController.changeTeamMember('other', newUser);
             },

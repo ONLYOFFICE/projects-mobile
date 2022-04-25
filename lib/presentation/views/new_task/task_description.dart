@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
@@ -46,7 +47,8 @@ class TaskDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'] as TaskActionsController;
 
     final platformController = Get.find<PlatformController>();
 
@@ -72,7 +74,7 @@ class TaskDescription extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
           child: PlatformTextField(
-            controller: controller.descriptionController.value as TextEditingController,
+            controller: controller.descriptionController.value,
             autofocus: true,
             maxLines: null,
             style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
