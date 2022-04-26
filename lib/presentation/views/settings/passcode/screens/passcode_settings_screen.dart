@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:projects/domain/controllers/passcode/passcode_settings_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -138,13 +139,15 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 28),
-                      if (controller.isFingerprintAvailable.value == true ||
+                      if (controller.isBiometricAvailable.value == true &&
                           controller.isPasscodeEnable.value == true)
                         OptionWithSwitch(
-                            title: tr('fingerprint'),
+                            title: controller.biometricType == BiometricType.fingerprint
+                                ? tr('fingerprint')
+                                : tr('faceId'),
                             style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                             switchOnChanged: controller.tryTogglingFingerprintStatus,
-                            switchValue: controller.isFingerprintEnable),
+                            switchValue: controller.isBiometricEnable),
                     ],
                   ),
                 ]),
@@ -217,7 +220,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (controller.isFingerprintAvailable.value == true &&
+                    if (controller.isBiometricAvailable.value == true &&
                         controller.isPasscodeEnable.value == true)
                       SettingsList(
                         shrinkWrap: true,
@@ -233,10 +236,11 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           SettingsSection(
                             tiles: [
                               SettingsTile.switchTile(
-                                initialValue: controller.isFingerprintEnable.value,
+                                initialValue: controller.isBiometricEnable.value,
                                 onToggle: controller.tryTogglingFingerprintStatus,
+                                activeSwitchColor: Get.theme.colors().primary,
                                 title: Text(
-                                  tr('fingerprint'),
+                                  controller.biometricTypeDescription,
                                   overflow: TextOverflow.ellipsis,
                                   style:
                                       TextStyleHelper.subtitle1(color: Get.theme.colors().primary),

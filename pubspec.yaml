@@ -53,7 +53,7 @@ dependencies:
   # formatting input in textfields // надо поменять, тк он и сам текст форматирует
   flutter_masked_text2: ^0.9.1
   # for biometric authentication
-  local_auth: ^1.1.8
+  local_auth: ^2.0.0
   # to get device location country
   devicelocale: ^0.5.0
   # for sms 2FA

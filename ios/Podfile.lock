@@ -171,7 +171,7 @@ PODS:
   - KeychainSwift (20.0.0)
   - launch_review (0.0.1):
     - Flutter
-  - local_auth (0.0.1):
+  - local_auth_ios (0.0.1):
     - Flutter
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
@@ -231,7 +231,7 @@ DEPENDENCIES:
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - KeychainSwift
   - launch_review (from `.symlinks/plugins/launch_review/ios`)
-  - local_auth (from `.symlinks/plugins/local_auth/ios`)
+  - local_auth_ios (from `.symlinks/plugins/local_auth_ios/ios`)
   - ObjectMapper
   - open_file (from `.symlinks/plugins/open_file/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
@@ -306,8 +306,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/just_audio/ios"
   launch_review:
     :path: ".symlinks/plugins/launch_review/ios"
-  local_auth:
-    :path: ".symlinks/plugins/local_auth/ios"
+  local_auth_ios:
+    :path: ".symlinks/plugins/local_auth_ios/ios"
   open_file:
     :path: ".symlinks/plugins/open_file/ios"
   package_info:
@@ -367,7 +367,7 @@ SPEC CHECKSUMS:
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
   KeychainSwift: 0ce6a4d13f7228054d1a71bb1b500448fb2ab837
   launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
-  local_auth: ef62030a2731330b95df7ef1331bd15f6a64b8a6
+  local_auth_ios: 0d333dde7780f669e66f19d2ff6005f3ea84008d
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
   open_file: 02eb5cb6b21264bd3a696876f5afbfb7ca4f4b7d

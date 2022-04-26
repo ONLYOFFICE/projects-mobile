@@ -35,14 +35,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
 import 'package:projects/presentation/shared/widgets/passcode_screen_mixin.dart';
-
 import 'package:projects/presentation/views/settings/passcode/passcode_keyboard_items.dart';
 
 class PasscodeScreen extends StatelessWidget with PasscodeScreenMixin {
   PasscodeScreen({Key? key}) : super(key: key);
 
   final passcodeCheckingController = Get.find<PasscodeCheckingController>()
-    ..setup(canUseFingerprint: true);
+    ..setup(canUseBiometric: true);
 
   @override
   String get title => tr('passcodeToUnlock');
@@ -75,10 +74,13 @@ class PasscodeScreen extends StatelessWidget with PasscodeScreenMixin {
       children: [
         Obx(() {
           if (passcodeCheckingController.loaded.value == false ||
-              !passcodeCheckingController.isFingerprintEnable) {
+              !passcodeCheckingController.isBiometricEnable) {
             return const SizedBox(width: 72.53);
           }
-          return FingerprintButton(onTap: passcodeCheckingController.useFingerprint);
+          return BiometricButton(
+            onTap: passcodeCheckingController.useBiometric,
+            isFingerprint: passcodeCheckingController.isFingerprint,
+          );
         }),
         const SizedBox(width: 20.53),
         PasscodeNumber(number: 0, onPressed: passcodeCheckingController.addNumberToPasscode),

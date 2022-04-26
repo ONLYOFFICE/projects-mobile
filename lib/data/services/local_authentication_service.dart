@@ -30,39 +30,46 @@
  *
  */
 
-import 'package:local_auth/auth_strings.dart';
+import 'dart:io';
+
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_ios/local_auth_ios.dart';
 
 class LocalAuthenticationService {
   final _localAuth = LocalAuthentication();
 
-  Future<List<BiometricType>> get availableBiometrics async => _localAuth.getAvailableBiometrics();
+  Future<BiometricType?> get availableBiometrics async {
+    final biometrics = await _localAuth.getAvailableBiometrics();
+    if (biometrics.contains(BiometricType.face) && Platform.isIOS) return BiometricType.face;
+    if (biometrics.contains(BiometricType.fingerprint)) return BiometricType.fingerprint;
+    return null;
+  }
 
-  Future<bool> get isFingerprintAvailable async {
+  Future<bool> get isBiometricAvailable async {
     final canCheckBiometrics = await _localAuth.canCheckBiometrics;
-    final biometrics = await availableBiometrics;
-    final isFingerprintAvailable = biometrics.contains(BiometricType.fingerprint);
     final isDeviceSupported = await _localAuth.isDeviceSupported();
-
-    return canCheckBiometrics && isFingerprintAvailable && isDeviceSupported;
+    final biometrics = await availableBiometrics;
+    return biometrics != null && canCheckBiometrics && isDeviceSupported;
   }
 
   Future<bool> authenticate({String? signInTitle}) async {
     return _localAuth.authenticate(
       localizedReason: ' ',
-      androidAuthStrings: AndroidAuthMessages(
-        biometricHint: '',
-        biometricNotRecognized: '',
-        biometricRequiredTitle: '',
-        biometricSuccess: '',
-        deviceCredentialsRequiredTitle: '',
-        deviceCredentialsSetupDescription: '',
-        goToSettingsButton: '',
-        goToSettingsDescription: '',
-        signInTitle: signInTitle,
-      ),
-      stickyAuth: true,
-      biometricOnly: true,
+      authMessages: [
+        AndroidAuthMessages(
+          biometricHint: '',
+          biometricNotRecognized: '',
+          biometricRequiredTitle: '',
+          biometricSuccess: '',
+          deviceCredentialsRequiredTitle: '',
+          deviceCredentialsSetupDescription: '',
+          goToSettingsButton: '',
+          goToSettingsDescription: '',
+          signInTitle: signInTitle,
+        ),
+      ],
+      options: const AuthenticationOptions(stickyAuth: true, biometricOnly: true),
     );
   }
 }

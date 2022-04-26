@@ -30,8 +30,10 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
@@ -51,9 +53,11 @@ class PasscodeSettingsController extends GetxController {
   final loaded = false.obs;
   final passcodeCheckFailed = false.obs;
   final isPasscodeEnable = false.obs;
-  final isFingerprintEnable = false.obs;
-  final isFingerprintAvailable = false.obs;
+  final isBiometricEnable = false.obs;
+  final isBiometricAvailable = false.obs;
 
+  late final BiometricType? biometricType;
+  late final String biometricTypeDescription;
   RxInt enteredPasscodeLen = 0.obs;
   RxInt passcodeCheckLen = 0.obs;
 
@@ -63,15 +67,17 @@ class PasscodeSettingsController extends GetxController {
 
     isPasscodeEnable.value = await _service.isPasscodeEnable;
 
-    final isFinEnable = await _service.isFingerprintEnable;
-    final isFinAvailable = await _service.isFingerprintAvailable;
+    biometricType = await _service.getBiometricType();
+    biometricTypeDescription =
+        biometricType == BiometricType.face ? tr('faceID') : tr('fingerprint');
 
-    if (isFinAvailable) {
-      isFingerprintEnable.value = isFinEnable;
-      isFingerprintAvailable.value = true;
+    if (await _service.isBiometricAvailable) {
+      isBiometricEnable.value = await _service.isBiometricEnable;
+      isBiometricAvailable.value = true;
     } else {
-      isFingerprintEnable.value = false;
-      isFingerprintAvailable.value = false;
+      isBiometricEnable.value = false;
+      isBiometricAvailable.value = false;
+      await _service.setBiometricStatus(false);
     }
 
     loaded.value = true;
@@ -136,9 +142,9 @@ class PasscodeSettingsController extends GetxController {
   Future<void> _disablePasscode() async {
     await _service.deletePasscode();
     isPasscodeEnable.value = false;
-    if (isFingerprintEnable.value == true) {
-      await _service.setFingerprintStatus(false);
-      isFingerprintEnable.value = false;
+    if (isBiometricEnable.value == true) {
+      await _service.setBiometricStatus(false);
+      isBiometricEnable.value = false;
     }
     leave();
   }
@@ -204,12 +210,12 @@ class PasscodeSettingsController extends GetxController {
   }
 
   void tryTogglingFingerprintStatus(bool value) {
-    isFingerprintEnable.value = value;
+    isBiometricEnable.value = value;
     Get.to(
       () => EnterCurrentPasscodeScreen(
         onPass: () => _toggleFingerprintStatus(value),
         onBack: () {
-          isFingerprintEnable.value = !value;
+          isBiometricEnable.value = !value;
           Get.back();
         },
       ),
@@ -218,9 +224,9 @@ class PasscodeSettingsController extends GetxController {
   }
 
   void _toggleFingerprintStatus(bool value) {
-    if (isFingerprintAvailable.value == true) {
-      isFingerprintEnable.value = value;
-      _service.setFingerprintStatus(value);
+    if (isBiometricAvailable.value == true) {
+      isBiometricEnable.value = value;
+      _service.setBiometricStatus(value);
     }
     Get.back();
   }
