@@ -496,5 +496,5 @@
 	"openFileError": "Невозможно открыть файл",
 	"cancelDownload": "Отменить скачивание",
 	"uploading": "Uploading...",
-	"faceID": "Use FaceID to unlock"
+	"faceID": "Open with Face ID"
 }

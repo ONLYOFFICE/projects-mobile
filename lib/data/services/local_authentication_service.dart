@@ -34,6 +34,7 @@ import 'dart:io';
 
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_ios/local_auth_ios.dart';
 
 class LocalAuthenticationService {
   final _localAuth = LocalAuthentication();
@@ -48,8 +49,8 @@ class LocalAuthenticationService {
   Future<bool> get isBiometricAvailable async {
     final canCheckBiometrics = await _localAuth.canCheckBiometrics;
     final isDeviceSupported = await _localAuth.isDeviceSupported();
-    final biometrics = await _localAuth.getAvailableBiometrics();
-    return biometrics.isNotEmpty && canCheckBiometrics && isDeviceSupported;
+    final biometrics = await availableBiometrics;
+    return biometrics != null && canCheckBiometrics && isDeviceSupported;
   }
 
   Future<bool> authenticate({String? signInTitle}) async {

@@ -64,7 +64,7 @@ class PasscodeService {
   }
 
   Future<bool> get isBiometricAvailable async {
-    return await _biometricService.availableBiometrics != null;
+    return await _biometricService.isBiometricAvailable;
   }
 
   Future<bool> get isPasscodeEnable async {

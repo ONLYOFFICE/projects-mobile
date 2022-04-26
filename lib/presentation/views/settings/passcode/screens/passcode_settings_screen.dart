@@ -139,7 +139,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 28),
-                      if (controller.isFingerprintAvailable.value == true &&
+                      if (controller.isBiometricAvailable.value == true &&
                           controller.isPasscodeEnable.value == true)
                         OptionWithSwitch(
                             title: controller.biometricType == BiometricType.fingerprint
@@ -147,7 +147,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                                 : tr('faceId'),
                             style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                             switchOnChanged: controller.tryTogglingFingerprintStatus,
-                            switchValue: controller.isFingerprintEnable),
+                            switchValue: controller.isBiometricEnable),
                     ],
                   ),
                 ]),
@@ -220,7 +220,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (controller.isFingerprintAvailable.value == true &&
+                    if (controller.isBiometricAvailable.value == true &&
                         controller.isPasscodeEnable.value == true)
                       SettingsList(
                         shrinkWrap: true,
@@ -236,8 +236,9 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           SettingsSection(
                             tiles: [
                               SettingsTile.switchTile(
-                                initialValue: controller.isFingerprintEnable.value,
+                                initialValue: controller.isBiometricEnable.value,
                                 onToggle: controller.tryTogglingFingerprintStatus,
+                                activeSwitchColor: Get.theme.colors().primary,
                                 title: Text(
                                   controller.biometricTypeDescription,
                                   overflow: TextOverflow.ellipsis,

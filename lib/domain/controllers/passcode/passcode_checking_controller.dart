@@ -88,7 +88,10 @@ class PasscodeCheckingController extends GetxController {
       } else {
         await Get.offAll(() => const MainView());
       }
-    } catch (_) {
+    } catch (e) {
+      if (e is PlatformException && e.message == 'Biometry is not available.') {
+        await _service.setBiometricStatus(false);
+      }
       loaded.value = false;
       isBiometricAvailable = false;
       isBiometricEnable = false;
