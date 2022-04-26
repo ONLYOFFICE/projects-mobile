@@ -53,6 +53,7 @@ import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:open_file/open_file.dart';
 
 class FileCellController extends GetxController {
   final _api = locator<FilesService>();
@@ -215,9 +216,10 @@ class FileCellController extends GetxController {
     if (downloadTaskId != null && id == downloadTaskId) {
       this.status.value = status;
 
-      if (status == DownloadTaskStatus.complete) {
+      if (status == DownloadTaskStatus.complete || this.progress.value == 100) {
         Get.back();
-        if (!(await FlutterDownloader.open(taskId: downloadTaskId!)))
+
+        if ((await tryToOpenAlreadyDownloadedFile()).type != ResultType.done)
           MessagesHandler.showSnackBar(context: Get.context!, text: tr('openFileError'));
       } else if (status == DownloadTaskStatus.failed) {
         Get.back();
@@ -231,7 +233,7 @@ class FileCellController extends GetxController {
   Future<void> downloadFile() async {
     if (downloadInProgress) return;
 
-    downloadTaskId = await downloadService.downloadDocument(file.viewUrl!);
+    downloadTaskId = await downloadService.downloadDocument(file);
     if (downloadTaskId == null) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       return;
@@ -244,14 +246,18 @@ class FileCellController extends GetxController {
     if (downloadTaskId != null) await FlutterDownloader.cancel(taskId: downloadTaskId!);
   }
 
-  Future<bool> tryToOpenAlreadyDownloadedFile() async {
-    return await FlutterDownloader.open(taskId: downloadTaskId!);
+  Future<OpenResult> tryToOpenAlreadyDownloadedFile() async {
+    final res = (await FlutterDownloader.loadTasks())
+        ?.lastWhere((element) => element.taskId == downloadTaskId);
+
+    return await OpenFile.open('${res!.savedDir}/${res.filename!}');
   }
 
   Future<void> viewFile() async {
     if (downloadInProgress) return;
 
-    if (downloadTaskId != null && await tryToOpenAlreadyDownloadedFile()) return;
+    if (downloadTaskId != null &&
+        ((await tryToOpenAlreadyDownloadedFile()).type == ResultType.done)) return;
 
     unawaited(Get.dialog(
       SingleButtonDialog(
@@ -273,7 +279,7 @@ class FileCellController extends GetxController {
       barrierDismissible: false,
     ));
 
-    downloadTaskId = await downloadService.downloadDocument(file.viewUrl!, temp: true);
+    downloadTaskId = await downloadService.downloadDocument(file, temp: true);
     if (downloadTaskId == null) {
       Get.back();
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
@@ -284,10 +290,10 @@ class FileCellController extends GetxController {
   }
 
   Future openFile({int? parentId}) async {
-    if (file.fileType! >= 5)
-      await openFileInDocumentsApp(parentId: parentId);
-    else
+    if (file.fileType! < 5 || file.fileExst == '.pdf')
       await viewFile();
+    else
+      await openFileInDocumentsApp(parentId: parentId);
   }
 
   Future openFileInDocumentsApp({int? parentId}) async {
