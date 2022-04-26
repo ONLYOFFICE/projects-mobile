@@ -36,6 +36,7 @@ import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:android_path_provider/android_path_provider.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -79,6 +80,8 @@ class DownloadService {
 
 class DocumentsDownloadService {
   DocumentsDownloadService() {
+    initPaths();
+
     if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName)) {
       IsolateNameServer.removePortNameMapping(_portName);
       if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName))
@@ -105,6 +108,9 @@ class DocumentsDownloadService {
   final _port = ReceivePort();
   static const _portName = 'downloader_send_port';
 
+  late final String tempPath;
+  late final String downloadPath;
+
   final _callbacksList = <String, Function(String id, DownloadTaskStatus status, int progress)>{};
 
   bool registerCallback({
@@ -117,13 +123,6 @@ class DocumentsDownloadService {
   }
 
   Future<String?> downloadDocument(String url, {bool temp = false}) async {
-    final path = await getPath(temp: temp);
-
-    if (path == null || path.isEmpty) {
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-      return null;
-    }
-
     if (!(await _checkPermission())) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('noPermission'));
       return null;
@@ -138,8 +137,7 @@ class DocumentsDownloadService {
     return await FlutterDownloader.enqueue(
       url: finalUrl,
       headers: headers,
-      savedDir: path,
-      saveInPublicStorage: true,
+      savedDir: temp ? tempPath : downloadPath,
       showNotification: !temp,
     );
   }
@@ -169,25 +167,28 @@ class DocumentsDownloadService {
     return finalUrl.toString();
   }
 
-  Future<String?> getPath({bool temp = false}) async {
-    String? path;
-    /*  if (temp)
-      path = (await getTemporaryDirectory()).absolute.path;
-    else */ // TODO @garanin save to cache
-    if (GetPlatform.isAndroid) {
-      path = (await getExternalStorageDirectory())?.absolute.path;
-    } else {
-      path = (await getApplicationDocumentsDirectory()).absolute.path;
-    }
-
-    final savedDir = Directory(path!);
+  Future<void> initPaths() async {
+    final _tempPath = (await getTemporaryDirectory()).absolute.path;
     // ignore: avoid_slow_async_io
-    final existed = await savedDir.exists();
-    if (!existed) {
-      await savedDir.create();
+    if (!(await Directory(_tempPath).exists())) await Directory(_tempPath).create();
+
+    tempPath = _tempPath;
+
+    String? _downloadPath;
+    if (GetPlatform.isAndroid) {
+      try {
+        _downloadPath = await AndroidPathProvider.downloadsPath;
+      } catch (e) {
+        _downloadPath = (await getExternalStorageDirectory())?.absolute.path;
+      }
+    } else {
+      _downloadPath = (await getApplicationDocumentsDirectory()).absolute.path;
     }
 
-    return path;
+    // ignore: avoid_slow_async_io
+    if (!(await Directory(_downloadPath!).exists())) await Directory(_downloadPath).create();
+
+    downloadPath = _downloadPath;
   }
 
   Future<bool> _checkPermission() async {
