@@ -81,8 +81,6 @@ class DownloadService {
 
 class DocumentsDownloadService {
   DocumentsDownloadService() {
-    initPaths();
-
     if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName)) {
       IsolateNameServer.removePortNameMapping(_portName);
       if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName))
@@ -109,8 +107,8 @@ class DocumentsDownloadService {
   final _port = ReceivePort();
   static const _portName = 'downloader_send_port';
 
-  late final String tempPath;
-  late final String downloadPath;
+  String? tempPath;
+  String? downloadPath;
 
   final _callbacksList = <String, Function(String id, DownloadTaskStatus status, int progress)>{};
 
@@ -128,6 +126,8 @@ class DocumentsDownloadService {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('noPermission'));
       return null;
     }
+
+    if (tempPath == null || downloadPath == null) await initPaths();
 
     File _file;
     if (temp) {
@@ -154,7 +154,7 @@ class DocumentsDownloadService {
       url: finalUrl,
       fileName: fileName,
       headers: headers,
-      savedDir: temp ? tempPath : downloadPath,
+      savedDir: temp ? tempPath! : downloadPath!,
       showNotification: !temp,
     );
   }
