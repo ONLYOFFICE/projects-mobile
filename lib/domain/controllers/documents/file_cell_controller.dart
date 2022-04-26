@@ -284,10 +284,10 @@ class FileCellController extends GetxController {
   }
 
   Future openFile({int? parentId}) async {
-    if (file.fileType! >= 5)
-      await openFileInDocumentsApp(parentId: parentId);
-    else
+    if (file.fileType! < 5 || file.fileExst == '.pdf')
       await viewFile();
+    else
+      await openFileInDocumentsApp(parentId: parentId);
   }
 
   Future openFileInDocumentsApp({int? parentId}) async {
