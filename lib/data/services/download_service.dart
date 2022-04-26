@@ -31,7 +31,7 @@
  */
 
 import 'dart:async';
-import 'dart:io' show Directory, Platform;
+import 'dart:io' show Directory, File, Platform;
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -46,6 +46,7 @@ import 'package:http_client_helper/http_client_helper.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projects/data/api/download_api.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -122,13 +123,28 @@ class DocumentsDownloadService {
     return true;
   }
 
-  Future<String?> downloadDocument(String url, {bool temp = false}) async {
+  Future<String?> downloadDocument(PortalFile file, {bool temp = false}) async {
     if (!(await _checkPermission())) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('noPermission'));
       return null;
     }
 
-    final finalUrl = await getRedirectedUrl(url);
+    File _file;
+    if (temp) {
+      _file = File('$tempPath/${file.title!}');
+      // ignore: avoid_slow_async_io
+      if (await _file.exists()) await _file.delete();
+    } else {
+      _file = File('$downloadPath/${file.title!}');
+      // ignore: avoid_slow_async_io
+      while (await _file.exists()) {
+        final dotIndex = _file.path.lastIndexOf('.');
+        _file = File('${_file.path.substring(0, dotIndex)}(1)${file.fileExst!}');
+      }
+    }
+    final fileName = _file.path.substring(_file.path.lastIndexOf('/') + 1);
+
+    final finalUrl = await getRedirectedUrl(file.viewUrl!);
 
     Map<String, String>? headers;
     if (finalUrl.contains(Get.find<PortalInfoController>().portalName!))
@@ -136,6 +152,7 @@ class DocumentsDownloadService {
 
     return await FlutterDownloader.enqueue(
       url: finalUrl,
+      fileName: fileName,
       headers: headers,
       savedDir: temp ? tempPath : downloadPath,
       showNotification: !temp,

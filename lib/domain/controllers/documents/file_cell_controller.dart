@@ -233,7 +233,7 @@ class FileCellController extends GetxController {
   Future<void> downloadFile() async {
     if (downloadInProgress) return;
 
-    downloadTaskId = await downloadService.downloadDocument(file.viewUrl!);
+    downloadTaskId = await downloadService.downloadDocument(file);
     if (downloadTaskId == null) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       return;
@@ -279,7 +279,7 @@ class FileCellController extends GetxController {
       barrierDismissible: false,
     ));
 
-    downloadTaskId = await downloadService.downloadDocument(file.viewUrl!, temp: true);
+    downloadTaskId = await downloadService.downloadDocument(file, temp: true);
     if (downloadTaskId == null) {
       Get.back();
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
