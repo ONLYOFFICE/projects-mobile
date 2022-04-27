@@ -37,7 +37,7 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-import 'package:projects/data/models/from_api/move_folder_response.dart';
+import 'package:projects/data/models/from_api/operation.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/internal/locator.dart';
 
@@ -203,16 +203,20 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO> deleteFile({required String fileId}) async {
+  Future<ApiDTO<List<Operation>>> deleteFile({required String fileId}) async {
     final url = await locator.get<CoreApi>().getFileByIdUrl(fileId);
-    final result = ApiDTO();
+
+    final result = ApiDTO<List<Operation>>();
 
     try {
       final response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = responseJson['response'];
+        result.response = (responseJson['response'] as List)
+            .cast<Map<String, dynamic>>()
+            .map(Operation.fromJson)
+            .toList();
       } else {
         result.error = response as CustomError;
       }
@@ -223,7 +227,7 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO<MoveFolderResponse>> moveDocument({
+  Future<ApiDTO<Operation>> moveDocument({
     required String targetFolder,
     required ConflictResolveType type,
     String? movingFolder,
@@ -244,15 +248,14 @@ class FilesApi {
       'deleteAfter': true
     };
 
-    final result = ApiDTO<MoveFolderResponse>();
+    final result = ApiDTO<Operation>();
 
     try {
       final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            MoveFolderResponse.fromJson(responseJson['response'][0] as Map<String, dynamic>);
+        result.response = Operation.fromJson(responseJson['response'][0] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -263,7 +266,7 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO<MoveFolderResponse>> copyDocument({
+  Future<ApiDTO<Operation>> copyDocument({
     required String targetFolder,
     required ConflictResolveType type,
     String? copyingFolder,
@@ -284,15 +287,14 @@ class FilesApi {
       'deleteAfter': false
     };
 
-    final result = ApiDTO<MoveFolderResponse>();
+    final result = ApiDTO<Operation>();
 
     try {
       final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            MoveFolderResponse.fromJson(responseJson['response'][0] as Map<String, dynamic>);
+        result.response = Operation.fromJson(responseJson['response'][0] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -324,6 +326,30 @@ class FilesApi {
         result.response = (responseJson['response'] as List)
             .cast<Map<String, dynamic>>()
             .map(PortalFile.fromJson)
+            .toList();
+      } else {
+        result.error = response as CustomError;
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<List<Operation>>> getActiveOperations() async {
+    final url = await locator.get<CoreApi>().getFileOperationsUrl();
+
+    final result = ApiDTO<List<Operation>>();
+
+    try {
+      final response = await locator.get<CoreApi>().getRequest(url);
+
+      if (response is http.Response) {
+        final responseJson = json.decode(response.body);
+        result.response = (responseJson['response'] as List)
+            .cast<Map<String, dynamic>>()
+            .map(Operation.fromJson)
             .toList();
       } else {
         result.error = response as CustomError;

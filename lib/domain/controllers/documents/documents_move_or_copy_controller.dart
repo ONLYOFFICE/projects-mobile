@@ -38,7 +38,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-import 'package:projects/data/models/from_api/move_folder_response.dart';
+import 'package:projects/data/models/from_api/operation.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/conflict_resolving_dialog.dart';
@@ -245,7 +245,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
         return;
       }
 
-      MoveFolderResponse? result;
+      Operation? result;
       if (mode == MoveOrCopyMode.CopyFolder || mode == MoveOrCopyMode.CopyDocument)
         result = await _api.copyDocument(
           copyingFile: mode == MoveOrCopyMode.CopyDocument ? _targetId.toString() : null,

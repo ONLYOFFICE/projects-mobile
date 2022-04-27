@@ -33,7 +33,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-import 'package:projects/data/models/from_api/move_folder_response.dart';
+import 'package:projects/data/models/from_api/operation.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
@@ -142,11 +142,9 @@ class FilesService {
     }
   }
 
-  // TODO: Future <??>
-  Future deleteFile({required String fileId}) async {
-    final result = await _api.deleteFile(
-      fileId: fileId,
-    );
+  Future<List<Operation>?> deleteFile({required String fileId}) async {
+    final result = await _api.deleteFile(fileId: fileId);
+
     final success = result.response != null;
 
     if (success) {
@@ -161,7 +159,7 @@ class FilesService {
     }
   }
 
-  Future<MoveFolderResponse?> moveDocument({
+  Future<Operation?> moveDocument({
     required String targetFolder,
     required ConflictResolveType type,
     String? movingFolder,
@@ -187,7 +185,7 @@ class FilesService {
     }
   }
 
-  Future<MoveFolderResponse?> copyDocument({
+  Future<Operation?> copyDocument({
     required String targetFolder,
     required ConflictResolveType type,
     String? copyingFolder,
@@ -223,6 +221,19 @@ class FilesService {
 
     final result = await _api.checkForConflicts(
         destFolderId: destFolderId, folderIds: folderIds, fileIds: fileIds);
+
+    final success = result.error == null;
+
+    if (success) {
+      return result.response;
+    } else {
+      await Get.find<ErrorDialog>().show(result.error!.message);
+      return null;
+    }
+  }
+
+  Future<List<Operation>?> getActiveOperations() async {
+    final result = await _api.getActiveOperations();
 
     final success = result.error == null;
 

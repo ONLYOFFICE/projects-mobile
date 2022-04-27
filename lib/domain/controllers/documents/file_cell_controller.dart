@@ -38,6 +38,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:projects/data/enums/file_type.dart';
+import 'package:projects/data/models/from_api/operation.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -182,11 +183,26 @@ class FileCellController extends GetxController {
   }
 
   Future<String?> deleteFile() async {
-    final result = await _api.deleteFile(
-      fileId: file.id.toString(),
-    );
+    final result = await _api.deleteFile(fileId: file.id.toString());
 
-    return result?[0]?['error'] as String? ?? result?[1]?['error'] as String?;
+    if (result == null || result.isEmpty) return tr('error');
+
+    return _waitFinishOperation(result[0].id!);
+  }
+
+  Future<String?> _waitFinishOperation(String id) async {
+    Operation? operationStatus;
+    do {
+      final activeOperations = await _api.getActiveOperations();
+      if (activeOperations == null) return tr('error');
+
+      operationStatus = activeOperations.firstWhere(
+        (element) => element.id == id,
+        orElse: () => Operation(finished: true, error: tr('error')),
+      );
+    } while (!operationStatus.finished!);
+
+    return operationStatus.error;
   }
 
   Future<bool> renameFile(String newName) async {
