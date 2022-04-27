@@ -68,7 +68,10 @@ class AppBarMenuButton extends StatelessWidget {
           if (controller.discussion.value.canEdit!)
             PlatformPopupMenuItem(
               value: 'Edit',
-              child: Text(tr('editDiscussion')),
+              child: Text(
+                tr('editDiscussion'),
+                maxLines: 1,
+              ),
             ),
           // TODO realize
           // const PopupMenuItem(
@@ -77,6 +80,7 @@ class AppBarMenuButton extends StatelessWidget {
             value: 'Subscribe',
             child: Text(
               controller.isSubscribed ? tr('unsubscribeFromComments') : tr('subscribeToComments'),
+              maxLines: 1,
             ),
           ),
           if (controller.discussion.value.canEdit!)
@@ -85,7 +89,10 @@ class AppBarMenuButton extends StatelessWidget {
               isDestructiveAction: true,
               textStyle: Get.theme.popupMenuTheme.textStyle
                   ?.copyWith(color: Get.theme.colors().colorError),
-              child: Text(tr('deleteDiscussion')),
+              child: Text(
+                tr('deleteDiscussion'),
+                maxLines: 1,
+              ),
             ),
         ];
       },

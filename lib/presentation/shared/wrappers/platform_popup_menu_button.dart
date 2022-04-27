@@ -10,7 +10,7 @@ import 'package:projects/presentation/shared/wrappers/platform_popup_menu_divide
 
 const Duration _kMenuDuration = Duration(milliseconds: 300);
 const double _kMenuCloseIntervalEnd = 2.0 / 3.0;
-const double _kMenuMaxWidth = 5.0 * _kMenuWidthStep;
+const double _kMenuMaxWidth = 6.0 * _kMenuWidthStep;
 const double _kMenuMinWidth = 4 * _kMenuWidthStep;
 const double _kMenuVerticalPadding = 8;
 const double _kMenuWidthStep = 50;
