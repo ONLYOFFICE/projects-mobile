@@ -89,6 +89,7 @@ class TaskTitle extends StatelessWidget {
                     style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
                     cursorColor: Get.theme.colors().primary.withOpacity(0.87),
                     hintText: tr('taskTitle'),
+                    makeCupertinoDecorationNull: true,
                     cupertino: (_, __) => CupertinoTextFieldData(
                       padding: EdgeInsets.zero,
                       placeholderStyle: TextStyleHelper.headline6(

@@ -82,6 +82,7 @@ class ProjectTitleTile extends StatelessWidget {
                 Obx(() {
                   final needToFillTitle = controller.needToFillTitle.value;
                   return PlatformTextField(
+                    makeCupertinoDecorationNull: true,
                     focusNode: focusOnTitle ? controller.titleFocus : null,
                     maxLines: null,
                     controller: controller.titleController,

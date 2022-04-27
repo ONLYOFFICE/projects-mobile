@@ -362,6 +362,7 @@ class _NameFolderTextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformTextField(
+      makeCupertinoDecorationNull: true,
       autofocus: true,
       textInputAction: TextInputAction.done,
       controller: inputController,

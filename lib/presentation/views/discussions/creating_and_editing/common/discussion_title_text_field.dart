@@ -71,6 +71,7 @@ class DiscussionTitleTextField extends StatelessWidget {
             child: Obx(() {
               final setTitleError = controller.setTitleError.value;
               return PlatformTextField(
+                makeCupertinoDecorationNull: true,
                 onChanged: controller.changeTitle,
                 focusNode: controller.titleFocus,
                 maxLines: null,

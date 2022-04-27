@@ -45,6 +45,7 @@ class CommentTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => PlatformTextField(
+        makeCupertinoDecorationNull: true,
         maxLines: null,
         autofocus: true,
         controller: controller.textController as TextEditingController?,

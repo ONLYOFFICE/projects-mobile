@@ -219,6 +219,7 @@ class MilestoneInput extends StatelessWidget {
             child: Obx(() {
               final needToSetTitle = controller.needToSetTitle.value;
               return PlatformTextField(
+                makeCupertinoDecorationNull: true,
                 focusNode: focusOnTitle ? controller.titleFocus : null,
                 maxLines: null,
                 controller: controller.titleController,

@@ -90,6 +90,7 @@ class _SarchField extends StatelessWidget {
     final controller = Get.find<TFASmsController>();
 
     return PlatformTextField(
+      makeCupertinoDecorationNull: true,
       autofocus: true,
       style: TextStyleHelper.headline6(),
       hintText: tr('search'),

@@ -174,6 +174,7 @@ class _TagTextFieldWidget extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 10),
       child: PlatformTextField(
+        makeCupertinoDecorationNull: true,
         autofocus: true,
         textInputAction: TextInputAction.done,
         controller: inputController,

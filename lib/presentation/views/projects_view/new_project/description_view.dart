@@ -70,6 +70,7 @@ class NewProjectDescription extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
         child: PlatformTextField(
+          makeCupertinoDecorationNull: true,
           autofocus: true,
           controller: controller.descriptionController,
           maxLines: null,

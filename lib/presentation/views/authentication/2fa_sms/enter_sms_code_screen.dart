@@ -88,6 +88,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
                   Obx(() {
                     final codeError = controller.needToShowError.value;
                     return PlatformTextField(
+                      makeCupertinoDecorationNull: true,
                       controller: codeController,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,

@@ -137,6 +137,7 @@ class _CountrySelection extends StatelessWidget {
                 Flexible(
                   flex: 1,
                   child: PlatformTextField(
+                    makeCupertinoDecorationNull: true,
                     controller: controller.phoneCodeController,
                     onChanged: (value) {},
                     autofocus: controller.deviceCountry.value?.phoneCode == null,
@@ -165,6 +166,7 @@ class _CountrySelection extends StatelessWidget {
                 Flexible(
                   flex: 4,
                   child: PlatformTextField(
+                    makeCupertinoDecorationNull: true,
                     autofocus: controller.deviceCountry.value?.phoneCode != null,
                     controller: controller.phoneNumberController,
                     keyboardType: TextInputType.number,

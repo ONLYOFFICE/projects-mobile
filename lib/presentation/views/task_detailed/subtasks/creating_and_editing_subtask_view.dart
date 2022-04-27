@@ -139,6 +139,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                             child: Obx(() {
                               final setTiltleError = controller.setTiltleError!.value;
                               return PlatformTextField(
+                                makeCupertinoDecorationNull: true,
                                 controller: controller.titleController,
                                 maxLines: null,
                                 // focusNode = null if subtaskEditingController

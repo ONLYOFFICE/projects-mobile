@@ -69,6 +69,7 @@ class NewMilestoneDescription extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
         child: PlatformTextField(
+          makeCupertinoDecorationNull: true,
           controller: newMilestoneController.descriptionController.value,
           autofocus: true,
           maxLines: null,
