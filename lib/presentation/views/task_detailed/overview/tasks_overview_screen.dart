@@ -65,11 +65,14 @@ class TaskOverviewScreen extends StatelessWidget {
     return Obx(
       () {
         if (taskController!.loaded.value || taskController!.firstReload.value) {
+          final scrollController = ScrollController();
           final task = taskController!.task.value;
           return StyledSmartRefresher(
+            scrollController: scrollController,
             controller: taskController!.refreshController,
             onRefresh: () => taskController!.reloadTask(showLoading: true),
             child: ListView(
+              controller: scrollController,
               children: [
                 _Task(taskController: taskController),
                 if (task.description != null && task.description!.isNotEmpty)
@@ -162,9 +165,12 @@ class TaskOverviewScreen extends StatelessWidget {
                   InfoTile(
                       onTap: () {
                         Get.find<NavigationController>().toScreen(
-                          const TaskTeamView(), page: '/TaskTeamView', arguments: {
-                          'controller': taskController,
-                        });
+                          const TaskTeamView(),
+                          page: '/TaskTeamView',
+                          arguments: {
+                            'controller': taskController,
+                          },
+                        );
                       },
                       icon: AppIcon(
                           icon: SvgIcons.person,

@@ -45,7 +45,7 @@ class _Task extends StatelessWidget {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 15),
+              padding: const EdgeInsets.only(top: 16),
               child: SizedBox(
                 width: 72,
                 child: AppIcon(
@@ -82,7 +82,7 @@ class _Task extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 72, bottom: 25, top: 15),
+          padding: const EdgeInsets.only(left: 72, bottom: 16, top: 16, right: 16),
           child: Obx(
             () => StatusButton(
               canEdit: taskController!.task.value.canEdit!,
