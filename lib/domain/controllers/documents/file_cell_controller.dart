@@ -261,7 +261,7 @@ class FileCellController extends GetxController {
 
     unawaited(Get.dialog(
       SingleButtonDialog(
-        titleText: tr('uploading'),
+        titleText: tr('downloading'),
         acceptText: tr('cancel'),
         onAcceptTap: () {
           cancelDownloadFile();
