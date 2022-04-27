@@ -278,18 +278,10 @@ class _PopupMenu<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     final dividerColor = CupertinoDynamicColor.resolve(CupertinoColors.separator, context);
 
-    final unit =
-        1.0 / (route.items.length + 1.5); // 1.0 for the width and 0.5 for the last item's fade.
     final children = <Widget>[];
     final popupMenuTheme = PopupMenuTheme.of(context);
 
     for (var i = 0; i < route.items.length; i += 1) {
-      final start = (i + 1) * unit;
-      final end = (start + 1.5 * unit).clamp(0.0, 1.0);
-      final opacity = CurvedAnimation(
-        parent: route.animation!,
-        curve: Interval(start, end),
-      );
       Widget item = route.items[i];
       if (route.initialValue != null && route.items[i].represents(route.initialValue)) {
         item = Container(
@@ -302,32 +294,27 @@ class _PopupMenu<T> extends StatelessWidget {
           onLayout: (Size size) {
             route.itemSizes[i] = size;
           },
-          child: FadeTransition(
-            opacity: opacity,
-            child: Container(
-              decoration: BoxDecoration(
-                border: !isMaterial(context) &&
-                        i != route.items.length - 1 &&
-                        item is! PlatformPopupMenuDivider &&
-                        route.items[i + 1] is! PlatformPopupMenuDivider
-                    ? Border(
-                        bottom: BorderSide(
-                          color: dividerColor,
-                          width: 0.5,
-                        ),
-                      )
-                    : null,
-              ),
-              child: item,
+          child: Container(
+            decoration: BoxDecoration(
+              border: !isMaterial(context) &&
+                      i != route.items.length - 1 &&
+                      item is! PlatformPopupMenuDivider &&
+                      route.items[i + 1] is! PlatformPopupMenuDivider
+                  ? Border(
+                      bottom: BorderSide(
+                        color: dividerColor,
+                        width: 0.5,
+                      ),
+                    )
+                  : null,
             ),
+            child: item,
           ),
         ),
       );
     }
 
     final opacity = CurveTween(curve: const Interval(0, 1.0 / 3.0));
-    final width = CurveTween(curve: Interval(0, unit));
-    final height = CurveTween(curve: Interval(0, unit * route.items.length));
 
     final Widget child = ConstrainedBox(
       constraints: const BoxConstraints(
@@ -369,8 +356,8 @@ class _PopupMenu<T> extends StatelessWidget {
                   elevation: route.elevation ?? popupMenuTheme.elevation ?? 8.0,
                   child: Align(
                     alignment: AlignmentDirectional.topEnd,
-                    widthFactor: width.evaluate(route.animation!),
-                    heightFactor: height.evaluate(route.animation!),
+                    widthFactor: 1,
+                    heightFactor: 1,
                     child: child,
                   ),
                 )
@@ -387,8 +374,8 @@ class _PopupMenu<T> extends StatelessWidget {
                   ),
                   child: Align(
                     alignment: AlignmentDirectional.topEnd,
-                    widthFactor: width.evaluate(route.animation!),
-                    heightFactor: height.evaluate(route.animation!),
+                    widthFactor: 1,
+                    heightFactor: 1,
                     child: child,
                   ),
                 ),
