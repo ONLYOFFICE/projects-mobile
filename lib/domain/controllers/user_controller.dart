@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:synchronized/synchronized.dart';
@@ -40,21 +42,29 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/internal/locator.dart';
 
 class UserController extends GetxController {
-  final _lock = Lock();
-
   final user = Rxn<PortalUser>();
   final securityInfo = Rxn<SecurityInfo>();
 
   final dataUpdated = false.obs;
 
+  static const _timeoutDuration = 3;
+
   Future<void> updateData() async {
-    var loaded = await getUserInfo();
-    loaded = await getSecurityInfo();
-    if (loaded) dataUpdated.value = !dataUpdated.value;
+    if (await getUserInfo() && await getSecurityInfo()) dataUpdated.value = !dataUpdated.value;
   }
 
+  bool _userInfoTimeoutLock = false;
+  Timer? _userInfoTimeoutTimer;
+  final _userInfoLock = Lock();
+
   Future<bool> getUserInfo() async {
-    final response = await _lock.synchronized(() async {
+    if (user.value != null && (_userInfoTimeoutLock || _userInfoLock.locked)) return true;
+
+    _userInfoTimeoutLock = true;
+    _userInfoTimeoutTimer =
+        Timer(const Duration(seconds: _timeoutDuration), () => _userInfoTimeoutLock = false);
+
+    final response = await _userInfoLock.synchronized(() async {
       final response = await locator<AuthService>().getSelfInfo();
       if (response.response == null) return false;
       user.value = response.response;
@@ -63,8 +73,19 @@ class UserController extends GetxController {
     return response;
   }
 
+  bool _securityInfoTimeoutLock = false;
+  Timer? _securityInfoTimeoutTimer;
+  final _securityInfoLock = Lock();
+
   Future<bool> getSecurityInfo() async {
-    final response = await _lock.synchronized(() async {
+    if (securityInfo.value != null && (_securityInfoTimeoutLock || _securityInfoLock.locked))
+      return true;
+
+    _securityInfoTimeoutLock = true;
+    _securityInfoTimeoutTimer =
+        Timer(const Duration(seconds: _timeoutDuration), () => _securityInfoTimeoutLock = false);
+
+    final response = await _securityInfoLock.synchronized(() async {
       final response = await locator<ProjectService>().getProjectSecurityinfo();
       if (response == null) return false;
       securityInfo.value = response;
