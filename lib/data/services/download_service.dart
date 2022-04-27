@@ -31,13 +31,12 @@
  */
 
 import 'dart:async';
-import 'dart:io' show Directory, File, Platform;
+import 'dart:io' show Directory, File;
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:android_path_provider/android_path_provider.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';

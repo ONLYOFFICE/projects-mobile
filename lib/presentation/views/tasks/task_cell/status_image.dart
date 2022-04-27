@@ -138,7 +138,10 @@ class _StatusLoadingIcon extends StatelessWidget {
                   height: 16,
                   width: 16,
                   child: PlatformCircularProgressIndicator(
-                    color: Get.theme.colors().primary,
+                    material: (_, __) =>
+                        MaterialProgressIndicatorData(color: Get.theme.colors().primary),
+                    cupertino: (_, __) =>
+                        CupertinoProgressIndicatorData(color: Get.theme.colors().primary),
                   ),
                 ),
               ),

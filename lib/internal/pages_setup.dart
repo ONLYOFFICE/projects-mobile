@@ -38,6 +38,7 @@ import 'package:projects/presentation/shared/widgets/select_item_screens/select_
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_project_screen.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_tag_screen.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_date_range_picker.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/select_country_screen.dart';
@@ -92,8 +93,6 @@ import 'package:projects/presentation/views/task_detailed/task_team.dart';
 import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
-
-import '../presentation/shared/widgets/styled/styled_date_range_picker.dart';
 
 List<GetPage> getxPages() => [
       GetPage(name: '/MainView', page: () => const MainView()),

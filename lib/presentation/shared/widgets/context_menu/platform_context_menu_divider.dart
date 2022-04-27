@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 const double _kMenuDividerHeight = 16;
 const double _iosMenuDividerHeight = 8;

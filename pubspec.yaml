@@ -79,6 +79,7 @@ dependencies:
   device_info_plus: ^3.2.2
   # clear cache
   flutter_cache_manager: ^3.3.0
+  flutter_platform_widgets: ^1.20.0
   
   # app localization
   easy_localization: ^3.0.0

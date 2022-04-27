@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart' show CupertinoScrollbar;
 import 'package:flutter/material.dart' show Scrollbar;
 import 'package:flutter/widgets.dart';
-
-import 'package:projects/presentation/shared/wrappers/widget_base.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 
 class PlatformScrollbar extends PlatformWidgetBase<CupertinoScrollbar, Scrollbar> {
   final Widget child;

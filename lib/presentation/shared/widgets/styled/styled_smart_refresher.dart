@@ -31,9 +31,8 @@
  */
 
 import 'package:flutter/cupertino.dart';
-import 'package:projects/presentation/shared/wrappers/platform.dart';
-import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
-import 'package:projects/presentation/shared/wrappers/platform_scrollbar.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:projects/presentation/shared/widgets/platform_scrollbar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class StyledSmartRefresher extends StatelessWidget {

@@ -32,12 +32,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
 class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double titleHeight;
@@ -92,7 +91,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: leadingWidth,
       leading: leading == null && showBackButton
           ? PlatformIconButton(
-        padding: EdgeInsets.zero,
+              padding: EdgeInsets.zero,
               icon: backButtonIcon,
               onPressed: onLeadingPressed ?? Get.find<NavigationController>().back,
             )

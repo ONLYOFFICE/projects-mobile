@@ -33,10 +33,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:get/get.dart';
-import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 
 class LoadingHUD {
   LoadingHUD({String? loadingText}) {

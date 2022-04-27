@@ -33,6 +33,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/internal/utils/debug_print.dart';
 import 'package:projects/main_controller.dart';
@@ -40,7 +41,6 @@ import 'package:projects/main_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class NoInternetScreen extends StatelessWidget {
   const NoInternetScreen({

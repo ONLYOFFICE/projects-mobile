@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -46,10 +47,6 @@ import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/shared/widgets/option_with_switch.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
-import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
@@ -267,12 +264,11 @@ class DescriptionTile extends StatelessWidget {
       () {
         final _isSletected = newMilestoneController.descriptionText.value.isNotEmpty;
         return NewItemTile(
-            text:
-                _isSletected ? newMilestoneController.descriptionText.value : tr('addDescription'),
-            maxLines: 1,
-            icon: SvgIcons.description,
-            iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-            selectedIconColor: Get.theme.colors().onBackground,
+          text: _isSletected ? newMilestoneController.descriptionText.value : tr('addDescription'),
+          maxLines: 1,
+          icon: SvgIcons.description,
+          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Get.theme.colors().onBackground,
           caption: _isSletected ? tr('description') : null,
           isSelected: _isSletected,
           suffix: _isSletected
@@ -299,7 +295,7 @@ class ProjectTile extends StatelessWidget {
   }) : super(key: key);
 
   void _onPressed() => Get.find<NavigationController>().toScreen(
-    const SelectProjectView(),
+        const SelectProjectView(),
         arguments: {'controller': controller},
         transition: Transition.rightToLeft,
         page: '/SelectProjectView',
