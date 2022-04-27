@@ -245,7 +245,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
         return;
       }
 
-      Operation? result;
+      List<Operation>? result;
       if (mode == MoveOrCopyMode.CopyFolder || mode == MoveOrCopyMode.CopyDocument)
         result = await _api.copyDocument(
           copyingFile: mode == MoveOrCopyMode.CopyDocument ? _targetId.toString() : null,
@@ -261,8 +261,14 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
           type: type,
         );
 
-      Get.close(nestingCounter);
-      if (result != null)
+      if (result == null || result.isEmpty) {
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+        return;
+      }
+
+      final errorMessage = await _api.waitFinishOperation(result[0].id!);
+      if (errorMessage == null) {
+        Get.close(nestingCounter);
         switch (mode) {
           case MoveOrCopyMode.CopyDocument:
             MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileCopied'));
@@ -277,10 +283,9 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
             MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderMoved'));
             break;
         }
-      else
-        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
-
-      locator<EventHub>().fire('needToRefreshDocuments');
+        locator<EventHub>().fire('needToRefreshDocuments');
+      } else
+        MessagesHandler.showSnackBar(context: Get.context!, text: errorMessage);
     }));
   }
 

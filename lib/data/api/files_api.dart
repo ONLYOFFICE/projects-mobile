@@ -227,7 +227,7 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO<Operation>> moveDocument({
+  Future<ApiDTO<List<Operation>>> moveDocument({
     required String targetFolder,
     required ConflictResolveType type,
     String? movingFolder,
@@ -248,14 +248,17 @@ class FilesApi {
       'deleteAfter': true
     };
 
-    final result = ApiDTO<Operation>();
+    final result = ApiDTO<List<Operation>>();
 
     try {
       final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = Operation.fromJson(responseJson['response'][0] as Map<String, dynamic>);
+        result.response = (responseJson['response'] as List)
+            .cast<Map<String, dynamic>>()
+            .map(Operation.fromJson)
+            .toList();
       } else {
         result.error = response as CustomError;
       }
@@ -266,7 +269,7 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO<Operation>> copyDocument({
+  Future<ApiDTO<List<Operation>>> copyDocument({
     required String targetFolder,
     required ConflictResolveType type,
     String? copyingFolder,
@@ -287,14 +290,17 @@ class FilesApi {
       'deleteAfter': false
     };
 
-    final result = ApiDTO<Operation>();
+    final result = ApiDTO<List<Operation>>();
 
     try {
       final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = Operation.fromJson(responseJson['response'][0] as Map<String, dynamic>);
+        result.response = (responseJson['response'] as List)
+            .cast<Map<String, dynamic>>()
+            .map(Operation.fromJson)
+            .toList();
       } else {
         result.error = response as CustomError;
       }

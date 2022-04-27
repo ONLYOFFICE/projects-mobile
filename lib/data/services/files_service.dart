@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
@@ -145,7 +146,7 @@ class FilesService {
   Future<List<Operation>?> deleteFile({required String fileId}) async {
     final result = await _api.deleteFile(fileId: fileId);
 
-    final success = result.response != null;
+    final success = result.error == null;
 
     if (success) {
       await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
@@ -159,7 +160,7 @@ class FilesService {
     }
   }
 
-  Future<Operation?> moveDocument({
+  Future<List<Operation>?> moveDocument({
     required String targetFolder,
     required ConflictResolveType type,
     String? movingFolder,
@@ -175,7 +176,7 @@ class FilesService {
       type: type,
     );
 
-    final success = result.response!.error == null;
+    final success = result.error == null;
 
     if (success) {
       return result.response;
@@ -185,7 +186,7 @@ class FilesService {
     }
   }
 
-  Future<Operation?> copyDocument({
+  Future<List<Operation>?> copyDocument({
     required String targetFolder,
     required ConflictResolveType type,
     String? copyingFolder,
@@ -201,7 +202,7 @@ class FilesService {
       type: type,
     );
 
-    final success = result.response!.error == null;
+    final success = result.error == null;
 
     if (success) {
       return result.response;
@@ -243,5 +244,21 @@ class FilesService {
       await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
+  }
+
+  Future<String?> waitFinishOperation(String id) async {
+    Operation? operationStatus;
+    do {
+      // TODO garanin add pause between requests
+      final activeOperations = await getActiveOperations();
+      if (activeOperations == null || activeOperations.isEmpty) return tr('error');
+
+      operationStatus = activeOperations.firstWhere(
+        (element) => element.id == id,
+        orElse: () => Operation(finished: true, error: tr('error')),
+      );
+    } while (!operationStatus.finished!);
+
+    return operationStatus.error;
   }
 }

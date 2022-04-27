@@ -187,22 +187,7 @@ class FileCellController extends GetxController {
 
     if (result == null || result.isEmpty) return tr('error');
 
-    return _waitFinishOperation(result[0].id!);
-  }
-
-  Future<String?> _waitFinishOperation(String id) async {
-    Operation? operationStatus;
-    do {
-      final activeOperations = await _api.getActiveOperations();
-      if (activeOperations == null) return tr('error');
-
-      operationStatus = activeOperations.firstWhere(
-        (element) => element.id == id,
-        orElse: () => Operation(finished: true, error: tr('error')),
-      );
-    } while (!operationStatus.finished!);
-
-    return operationStatus.error;
+    return await _api.waitFinishOperation(result[0].id!);
   }
 
   Future<bool> renameFile(String newName) async {
