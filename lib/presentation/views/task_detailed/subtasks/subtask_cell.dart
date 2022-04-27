@@ -38,9 +38,9 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 

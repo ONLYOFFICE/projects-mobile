@@ -41,12 +41,12 @@ import 'package:projects/domain/controllers/documents/base_documents_controller.
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
 import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 

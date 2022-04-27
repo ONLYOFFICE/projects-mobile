@@ -44,14 +44,14 @@ import 'package:projects/domain/controllers/projects/detailed_project/detailed_p
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_divider.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_popup_menu_divider.dart';
-import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/discussions/discussions_shared.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';

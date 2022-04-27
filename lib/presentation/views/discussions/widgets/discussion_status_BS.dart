@@ -36,11 +36,11 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
-import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 
 Future<void> showsDiscussionStatusesBS({
   required BuildContext context,
