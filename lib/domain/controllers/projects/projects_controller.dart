@@ -146,7 +146,7 @@ class ProjectsController extends BaseController {
     loaded.value = false;
 
     paginationController.startIndex = 0;
-    if (_preset != null) await _filterController.setupPreset(_preset);
+    if (_preset != null) await _filterController.setupPreset(_preset!);
 
     await _getProjects(needToClear: true);
 

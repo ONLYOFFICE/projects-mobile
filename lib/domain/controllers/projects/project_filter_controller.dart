@@ -242,7 +242,7 @@ class ProjectsFilterController extends BaseFilterController {
     await saveFilters();
   }
 
-  Future<void> setupPreset(PresetProjectFilters? preset) async {
+  Future<void> setupPreset(PresetProjectFilters preset) async {
     _selfId = await Get.find<UserController>().getUserId();
 
     switch (preset) {
@@ -268,7 +268,6 @@ class ProjectsFilterController extends BaseFilterController {
         _statusFilter = '&status=open';
         _projectManagerFilter = '&manager=$_selfId';
         break;
-      default:
     }
 
     hasFilters.value = _hasFilters;

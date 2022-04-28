@@ -54,7 +54,7 @@ part 'user_list.dart';
 part 'user_tile.dart';
 
 class SelectUserScreen extends StatelessWidget with SelectItemWithSearchMixin {
-  const SelectUserScreen({Key? key, int? this.navigatorId}) : super(key: key);
+  const SelectUserScreen({Key? key, this.navigatorId}) : super(key: key);
 
   final int? navigatorId;
 

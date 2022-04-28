@@ -364,19 +364,4 @@ class NewDiscussionController extends DiscussionActionsController {
 
   @override
   void removeSubscriber(PortalUserItemController user) {}
-
-  @override
-  set selectedProjectTitle(RxString _selectedProjectTitle) {
-    // TODO: implement selectedProjectTitle
-  }
-
-  @override
-  set text(RxString _text) {
-    // TODO: implement text
-  }
-
-  @override
-  set title(RxString _title) {
-    // TODO: implement title
-  }
 }

@@ -53,16 +53,14 @@ class UserController extends GetxController {
     if (await getUserInfo() && await getSecurityInfo()) dataUpdated.value = !dataUpdated.value;
   }
 
-  bool _userInfoTimeoutLock = false;
   Timer? _userInfoTimeoutTimer;
   final _userInfoLock = Lock();
 
   Future<bool> getUserInfo() async {
-    if (user.value != null && (_userInfoTimeoutLock || _userInfoLock.locked)) return true;
+    if (user.value != null && (_userInfoTimeoutTimer?.isActive == true || _userInfoLock.locked))
+      return true;
 
-    _userInfoTimeoutLock = true;
-    _userInfoTimeoutTimer =
-        Timer(const Duration(seconds: _timeoutDuration), () => _userInfoTimeoutLock = false);
+    _userInfoTimeoutTimer = Timer(const Duration(seconds: _timeoutDuration), () {});
 
     final response = await _userInfoLock.synchronized(() async {
       final response = await locator<AuthService>().getSelfInfo();
@@ -73,17 +71,14 @@ class UserController extends GetxController {
     return response;
   }
 
-  bool _securityInfoTimeoutLock = false;
   Timer? _securityInfoTimeoutTimer;
   final _securityInfoLock = Lock();
 
   Future<bool> getSecurityInfo() async {
-    if (securityInfo.value != null && (_securityInfoTimeoutLock || _securityInfoLock.locked))
-      return true;
+    if (securityInfo.value != null &&
+        (_securityInfoTimeoutTimer?.isActive == true || _securityInfoLock.locked)) return true;
 
-    _securityInfoTimeoutLock = true;
-    _securityInfoTimeoutTimer =
-        Timer(const Duration(seconds: _timeoutDuration), () => _securityInfoTimeoutLock = false);
+    _securityInfoTimeoutTimer = Timer(const Duration(seconds: _timeoutDuration), () {});
 
     final response = await _securityInfoLock.synchronized(() async {
       final response = await locator<ProjectService>().getProjectSecurityinfo();
