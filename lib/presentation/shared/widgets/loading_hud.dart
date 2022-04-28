@@ -51,7 +51,7 @@ class LoadingHUD {
   }
 
   void showLoadingHUD(bool value) {
-    if (!value) {
+    if (value) {
       if (GetPlatform.isIOS)
         _loadingHudRoute = CupertinoDialogRoute(
           builder: (_) => WillPopScope(
@@ -83,7 +83,7 @@ class LoadingHUD {
       Navigator.push(Get.context!, _loadingHudRoute!);
       return;
     }
-    if (value && _loadingHudRoute?.isActive == true) {
+    if (!value && _loadingHudRoute?.isActive == true) {
       Navigator.removeRoute(Get.context!, _loadingHudRoute!);
       _loadingHudRoute = null;
     }

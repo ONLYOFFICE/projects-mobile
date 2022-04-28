@@ -39,6 +39,7 @@ import 'package:projects/data/services/task/subtasks_service.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/loading_hud.dart';
 
 class SubtaskStatus {
   static const OPEN = 1;
@@ -63,6 +64,9 @@ class SubtaskController extends GetxController {
     required int taskId,
     required int subtaskId,
   }) async {
+    final _loading = LoadingHUD();
+    _loading.showLoadingHUD(true);
+
     await _userController.getUserInfo();
     final selfUser = _userController.user.value!;
     final data = {'responsible': selfUser.id, 'title': subtask.value!.title};
@@ -73,6 +77,8 @@ class SubtaskController extends GetxController {
       subtask.value = result;
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('subtaskAccepted'));
     }
+
+    _loading.showLoadingHUD(false);
   }
 
   void copySubtask(

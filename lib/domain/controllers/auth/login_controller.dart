@@ -107,7 +107,7 @@ class LoginController extends GetxController {
     accountManager =
         Get.isRegistered<AccountManager>() ? Get.find<AccountManager>() : Get.put(AccountManager());
 
-    loaded.listen(loadingHud.showLoadingHUD);
+    loaded.listen((value) => loadingHud.showLoadingHUD(!value));
 
     super.onInit();
   }
