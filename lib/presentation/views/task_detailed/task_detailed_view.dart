@@ -79,8 +79,6 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
 
   late TaskItemController taskItemController;
 
-  final documentsController = Get.find<DocumentsController>();
-
   @override
   void initState() {
     super.initState();
@@ -93,11 +91,6 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
     });
 
     _tabController = TabController(vsync: this, length: tabsAmount);
-
-    documentsController.entityType = 'task';
-    documentsController.setupFolder(
-        folderId: taskItemController.task.value.id,
-        folderName: taskItemController.task.value.title!);
 
     _tabController.addListener(() {
       if (_activeIndex.value == _tabController.index) return;
@@ -153,7 +146,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
         children: [
           TaskOverviewScreen(taskController: taskItemController, tabController: _tabController),
           SubtasksView(controller: taskItemController),
-          ProjectDocumentsScreen(controller: documentsController),
+          ProjectDocumentsScreen(controller: taskItemController.documentsController),
           TaskCommentsView(controller: taskItemController),
         ],
       ),

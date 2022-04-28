@@ -44,6 +44,7 @@ import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
@@ -71,6 +72,8 @@ class TaskItemController extends GetxController {
 
   final loaded = false.obs;
   final isStatusLoaded = false.obs;
+
+  final documentsController = Get.find<DocumentsController>();
 
   RefreshController get refreshController {
     return RefreshController();
@@ -113,6 +116,9 @@ class TaskItemController extends GetxController {
 
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
+
+    documentsController.entityType = 'task';
+    documentsController.setupFolder(folderId: task.value.id, folderName: task.value.title!);
 
     _ss.add(locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
@@ -237,7 +243,9 @@ class TaskItemController extends GetxController {
     final t = await _api.getTaskByID(id: task.value.id!);
     if (t != null) {
       task.value = t;
+
       unawaited(initTaskStatus(task.value));
+      unawaited(documentsController.refreshContent());
 
       locator<EventHub>().fire('needToRefreshTasks', {'task': t});
     }
