@@ -263,16 +263,16 @@ class FileCellController extends GetxController {
       SingleButtonDialog(
         titleText: tr('downloading'),
         acceptText: tr('cancel'),
-        onAcceptTap: () {
-          cancelDownloadFile();
+        onAcceptTap: () async {
           Get.back();
+          await cancelDownloadFile();
         },
         content: Obx(() {
           final value = progress.value;
           return LinearProgressIndicator(
             value: (value ?? 0) < 5 ? 0.05 : value! / 100,
             color: Get.theme.colors().primary,
-            backgroundColor: Get.theme.colors().surface,
+            backgroundColor: Get.theme.colors().backgroundSecond,
           );
         }),
       ),

@@ -163,7 +163,7 @@ class FileCell extends StatelessWidget {
                 return LinearProgressIndicator(
                   value: (value ?? 0) < 5 ? 0.05 : value! / 100,
                   color: Get.theme.colors().primary,
-                  backgroundColor: Get.theme.colors().surface,
+                  backgroundColor: Get.theme.colors().backgroundSecond,
                 );
               });
             else
