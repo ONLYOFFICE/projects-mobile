@@ -181,7 +181,7 @@ class SingleButtonDialog extends StatelessWidget {
         content: _content != null
             ? Container(
                 padding: GetPlatform.isIOS
-                    ? const EdgeInsets.only(top: 8)
+                    ? const EdgeInsets.only(top: 8, bottom: 0)
                     : const EdgeInsets.symmetric(vertical: 8),
                 child: _content,
               )

@@ -40,6 +40,7 @@ import 'package:launch_review/launch_review.dart';
 import 'package:projects/data/enums/file_type.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -71,7 +72,7 @@ class FileCellController extends GetxController {
 
   String? downloadTaskId;
   final status = Rxn<DownloadTaskStatus>();
-  final progress = Rxn<int>();
+  final progress = Rx<int>(0);
 
   FileCellController({required this.file}) {
     setupFileIcon();
@@ -261,20 +262,39 @@ class FileCellController extends GetxController {
 
     unawaited(Get.dialog(
       SingleButtonDialog(
-        titleText: tr('downloading'),
+        titleText: '${tr('downloading')} ${file.title!}',
         acceptText: tr('cancel'),
         onAcceptTap: () async {
           Get.back();
           await cancelDownloadFile();
         },
-        content: Obx(() {
-          final value = progress.value;
-          return LinearProgressIndicator(
-            value: (value ?? 0) < 5 ? 0.05 : value! / 100,
-            color: Get.theme.colors().primary,
-            backgroundColor: Get.theme.colors().backgroundSecond,
-          );
-        }),
+        content: Padding(
+          padding: const EdgeInsets.only(top: 8),
+          child: Obx(() {
+            final value = progress.value;
+            return Column(
+              children: [
+                LinearProgressIndicator(
+                  value: value / 100,
+                  color: Get.theme.colors().primary,
+                  backgroundColor: Get.theme.colors().backgroundSecond,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8, bottom: 0),
+                  child: Row(
+                    children: [
+                      const Spacer(),
+                      Text(
+                        '$value %',
+                        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            );
+          }),
+        ),
       ),
       barrierDismissible: false,
     ));
