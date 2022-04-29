@@ -86,22 +86,22 @@ class SettingsController extends GetxController {
     appVersion = await _packageInfoService.version;
     buildNumber = await _packageInfoService.buildNumber;
 
-    var themeMode = await _storage.read('themeMode');
+    var themeMode = await _storage.getString('themeMode');
     if (themeMode == null) {
       themeMode = 'sameAsSystem';
-      await _storage.write(themeMode as String, themeMode);
+      await _storage.saveString('themeMode', themeMode);
     }
 
-    final analytics = await _storage.read('shareAnalytics');
+    final analytics = await _storage.getBool('shareAnalytics');
 
     if (analytics == null) {
-      await _storage.write('shareAnalytics', true);
+      await _storage.saveBool('shareAnalytics', true);
       shareAnalytics.value = true;
     } else {
-      shareAnalytics.value = analytics as bool;
+      shareAnalytics.value = analytics;
     }
 
-    currentTheme.value = themeMode as String;
+    currentTheme.value = themeMode;
 
     unawaited(setupCacheDirectorySize());
 
@@ -135,7 +135,7 @@ class SettingsController extends GetxController {
         }
 
         currentTheme.value = themeMode;
-        await _storage.write('themeMode', themeMode);
+        await _storage.saveString('themeMode', themeMode);
 
         Get.rootController.restartApp();
       },
@@ -145,7 +145,7 @@ class SettingsController extends GetxController {
 
   Future<void> changeAnalyticsSharingEnability(bool value) async {
     try {
-      await _storage.write('shareAnalytics', value);
+      await _storage.saveBool('shareAnalytics', value);
       shareAnalytics.value = value;
     } catch (_) {
       await Get.find<ErrorDialog>().show(tr('error'));

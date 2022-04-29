@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/project_service.dart';
@@ -275,7 +277,7 @@ class ProjectsFilterController extends BaseFilterController {
 
   @override
   Future<void> saveFilters() async {
-    await _storage.write(
+    await _storage.saveMapAsJson(
       'projectFilters',
       {
         'projectManager': {'buttons': Map.from(projectManager), 'value': _projectManagerFilter},
@@ -296,7 +298,7 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   Future<void> _getSavedFilters() async {
-    final savedFilters = await _storage.read('projectFilters');
+    final savedFilters = await _storage.getMapAsJson('projectFilters');
 
     if (savedFilters != null) {
       try {

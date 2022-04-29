@@ -288,7 +288,7 @@ class MilestonesFilterController extends BaseFilterController {
       'stopDate': stopDate,
     };
 
-    await _storage.write(
+    await _storage.saveMapAsJson(
       'milestonesFilter',
       {
         'milestoneResponsible': {
@@ -325,7 +325,7 @@ class MilestonesFilterController extends BaseFilterController {
   // UNUSED
   // ignore: unused_element
   Future<void> _getSavedFilters() async {
-    final savedFilters = await _storage.read('milestoneFilters', returnCopy: true);
+    final savedFilters = await _storage.getMapAsJson('milestoneFilters');
 
     if (savedFilters != null) {
       try {

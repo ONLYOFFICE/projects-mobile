@@ -31,30 +31,64 @@
  */
 
 import 'dart:convert';
-import 'package:get_storage/get_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Storage {
-  final _storage = GetStorage();
+  final _storage = SharedPreferences.getInstance();
 
-  // TODO: Future <??>
-  Future read(String key, {bool returnCopy = false}) async {
-    final dynamic data = await _storage.read<dynamic>(key);
+  Future<dynamic> getMapAsJson(String key) async {
+    final prefs = await _storage;
 
-    if (returnCopy) return json.decode(json.encode(data));
+    final data = prefs.getString(key);
+    if (data != null) {
+      final _json = json.decode(data);
 
-    return data;
+      return _json;
+    } else
+      return null;
   }
 
-  // ignore: always_declare_return_types
-  dynamic getValue(String key) => _storage.read<dynamic>(key);
+  Future<bool> saveMapAsJson(String key, Map map) async {
+    final prefs = await _storage;
 
-  Future getKeys() async => await _storage.getKeys();
+    final _json = json.encode(map);
+    final res = await prefs.setString(key, _json);
 
-  Future getValues() async => await _storage.getValues();
+    return res;
+  }
 
-  Future write(String key, dynamic value) async => _storage.write(key, value);
+  Future<bool?> getBool(String key) async {
+    final prefs = await _storage;
+    return prefs.getBool(key);
+  }
 
-  Future<void> remove(String key) async => _storage.remove(key);
+  Future<bool> saveBool(String key, bool value) async {
+    final prefs = await _storage;
+    return await prefs.setBool(key, value);
+  }
 
-  Future<void> removeAll() async => _storage.erase();
+  Future<String?> getString(String key) async {
+    final prefs = await _storage;
+    return prefs.getString(key);
+  }
+
+  Future<bool> saveString(String key, String value) async {
+    final prefs = await _storage;
+    return await prefs.setString(key, value);
+  }
+
+  Future<dynamic> getValue(String key) async {
+    final prefs = await _storage;
+    return prefs.get(key);
+  }
+
+  Future<bool> remove(String key) async {
+    final prefs = await _storage;
+    return await prefs.remove(key);
+  }
+
+  Future<bool> removeAll() async {
+    final prefs = await _storage;
+    return await prefs.clear();
+  }
 }
