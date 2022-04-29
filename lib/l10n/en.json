@@ -496,5 +496,7 @@
 	"openFileError": "Невозможно открыть файл",
 	"cancelDownload": "Отменить скачивание",
 	"downloading": "Downloading",
-	"faceID": "Open with Face ID"
+	"faceID": "Open with Face ID",
+	"subtaskDeleted": "Subtask deleted",
+	"newProject": "New Project"
 }

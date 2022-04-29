@@ -103,7 +103,7 @@ class SubtaskController extends GetxController {
     if (result != null) {
       locator<EventHub>().fire('needToRefreshParentTask', [taskId]);
 
-      MessagesHandler.showSnackBar(context: Get.context!, text: 'Subtask deleted');
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('subtaskDeleted'));
       if (closePage) Get.back();
     } else
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
