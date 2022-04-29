@@ -172,7 +172,7 @@ class _TagTextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final errorColor = Theme.of(context).errorColor;
     return Container(
-      constraints: const BoxConstraints(maxWidth: 300),
+      constraints: const BoxConstraints(minWidth: 300, maxWidth: 300),
       margin: const EdgeInsets.only(top: 10),
       child: PlatformTextField(
         makeCupertinoDecorationNull: true,
