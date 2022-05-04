@@ -30,8 +30,6 @@
  *
  */
 
-import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/project_service.dart';
