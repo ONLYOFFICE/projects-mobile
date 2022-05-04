@@ -52,9 +52,9 @@ class ColorThemeSelectionScreen extends StatelessWidget {
 
     return Obx(
       () => Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('colorTheme'),
           onLeadingPressed: () => controller.back(),
         ),
@@ -87,10 +87,10 @@ class ColorThemeSelectionScreen extends StatelessWidget {
             : SettingsList(
                 darkTheme: const SettingsThemeData().copyWith(
                   settingsListBackground: platformController.isMobile
-                      ? Get.theme.colors().backgroundSecond
-                      : Get.theme.colors().surface,
+                      ? Theme.of(context).colors().backgroundSecond
+                      : Theme.of(context).colors().surface,
                   settingsSectionBackground:
-                      platformController.isMobile ? null : Get.theme.colors().bgDescription,
+                      platformController.isMobile ? null : Theme.of(context).colors().bgDescription,
                 ),
                 applicationType: ApplicationType.cupertino,
                 sections: [
@@ -101,13 +101,14 @@ class ColorThemeSelectionScreen extends StatelessWidget {
                         title: Text(
                           tr('sameAsSystem'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                         trailing: controller.currentTheme.value == 'sameAsSystem'
                             ? Icon(
                                 PlatformIcons(context).checkMark,
                                 size: 20,
-                                color: Get.theme.colors().primary,
+                                color: Theme.of(context).colors().primary,
                               )
                             : null,
                       ),
@@ -116,13 +117,14 @@ class ColorThemeSelectionScreen extends StatelessWidget {
                         title: Text(
                           tr('lightTheme'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                         trailing: controller.currentTheme.value == 'lightTheme'
                             ? Icon(
                                 PlatformIcons(context).checkMark,
                                 size: 20,
-                                color: Get.theme.colors().primary,
+                                color: Theme.of(context).colors().primary,
                               )
                             : null,
                       ),
@@ -131,13 +133,14 @@ class ColorThemeSelectionScreen extends StatelessWidget {
                         title: Text(
                           tr('darkTheme'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                         trailing: controller.currentTheme.value == 'darkTheme'
                             ? Icon(
                                 PlatformIcons(context).checkMark,
                                 size: 20,
-                                color: Get.theme.colors().primary,
+                                color: Theme.of(context).colors().primary,
                               )
                             : null,
                       ),
@@ -174,7 +177,7 @@ class _ColorThemeTile extends StatelessWidget {
             if (isSelected!)
               Icon(
                 PlatformIcons(context).checkMark,
-                color: Get.theme.colors().onBackground.withOpacity(0.6),
+                color: Theme.of(context).colors().onBackground.withOpacity(0.6),
               )
           ],
         ),

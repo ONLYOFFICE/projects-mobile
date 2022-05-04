@@ -51,11 +51,12 @@ class FiltersButton extends StatelessWidget {
           height: 24,
           icon: controller.filterController.hasFilters == false
               ? SvgIcons.preferences
-              : Get.theme.brightness == Brightness.dark
+              : Theme.of(context).brightness == Brightness.dark
                   ? SvgIcons.preferences_active_dark_theme
                   : SvgIcons.preferences_active,
-          color:
-              controller.filterController.hasFilters == false ? Get.theme.colors().primary : null,
+          color: controller.filterController.hasFilters == false
+              ? Theme.of(context).colors().primary
+              : null,
         ),
       ),
     );

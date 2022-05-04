@@ -54,19 +54,19 @@ class AnalyticsScreen extends StatelessWidget {
     if (GetPlatform.isAndroid) {
       if (platformController.isMobile) {
         Theme.of(context).brightness == Brightness.dark
-            ? backgroundColor = Get.theme.colors().background
-            : backgroundColor = Get.theme.colors().surface;
+            ? backgroundColor = Theme.of(context).colors().background
+            : backgroundColor = Theme.of(context).colors().surface;
       } else {
-        backgroundColor = Get.theme.colors().surface;
+        backgroundColor = Theme.of(context).colors().surface;
       }
     } else {
       if (platformController.isMobile) {
         Theme.of(context).brightness == Brightness.dark
-            ? backgroundColor = Get.theme.colors().backgroundSecond
+            ? backgroundColor = Theme.of(context).colors().backgroundSecond
             : backgroundColor = CupertinoColors.systemGrey6;
       } else {
         Theme.of(context).brightness == Brightness.dark
-            ? backgroundColor = Get.theme.colors().surface
+            ? backgroundColor = Theme.of(context).colors().surface
             : backgroundColor = CupertinoColors.systemGrey6;
       }
     }
@@ -77,7 +77,7 @@ class AnalyticsScreen extends StatelessWidget {
       backgroundColor: backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('analytics'),
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         onLeadingPressed: () => controller.back(),
       ),
       body: GetPlatform.isAndroid
@@ -90,7 +90,8 @@ class AnalyticsScreen extends StatelessWidget {
                     title: tr('shareAnalytics'),
                     switchOnChanged: controller.changeAnalyticsSharingEnability,
                     switchValue: controller.shareAnalytics,
-                    style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                    style:
+                        TextStyleHelper.subtitle1(color: Theme.of(context).colors().onBackground),
                   ),
                   Padding(
                       padding: const EdgeInsets.only(top: 2),
@@ -108,10 +109,11 @@ class AnalyticsScreen extends StatelessWidget {
                       shrinkWrap: true,
                       darkTheme: const SettingsThemeData().copyWith(
                         settingsListBackground: platformController.isMobile
-                            ? Get.theme.colors().backgroundSecond
-                            : Get.theme.colors().surface,
-                        settingsSectionBackground:
-                            platformController.isMobile ? null : Get.theme.colors().bgDescription,
+                            ? Theme.of(context).colors().backgroundSecond
+                            : Theme.of(context).colors().surface,
+                        settingsSectionBackground: platformController.isMobile
+                            ? null
+                            : Theme.of(context).colors().bgDescription,
                       ),
                       applicationType: ApplicationType.cupertino,
                       sections: [
@@ -129,7 +131,7 @@ class AnalyticsScreen extends StatelessWidget {
                               title: Text(
                                 tr('shareAnalytics'),
                               ),
-                              activeSwitchColor: Get.theme.colors().primary,
+                              activeSwitchColor: Theme.of(context).colors().primary,
                             ),
                           ],
                         )

@@ -58,7 +58,7 @@ class DiscussionSubscribersTile extends StatelessWidget {
             ? tr('addSubscribers')
             : plural('subscribersPlural', controller.subscribers.length),
         isSelected: controller.subscribers.isNotEmpty,
-        selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
+        selectedIconColor: Theme.of(context).colors().onSurface.withOpacity(0.8),
         onTap: () {
           Get.find<NavigationController>().toScreen(
             controller is NewDiscussionController

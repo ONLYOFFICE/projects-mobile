@@ -54,9 +54,9 @@ class NewCommentView extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('newComment'),
           backButtonIcon: platformController.isMobile
               ? const BackButtonIcon()

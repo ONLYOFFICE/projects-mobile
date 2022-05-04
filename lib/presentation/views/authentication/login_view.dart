@@ -69,7 +69,7 @@ class LoginView extends StatelessWidget {
     title: Platform.isAndroid
         ? Text(
             tr('addNewAccount'),
-            style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.headline6(color: Theme.of(Get.context!).colors().onSurface),
           )
         : null,
     titleHeight: Platform.isIOS ? 50 : 56,
@@ -104,10 +104,11 @@ class LoginView extends StatelessWidget {
                   children: [
                     const Spacer(flex: 2),
                     Text('${tr('portalAdress')}:',
-                        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
+                        style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface)),
                     const SizedBox(height: 8),
                     Text(controller.portalAdress,
-                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+                        style:
+                            TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
                     const Spacer(),
                     Obx(
                       () => Form(
@@ -154,7 +155,7 @@ class LoginView extends StatelessWidget {
                       child: Text(
                         tr('forgotPassword'),
                         style: TextStyleHelper.subtitle2(
-                          color: Get.theme.colors().primary,
+                          color: Theme.of(context).colors().primary,
                         ),
                       ),
                     ),

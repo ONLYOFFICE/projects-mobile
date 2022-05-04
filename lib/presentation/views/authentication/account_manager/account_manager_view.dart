@@ -57,7 +57,7 @@ class AccountManagerView extends StatelessWidget {
 
     return Scaffold(
       //TODO fix background colors for tablet
-      // backgroundColor: Get.theme.colors().backgroundSecond,
+      // backgroundColor: Theme.of(context).colors().backgroundSecond,
       body: Center(
         child: Container(
           constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
@@ -73,7 +73,7 @@ class AccountManagerView extends StatelessWidget {
                 SizedBox(height: Get.height * 0.01),
                 AppIcon(
                   icon: SvgIcons.app_title,
-                  color: Get.theme.colors().onSurface,
+                  color: Theme.of(context).colors().onSurface,
                 ),
                 if (orientation == Orientation.portrait)
                   SizedBox(height: Get.height * 0.06)
@@ -126,7 +126,7 @@ class _NewAccountButton extends StatelessWidget {
               width: 72,
               child: Icon(
                 Icons.add,
-                color: Get.theme.colors().primary,
+                color: Theme.of(context).colors().primary,
               ),
             ),
             Expanded(
@@ -141,7 +141,8 @@ class _NewAccountButton extends StatelessWidget {
                         Text(
                           tr('addNewAccount'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                          style:
+                              TextStyleHelper.subtitle1(color: Theme.of(context).colors().primary),
                         ),
                       ],
                     ),

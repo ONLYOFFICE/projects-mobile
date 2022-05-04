@@ -100,8 +100,8 @@ class _DescriptionTileState extends State<DescriptionTile> with TickerProviderSt
         // ignore: omit_local_variable_types
         final _isNotEmpty = widget.controller!.descriptionText.value.isNotEmpty;
         final _color = _isNotEmpty
-            ? Get.theme.colors().onBackground
-            : Get.theme.colors().onBackground.withOpacity(0.4);
+            ? Theme.of(context).colors().onBackground
+            : Theme.of(context).colors().onBackground.withOpacity(0.4);
         final text = widget.controller!.descriptionText.value;
         final textSize = _textSize(text, TextStyleHelper.subtitle1());
 
@@ -133,7 +133,10 @@ class _DescriptionTileState extends State<DescriptionTile> with TickerProviderSt
                               if (_isNotEmpty)
                                 Text('${tr('description')}:',
                                     style: TextStyleHelper.caption(
-                                        color: Get.theme.colors().onBackground.withOpacity(0.75))),
+                                        color: Theme.of(context)
+                                            .colors()
+                                            .onBackground
+                                            .withOpacity(0.75))),
                               Flexible(
                                 child: Text(_isNotEmpty ? text : tr('addDescription'),
                                     style: TextStyleHelper.subtitle1(color: _color)),
@@ -151,7 +154,7 @@ class _DescriptionTileState extends State<DescriptionTile> with TickerProviderSt
                               child: Icon(
                                 PlatformIcons(context).rightChevron,
                                 size: 24,
-                                color: Get.theme.colors().onBackground,
+                                color: Theme.of(context).colors().onBackground,
                               ),
                             ),
                             onPressed: changeExpansion,

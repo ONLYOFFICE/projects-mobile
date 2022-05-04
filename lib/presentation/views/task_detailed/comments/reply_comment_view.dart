@@ -79,9 +79,9 @@ class ReplyCommentView extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('newComment'),
           onLeadingPressed: controller.leavePage,
           actions: [
@@ -118,8 +118,8 @@ class ReplyCommentView extends StatelessWidget {
                       children: [
                         if (comment.userFullName != null)
                           Text(comment.userFullName!,
-                              style:
-                                  TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface)),
+                              style: TextStyleHelper.subtitle1(
+                                  color: Theme.of(context).colors().onSurface)),
                         Text(
                           parseHtml(comment.commentBody),
                           maxLines: 1,

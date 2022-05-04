@@ -44,17 +44,17 @@ class _DueDate extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('overdue'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.deadline['overdue'] as bool,
               onTap: () => filterController.changeDeadline('overdue')),
           FilterElement(
               title: tr('today'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.deadline['today'] as bool,
               onTap: () => filterController.changeDeadline('today')),
           FilterElement(
               title: tr('upcoming'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.deadline['upcoming'] as bool,
               onTap: () => filterController.changeDeadline('upcoming')),
           FilterElement(

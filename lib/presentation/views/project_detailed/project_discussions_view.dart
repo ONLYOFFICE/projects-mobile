@@ -62,7 +62,7 @@ class ProjectDiscussionsScreen extends StatelessWidget {
                   onPressed: controller.toNewDiscussionScreen,
                   child: AppIcon(
                     icon: SvgIcons.add_discussion,
-                    color: Get.theme.colors().onPrimarySurface,
+                    color: Theme.of(context).colors().onPrimarySurface,
                   ),
                 ),
               ),

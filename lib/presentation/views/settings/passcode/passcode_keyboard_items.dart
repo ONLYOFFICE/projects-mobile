@@ -118,7 +118,7 @@ class PasscodeNumber extends StatelessWidget {
           child: Text(
             number.toString(),
             style: TextStyleHelper.headline4(
-              color: Get.theme.colors().onBackground,
+              color: Theme.of(context).colors().onBackground,
             ).copyWith(height: 1),
           ),
         ),
@@ -145,7 +145,7 @@ class DeleteButton extends StatelessWidget {
         child: Center(
           child: AppIcon(
             icon: SvgIcons.delete_number,
-            color: Get.theme.colors().onBackground,
+            color: Theme.of(context).colors().onBackground,
           ),
         ),
       ),

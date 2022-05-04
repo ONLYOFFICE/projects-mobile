@@ -49,7 +49,7 @@ class FiltersRow extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16, bottom: 20),
           child: Text(
             title!,
-            style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
           ),
         ),
         Padding(

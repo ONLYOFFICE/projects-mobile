@@ -76,7 +76,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
                   ),
                   child: AppIcon(
                     icon: SvgIcons.fab_milestone,
-                    color: Get.theme.colors().onPrimarySurface,
+                    color: Theme.of(context).colors().onPrimarySurface,
                   ),
                 ),
               ),

@@ -136,19 +136,19 @@ class _CountryWithCodeTile extends StatelessWidget {
                   child: showFirstLetter
                       ? Text(country.countryName![0],
                           style: TextStyleHelper.headline6(
-                              color: Get.theme.colors().onBackground.withOpacity(0.6)))
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.6)))
                       : null,
                 ),
                 Expanded(
                   child: Text(
                     country.countryName!,
-                    style: TextStyleHelper.body2(color: Get.theme.colors().onBackground),
+                    style: TextStyleHelper.body2(color: Theme.of(context).colors().onBackground),
                   ),
                 ),
                 Text(
                   '+ ${country.phoneCode}',
                   style: TextStyleHelper.subtitle2(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
                 ),
               ],
             ),

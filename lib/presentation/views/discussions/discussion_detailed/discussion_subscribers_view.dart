@@ -97,7 +97,7 @@ class DiscussionSubscribersView extends StatelessWidget {
                         onPressed: () => controller.toSubscribersManagingScreen(context),
                         child: AppIcon(
                           icon: SvgIcons.add_fab,
-                          color: Get.theme.colors().onPrimarySurface,
+                          color: Theme.of(context).colors().onPrimarySurface,
                         ),
                       ),
                     ),

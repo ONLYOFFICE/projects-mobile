@@ -62,22 +62,22 @@ class ConfirmFiltersButton extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
             material: (context, platform) => MaterialTextButtonData(
               style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.resolveWith<Color>((_) => Get.theme.colors().primary),
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                    (_) => Theme.of(context).colors().primary),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                 ),
               ),
             ),
             cupertino: (context, platform) => CupertinoTextButtonData(
-                color: Get.theme.colors().primary, borderRadius: BorderRadius.circular(6)),
+                color: Theme.of(context).colors().primary, borderRadius: BorderRadius.circular(6)),
             child: Text(filterController.filtersTitle,
                 textAlign: TextAlign.center,
                 // tr('filterConfirmButton', args: [
                 //   filterController.suitableResultCount.value.toString(),
                 //   filterController.filtersTitle
                 // ]),
-                style: TextStyleHelper.body2(color: Get.theme.colors().onNavBar)),
+                style: TextStyleHelper.body2(color: Theme.of(context).colors().onNavBar)),
           ),
         ),
       ),

@@ -21,7 +21,7 @@ class ResetFiltersButton extends StatelessWidget {
             onPressed: filterController.resetFilters,
             child: Text(
               tr('reset'),
-              style: TextStyleHelper.button(color: Get.theme.colors().systemBlue),
+              style: TextStyleHelper.button(color: Theme.of(context).colors().systemBlue),
             ),
           ),
           cupertino: (platformContext, __) => CupertinoButton(

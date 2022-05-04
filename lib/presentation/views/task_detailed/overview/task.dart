@@ -50,7 +50,7 @@ class _Task extends StatelessWidget {
                 width: 72,
                 child: AppIcon(
                   icon: SvgIcons.tab_bar_tasks,
-                  color: Get.theme.colors().onBackground.withOpacity(0.6),
+                  color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                 ),
               ),
             ),
@@ -63,7 +63,7 @@ class _Task extends StatelessWidget {
                     Text(
                       tr('task'),
                       style: TextStyleHelper.overline(
-                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
                     ),
                     Obx(
                       () => Text(
@@ -71,7 +71,7 @@ class _Task extends StatelessWidget {
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyleHelper.headline6(
-                          color: Get.theme.colors().onSurface,
+                          color: Theme.of(context).colors().onSurface,
                         ),
                       ),
                     ),

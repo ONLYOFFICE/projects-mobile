@@ -61,15 +61,15 @@ class CustomTab extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: currentTab
-                    ? Get.theme.colors().primary
-                    : Get.theme.colors().onSurface.withOpacity(0.25),
+                    ? Theme.of(context).colors().primary
+                    : Theme.of(context).colors().onSurface.withOpacity(0.25),
               ),
               child: Text(
                 count.toString(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
-                  color: Get.theme.colors().surface,
+                  color: Theme.of(context).colors().surface,
                   letterSpacing: 0.1,
                 ),
               ),

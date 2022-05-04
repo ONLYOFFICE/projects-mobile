@@ -63,13 +63,13 @@ class SubtaskCheckBox extends StatelessWidget {
             return Icon(
               PlatformIcons(context).checked,
               color: !subtaskController.canEdit
-                  ? Get.theme.colors().inactiveGrey
-                  : Get.theme.colors().primary,
+                  ? Theme.of(context).colors().inactiveGrey
+                  : Theme.of(context).colors().primary,
             );
           else
             return Icon(
               PlatformIcons(context).unchecked,
-              color: Get.theme.colors().inactiveGrey,
+              color: Theme.of(context).colors().inactiveGrey,
             );
         }),
       ),

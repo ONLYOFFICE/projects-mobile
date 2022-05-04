@@ -136,8 +136,8 @@ class ProjectIcon extends StatelessWidget {
           const SizedBox(width: 16),
           Obx(() {
             final color = itemController.canEdit.value == true
-                ? Get.theme.colors().primary
-                : Get.theme.colors().onBackground;
+                ? Theme.of(context).colors().primary
+                : Theme.of(context).colors().onBackground;
             final statusImage = itemController.statusImageString.value;
             return Stack(
               alignment: Alignment.center,
@@ -159,9 +159,9 @@ class ProjectIcon extends StatelessWidget {
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 1,
-                        color: Get.theme.colors().primary.withOpacity(0.1),
+                        color: Theme.of(context).colors().primary.withOpacity(0.1),
                       ),
-                      color: Get.theme.colors().background,
+                      color: Theme.of(context).colors().background,
                       shape: BoxShape.circle,
                     ),
                     child: const Padding(
@@ -205,14 +205,14 @@ class _Content extends StatelessWidget {
           () {
             TextStyle style;
             if (itemController.status.value == 1) {
-              style =
-                  TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.6))
-                      .copyWith(decoration: TextDecoration.lineThrough);
+              style = TextStyleHelper.subtitle1(
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.6))
+                  .copyWith(decoration: TextDecoration.lineThrough);
             } else if (itemController.status.value == 2) {
-              style =
-                  TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.6));
+              style = TextStyleHelper.subtitle1(
+                  color: Theme.of(context).colors().onSurface.withOpacity(0.6));
             } else {
-              style = TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface);
+              style = TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface);
             }
             return CellAtributedTitle(
               text: itemController.projectData.title,
@@ -226,8 +226,8 @@ class _Content extends StatelessWidget {
           children: [
             Obx(() {
               final color = itemController.canEdit.value == true
-                  ? Get.theme.colors().primary
-                  : Get.theme.colors().onBackground;
+                  ? Theme.of(context).colors().primary
+                  : Theme.of(context).colors().onBackground;
               final status = itemController.statusNameString.value;
               return Text(
                 status,
@@ -235,14 +235,14 @@ class _Content extends StatelessWidget {
               );
             }),
             Text(' • ',
-                style:
-                    TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                style: TextStyleHelper.caption(
+                    color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
             Flexible(
               child: Text(NameFormatter.formateName(itemController.projectData.responsible!)!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyleHelper.caption(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
             ),
           ],
         ),
@@ -265,7 +265,7 @@ class _Suffix extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        AppIcon(icon: SvgIcons.check_square, color: Get.theme.colors().onSurface),
+        AppIcon(icon: SvgIcons.check_square, color: Theme.of(context).colors().onSurface),
         const SizedBox(width: 3),
         SizedBox(
           width: 20,
@@ -274,7 +274,7 @@ class _Suffix extends StatelessWidget {
               projectController.taskCount.value.toString(),
               overflow: TextOverflow.ellipsis,
               style: TextStyleHelper.body2(
-                color: Get.theme.colors().onSurface.withOpacity(0.6),
+                color: Theme.of(context).colors().onSurface.withOpacity(0.6),
               ),
             ),
           ),
@@ -293,12 +293,12 @@ void showsStatusesBS(
     headerHeight: 60,
     initHeight: _getInitialSize(statusCount: _statusesController.statuses.length),
     decoration: BoxDecoration(
-        color: Get.theme.colors().surface,
+        color: Theme.of(context).colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) {
       return Container(
         decoration: BoxDecoration(
-            color: Get.theme.colors().surface,
+            color: Theme.of(context as BuildContext).colors().surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -307,7 +307,7 @@ void showsStatusesBS(
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Text(tr('selectStatus'),
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
             ),
           ],
         ),
@@ -320,7 +320,9 @@ void showsStatusesBS(
             () => DecoratedBox(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(width: 1, color: Get.theme.colors().outline.withOpacity(0.5)),
+                  top: BorderSide(
+                      width: 1,
+                      color: Theme.of(context as BuildContext).colors().outline.withOpacity(0.5)),
                 ),
               ),
               child: Column(
@@ -340,8 +342,8 @@ void showsStatusesBS(
                           icon: AppIcon(
                               icon: _statusesController.getStatusImageString(i),
                               color: itemController.projectData!.canEdit!
-                                  ? Get.theme.colors().primary
-                                  : Get.theme.colors().onBackground),
+                                  ? Theme.of(context).colors().primary
+                                  : Theme.of(context).colors().onBackground),
                           selected: _statusesController.statuses[i] ==
                               itemController.projectData!.status!),
                     ),
@@ -386,8 +388,8 @@ void showsStatusesPM(
               trailingIcon: AppIcon(
                 icon: _statusesController.getStatusImageString(i),
                 color: itemController.projectData!.canEdit!
-                    ? Get.theme.colors().primary
-                    : Get.theme.colors().onBackground,
+                    ? Theme.of(context).colors().primary
+                    : Theme.of(context).colors().onBackground,
               ),
               child: StatusTileTablet(
                 title: _statusesController.getStatusName(i),

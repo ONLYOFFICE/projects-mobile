@@ -80,7 +80,7 @@ mixin PasscodeScreenMixin on StatelessWidget {
             children: [
               Text(title,
                   textAlign: TextAlign.center,
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground)),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onBackground)),
               SizedBox(
                   height: h(72),
                   child: Obx(() {
@@ -89,12 +89,13 @@ mixin PasscodeScreenMixin on StatelessWidget {
                       if (hasError.isTrue)
                         Text(errorText!,
                             textAlign: TextAlign.center,
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError)),
+                            style: TextStyleHelper.subtitle1(
+                                color: Theme.of(context).colors().colorError)),
                       if (hasError.isFalse && caption != null)
                         Text(caption!,
                             textAlign: TextAlign.center,
                             style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().onBackground.withOpacity(0.6))),
+                                color: Theme.of(context).colors().onBackground.withOpacity(0.6))),
                       const Flexible(flex: 2, child: SizedBox(height: 32)),
                     ]);
                   })),

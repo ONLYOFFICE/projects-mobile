@@ -35,6 +35,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
@@ -196,7 +197,7 @@ class DiscussionItemController extends GetxController {
       titleText: tr('deleteDiscussionTitle'),
       contentText: tr('deleteDiscussionAlert'),
       acceptText: tr('delete').toUpperCase(),
-      acceptColor: Get.theme.colors().colorError,
+      acceptColor: Theme.of(Get.context!).colors().colorError,
       onCancelTap: () async => Get.back(),
       onAcceptTap: () async {
         try {

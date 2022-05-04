@@ -44,12 +44,12 @@ class DefaultAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       radius: radius,
-      backgroundColor: Get.theme.colors().bgDescription,
+      backgroundColor: Theme.of(context).colors().bgDescription,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius),
         child: AppIcon(
           icon: SvgIcons.avatar,
-          color: Get.theme.colors().onSurface,
+          color: Theme.of(context).colors().onSurface,
         ),
       ),
     );

@@ -56,9 +56,9 @@ class TaskDescription extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('description'),
           onLeadingPressed: () =>
               controller.leaveDescriptionView(controller.descriptionController.value.text),
@@ -76,18 +76,18 @@ class TaskDescription extends StatelessWidget {
             controller: controller.descriptionController.value,
             autofocus: true,
             maxLines: null,
-            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
             hintText: tr('taskDescription'),
             cupertino: (_, __) => CupertinoTextFieldData(
               placeholderStyle: TextStyleHelper.subtitle1(
-                color: Get.theme.colors().onSurface.withOpacity(0.4),
+                color: Theme.of(context).colors().onSurface.withOpacity(0.4),
               ),
             ),
             material: (_, __) => MaterialTextFieldData(
               decoration: InputDecoration.collapsed(
                 hintText: tr('taskDescription'),
                 hintStyle: TextStyleHelper.subtitle1(
-                  color: Get.theme.colors().onSurface.withOpacity(0.4),
+                  color: Theme.of(context).colors().onSurface.withOpacity(0.4),
                 ),
               ),
             ),

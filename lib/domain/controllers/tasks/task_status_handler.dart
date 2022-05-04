@@ -44,17 +44,17 @@ class TaskStatusHandler {
 
   Color getBackgroundColor(Status status, bool canEdit) {
     if (status.isNull) throw Exception('STATUS IS NULL');
-    if (!canEdit) return Get.theme.colors().onBackground.withOpacity(0.05);
-    if (status.id! < 0) return Get.theme.colors().primary.withOpacity(0.1);
+    if (!canEdit) return Theme.of(Get.context!).colors().onBackground.withOpacity(0.05);
+    if (status.id! < 0) return Theme.of(Get.context!).colors().primary.withOpacity(0.1);
 
-    return Get.theme.colors().onBackground.withOpacity(0.05);
+    return Theme.of(Get.context!).colors().onBackground.withOpacity(0.05);
   }
 
   Color getTextColor(Status status, bool canEdit) {
     if (status.isNull) throw Exception('STATUS IS NULL');
-    if (!canEdit) return Get.theme.colors().onSurface.withOpacity(0.75);
-    if (status.id! < 0) return Get.theme.colors().primary;
+    if (!canEdit) return Theme.of(Get.context!).colors().onSurface.withOpacity(0.75);
+    if (status.id! < 0) return Theme.of(Get.context!).colors().primary;
 
-    return status.color?.toColor() ?? Get.theme.colors().primary;
+    return status.color?.toColor() ?? Theme.of(Get.context!).colors().primary;
   }
 }

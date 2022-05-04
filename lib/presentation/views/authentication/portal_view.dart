@@ -89,7 +89,7 @@ class PortalInputView extends StatelessWidget {
               title: Platform.isAndroid
                   ? Text(
                       tr('addNewAccount'),
-                      style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                      style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
                     )
                   : null,
             ),
@@ -113,7 +113,7 @@ class PortalInputView extends StatelessWidget {
                   const SizedBox(height: 10),
                   AppIcon(
                     icon: SvgIcons.app_title,
-                    color: Get.theme.colors().onSurface,
+                    color: Theme.of(context).colors().onSurface,
                   ),
                   const Spacer(),
                   Obx(
@@ -130,10 +130,10 @@ class PortalInputView extends StatelessWidget {
                   WideButton(
                     text: tr('next'),
                     textColor: controller.needAgreement && !controller.checkBoxValue.value
-                        ? Get.theme.colors().onBackground.withOpacity(0.5)
+                        ? Theme.of(context).colors().onBackground.withOpacity(0.5)
                         : null,
                     color: controller.needAgreement && !controller.checkBoxValue.value
-                        ? Get.theme.colors().bgDescription
+                        ? Theme.of(context).colors().bgDescription
                         : null,
                     onPressed: controller.getPortalCapabilities,
                   ),

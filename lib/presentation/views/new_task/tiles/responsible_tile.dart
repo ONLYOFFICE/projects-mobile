@@ -64,8 +64,8 @@ class ResponsibleTile extends StatelessWidget {
           isSelected: _isSelected,
           caption: _isSelected ? '${tr('assignedTo')}:' : null,
           enableBorder: enableUnderline,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground,
           text: _isSelected
               ? controller.responsibles.length == 1
                   ? controller.responsibles[0]?.displayName as String
@@ -74,7 +74,7 @@ class ResponsibleTile extends StatelessWidget {
           suffix: _isSelected
               ? suffixIcon ??
                   Icon(PlatformIcons(context).rightChevron,
-                      size: 24, color: Get.theme.colors().onBackground.withOpacity(0.6))
+                      size: 24, color: Theme.of(context).colors().onBackground.withOpacity(0.6))
               : null,
           suffixPadding: const EdgeInsets.only(right: 8),
           icon: SvgIcons.person,
@@ -112,8 +112,8 @@ class SubtaskResponsibleTile extends StatelessWidget {
           isSelected: _isSelected,
           caption: _isSelected ? '${tr('assignedTo')}:' : null,
           enableBorder: enableUnderline,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground,
           text: _isSelected
               ? controller.responsibles.length == 1
                   ? controller.responsibles[0]?.displayName as String
@@ -122,7 +122,7 @@ class SubtaskResponsibleTile extends StatelessWidget {
           suffix: _isSelected
               ? suffixIcon ??
                   Icon(PlatformIcons(context).rightChevron,
-                      size: 24, color: Get.theme.colors().onBackground.withOpacity(0.6))
+                      size: 24, color: Theme.of(context).colors().onBackground.withOpacity(0.6))
               : null,
           icon: SvgIcons.person,
           onTap: () => Get.find<NavigationController>().toScreen(

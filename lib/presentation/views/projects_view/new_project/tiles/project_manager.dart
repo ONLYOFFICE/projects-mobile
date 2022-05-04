@@ -59,9 +59,10 @@ class ProjectManagerTile extends StatelessWidget {
           caption: _isNotEmpty ? '${tr('projectManager')}:' : null,
           text: _isNotEmpty ? controller.managerName.value : tr('choosePM'),
           icon: SvgIcons.user,
-          textColor: controller.needToFillManager.value ? Get.theme.colors().colorError : null,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
+          textColor:
+              controller.needToFillManager.value ? Theme.of(context).colors().colorError : null,
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(
@@ -69,7 +70,7 @@ class ProjectManagerTile extends StatelessWidget {
                   child: Icon(
                     PlatformIcons(context).clear,
                     size: 24,
-                    color: Get.theme.colors().onBackground.withOpacity(0.6),
+                    color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                   ),
                 )
               : null,

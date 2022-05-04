@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
@@ -94,7 +95,7 @@ class DiscussionCommentsView extends StatelessWidget {
                       onPressed: controller.toNewCommentView,
                       child: AppIcon(
                         icon: SvgIcons.add_fab,
-                        color: Get.theme.colors().onPrimarySurface,
+                        color: Theme.of(context).colors().onPrimarySurface,
                       ),
                     ),
                   ),

@@ -94,7 +94,7 @@ class FileCell extends StatelessWidget {
                         Text(
                             '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',
                             style: TextStyleHelper.caption(
-                                color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                                color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
                       ],
                     ),
                   ),
@@ -104,7 +104,7 @@ class FileCell extends StatelessWidget {
                     onSelected: (dynamic value) =>
                         _onFilePopupMenuSelected(value, documentsController, cellController),
                     icon: Icon(PlatformIcons(context).ellipsis,
-                        color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                        color: Theme.of(context).colors().onSurface.withOpacity(0.5)),
                     itemBuilder: (context) {
                       return [
                         PlatformPopupMenuItem(
@@ -143,8 +143,8 @@ class FileCell extends StatelessWidget {
                           PlatformPopupMenuItem(
                             value: 'delete',
                             isDestructiveAction: true,
-                            textStyle:
-                                TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                            textStyle: TextStyleHelper.subtitle1(
+                                color: Theme.of(context).colors().colorError),
                             child: Text(tr('delete')),
                           ),
                       ];
@@ -162,8 +162,8 @@ class FileCell extends StatelessWidget {
                 final value = cellController.progress.value;
                 return LinearProgressIndicator(
                   value: value / 100,
-                  color: Get.theme.colors().primary,
-                  backgroundColor: Get.theme.colors().backgroundSecond,
+                  color: Theme.of(context).colors().primary,
+                  backgroundColor: Theme.of(context).colors().backgroundSecond,
                 );
               });
             else
@@ -309,30 +309,30 @@ class _NewFileTextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformTextField(
       autofocus: true,
-      style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+      style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface),
       textInputAction: TextInputAction.done,
       controller: inputController,
       makeCupertinoDecorationNull: false,
       hintText: tr('enterFileName'),
       cupertino: (_, __) => CupertinoTextFieldData(
         decoration: BoxDecoration(
-          color: Get.theme.colors().background,
+          color: Theme.of(context).colors().background,
           borderRadius: BorderRadius.circular(5),
         ),
         placeholderStyle: TextStyleHelper.body2(
           color: isErrorInputText.value
-              ? Get.theme.colors().colorError
-              : Get.theme.colors().onSurface.withOpacity(0.5),
+              ? Theme.of(context).colors().colorError
+              : Theme.of(context).colors().onSurface.withOpacity(0.5),
         ),
       ),
       material: (_, __) => MaterialTextFieldData(
         decoration: InputDecoration.collapsed(
           hintText: tr('enterFileName'),
-          fillColor: Get.theme.colors().background,
+          fillColor: Theme.of(context).colors().background,
           hintStyle: TextStyleHelper.body2(
             color: isErrorInputText.value
-                ? Get.theme.colors().colorError
-                : Get.theme.colors().onSurface.withOpacity(0.5),
+                ? Theme.of(context).colors().colorError
+                : Theme.of(context).colors().onSurface.withOpacity(0.5),
           ),
         ),
       ),

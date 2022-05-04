@@ -80,16 +80,16 @@ class SubtaskCell extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: subtaskController.subtask.value!.status == SubtaskStatus.CLOSED
                           ? TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().onBackground.withOpacity(0.4),
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.4),
                             ).copyWith(decoration: TextDecoration.lineThrough)
                           : TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().onBackground.withOpacity(0.87),
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.87),
                             ),
                     ),
                     Text(
                       subtaskController.subtask.value!.responsible?.displayName ?? tr('nobody'),
                       style: TextStyleHelper.caption(
-                        color: Get.theme.colors().onBackground.withOpacity(0.6),
+                        color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                       ),
                     ),
                   ],
@@ -99,7 +99,7 @@ class SubtaskCell extends StatelessWidget {
                 PlatformPopupMenuButton(
                   onSelected: (dynamic value) => _onSelected(context, value, subtaskController),
                   icon: Icon(PlatformIcons(context).ellipsis,
-                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
                       if (subtaskController.canEdit &&
@@ -116,8 +116,8 @@ class SubtaskCell extends StatelessWidget {
                         PlatformPopupMenuItem(
                           value: 'delete',
                           isDestructiveAction: true,
-                          textStyle:
-                              TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                          textStyle: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().colorError),
                           child: Text(tr('delete')),
                         )
                     ];

@@ -54,14 +54,14 @@ class DashboardView extends StatelessWidget {
     final dashboardController = Get.find<DashboardController>(tag: 'DashboardController');
 
     return Scaffold(
-      backgroundColor: Get.theme.colors().background,
+      backgroundColor: Theme.of(context).colors().background,
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             MainAppBar(
               cupertinoTitle: Text(
                 dashboardController.screenName,
-                style: TextStyle(color: Get.theme.colors().onSurface),
+                style: TextStyle(color: Theme.of(context).colors().onSurface),
               ),
               materialTitle: Title(
                 controller: dashboardController,
@@ -136,7 +136,7 @@ class DashboardCardView extends StatelessWidget {
       width: double.maxFinite,
       child: Card(
         elevation: 1,
-        color: Get.theme.colors().surface,
+        color: Theme.of(context).colors().surface,
         child: Column(
           children: <Widget>[
             InkWell(
@@ -156,7 +156,7 @@ class DashboardCardView extends StatelessWidget {
                           Text(
                             overline,
                             style: TextStyleHelper.overline(
-                              color: Get.theme.colors().onSurface.withOpacity(0.6),
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6),
                             ),
                           ),
                           Text(
@@ -172,7 +172,7 @@ class DashboardCardView extends StatelessWidget {
                       height: 28,
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
-                        color: Get.theme.colors().bgDescription,
+                        color: Theme.of(context).colors().bgDescription,
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Center(
@@ -213,7 +213,7 @@ class DashboardCardView extends StatelessWidget {
                                   Text(
                                     tr('dashboardNoActive', args: [overline.toLowerCase()]),
                                     style: TextStyleHelper.subtitle1(
-                                      color: Get.theme.colors().onSurface.withOpacity(0.6),
+                                      color: Theme.of(context).colors().onSurface.withOpacity(0.6),
                                     ),
                                   ),
                                 ],
@@ -269,7 +269,7 @@ class DashboardCardView extends StatelessWidget {
                                                 ? tr('viewAll')
                                                 : tr('viewAll').toUpperCase(),
                                             style: TextStyleHelper.button(
-                                              color: Get.theme.colors().primary,
+                                              color: Theme.of(context).colors().primary,
                                             ),
                                           )
                                         : Text(
@@ -277,7 +277,7 @@ class DashboardCardView extends StatelessWidget {
                                                 ? tr('viewLess')
                                                 : tr('viewLess').toUpperCase(),
                                             style: TextStyleHelper.button(
-                                              color: Get.theme.colors().primary,
+                                              color: Theme.of(context).colors().primary,
                                             ),
                                           ),
                                   ),
@@ -310,7 +310,7 @@ class Title extends StatelessWidget {
           Expanded(
             child: Text(
               controller.screenName,
-              style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+              style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
             ),
           ),
           Row(

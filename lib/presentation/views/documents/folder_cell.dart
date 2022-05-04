@@ -86,7 +86,7 @@ class FolderCell extends StatelessWidget {
                 controller,
               ),
               icon: Icon(PlatformIcons(context).ellipsis,
-                  color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                  color: Theme.of(context).colors().onSurface.withOpacity(0.5)),
               itemBuilder: (context) {
                 return [
                   PlatformPopupMenuItem(
@@ -116,7 +116,8 @@ class FolderCell extends StatelessWidget {
                     PlatformPopupMenuItem(
                       value: 'delete',
                       isDestructiveAction: true,
-                      textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                      textStyle:
+                          TextStyleHelper.subtitle1(color: Theme.of(context).colors().colorError),
                       child: Text(tr('delete')),
                     ),
                 ];
@@ -186,7 +187,7 @@ class FolderCellAvatar extends StatelessWidget {
         child: AppIcon(
           width: 20,
           height: 20,
-          color: Get.theme.colors().onSurface.withOpacity(0.8),
+          color: Theme.of(context).colors().onSurface.withOpacity(0.8),
           icon: SvgIcons.folder,
         ),
       ),
@@ -227,7 +228,7 @@ class FolderCellTitle extends StatelessWidget {
           ),
           // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
           style: TextStyleHelper.caption(
-            color: Get.theme.colors().onSurface.withOpacity(0.6),
+            color: Theme.of(context).colors().onSurface.withOpacity(0.6),
           ),
         ),
       ],
@@ -367,26 +368,26 @@ class _NameFolderTextFieldWidget extends StatelessWidget {
       textInputAction: TextInputAction.done,
       controller: inputController,
       hintText: tr('enterFolderName'),
-      style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+      style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface),
       cupertino: (_, __) => CupertinoTextFieldData(
         decoration: BoxDecoration(
-          color: Get.theme.colors().background,
+          color: Theme.of(context).colors().background,
           borderRadius: BorderRadius.circular(5),
         ),
         placeholderStyle: TextStyleHelper.body2(
           color: isErrorInputText.value
-              ? Get.theme.colors().colorError
-              : Get.theme.colors().onSurface.withOpacity(0.5),
+              ? Theme.of(context).colors().colorError
+              : Theme.of(context).colors().onSurface.withOpacity(0.5),
         ),
       ),
       material: (_, __) => MaterialTextFieldData(
         decoration: InputDecoration.collapsed(
           hintText: tr('enterFolderName'),
-          fillColor: Get.theme.colors().background,
+          fillColor: Theme.of(context).colors().background,
           hintStyle: TextStyleHelper.body2(
             color: isErrorInputText.value
-                ? Get.theme.colors().colorError
-                : Get.theme.colors().onSurface.withOpacity(0.5),
+                ? Theme.of(context).colors().colorError
+                : Theme.of(context).colors().onSurface.withOpacity(0.5),
           ),
         ),
       ),

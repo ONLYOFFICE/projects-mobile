@@ -39,7 +39,8 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = Get.theme.brightness == Brightness.light ? PngIcons.splash : PngIcons.splash_dark;
+    final icon =
+        Theme.of(context).brightness == Brightness.light ? PngIcons.splash : PngIcons.splash_dark;
 
     return Material(
       child: Column(

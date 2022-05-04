@@ -79,7 +79,8 @@ class _CodeViewState extends State<CodeView> {
                     SizedBox(height: Get.height * 0.0347),
                     Text(tr('tfaTitle'),
                         textAlign: TextAlign.center,
-                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+                        style:
+                            TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
                     SizedBox(height: Get.height * 0.0222),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -87,7 +88,7 @@ class _CodeViewState extends State<CodeView> {
                         tr('tfaGAcodeDescription'),
                         textAlign: TextAlign.center,
                         style: TextStyleHelper.body2(
-                            color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                            color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
                       ),
                     ),
                     SizedBox(height: Get.height * 0.0333),

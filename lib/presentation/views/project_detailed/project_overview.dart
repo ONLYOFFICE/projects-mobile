@@ -72,11 +72,11 @@ class ProjectOverview extends StatelessWidget {
                   () => InfoTile(
                     caption: tr('project'),
                     captionStyle: TextStyleHelper.overline(
-                        color: Get.theme.colors().onBackground.withOpacity(0.6)),
+                        color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
                     icon: const AppIcon(icon: SvgIcons.project, color: Color(0xff707070)),
                     subtitle: projectController.projectTitleText.value,
                     subtitleStyle: TextStyleHelper.headline7(
-                      color: Get.theme.colors().onBackground,
+                      color: Theme.of(context).colors().onBackground,
                     ),
                     privateIconVisible: projectController.isPrivate.value,
                   ),
@@ -95,7 +95,7 @@ class ProjectOverview extends StatelessWidget {
                     child: InfoTile(
                       caption: tr('description'),
                       captionStyle: TextStyleHelper.caption(
-                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
                       icon: const AppIcon(icon: SvgIcons.description, color: Color(0xff707070)),
                       subtitleWidget: ReadMoreText(
                         projectController.descriptionText.value,
@@ -106,8 +106,8 @@ class ProjectOverview extends StatelessWidget {
                         delimiter: ' ',
                         trimCollapsedText: tr('showMore'),
                         trimExpandedText: tr('showLess'),
-                        moreStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
-                        lessStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
+                        moreStyle: TextStyleHelper.body2(color: Theme.of(context).colors().links),
+                        lessStyle: TextStyleHelper.body2(color: Theme.of(context).colors().links),
                       ),
                     ),
                   ),
@@ -115,9 +115,10 @@ class ProjectOverview extends StatelessWidget {
                       icon: const AppIcon(icon: SvgIcons.user, color: Color(0xff707070)),
                       caption: tr('projectManager'),
                       captionStyle: TextStyleHelper.caption(
-                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
                       subtitle: projectController.managerText.value,
-                      subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                      subtitleStyle:
+                          TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
                     )),
                 const SizedBox(height: 20),
                 Obx(
@@ -132,11 +133,12 @@ class ProjectOverview extends StatelessWidget {
                       },
                       caption: tr('team'),
                       captionStyle: TextStyleHelper.caption(
-                          color: Get.theme.colors().onBackground.withOpacity(0.6)),
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
                       iconData: PlatformIcons(context).rightChevron,
                       subtitle: plural(
                           'members', projectController.projectTeamDataSource!.usersList.length),
-                      subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                      subtitleStyle:
+                          TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
                     ),
                   ),
                 ),
@@ -145,7 +147,7 @@ class ProjectOverview extends StatelessWidget {
                     icon: const AppIcon(icon: SvgIcons.calendar, color: Color(0xff707070)),
                     caption: tr('creationDate'),
                     captionStyle: TextStyleHelper.caption(
-                        color: Get.theme.colors().onBackground.withOpacity(0.6)),
+                        color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
                     subtitle: projectController.creationDateText.value)),
                 const SizedBox(height: 20),
                 Obx(() {
@@ -154,7 +156,7 @@ class ProjectOverview extends StatelessWidget {
                         icon: const AppIcon(icon: SvgIcons.tag, color: Color(0xff707070)),
                         caption: tr('tags'),
                         captionStyle: TextStyleHelper.caption(
-                            color: Get.theme.colors().onBackground.withOpacity(0.6)),
+                            color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
                         subtitle: projectController.tagsText.value);
                   return const SizedBox();
                 })
@@ -185,14 +187,14 @@ class ProjectStatusButton extends StatelessWidget {
           style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
         return canEdit
             ? const Color(0xff81C4FF).withOpacity(0.2)
-            : Get.theme.colors().bgDescription;
+            : Theme.of(context).colors().bgDescription;
       }), side: MaterialStateProperty.resolveWith((_) {
         return const BorderSide(color: Colors.transparent, width: 0);
       }))),
       cupertino: (_, __) => CupertinoTextButtonData(
           color: canEdit
               ? const Color(0xff81C4FF).withOpacity(0.2)
-              : Get.theme.colors().bgDescription),
+              : Theme.of(context).colors().bgDescription),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -202,8 +204,8 @@ class ProjectStatusButton extends StatelessWidget {
                 projectController.statusText.value,
                 style: TextStyleHelper.subtitle2(
                   color: canEdit
-                      ? Get.theme.colors().primary
-                      : Get.theme.colors().onBackground.withOpacity(0.75),
+                      ? Theme.of(context).colors().primary
+                      : Theme.of(context).colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
@@ -214,7 +216,7 @@ class ProjectStatusButton extends StatelessWidget {
               padding: const EdgeInsets.only(top: 2),
               child: Icon(
                 PlatformIcons(context).downChevron,
-                color: Get.theme.colors().primary,
+                color: Theme.of(context).colors().primary,
                 size: 19,
               ),
             )

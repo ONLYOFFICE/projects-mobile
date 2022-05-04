@@ -44,7 +44,7 @@ class _TeamMember extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('me'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.teamMember['me'] as bool,
               onTap: () => filterController.changeTeamMember('me')),
           FilterElement(

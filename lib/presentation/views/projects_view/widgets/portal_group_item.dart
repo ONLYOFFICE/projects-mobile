@@ -66,7 +66,7 @@ class PortalGroupItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Icon(
                   PlatformIcons(context).checked,
-                  color: Get.theme.colors().primary,
+                  color: Theme.of(context).colors().primary,
                 ),
               );
             else
@@ -74,7 +74,7 @@ class PortalGroupItem extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Icon(
                   PlatformIcons(context).unchecked,
-                  color: Get.theme.colors().inactiveGrey,
+                  color: Theme.of(context).colors().inactiveGrey,
                 ),
               );
           }),
@@ -82,11 +82,12 @@ class PortalGroupItem extends StatelessWidget {
             height: 40,
             width: 40,
             decoration: BoxDecoration(
-                shape: BoxShape.circle, color: Get.theme.colors().onSurface.withOpacity(0.06)),
+                shape: BoxShape.circle,
+                color: Theme.of(context).colors().onSurface.withOpacity(0.06)),
             child: Center(
               child: AppIcon(
                 icon: SvgIcons.group,
-                color: Get.theme.colors().onSurface.withOpacity(0.4),
+                color: Theme.of(context).colors().onSurface.withOpacity(0.4),
                 height: 22,
                 width: 14,
               ),

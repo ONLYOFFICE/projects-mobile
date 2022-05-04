@@ -71,9 +71,9 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         title: AppBarTitleWithSearch(
           appBarText: appBarText,
           searchController: searchController,
@@ -114,10 +114,10 @@ mixin SelectItemMixin on StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
         titleText: appBarText,
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         onLeadingPressed: onLeadingPressed,
       ),
       body: Obx(

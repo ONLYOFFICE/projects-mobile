@@ -64,18 +64,21 @@ class FilterElement extends StatelessWidget {
         cupertino: (_, __) => CupertinoTextButtonData(
           padding: const EdgeInsets.only(top: 5, bottom: 6, left: 12, right: 12),
           borderRadius: BorderRadius.circular(16),
-          color: isSelected ? Get.theme.colors().primary : Get.theme.colors().bgDescription,
+          color: isSelected
+              ? Theme.of(context).colors().primary
+              : Theme.of(context).colors().bgDescription,
         ),
         material: (_, __) => MaterialTextButtonData(
           style: ButtonStyle(
             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                 const EdgeInsets.only(top: 5, bottom: 6, left: 12, right: 12)),
-            backgroundColor: MaterialStateProperty.all<Color>(
-                isSelected ? Get.theme.colors().primary : Get.theme.colors().bgDescription),
+            backgroundColor: MaterialStateProperty.all<Color>(isSelected
+                ? Theme.of(context).colors().primary
+                : Theme.of(context).colors().bgDescription),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
-                  side: BorderSide(color: Get.theme.colors().outline, width: 0.5)),
+                  side: BorderSide(color: Theme.of(context).colors().outline, width: 0.5)),
             ),
           ),
         ),
@@ -87,8 +90,8 @@ class FilterElement extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyleHelper.body2(
                       color: isSelected
-                          ? Get.theme.colors().onPrimarySurface
-                          : titleColor ?? Get.theme.colors().primary)),
+                          ? Theme.of(context).colors().onPrimarySurface
+                          : titleColor ?? Theme.of(context).colors().primary)),
             ),
             if (cancelButtonEnabled!)
               Padding(

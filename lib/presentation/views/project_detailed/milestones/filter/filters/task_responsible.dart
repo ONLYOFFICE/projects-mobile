@@ -44,7 +44,7 @@ class _TaskResponsible extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('myTasks'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.taskResponsible?['me'] as bool,
               onTap: () => filterController.changeTasksResponsible('me')),
           FilterElement(

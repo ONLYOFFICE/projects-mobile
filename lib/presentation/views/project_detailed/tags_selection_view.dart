@@ -65,7 +65,7 @@ class TagsSelectionView extends StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       floatingActionButton: AnimatedPadding(
         padding: EdgeInsets.zero,
         duration: const Duration(milliseconds: 100),
@@ -76,17 +76,17 @@ class TagsSelectionView extends StatelessWidget {
               onPressed: () => showTagAddingDialog(controller),
               child: Icon(
                 PlatformIcons(context).plus,
-                color: Get.theme.colors().onPrimarySurface,
+                color: Theme.of(context).colors().onPrimarySurface,
               ),
             ),
           ),
         ),
       ),
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         title: Text(
           tr('tags'),
-          style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+          style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
         ),
         actions: [
           Padding(
@@ -189,7 +189,8 @@ class _TagTextFieldWidget extends StatelessWidget {
             isCollapsed: true,
             errorText: !validate.value ? tr('newTagNoTitleErrorMessage') : null,
             focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42))),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colors().onSurface.withOpacity(0.42))),
             focusedErrorBorder: !validate.value
                 ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
                 : null,
@@ -198,7 +199,7 @@ class _TagTextFieldWidget extends StatelessWidget {
                 : null,
           ),
         ),
-        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+        style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface),
         onSubmitted: (value) {
           if (inputController.text.isNotEmpty) {
             onSubmited(value);

@@ -66,20 +66,21 @@ class SelectDiscussionSubscribers extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-            backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+            backgroundColor:
+                platformController.isMobile ? null : Theme.of(context).colors().surface,
             title: Obx(
               () => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     tr('selectSubscribers'),
-                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                    style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
                   ),
                   if (controller.subscribers.isNotEmpty)
                     Text(plural('selected', controller.subscribers.length),
-                        style: TextStyleHelper.caption(color: Get.theme.colors().onSurface))
+                        style: TextStyleHelper.caption(color: Theme.of(context).colors().onSurface))
                 ],
               ),
             ),

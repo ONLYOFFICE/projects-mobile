@@ -53,12 +53,12 @@ void showsStatusesBS({
     headerHeight: 60,
     initHeight: _getInitialSize(statusCount: _statusesController.statuses.length),
     decoration: BoxDecoration(
-        color: Get.theme.colors().surface,
+        color: Theme.of(context).colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) {
       return Container(
         decoration: BoxDecoration(
-            color: Get.theme.colors().surface,
+            color: Theme.of(context as BuildContext).colors().surface,
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -67,7 +67,7 @@ void showsStatusesBS({
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Text(tr('selectStatus'),
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
             ),
           ],
         ),
@@ -80,7 +80,9 @@ void showsStatusesBS({
             () => DecoratedBox(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(width: 1, color: Get.theme.colors().outline.withOpacity(0.5)),
+                  top: BorderSide(
+                      width: 1,
+                      color: Theme.of(context as BuildContext).colors().outline.withOpacity(0.5)),
                 ),
               ),
               child: Column(

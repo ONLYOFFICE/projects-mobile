@@ -97,7 +97,8 @@ class NewItemTile extends StatelessWidget {
                         if (caption != null && caption!.isNotEmpty)
                           Text(caption!,
                               style: TextStyleHelper.caption(
-                                  color: Get.theme.colors().onBackground.withOpacity(0.75))),
+                                  color:
+                                      Theme.of(context).colors().onBackground.withOpacity(0.75))),
                         Text(text!,
                             maxLines: maxLines,
                             overflow: textOverflow,
@@ -107,8 +108,11 @@ class NewItemTile extends StatelessWidget {
                                     color: textColor != null
                                         ? textColor
                                         : isSelected!
-                                            ? Get.theme.colors().onBackground
-                                            : Get.theme.colors().onSurface.withOpacity(0.4))),
+                                            ? Theme.of(context).colors().onBackground
+                                            : Theme.of(context)
+                                                .colors()
+                                                .onSurface
+                                                .withOpacity(0.4))),
                       ],
                     ),
                   ),
@@ -152,8 +156,8 @@ class _Icon extends StatelessWidget {
               color: selectedIconColor != null
                   ? isSelected!
                       ? selectedIconColor
-                      : iconColor ?? Get.theme.colors().onSurface.withOpacity(0.4)
-                  : iconColor ?? Get.theme.colors().onSurface.withOpacity(0.4),
+                      : iconColor ?? Theme.of(context).colors().onSurface.withOpacity(0.4)
+                  : iconColor ?? Theme.of(context).colors().onSurface.withOpacity(0.4),
             )
           : null,
     );

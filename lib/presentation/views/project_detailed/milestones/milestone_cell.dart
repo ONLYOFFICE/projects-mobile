@@ -117,10 +117,10 @@ class _SecondColumn extends StatelessWidget {
             if (itemController.milestone.value.status == 1) {
               style = TextStyleHelper.subtitle1().copyWith(
                   decoration: TextDecoration.lineThrough,
-                  color: Get.theme.colors().onSurface.withOpacity(0.6));
+                  color: Theme.of(context).colors().onSurface.withOpacity(0.6));
             } else if (itemController.milestone.value.status == 2) {
               style = TextStyleHelper.subtitle1()
-                  .copyWith(color: Get.theme.colors().onSurface.withOpacity(0.6));
+                  .copyWith(color: Theme.of(context).colors().onSurface.withOpacity(0.6));
             } else {
               style = TextStyleHelper.subtitle1();
             }
@@ -137,8 +137,8 @@ class _SecondColumn extends StatelessWidget {
             children: [
               Obx(() {
                 final color = itemController.milestone.value.canEdit!
-                    ? Get.theme.colors().primary
-                    : Get.theme.colors().onBackground;
+                    ? Theme.of(context).colors().primary
+                    : Theme.of(context).colors().onBackground;
                 return Text(
                   itemController.statusName,
                   style: TextStyleHelper.status(color: color),
@@ -146,7 +146,7 @@ class _SecondColumn extends StatelessWidget {
               }),
               Text(' • ',
                   style: TextStyleHelper.caption(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
               Flexible(
                 child: Text(
                     itemController.milestone.value.responsible!.displayName!
@@ -154,7 +154,7 @@ class _SecondColumn extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                        color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
               ),
             ],
           ),
@@ -184,8 +184,8 @@ class _ThirdColumn extends StatelessWidget {
           Text(
             formatedDate(controller.milestone.value.deadline!),
             style: controller.milestone.value.deadline!.isBefore(_now)
-                ? TextStyleHelper.caption(color: Get.theme.colors().colorError)
-                : TextStyleHelper.caption(color: Get.theme.colors().onSurface),
+                ? TextStyleHelper.caption(color: Theme.of(context).colors().colorError)
+                : TextStyleHelper.caption(color: Theme.of(context).colors().onSurface),
           ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -200,7 +200,7 @@ class _ThirdColumn extends StatelessWidget {
             Text(
               controller.milestone.value.activeTaskCount.toString(),
               style: TextStyleHelper.body2(
-                color: Get.theme.colors().onSurface.withOpacity(0.6),
+                color: Theme.of(context).colors().onSurface.withOpacity(0.6),
               ),
             ),
           ],
@@ -226,8 +226,8 @@ class _MilestoneIcon extends StatelessWidget {
       children: [
         Obx(() {
           final color = itemController.milestone.value.canEdit!
-              ? Get.theme.colors().primary
-              : Get.theme.colors().onBackground;
+              ? Theme.of(context).colors().primary
+              : Theme.of(context).colors().onBackground;
           return SizedBox(
             width: 72,
             child: Stack(
@@ -250,16 +250,16 @@ class _MilestoneIcon extends StatelessWidget {
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 1,
-                        color: Get.theme.colors().primary.withOpacity(0.1),
+                        color: Theme.of(context).colors().primary.withOpacity(0.1),
                       ),
-                      color: Get.theme.colors().background,
+                      color: Theme.of(context).colors().background,
                       shape: BoxShape.circle,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(4),
                       child: AppIcon(
                         icon: SvgIcons.milestone,
-                        color: Get.theme.colors().onBackground.withOpacity(0.6),
+                        color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                         width: 16,
                         height: 16,
                       ),

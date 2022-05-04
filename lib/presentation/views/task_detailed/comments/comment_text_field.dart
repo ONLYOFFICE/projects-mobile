@@ -53,13 +53,16 @@ class CommentTextField extends StatelessWidget {
         hintText: tr('replyText'),
         cupertino: (_, __) => CupertinoTextFieldData(
           placeholderStyle: TextStyle(
-              color: controller.setTitleError == true ? Get.theme.colors().colorError : null),
+              color:
+                  controller.setTitleError == true ? Theme.of(context).colors().colorError : null),
         ),
         material: (_, __) => MaterialTextFieldData(
           decoration: InputDecoration.collapsed(
             hintText: tr('replyText'),
             hintStyle: TextStyle(
-                color: controller.setTitleError == true ? Get.theme.colors().colorError : null),
+                color: controller.setTitleError == true
+                    ? Theme.of(context).colors().colorError
+                    : null),
           ),
         ),
       ),

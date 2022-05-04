@@ -81,7 +81,7 @@ class HtmlTextEditor extends StatelessWidget {
           textController.insertLink(text, url, isNewWindow);
           return false;
         },
-        textStyle: TextStyleHelper.body2(color: Get.theme.colors().onBackground),
+        textStyle: TextStyleHelper.body2(color: Theme.of(context).colors().onBackground),
         defaultToolbarButtons: const [
           StyleButtons(),
           FontSettingButtons(fontSizeUnit: false),
@@ -113,7 +113,7 @@ class HtmlTextEditor extends StatelessWidget {
       otherOptions: OtherOptions(
         decoration: BoxDecoration(
           border: Border.all(
-            color: Get.theme.colors().colorError,
+            color: Theme.of(context).colors().colorError,
             width: 2,
             style: hasError ? BorderStyle.solid : BorderStyle.none,
           ),

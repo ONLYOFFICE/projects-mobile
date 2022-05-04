@@ -53,12 +53,12 @@ class StyledDateRangePickerDialog extends StatelessWidget {
                 surface: darkColors.systemBlue,
               )
             : ColorScheme.light(
-          onPrimary: lightColors.onBackground,
-          primary: darkColors.primary.withOpacity(0.3),
-          surface: darkColors.systemBlue,
-          onSurface: darkColors.surface,
-        ),
-        primaryColor: Get.theme.colors().surface,
+                onPrimary: lightColors.onBackground,
+                primary: darkColors.primary.withOpacity(0.3),
+                surface: darkColors.systemBlue,
+                onSurface: darkColors.surface,
+              ),
+        primaryColor: Theme.of(context).colors().surface,
       ),
       child: DateRangePickerDialog(
         currentDate: DateTime.now(),

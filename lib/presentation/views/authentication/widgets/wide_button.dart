@@ -60,17 +60,18 @@ class WideButton extends StatelessWidget {
           padding: padding,
           child: Text(
             text,
-            style: TextStyleHelper.button(color: textColor ?? Get.theme.colors().onNavBar),
+            style: TextStyleHelper.button(color: textColor ?? Theme.of(context).colors().onNavBar),
           ),
           material: (context, platform) => MaterialTextButtonData(
             style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(color ?? Get.theme.colors().primary),
+                backgroundColor:
+                    MaterialStateProperty.all(color ?? Theme.of(context).colors().primary),
                 shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)))),
           ),
           cupertino: (context, platform) => CupertinoTextButtonData(
-              color: color ?? Get.theme.colors().primary,
-              disabledColor: Get.theme.colors().surface,
+              color: color ?? Theme.of(context).colors().primary,
+              disabledColor: Theme.of(context).colors().surface,
               borderRadius: BorderRadius.circular(6)),
         ));
   }

@@ -115,32 +115,21 @@ class SettingsController extends GetxController {
   Future setTheme(String themeMode) async {
     if (themeMode == currentTheme.value) return;
 
-    await Get.dialog(StyledAlertDialog(
-      titleText: tr('reloadDialogTitle'),
-      acceptText: tr('reload').toUpperCase(),
-      cancelText: tr('notNow').toUpperCase(),
-      onAcceptTap: () async {
-        switch (themeMode) {
-          case 'darkTheme':
-            Get.changeThemeMode(ThemeMode.dark);
-            break;
-          case 'lightTheme':
-            Get.changeThemeMode(ThemeMode.light);
-            break;
-          case 'sameAsSystem':
-            Get.changeThemeMode(ThemeMode.system);
-            break;
-          default:
-            Get.changeThemeMode(ThemeMode.system);
-        }
-
-        currentTheme.value = themeMode;
-        await _storage.write('themeMode', themeMode);
-
-        Get.rootController.restartApp();
-      },
-      onCancelTap: Get.back,
-    ));
+    switch (themeMode) {
+      case 'darkTheme':
+        Get.changeThemeMode(ThemeMode.dark);
+        break;
+      case 'lightTheme':
+        Get.changeThemeMode(ThemeMode.light);
+        break;
+      case 'sameAsSystem':
+        Get.changeThemeMode(ThemeMode.system);
+        break;
+      default:
+        Get.changeThemeMode(ThemeMode.system);
+    }
+    currentTheme.value = themeMode;
+    await _storage.write('themeMode', themeMode);
   }
 
   Future<void> changeAnalyticsSharingEnability(bool value) async {

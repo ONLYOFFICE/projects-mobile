@@ -58,7 +58,7 @@ class PortalDiscussionsView extends StatelessWidget {
             onPressed: controller.toNewDiscussionScreen,
             child: AppIcon(
               icon: SvgIcons.add_discussion,
-              color: Get.theme.colors().onPrimarySurface,
+              color: Theme.of(context).colors().onPrimarySurface,
             ),
           ),
         ),
@@ -68,11 +68,11 @@ class PortalDiscussionsView extends StatelessWidget {
           MainAppBar(
             materialTitle: Text(
               tr('discussions'),
-              style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+              style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
             ),
             cupertinoTitle: Text(
               tr('discussions'),
-              style: TextStyle(color: Get.theme.colors().onSurface),
+              style: TextStyle(color: Theme.of(context).colors().onSurface),
             ),
             actions: [
               SearchButton(controller: controller),

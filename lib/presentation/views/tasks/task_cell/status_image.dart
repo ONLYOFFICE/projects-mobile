@@ -97,16 +97,16 @@ class StatusIcon extends StatelessWidget {
               16,
               16,
               canEditTask
-                  ? status.color?.toColor() ?? Get.theme.colors().primary
-                  : Get.theme.colors().onBackground.withOpacity(0.6)));
+                  ? status.color?.toColor() ?? Theme.of(context).colors().primary
+                  : Theme.of(context).colors().onBackground.withOpacity(0.6)));
     }
     if (Const.standartTaskStatuses.containsKey(status.id)) {
       return Center(
         child: AppIcon(
             icon: Const.standartTaskStatuses[status.id!],
             color: canEditTask
-                ? Get.theme.colors().primary
-                : Get.theme.colors().onBackground.withOpacity(0.6)),
+                ? Theme.of(context).colors().primary
+                : Theme.of(context).colors().onBackground.withOpacity(0.6)),
       );
     }
     throw Exception('STATUS ERROR');
@@ -131,7 +131,7 @@ class _StatusLoadingIcon extends StatelessWidget {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: Get.theme.colors().onBackground.withOpacity(0.05),
+                color: Theme.of(context).colors().onBackground.withOpacity(0.05),
               ),
               child: Center(
                 child: SizedBox(
@@ -139,9 +139,9 @@ class _StatusLoadingIcon extends StatelessWidget {
                   width: 16,
                   child: PlatformCircularProgressIndicator(
                     material: (_, __) =>
-                        MaterialProgressIndicatorData(color: Get.theme.colors().primary),
+                        MaterialProgressIndicatorData(color: Theme.of(context).colors().primary),
                     cupertino: (_, __) =>
-                        CupertinoProgressIndicatorData(color: Get.theme.colors().primary),
+                        CupertinoProgressIndicatorData(color: Theme.of(context).colors().primary),
                   ),
                 ),
               ),

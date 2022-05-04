@@ -58,14 +58,14 @@ class StatusButton extends StatelessWidget {
           style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
         return canEdit
             ? const Color(0xff81C4FF).withOpacity(0.2)
-            : Get.theme.colors().bgDescription;
+            : Theme.of(context).colors().bgDescription;
       }), side: MaterialStateProperty.resolveWith((_) {
         return const BorderSide(color: Colors.transparent, width: 0);
       }))),
       cupertino: (_, __) => CupertinoTextButtonData(
           color: canEdit
               ? const Color(0xff81C4FF).withOpacity(0.2)
-              : Get.theme.colors().bgDescription),
+              : Theme.of(context).colors().bgDescription),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -74,8 +74,8 @@ class StatusButton extends StatelessWidget {
               text,
               style: TextStyleHelper.subtitle2(
                 color: canEdit
-                    ? Get.theme.colors().primary
-                    : Get.theme.colors().onBackground.withOpacity(0.75),
+                    ? Theme.of(context).colors().primary
+                    : Theme.of(context).colors().onBackground.withOpacity(0.75),
               ),
             ),
           ),
@@ -85,7 +85,7 @@ class StatusButton extends StatelessWidget {
               padding: const EdgeInsets.only(top: 2),
               child: Icon(
                 PlatformIcons(context).downChevron,
-                color: Get.theme.colors().primary,
+                color: Theme.of(context).colors().primary,
                 size: 19,
               ),
             )

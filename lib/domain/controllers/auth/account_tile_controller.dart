@@ -36,6 +36,7 @@ import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/core_api.dart';
@@ -70,8 +71,11 @@ class AccountTileController extends GetxController {
 
   Rx<Widget> avatar =
       // ignore: unnecessary_cast
-      (AppIcon(width: 40, height: 40, icon: SvgIcons.avatar, color: Get.theme.colors().onSurface)
-              as Widget)
+      (AppIcon(
+              width: 40,
+              height: 40,
+              icon: SvgIcons.avatar,
+              color: Theme.of(Get.context!).colors().onSurface) as Widget)
           .obs;
 
   String? get displayName => accountData!.name;

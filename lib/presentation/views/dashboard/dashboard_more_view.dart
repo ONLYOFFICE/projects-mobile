@@ -48,7 +48,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
     final controller = Get.arguments['controller'] as ProjectsController;
 
     return Scaffold(
-      backgroundColor: Get.theme.colors().backgroundColor,
+      backgroundColor: Theme.of(context).colors().backgroundColor,
       floatingActionButton: Obx(
         () => Visibility(
           visible: controller.fabIsVisible.value,
@@ -58,7 +58,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
               icon: SvgIcons.fab_project,
               width: 32,
               height: 32,
-              color: Get.theme.colors().onPrimarySurface,
+              color: Theme.of(context).colors().onPrimarySurface,
             ),
           ),
         ),
@@ -70,11 +70,11 @@ class ProjectsDashboardMoreView extends StatelessWidget {
               isCollapsed: true,
               cupertinoTitle: Text(
                 controller.screenName,
-                style: TextStyle(color: Get.theme.colors().onSurface),
+                style: TextStyle(color: Theme.of(context).colors().onSurface),
               ),
               materialTitle: Text(
                 controller.screenName,
-                style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
               ),
               actions: [
                 SearchButton(controller: controller),

@@ -80,7 +80,7 @@ class EmptyScreen extends StatelessWidget {
               builder: (_) {
                 try {
                   return AppIcon(
-                    icon: Get.theme.brightness == Brightness.light ? icon : darkThemeIcon,
+                    icon: Theme.of(context).brightness == Brightness.light ? icon : darkThemeIcon,
                   );
                 } catch (e) {
                   printError(e);
@@ -92,7 +92,8 @@ class EmptyScreen extends StatelessWidget {
           Text(
             text,
             textAlign: TextAlign.center,
-            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.4)),
+            style: TextStyleHelper.subtitle1(
+                color: Theme.of(context).colors().onSurface.withOpacity(0.4)),
           ),
         ],
       ),

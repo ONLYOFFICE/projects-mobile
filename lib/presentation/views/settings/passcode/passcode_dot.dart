@@ -56,10 +56,10 @@ class PasscodeDot extends StatelessWidget {
           shape: BoxShape.circle,
           color: !passwordIsWrong
               ? inputLenght >= position + 1
-                  // ? Get.theme.customColors().onBackground
-                  ? Get.theme.colors().primary
-                  : Get.theme.colors().onBackground.withOpacity(0.2)
-              : Get.theme.colors().colorError),
+                  // ? Theme.of(context).customColors().onBackground
+                  ? Theme.of(context).colors().primary
+                  : Theme.of(context).colors().onBackground.withOpacity(0.2)
+              : Theme.of(context).colors().colorError),
     );
   }
 }

@@ -51,9 +51,9 @@ class NewMilestoneDescription extends StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('description'),
         leading: PlatformIconButton(
             icon: const BackButtonIcon(),
@@ -73,17 +73,17 @@ class NewMilestoneDescription extends StatelessWidget {
           controller: newMilestoneController.descriptionController.value,
           autofocus: true,
           maxLines: null,
-          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+          style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
           hintText: tr('milestoneDescription'),
           cupertino: (_, __) => CupertinoTextFieldData(
-            placeholderStyle:
-                TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.4)),
+            placeholderStyle: TextStyleHelper.subtitle1(
+                color: Theme.of(context).colors().onSurface.withOpacity(0.4)),
           ),
           material: (_, __) => MaterialTextFieldData(
             decoration: InputDecoration.collapsed(
               hintText: tr('milestoneDescription'),
-              hintStyle:
-                  TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.4)),
+              hintStyle: TextStyleHelper.subtitle1(
+                  color: Theme.of(context).colors().onSurface.withOpacity(0.4)),
             ),
           ),
         ),

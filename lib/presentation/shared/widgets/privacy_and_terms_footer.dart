@@ -105,7 +105,7 @@ class PrivacyAndTermsFooter extends StatelessWidget {
           if (needAgreement)
             Obx(
               () => Checkbox(
-                activeColor: Get.theme.colors().primary,
+                activeColor: Theme.of(context).colors().primary,
                 value: controller.checkBoxValue.value,
                 onChanged: (bool? value) {
                   controller.checkBoxValue.value = value ?? false;
@@ -119,7 +119,7 @@ class PrivacyAndTermsFooter extends StatelessWidget {
                 textAlign: needAgreement ? TextAlign.left : TextAlign.center,
                 text: TextSpan(
                   style: TextStyleHelper.body2(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6),
+                    color: Theme.of(context).colors().onSurface.withOpacity(0.6),
                   ),
                   children: [
                     TextSpan(text: beforeText),

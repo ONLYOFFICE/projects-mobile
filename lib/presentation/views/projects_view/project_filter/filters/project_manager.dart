@@ -44,7 +44,7 @@ class _ProjectManager extends StatelessWidget {
         options: <Widget>[
           FilterElement(
             title: tr('me'),
-            titleColor: Get.theme.colors().onSurface,
+            titleColor: Theme.of(context).colors().onSurface,
             isSelected: filterController.projectManager['me'] as bool,
             onTap: () => filterController.changeProjectManager('me'),
           ),

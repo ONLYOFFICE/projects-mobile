@@ -87,7 +87,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: backgroundColor,
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
-      shadowColor: Get.theme.colors().outline,
+      shadowColor: Theme.of(context).colors().outline,
       leadingWidth: leadingWidth,
       leading: leading == null && showBackButton
           ? PlatformIconButton(
@@ -96,14 +96,14 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: onLeadingPressed ?? Get.find<NavigationController>().back,
             )
           : leading,
-      toolbarTextStyle: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+      toolbarTextStyle: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
       actions: actions,
       title: title != null
           ? PreferredSize(preferredSize: Size.fromHeight(titleHeight), child: title!)
           : titleText != null
               ? Text(
                   titleText!,
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
                 )
               : null,
       bottom: bottom == null
@@ -157,7 +157,7 @@ class MaterialAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      backgroundColor: Get.theme.colors().background,
+      backgroundColor: Theme.of(context).colors().background,
       pinned: true,
       title: title,
       actions: actions,
@@ -186,7 +186,7 @@ class CupertinoAppBar extends StatelessWidget {
                 actions: actions),
           )
         : CupertinoSliverNavigationBar(
-            backgroundColor: Get.theme.colors().background,
+            backgroundColor: Theme.of(context).colors().background,
             padding: EdgeInsetsDirectional.zero,
             largeTitle: title,
             trailing: Row(
@@ -214,7 +214,7 @@ class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
     return CupertinoNavigationBar(
       padding: EdgeInsetsDirectional.zero,
       transitionBetweenRoutes: false,
-      backgroundColor: Get.theme.colors().background,
+      backgroundColor: Theme.of(context).colors().background,
       middle: title,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

@@ -34,6 +34,7 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -66,7 +67,7 @@ class NewProjectController extends BaseProjectEditorController {
         titleText: tr('discardChanges'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.find<NavigationController>().back();

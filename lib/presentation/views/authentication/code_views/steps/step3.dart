@@ -96,13 +96,15 @@ class _Code extends StatelessWidget {
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               tr('code'),
-              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+              style: TextStyleHelper.caption(
+                  color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
             ),
           ),
           Row(
             children: [
               const SizedBox(width: 12),
-              Text(code, style: TextStyleHelper.subtitle2(color: Get.theme.colors().onSurface)),
+              Text(code,
+                  style: TextStyleHelper.subtitle2(color: Theme.of(context).colors().onSurface)),
               const Expanded(child: SizedBox()),
               GestureDetector(
                 onTap: () {
@@ -113,7 +115,7 @@ class _Code extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 12, bottom: 10),
                   child: AppIcon(
                     icon: SvgIcons.copy,
-                    color: Get.theme.colors().onBackground,
+                    color: Theme.of(context).colors().onBackground,
                   ),
                 ),
               ),

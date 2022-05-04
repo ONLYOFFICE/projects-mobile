@@ -85,11 +85,12 @@ class _Step4 extends StatelessWidget {
                       contentPadding: const EdgeInsets.only(left: 12, bottom: 8, top: 2),
                       focusedBorder: UnderlineInputBorder(
                           borderSide: BorderSide(
-                              width: 0.5, color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                              width: 0.5,
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
                       labelStyle: TextStyleHelper.caption(
-                          color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                          color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
                 ),
-                style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
               ),
             ),
           ),

@@ -78,7 +78,7 @@ class PortalUserItem extends StatelessWidget {
                       opacity: user.status == UserStatus.Terminated ? 0.4 : 1.0,
                       child: CircleAvatar(
                         radius: 20,
-                        backgroundColor: Get.theme.colors().bgDescription,
+                        backgroundColor: Theme.of(context).colors().bgDescription,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Obx(() {
@@ -118,7 +118,8 @@ class PortalUserItem extends StatelessWidget {
                   Text(
                     user.displayName!.replaceAll(' ', '\u00A0'),
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                    style:
+                        TextStyleHelper.subtitle1(color: Theme.of(context).colors().onBackground),
                   ),
                   Obx(
                     () => userController.userTitle.isNotEmpty
@@ -126,7 +127,7 @@ class PortalUserItem extends StatelessWidget {
                             userController.userTitle.replaceAll(' ', '\u00A0'),
                             overflow: TextOverflow.ellipsis,
                             style: TextStyleHelper.body2(
-                              color: Get.theme.colors().onBackground.withOpacity(0.6),
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                             ),
                           )
                         : const SizedBox(),
@@ -140,7 +141,7 @@ class PortalUserItem extends StatelessWidget {
                   userController.isSelected.value == true)
                 return Icon(
                   PlatformIcons(context).checkMarkAlt,
-                  color: Get.theme.colors().primary,
+                  color: Theme.of(context).colors().primary,
                 );
 
               return const SizedBox();
@@ -167,7 +168,7 @@ class _MultipleSelection extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16),
             child: Icon(
               PlatformIcons(context).checked,
-              color: Get.theme.colors().primary,
+              color: Theme.of(context).colors().primary,
             ),
           );
         } else {
@@ -175,7 +176,7 @@ class _MultipleSelection extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16),
             child: Icon(
               PlatformIcons(context).unchecked,
-              color: Get.theme.colors().inactiveGrey,
+              color: Theme.of(context).colors().inactiveGrey,
             ),
           );
         }

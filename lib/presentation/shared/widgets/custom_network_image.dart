@@ -59,7 +59,8 @@ class CustomNetworkImage extends StatelessWidget {
       future: locator<ImagesController>().getHeaders(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4));
+          return CircleAvatar(
+              backgroundColor: Theme.of(context).colors().bgDescription.withOpacity(0.4));
         }
         if (image != null && image!.isNotEmpty) {
           return CachedNetworkImage(
@@ -70,13 +71,16 @@ class CustomNetworkImage extends StatelessWidget {
             width: width,
             placeholder: (_, __) =>
                 defaultImage ??
-                CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4)),
+                CircleAvatar(
+                    backgroundColor: Theme.of(context).colors().bgDescription.withOpacity(0.4)),
             errorWidget: (_, __, ___) =>
                 defaultImage ??
-                CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4)),
+                CircleAvatar(
+                    backgroundColor: Theme.of(context).colors().bgDescription.withOpacity(0.4)),
           );
         } else {
-          return CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4));
+          return CircleAvatar(
+              backgroundColor: Theme.of(context).colors().bgDescription.withOpacity(0.4));
         }
       },
     );

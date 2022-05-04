@@ -54,7 +54,7 @@ class SettingsService {
             titleText: tr('failedToSendFeedback'),
             cancelText: tr('close'),
             acceptText: tr('goToForum'),
-            acceptColor: Get.theme.colors().primary,
+            acceptColor: Theme.of(context).colors().primary,
             onAcceptTap: () async => launch(Const.Urls.forumSupport),
           );
         },

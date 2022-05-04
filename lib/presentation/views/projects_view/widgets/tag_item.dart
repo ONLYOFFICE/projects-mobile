@@ -67,11 +67,12 @@ class TagItem extends StatelessWidget {
             ),
             Obx(() {
               if (tagItemDTO.isSelected!.value == true) {
-                return Icon(PlatformIcons(context).checked, color: Get.theme.colors().primary);
+                return Icon(PlatformIcons(context).checked,
+                    color: Theme.of(context).colors().primary);
               } else {
                 return Icon(
                   PlatformIcons(context).unchecked,
-                  color: Get.theme.colors().inactiveGrey,
+                  color: Theme.of(context).colors().inactiveGrey,
                 );
               }
             }),

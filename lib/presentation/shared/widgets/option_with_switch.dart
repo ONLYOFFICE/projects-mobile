@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -40,7 +41,7 @@ class OptionWithSwitch extends StatelessWidget {
               () => PlatformSwitch(
                 value: switchValue.value,
                 onChanged: switchOnChanged,
-                activeColor: Get.theme.colors().primary,
+                activeColor: Theme.of(context).colors().primary,
               ),
             ),
           ],

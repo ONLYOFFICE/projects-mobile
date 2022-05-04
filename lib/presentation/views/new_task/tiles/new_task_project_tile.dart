@@ -56,9 +56,10 @@ class NewTaskProjectTile extends StatelessWidget {
         return NewItemTile(
           text: _isNotEmpty ? controller.selectedProjectTitle.value : tr('selectProject'),
           icon: SvgIcons.project,
-          textColor: controller.needToSelectProject.value ? Get.theme.colors().colorError : null,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          textColor:
+              controller.needToSelectProject.value ? Theme.of(context).colors().colorError : null,
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground,
           isSelected: _isNotEmpty,
           caption: _isNotEmpty ? '${tr('project')}:' : null,
           onTap: () => Get.find<NavigationController>().toScreen(

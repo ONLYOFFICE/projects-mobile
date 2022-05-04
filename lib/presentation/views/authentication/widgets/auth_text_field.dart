@@ -78,7 +78,8 @@ class AuthTextField extends StatelessWidget {
       onFieldSubmitted: onSubmitted,
       validator: validator,
       style: TextStyleHelper.subtitle1(
-        color: hasError ? Get.theme.colors().colorError : Get.theme.colors().onSurface,
+        color:
+            hasError ? Theme.of(context).colors().colorError : Theme.of(context).colors().onSurface,
       ),
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
@@ -86,11 +87,11 @@ class AuthTextField extends StatelessWidget {
         labelText: hintText,
         labelStyle: TextStyleHelper.caption(
           color: hasError && controller.text.isEmpty
-              ? Get.theme.colors().colorError
-              : Get.theme.colors().onSurface.withOpacity(0.6),
+              ? Theme.of(context).colors().colorError
+              : Theme.of(context).colors().onSurface.withOpacity(0.6),
         ),
         focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42))),
+            borderSide: BorderSide(color: Theme.of(context).colors().onSurface.withOpacity(0.42))),
       ),
     );
   }

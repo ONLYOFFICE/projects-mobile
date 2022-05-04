@@ -109,7 +109,7 @@ class _LoadingHUDContent extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           DefaultTextStyle(
-            style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.caption(color: Theme.of(context).colors().onSurface),
             child: Text(text.capitalizeFirst!),
           ),
         ],

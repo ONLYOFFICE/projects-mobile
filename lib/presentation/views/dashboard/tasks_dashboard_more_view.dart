@@ -52,7 +52,7 @@ class TasksDashboardMoreView extends StatelessWidget {
     final controller = Get.arguments['controller'] as TasksController;
 
     return Scaffold(
-      //backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: Obx(
         () => Visibility(
           visible: controller.fabIsVisible.value,
@@ -64,7 +64,7 @@ class TasksDashboardMoreView extends StatelessWidget {
             ),
             child: AppIcon(
               icon: SvgIcons.add_fab,
-              color: Get.theme.colors().onPrimarySurface,
+              color: Theme.of(context).colors().onPrimarySurface,
             ),
           ),
         ),
@@ -76,11 +76,11 @@ class TasksDashboardMoreView extends StatelessWidget {
               isCollapsed: true,
               cupertinoTitle: Text(
                 controller.screenName,
-                style: TextStyle(color: Get.theme.colors().onSurface),
+                style: TextStyle(color: Theme.of(context).colors().onSurface),
               ),
               materialTitle: Text(
                 controller.screenName,
-                style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
               ),
               actions: [
                 SearchButton(controller: controller),

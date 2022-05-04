@@ -32,6 +32,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -249,12 +250,12 @@ class TextStyleHelper {
       fontFamily: 'Roboto',
       fontSize: 14,
       fontWeight: FontWeight.normal,
-      color: Get.theme.colors().primary);
+      color: Theme.of(Get.context!).colors().primary);
   static final TextStyle _iosProjectsSorting = TextStyle(
       fontFamily: '.SF Pro Display',
       fontSize: 14,
       fontWeight: FontWeight.normal,
-      color: Get.theme.colors().primary);
+      color: Theme.of(Get.context!).colors().primary);
 
   static final projectResponsible =
       Platform.isAndroid ? _androidProjectResponsible : _iosProjectResponsible;
@@ -262,13 +263,13 @@ class TextStyleHelper {
     fontFamily: 'Roboto',
     fontWeight: FontWeight.normal,
     fontSize: 14,
-    color: Get.theme.colors().projectsSubtitle,
+    color: Theme.of(Get.context!).colors().projectsSubtitle,
   );
   static final TextStyle _iosProjectResponsible = TextStyle(
     fontFamily: '.SF Pro Display',
     fontWeight: FontWeight.normal,
     fontSize: 14,
-    color: Get.theme.colors().projectsSubtitle,
+    color: Theme.of(Get.context!).colors().projectsSubtitle,
   );
 
   static const subHeaderStyle = TextStyle(

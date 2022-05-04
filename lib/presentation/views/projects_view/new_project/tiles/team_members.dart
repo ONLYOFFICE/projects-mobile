@@ -58,8 +58,8 @@ class TeamMembersTile extends StatelessWidget {
           caption: _isNotEmpty ? '${tr('team')}:' : null,
           text: _isNotEmpty ? controller.teamMembersTitle as String : tr('addTeamMembers'),
           icon: SvgIcons.users,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(
@@ -69,7 +69,7 @@ class TeamMembersTile extends StatelessWidget {
                         ? PlatformIcons(context).rightChevron
                         : PlatformIcons(context).clear,
                     size: 24,
-                    color: Get.theme.colors().onBackground.withOpacity(0.6),
+                    color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                   ),
                 )
               : null,

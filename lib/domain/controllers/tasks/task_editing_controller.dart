@@ -59,7 +59,6 @@ class TaskEditingController extends TaskActionsController {
   PortalTask task;
   final TaskService _api = locator<TaskService>();
 
-
   TaskEditingController({required this.task});
 
   final TextEditingController _titleController = TextEditingController();
@@ -169,7 +168,7 @@ class TaskEditingController extends TaskActionsController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           descriptionController.value.text = task.description!;
           Get.back();
@@ -256,7 +255,7 @@ class TaskEditingController extends TaskActionsController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           responsibles.value = List.of(_previusSelectedResponsibles!);
           Get.back();
@@ -325,7 +324,7 @@ class TaskEditingController extends TaskActionsController {
         titleText: tr('discardChanges'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.find<NavigationController>().back();

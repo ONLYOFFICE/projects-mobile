@@ -53,7 +53,7 @@ class StyledDivider extends StatelessWidget {
       key: key,
       indent: leftPadding,
       endIndent: rightPadding,
-      color: Get.theme.colors().outline.withOpacity(0.5),
+      color: Theme.of(context).colors().outline.withOpacity(0.5),
       thickness: thickness,
       height: height,
     );

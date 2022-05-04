@@ -32,6 +32,7 @@
 
 import 'package:darq/darq.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
@@ -132,7 +133,7 @@ abstract class BaseProjectEditorController extends GetxController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           descriptionController.text = descriptionText.value;
           Get.back();

@@ -165,7 +165,7 @@ class NewTaskController extends TaskActionsController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           descriptionController.value.text = descriptionText.value;
           Get.back();
@@ -193,7 +193,7 @@ class NewTaskController extends TaskActionsController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           notifyResponsibles.value = false;
           responsibles.value = List.of(_previusSelectedResponsibles);
@@ -350,7 +350,7 @@ class NewTaskController extends TaskActionsController {
         titleText: tr('discardTask'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.find<NavigationController>().back();

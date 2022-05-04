@@ -33,6 +33,7 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
@@ -68,7 +69,7 @@ class ProfileController extends GetxController {
       width: 120,
       height: 120,
       icon: SvgIcons.avatar,
-      color: Get.theme.colors().onSurface,
+      color: Theme.of(Get.context!).colors().onSurface,
     ),
   );
 
@@ -104,7 +105,7 @@ class ProfileController extends GetxController {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('logOutTitle'),
       acceptText: tr('logOut').toUpperCase(),
-      acceptColor: Get.theme.colors().colorError,
+      acceptColor: Theme.of(context as BuildContext).colors().colorError,
       onAcceptTap: () async {
         await Get.find<LoginController>().logout();
       },

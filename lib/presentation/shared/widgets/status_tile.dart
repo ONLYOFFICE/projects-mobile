@@ -53,7 +53,7 @@ class StatusTile extends StatelessWidget {
   Widget build(BuildContext context) {
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
-          color: Get.theme.colors().bgDescription, borderRadius: BorderRadius.circular(6));
+          color: Theme.of(context).colors().bgDescription, borderRadius: BorderRadius.circular(6));
     }
 
     return Container(
@@ -81,7 +81,7 @@ class StatusTile extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Icon(
                 PlatformIcons(context).checkMarkAlt,
-                color: Get.theme.colors().primary,
+                color: Theme.of(context).colors().primary,
               ),
             )
         ],
@@ -107,7 +107,7 @@ class StatusTileTablet extends StatelessWidget {
         if (selected)
           Icon(
             PlatformIcons(context).checkMarkAlt,
-            color: Get.theme.colors().primary,
+            color: Theme.of(context).colors().primary,
             size: 16,
           )
         else

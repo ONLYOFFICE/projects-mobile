@@ -93,7 +93,7 @@ class Comment extends StatelessWidget {
             Obx(
               () => HtmlWidget(
                 controller.comment?.value.commentBody?.trim() ?? '',
-                textStyle: TextStyleHelper.body1(color: Get.theme.colors().onBackground),
+                textStyle: TextStyleHelper.body1(color: Theme.of(context).colors().onBackground),
                 customStylesBuilder: (element) {
                   if (element.attributes.containsKey('style') &&
                       element.attributes['style']!.contains('color')) {
@@ -121,7 +121,7 @@ class Comment extends StatelessWidget {
                 cupertino: (_, __) => CupertinoTextButtonData(minSize: 0),
                 child: Text(
                   tr('reply'),
-                  style: TextStyleHelper.caption(color: Get.theme.colors().primary),
+                  style: TextStyleHelper.caption(color: Theme.of(context).colors().primary),
                 ),
               ),
           ],
@@ -205,7 +205,7 @@ class _CommentAuthor extends StatelessWidget {
               Text(comment.userFullName!, style: TextStyleHelper.subtitle1()),
               Text(comment.timeStampStr!,
                   style: TextStyleHelper.caption(
-                      color: Get.theme.colors().onBackground.withOpacity(0.6))),
+                      color: Theme.of(context).colors().onBackground.withOpacity(0.6))),
             ],
           ),
         ),
@@ -214,7 +214,7 @@ class _CommentAuthor extends StatelessWidget {
           onSelected: (value) => _onSelected(value as String, controller),
           icon: Icon(
             PlatformIcons(context).ellipsis,
-            color: Get.theme.colors().onSurface.withOpacity(0.5),
+            color: Theme.of(context).colors().onSurface.withOpacity(0.5),
           ),
           itemBuilder: (context) {
             return [
@@ -231,7 +231,8 @@ class _CommentAuthor extends StatelessWidget {
                 PlatformPopupMenuItem(
                   value: 'Delete',
                   isDestructiveAction: true,
-                  textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                  textStyle:
+                      TextStyleHelper.subtitle1(color: Theme.of(context).colors().colorError),
                   child: Text(tr('delete')),
                 ),
             ];
@@ -254,7 +255,7 @@ class _DeletedComment extends StatelessWidget {
         child: Text(
           tr('commentDeleted'),
           style: TextStyleHelper.body2(
-            color: Get.theme.colors().onBackground.withOpacity(0.4),
+            color: Theme.of(context).colors().onBackground.withOpacity(0.4),
           ),
         ),
       ),

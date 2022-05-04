@@ -54,11 +54,11 @@ class AppBarMenuButton extends StatelessWidget {
         padding: EdgeInsets.zero,
         cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         materialIcon: Icon(
           Icons.more_vert,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 38),
       ),
@@ -87,8 +87,10 @@ class AppBarMenuButton extends StatelessWidget {
             PlatformPopupMenuItem(
               value: 'Delete',
               isDestructiveAction: true,
-              textStyle: Get.theme.popupMenuTheme.textStyle
-                  ?.copyWith(color: Get.theme.colors().colorError),
+              textStyle: Theme.of(context)
+                  .popupMenuTheme
+                  .textStyle
+                  ?.copyWith(color: Theme.of(context).colors().colorError),
               child: Text(
                 tr('deleteDiscussion'),
                 maxLines: 1,

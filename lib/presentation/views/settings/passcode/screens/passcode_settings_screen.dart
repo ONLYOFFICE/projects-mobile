@@ -57,19 +57,19 @@ class PasscodeSettingsScreen extends StatelessWidget {
     if (GetPlatform.isAndroid) {
       if (platformController.isMobile) {
         Theme.of(context).brightness == Brightness.dark
-            ? backgroundColor = Get.theme.colors().background
-            : backgroundColor = Get.theme.colors().surface;
+            ? backgroundColor = Theme.of(context).colors().background
+            : backgroundColor = Theme.of(context).colors().surface;
       } else {
-        backgroundColor = Get.theme.colors().surface;
+        backgroundColor = Theme.of(context).colors().surface;
       }
     } else {
       if (platformController.isMobile) {
         Theme.of(context).brightness == Brightness.dark
-            ? backgroundColor = Get.theme.colors().backgroundSecond
+            ? backgroundColor = Theme.of(context).colors().backgroundSecond
             : backgroundColor = CupertinoColors.systemGrey6;
       } else {
         Theme.of(context).brightness == Brightness.dark
-            ? backgroundColor = Get.theme.colors().surface
+            ? backgroundColor = Theme.of(context).colors().surface
             : backgroundColor = CupertinoColors.systemGrey6;
       }
     }
@@ -78,7 +78,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
       backgroundColor: backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('passcodeLock'),
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         onLeadingPressed: controller.leavePasscodeSettingsScreen,
       ),
       body: Obx(
@@ -104,7 +104,8 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           controller.isPasscodeEnable.value
                               ? tr('disablePasscode')
                               : tr('enablePasscode'),
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                          style:
+                              TextStyleHelper.subtitle1(color: Theme.of(context).colors().primary),
                           textAlign: TextAlign.start,
                         ),
                       ),
@@ -118,7 +119,8 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           ),
                           child: Text(
                             tr('changePasscode'),
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                            style: TextStyleHelper.subtitle1(
+                                color: Theme.of(context).colors().primary),
                           ),
                         ),
                       const StyledDivider(),
@@ -128,7 +130,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           text: tr('passcodeLock'),
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            color: Get.theme.colors().onSurface,
+                            color: Theme.of(context).colors().onSurface,
                           ),
                           children: [
                             TextSpan(
@@ -145,7 +147,8 @@ class PasscodeSettingsScreen extends StatelessWidget {
                             title: controller.biometricType == BiometricType.fingerprint
                                 ? tr('fingerprint')
                                 : tr('faceId'),
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                            style: TextStyleHelper.subtitle1(
+                                color: Theme.of(context).colors().onSurface),
                             switchOnChanged: controller.tryTogglingFingerprintStatus,
                             switchValue: controller.isBiometricEnable),
                     ],
@@ -162,10 +165,11 @@ class PasscodeSettingsScreen extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       darkTheme: const SettingsThemeData().copyWith(
                         settingsListBackground: platformController.isMobile
-                            ? Get.theme.colors().backgroundSecond
-                            : Get.theme.colors().surface,
-                        settingsSectionBackground:
-                            platformController.isMobile ? null : Get.theme.colors().bgDescription,
+                            ? Theme.of(context).colors().backgroundSecond
+                            : Theme.of(context).colors().surface,
+                        settingsSectionBackground: platformController.isMobile
+                            ? null
+                            : Theme.of(context).colors().bgDescription,
                       ),
                       applicationType: ApplicationType.cupertino,
                       sections: [
@@ -185,7 +189,8 @@ class PasscodeSettingsScreen extends StatelessWidget {
                                     ? tr('disablePasscode')
                                     : tr('enablePasscode'),
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                                style: TextStyleHelper.subtitle1(
+                                    color: Theme.of(context).colors().primary),
                               ),
                             ),
                             if (controller.isPasscodeEnable.value == true)
@@ -194,8 +199,8 @@ class PasscodeSettingsScreen extends StatelessWidget {
                                 title: Text(
                                   tr('changePasscode'),
                                   overflow: TextOverflow.ellipsis,
-                                  style:
-                                      TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                                  style: TextStyleHelper.subtitle1(
+                                      color: Theme.of(context).colors().primary),
                                 ),
                               ),
                           ],
@@ -209,7 +214,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           text: tr('passcodeLock'),
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
-                            color: Get.theme.colors().onSurface,
+                            color: Theme.of(context).colors().onSurface,
                           ),
                           children: [
                             TextSpan(
@@ -226,10 +231,12 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         darkTheme: const SettingsThemeData().copyWith(
-                          settingsListBackground:
-                              platformController.isMobile ? null : Get.theme.colors().surface,
-                          settingsSectionBackground:
-                              platformController.isMobile ? null : Get.theme.colors().bgDescription,
+                          settingsListBackground: platformController.isMobile
+                              ? null
+                              : Theme.of(context).colors().surface,
+                          settingsSectionBackground: platformController.isMobile
+                              ? null
+                              : Theme.of(context).colors().bgDescription,
                         ),
                         applicationType: ApplicationType.cupertino,
                         sections: [
@@ -238,12 +245,12 @@ class PasscodeSettingsScreen extends StatelessWidget {
                               SettingsTile.switchTile(
                                 initialValue: controller.isBiometricEnable.value,
                                 onToggle: controller.tryTogglingFingerprintStatus,
-                                activeSwitchColor: Get.theme.colors().primary,
+                                activeSwitchColor: Theme.of(context).colors().primary,
                                 title: Text(
                                   controller.biometricTypeDescription,
                                   overflow: TextOverflow.ellipsis,
-                                  style:
-                                      TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                                  style: TextStyleHelper.subtitle1(
+                                      color: Theme.of(context).colors().primary),
                                 ),
                               )
                             ],

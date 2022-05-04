@@ -69,7 +69,7 @@ class AppBarTitleWithSearch extends StatelessWidget {
                 )
               : Text(
                   appBarText,
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
                 ),
         ),
       ],

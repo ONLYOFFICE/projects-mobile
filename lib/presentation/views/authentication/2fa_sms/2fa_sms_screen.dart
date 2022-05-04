@@ -64,23 +64,24 @@ class TFASmsScreen extends StatelessWidget {
             return SingleChildScrollView(
               child: Center(
                 child: Container(
-                  //color: Get.theme.backgroundColor,
+                  //color: Theme.of(context).backgroundColor,
                   constraints: const BoxConstraints(maxWidth: 480),
                   child: Column(
                     children: [
                       SizedBox(height: h(24.71)),
                       AppIcon(
                         icon: SvgIcons.password_recovery,
-                        color: Get.theme.colors().onBackground,
+                        color: Theme.of(context).colors().onBackground,
                       ),
                       SizedBox(height: h(11.54)),
                       Text(tr('tfaSMSTitle'),
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface)),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onSurface)),
                       SizedBox(height: h(12.54)),
                       Text(tr('tfaSMSCaption'),
                           textAlign: TextAlign.center,
                           style: TextStyleHelper.body2(
-                              color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
                       SizedBox(height: h(6.54)),
                       const _CountrySelection(),
                       SizedBox(height: h(24)),
@@ -124,7 +125,7 @@ class _CountrySelection extends StatelessWidget {
               child: Obx(
                 () => Text(
                   controller.deviceCountry.value?.countryName ?? tr('chooseCountry'),
-                  style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                  style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().primary),
                 ),
               ),
             ),

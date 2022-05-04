@@ -61,9 +61,9 @@ class SelectMilestoneView extends StatelessWidget {
     final _controller = args['controller'] as TaskActionsController;
     _milestoneController.setup(projectId: _controller.selectedProjectId);
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('selectMilestone'),
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const BackButtonIcon()
@@ -145,10 +145,11 @@ class _None extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(tr('none'), style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface)),
+            Text(tr('none'),
+                style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface)),
             if (isSelected)
               Icon(PlatformIcons(context).checkMark,
-                  color: Get.theme.colors().onBackground.withOpacity(0.6))
+                  color: Theme.of(context).colors().onBackground.withOpacity(0.6))
           ],
         ),
       ),
@@ -190,14 +191,14 @@ class _MilestoneSelectionTile extends StatelessWidget {
                   ),
                   Text(milestone.responsible!.displayName!,
                       style: TextStyleHelper.caption(
-                              color: Get.theme.colors().onSurface.withOpacity(0.6))
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6))
                           .copyWith(height: 1.667)),
                 ],
               ),
             ),
             if (isSelected)
               Icon(PlatformIcons(context).checkMark,
-                  color: Get.theme.colors().onBackground.withOpacity(0.6))
+                  color: Theme.of(context).colors().onBackground.withOpacity(0.6))
           ],
         ),
       ),

@@ -161,9 +161,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
             () => TabBar(
                 isScrollable: true,
                 controller: _tabController,
-                indicatorColor: Get.theme.colors().primary,
-                labelColor: Get.theme.colors().onSurface,
-                unselectedLabelColor: Get.theme.colors().onSurface.withOpacity(0.6),
+                indicatorColor: Theme.of(context).colors().primary,
+                labelColor: Theme.of(context).colors().onSurface,
+                unselectedLabelColor: Theme.of(context).colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   Tab(text: tr('overview')),
@@ -274,11 +274,11 @@ class _ProjectContextMenu extends StatelessWidget {
         padding: EdgeInsets.zero,
         cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         materialIcon: Icon(
           Icons.more_vert,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
@@ -360,7 +360,7 @@ class _ProjectContextMenu extends StatelessWidget {
         ),
       if (controller.projectData.canDelete as bool)
         PlatformPopupMenuItem(
-          textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+          textStyle: TextStyleHelper.subtitle1(color: Theme.of(Get.context!).colors().colorError),
           value: PopupMenuItemValue.deleteProject,
           isDestructiveAction: true,
           child: Text(tr('delete')),
@@ -389,7 +389,7 @@ Future<void> _onSelected(
         titleText: tr('deleteProject'),
         contentText: tr('deleteProjectAlert'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(context).colors().colorError,
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           final result = await controller.deleteProject();

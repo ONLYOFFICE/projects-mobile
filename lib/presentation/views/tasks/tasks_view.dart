@@ -68,7 +68,7 @@ class TasksView extends StatelessWidget {
             ),
             child: AppIcon(
               icon: SvgIcons.add_fab,
-              color: Get.theme.colors().onPrimarySurface,
+              color: Theme.of(context).colors().onPrimarySurface,
             ),
           ),
         ),
@@ -79,11 +79,11 @@ class TasksView extends StatelessWidget {
               MainAppBar(
                 materialTitle: Text(
                   controller.screenName,
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
                 ),
                 cupertinoTitle: Text(
                   controller.screenName,
-                  style: TextStyle(color: Get.theme.colors().onSurface),
+                  style: TextStyle(color: Theme.of(context).colors().onSurface),
                 ),
                 actions: [
                   SearchButton(controller: controller),
@@ -114,11 +114,11 @@ class TasksMoreButtonWidget extends StatelessWidget {
         padding: EdgeInsets.zero,
         cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         materialIcon: Icon(
           Icons.more_vert,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),

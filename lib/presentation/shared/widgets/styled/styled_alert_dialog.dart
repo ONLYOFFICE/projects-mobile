@@ -81,14 +81,14 @@ class StyledAlertDialog extends StatelessWidget {
         (titleText != null
             ? Text(
                 titleText!,
-                style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.headline7(color: Theme.of(context).colors().onSurface),
               )
             : null);
     final _content = content ??
         (contentText != null
             ? Text(
                 contentText!,
-                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface),
               )
             : null);
 
@@ -110,14 +110,15 @@ class StyledAlertDialog extends StatelessWidget {
                 onPressed: onCancelTap ?? Get.back,
                 child: Text(
                   platformCancelText ?? defaultCancelText,
-                  style: TextStyleHelper.button(color: Get.theme.colors().primary),
+                  style: TextStyleHelper.button(color: Theme.of(context).colors().primary),
                   softWrap: false,
                 ),
               ),
               PlatformDialogAction(
                 onPressed: onAcceptTap,
                 child: Text(platformAcceptText ?? defaultAcceptText,
-                    style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().primary),
+                    style: TextStyleHelper.button(
+                        color: acceptColor ?? Theme.of(context).colors().primary),
                     softWrap: false),
               ),
             ],
@@ -164,13 +165,13 @@ class SingleButtonDialog extends StatelessWidget {
     final _title = title ??
         Text(
           titleText!,
-          style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
+          style: TextStyleHelper.headline7(color: Theme.of(context).colors().onSurface),
         );
     final _content = content ??
         (contentText != null
             ? Text(
                 contentText!,
-                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface),
               )
             : null);
 
@@ -191,7 +192,8 @@ class SingleButtonDialog extends StatelessWidget {
             onPressed: onAcceptTap ?? Get.back,
             child: Text(
               platformAcceptText ?? defaultAcceptText,
-              style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().primary),
+              style:
+                  TextStyleHelper.button(color: acceptColor ?? Theme.of(context).colors().primary),
             ),
           ),
         ],

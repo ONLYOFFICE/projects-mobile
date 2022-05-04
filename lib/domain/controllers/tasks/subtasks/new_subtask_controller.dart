@@ -137,7 +137,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           responsibles.value = List.of(_previusSelectedResponsible);
           Get.back();
@@ -161,7 +161,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.find<NavigationController>().back();

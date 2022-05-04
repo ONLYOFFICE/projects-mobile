@@ -53,12 +53,12 @@ Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
     content: RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+        style: TextStyleHelper.body2(color: Theme.of(Get.context!).colors().onSurface),
         children: [
           TextSpan(text: tr('overwriteDialogContent.beforeText')),
           TextSpan(
               text: ' "${titles.join(', ')}" ',
-              style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)
+              style: TextStyleHelper.body2(color: Theme.of(Get.context!).colors().onSurface)
                   .copyWith(fontWeight: FontWeight.w700)),
           TextSpan(text: tr('overwriteDialogContent.afterText')),
         ],
@@ -118,12 +118,12 @@ Future<ConflictResolveType?> _showForAndroid(List<String> titles) async {
         RichText(
           textAlign: TextAlign.start,
           text: TextSpan(
-            style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.body2(color: Theme.of(Get.context!).colors().onSurface),
             children: [
               TextSpan(text: tr('overwriteDialogContent.beforeText')),
               TextSpan(
                   text: ' "${titles.join(', ')}" ',
-                  style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)
+                  style: TextStyleHelper.body2(color: Theme.of(Get.context!).colors().onSurface)
                       .copyWith(fontWeight: FontWeight.w700)),
               TextSpan(text: tr('overwriteDialogContent.afterText')),
             ],
@@ -182,7 +182,7 @@ class _DialogContentState extends State<_DialogContent> {
           contentPadding: EdgeInsets.zero,
           title: Text(
             tr('overwriteConfirmation'),
-            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
           ),
           leading: Radio<ConflictResolveType>(
               value: ConflictResolveType.Overwrite, groupValue: _character, onChanged: _onChanged),
@@ -196,7 +196,7 @@ class _DialogContentState extends State<_DialogContent> {
           contentPadding: EdgeInsets.zero,
           title: Text(
             tr('duplicateConfirmation'),
-            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
           ),
           leading: Radio<ConflictResolveType>(
               value: ConflictResolveType.Duplicate, groupValue: _character, onChanged: _onChanged),
@@ -210,7 +210,7 @@ class _DialogContentState extends State<_DialogContent> {
           contentPadding: EdgeInsets.zero,
           title: Text(
             tr('skipConfirmation'),
-            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
           ),
           leading: Radio<ConflictResolveType>(
               value: ConflictResolveType.Skip, groupValue: _character, onChanged: _onChanged),

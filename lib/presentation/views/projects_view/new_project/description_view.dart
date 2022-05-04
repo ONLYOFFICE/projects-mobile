@@ -50,9 +50,9 @@ class NewProjectDescription extends StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('description'),
         leading: PlatformIconButton(
             icon: Get.put(PlatformController()).isMobile
@@ -74,17 +74,17 @@ class NewProjectDescription extends StatelessWidget {
           autofocus: true,
           controller: controller.descriptionController,
           maxLines: null,
-          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+          style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
           hintText: tr('enterText'),
           cupertino: (_, __) => CupertinoTextFieldData(
-            placeholderStyle:
-                TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.4)),
+            placeholderStyle: TextStyleHelper.subtitle1(
+                color: Theme.of(context).colors().onSurface.withOpacity(0.4)),
           ),
           material: (_, __) => MaterialTextFieldData(
             decoration: InputDecoration.collapsed(
                 hintText: tr('enterText'),
                 hintStyle: TextStyleHelper.subtitle1(
-                    color: Get.theme.colors().onSurface.withOpacity(0.4))),
+                    color: Theme.of(context).colors().onSurface.withOpacity(0.4))),
           ),
         ),
       ),

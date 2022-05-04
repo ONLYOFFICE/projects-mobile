@@ -49,7 +49,7 @@ class NoInternetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = Get.theme.brightness == Brightness.light
+    final icon = Theme.of(context).brightness == Brightness.light
         ? SvgIcons.no_internet
         : SvgIcons.no_internet.replaceFirst('.', '_dark.');
 
@@ -80,14 +80,14 @@ class NoInternetScreen extends StatelessWidget {
                 Text(
                   tr('noInternetConnectionTitle'),
                   textAlign: TextAlign.center,
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   tr('noInternetConnectionSubtitle'),
                   textAlign: TextAlign.center,
                   style: TextStyleHelper.subtitle1(
-                      color: Get.theme.colors().onSurface.withOpacity(0.75)),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.75)),
                 ),
                 const SizedBox(height: 48),
                 Padding(
@@ -107,18 +107,19 @@ class NoInternetScreen extends StatelessWidget {
                       material: (context, platform) => MaterialTextButtonData(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                              (_) => Get.theme.colors().primary),
+                              (_) => Theme.of(context).colors().primary),
                           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                           ),
                         ),
                       ),
                       cupertino: (context, platform) => CupertinoTextButtonData(
-                          color: Get.theme.colors().primary,
+                          color: Theme.of(context).colors().primary,
                           borderRadius: BorderRadius.circular(6)),
                       child: Text(tr('tryAgain'),
                           textAlign: TextAlign.center,
-                          style: TextStyleHelper.button(color: Get.theme.colors().onPrimary)),
+                          style:
+                              TextStyleHelper.button(color: Theme.of(context).colors().onPrimary)),
                     ),
                   ),
                 ),

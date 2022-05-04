@@ -68,9 +68,9 @@ class SelectProjectScreen extends StatelessWidget {
     searchController.refreshData();
 
     return Scaffold(
-      backgroundColor: _platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: _platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: _platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: _platformController.isMobile ? null : Theme.of(context).colors().surface,
         showBackButton: true,
         onLeadingPressed: navigationController.back,
         centerTitle: !GetPlatform.isAndroid,

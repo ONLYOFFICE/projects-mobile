@@ -33,6 +33,7 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
@@ -82,7 +83,7 @@ class DiscussionCommentItemController extends GetxController implements CommentI
       titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
       acceptText: tr('delete').toUpperCase(),
-      acceptColor: Get.theme.colors().colorError,
+      acceptColor: Theme.of(Get.context!).colors().colorError,
       onCancelTap: Get.back,
       onAcceptTap: () async {
         final response = await _api.deleteComment(commentId: comment.value.commentId!);

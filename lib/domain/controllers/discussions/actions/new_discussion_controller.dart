@@ -181,7 +181,7 @@ class NewDiscussionController extends DiscussionActionsController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           subscribers.value = RxList.from(_previousSelectedSubscribers);
           clearUserSearch();
@@ -350,7 +350,7 @@ class NewDiscussionController extends DiscussionActionsController {
         titleText: tr('discardDiscussion'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           Get.back();
           navigationController.back();

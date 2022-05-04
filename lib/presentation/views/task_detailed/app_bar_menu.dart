@@ -45,11 +45,11 @@ class _AppBarMenu extends StatelessWidget {
         padding: EdgeInsets.zero,
         cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         materialIcon: Icon(
           Icons.more_vert,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
       ),
       onSelected: (dynamic value) => _onSelected(value, controller),
@@ -80,8 +80,10 @@ class _AppBarMenu extends StatelessWidget {
             ),
           if (task.canDelete!)
             PlatformPopupMenuItem(
-              textStyle: Get.theme.popupMenuTheme.textStyle
-                  ?.copyWith(color: Get.theme.colors().colorError),
+              textStyle: Theme.of(context)
+                  .popupMenuTheme
+                  .textStyle
+                  ?.copyWith(color: Theme.of(context).colors().colorError),
               isDestructiveAction: true,
               value: 'deleteTask',
               child: Text(tr('deleteTaskButton')),
@@ -129,7 +131,7 @@ void _onSelected(value, TaskItemController controller) async {
         titleText: tr('deleteTaskTitle'),
         contentText: tr('deleteTaskAlert'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           final result = await controller.deleteTask(taskId: task.id!);

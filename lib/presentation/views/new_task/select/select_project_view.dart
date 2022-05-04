@@ -95,9 +95,9 @@ class SelectProjectView extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('selectProject'),
         centerTitle: GetPlatform.isIOS,
         bottomHeight: 44,
@@ -162,8 +162,8 @@ class _ProjectCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Get.find<PlatformController>().isMobile
-          ? Get.theme.colors().backgroundColor
-          : Get.theme.colors().surface,
+          ? Theme.of(context).colors().backgroundColor
+          : Theme.of(context).colors().surface,
       child: InkWell(
         onTap: () {
           controller.changeProjectSelection(item);
@@ -182,7 +182,7 @@ class _ProjectCell extends StatelessWidget {
                     ),
                     Text(item.responsible!.displayName!,
                         style: TextStyleHelper.caption(
-                                color: Get.theme.colors().onSurface.withOpacity(0.6))
+                                color: Theme.of(context).colors().onSurface.withOpacity(0.6))
                             .copyWith(height: 1.667)),
                   ],
                 ),

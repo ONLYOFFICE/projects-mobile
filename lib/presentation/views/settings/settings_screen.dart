@@ -58,7 +58,7 @@ class SettingsScreen extends StatelessWidget {
     controller.setupCacheDirectorySize();
 
     final mobileAppBar = StyledAppBar(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       titleText: tr('settings'),
       onLeadingPressed: controller.leave,
       backButtonIcon:
@@ -66,7 +66,7 @@ class SettingsScreen extends StatelessWidget {
     );
 
     final tabletAppBar = StyledAppBar(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       titleText: tr('settings'),
       leadingWidth: GetPlatform.isIOS ? 100 : null,
       leading: PlatformWidget(
@@ -87,7 +87,7 @@ class SettingsScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: platformController.isMobile ? mobileAppBar : tabletAppBar,
       body: Obx(
         () {
@@ -187,10 +187,10 @@ class SettingsScreen extends StatelessWidget {
               return SettingsList(
                 darkTheme: const SettingsThemeData().copyWith(
                   settingsListBackground: platformController.isMobile
-                      ? Get.theme.colors().backgroundSecond
-                      : Get.theme.colors().surface,
+                      ? Theme.of(context).colors().backgroundSecond
+                      : Theme.of(context).colors().surface,
                   settingsSectionBackground:
-                      platformController.isMobile ? null : Get.theme.colors().bgDescription,
+                      platformController.isMobile ? null : Theme.of(context).colors().bgDescription,
                 ),
                 applicationType: ApplicationType.cupertino,
                 sections: [
@@ -201,7 +201,8 @@ class SettingsScreen extends StatelessWidget {
                         title: Text(
                           tr('passcodeLock'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                         trailing: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -211,12 +212,12 @@ class SettingsScreen extends StatelessWidget {
                                   ? tr('enabled')
                                   : tr('disabled'),
                               style: TextStyleHelper.body2(
-                                color: Get.theme.colors().onBackground.withOpacity(0.75),
+                                color: Theme.of(context).colors().onBackground.withOpacity(0.75),
                               ),
                             ),
                             Icon(
                               Icons.chevron_right,
-                              color: Get.theme.colors().onBackground.withOpacity(0.3),
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.3),
                             ),
                           ],
                         ),
@@ -230,7 +231,8 @@ class SettingsScreen extends StatelessWidget {
                         title: Text(
                           tr('colorTheme'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                         trailing: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -238,12 +240,12 @@ class SettingsScreen extends StatelessWidget {
                             Text(
                               tr(controller.currentTheme.value),
                               style: TextStyleHelper.body2(
-                                color: Get.theme.colors().onBackground.withOpacity(0.75),
+                                color: Theme.of(context).colors().onBackground.withOpacity(0.75),
                               ),
                             ),
                             Icon(
                               Icons.chevron_right,
-                              color: Get.theme.colors().onBackground.withOpacity(0.3),
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.3),
                             ),
                           ],
                         ),
@@ -304,7 +306,8 @@ class SettingsScreen extends StatelessWidget {
                         title: Text(
                           tr('clearCache'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                         trailing: Obx(
                           () => Text(
@@ -322,7 +325,8 @@ class SettingsScreen extends StatelessWidget {
                         title: Text(
                           tr('help'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                       ),
                       SettingsTile(
@@ -330,7 +334,8 @@ class SettingsScreen extends StatelessWidget {
                         title: Text(
                           tr('support'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                       ),
                       SettingsTile(
@@ -338,7 +343,8 @@ class SettingsScreen extends StatelessWidget {
                         title: Text(
                           tr('rateApp'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                       ),
                       SettingsTile(
@@ -346,7 +352,8 @@ class SettingsScreen extends StatelessWidget {
                         title: Text(
                           tr('privacyAndTermsFooter.privacyPolicyWithLink'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                       ),
                       SettingsTile(
@@ -354,7 +361,8 @@ class SettingsScreen extends StatelessWidget {
                         title: Text(
                           tr('privacyAndTermsFooter.termsOfServiceWithLink'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                       ),
                       SettingsTile.navigation(
@@ -362,14 +370,16 @@ class SettingsScreen extends StatelessWidget {
                         title: Text(
                           tr('analytics'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                       ),
                       SettingsTile(
                         title: Text(
                           tr('version'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
                         ),
                         trailing: Text(
                           controller.versionAndBuildNumber,

@@ -59,12 +59,12 @@ class DueDateTile extends StatelessWidget {
           text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
           caption: _isSelected ? '${tr('dueDate')}:' : null,
           isSelected: _isSelected,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground,
           suffix: _isSelected
               ? PlatformIconButton(
                   icon: Icon(PlatformIcons(context).clear,
-                      size: 24, color: Get.theme.colors().onBackground),
+                      size: 24, color: Theme.of(context).colors().onBackground),
                   onPressed: () => controller.changeDueDate(null))
               : null,
           onTap: () => Get.find<NavigationController>().toScreen(

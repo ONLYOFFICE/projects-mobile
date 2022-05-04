@@ -64,8 +64,8 @@ class ProjectTitleTile extends StatelessWidget {
                 () => AppIcon(
                   icon: SvgIcons.project,
                   color: controller.titleIsEmpty.value
-                      ? Get.theme.colors().onBackground.withOpacity(0.4)
-                      : Get.theme.colors().onBackground.withOpacity(0.75),
+                      ? Theme.of(context).colors().onBackground.withOpacity(0.4)
+                      : Theme.of(context).colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
@@ -78,7 +78,7 @@ class ProjectTitleTile extends StatelessWidget {
                 if (showCaption)
                   Text('${tr('projectTitle')}:',
                       style: TextStyleHelper.caption(
-                          color: Get.theme.colors().onBackground.withOpacity(0.75))),
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.75))),
                 Obx(() {
                   final needToFillTitle = controller.needToFillTitle.value;
                   return PlatformTextField(
@@ -86,23 +86,24 @@ class ProjectTitleTile extends StatelessWidget {
                     focusNode: focusOnTitle ? controller.titleFocus : null,
                     maxLines: null,
                     controller: controller.titleController,
-                    style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-                    cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                    style:
+                        TextStyleHelper.headline6(color: Theme.of(context).colors().onBackground),
+                    cursorColor: Theme.of(context).colors().primary.withOpacity(0.87),
                     hintText: tr('projectTitle'),
                     cupertino: (_, __) => CupertinoTextFieldData(
                       padding: EdgeInsets.zero,
                       placeholderStyle: TextStyleHelper.headline6(
                           color: needToFillTitle
-                              ? Get.theme.colors().colorError
-                              : Get.theme.colors().onSurface.withOpacity(0.5)),
+                              ? Theme.of(context).colors().colorError
+                              : Theme.of(context).colors().onSurface.withOpacity(0.5)),
                     ),
                     material: (_, __) => MaterialTextFieldData(
                       decoration: InputDecoration(
                           contentPadding: EdgeInsets.zero,
                           hintStyle: TextStyleHelper.headline6(
                               color: needToFillTitle
-                                  ? Get.theme.colors().colorError
-                                  : Get.theme.colors().onSurface.withOpacity(0.5)),
+                                  ? Theme.of(context).colors().colorError
+                                  : Theme.of(context).colors().onSurface.withOpacity(0.5)),
                           border: InputBorder.none),
                     ),
                   );

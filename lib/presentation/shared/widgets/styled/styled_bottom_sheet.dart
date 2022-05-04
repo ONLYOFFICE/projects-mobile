@@ -52,7 +52,7 @@ class StyledButtomSheet extends StatelessWidget {
     return Container(
       height: height,
       decoration: BoxDecoration(
-        color: Get.theme.colors().surface,
+        color: Theme.of(context).colors().surface,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
@@ -68,7 +68,7 @@ class StyledButtomSheet extends StatelessWidget {
                 width: 40,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                      color: Get.theme.colors().onSurface.withOpacity(0.2),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(2)),
                 ),
               ),

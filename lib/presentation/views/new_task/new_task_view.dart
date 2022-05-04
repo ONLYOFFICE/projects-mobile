@@ -68,12 +68,12 @@ class NewTaskView extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: platformController.isMobile
-            ? Get.theme.colors().backgroundColor
-            : Get.theme.colors().surface,
+            ? Theme.of(context).colors().backgroundColor
+            : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile
-              ? Get.theme.colors().backgroundColor
-              : Get.theme.colors().surface,
+              ? Theme.of(context).colors().backgroundColor
+              : Theme.of(context).colors().surface,
           titleText: tr('newTask'),
           leadingWidth: GetPlatform.isIOS ? 100 : null,
           centerTitle: GetPlatform.isIOS,
@@ -82,7 +82,7 @@ class NewTaskView extends StatelessWidget {
               materialIcon: const Icon(Icons.check_rounded),
               cupertinoIcon: Text(
                 tr('done'),
-                style: TextStyleHelper.headline7(color: Get.theme.colors().primary),
+                style: TextStyleHelper.headline7(color: Theme.of(context).colors().primary),
               ),
               onPressed: controller.confirm,
             ),
@@ -91,7 +91,7 @@ class NewTaskView extends StatelessWidget {
             materialIcon: const Icon(Icons.close),
             cupertinoIcon: Text(
               tr('cancel').toLowerCase().capitalizeFirst!,
-              style: TextStyleHelper.body1(color: Get.theme.colors().primary),
+              style: TextStyleHelper.body1(color: Theme.of(context).colors().primary),
             ),
             onPressed: controller.discardTask,
             cupertino: (_, __) => CupertinoIconButtonData(

@@ -141,7 +141,7 @@ class DiscussionEditingController extends DiscussionActionsController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           for (final item in _previusSelectedSubscribers) {
             if (!item.isSelected.value) item.isSelected.value = true;
@@ -310,7 +310,7 @@ class DiscussionEditingController extends DiscussionActionsController {
         titleText: tr('discardDiscussion'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
-        acceptColor: Get.theme.colors().colorError,
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.find<NavigationController>().back();

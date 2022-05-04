@@ -61,8 +61,8 @@ class DiscussionTitleTextField extends StatelessWidget {
                 () => AppIcon(
                   icon: SvgIcons.discussions,
                   color: controller.titleIsEmpty.value
-                      ? Get.theme.colors().onBackground.withOpacity(0.4)
-                      : Get.theme.colors().onBackground.withOpacity(0.75),
+                      ? Theme.of(context).colors().onBackground.withOpacity(0.4)
+                      : Theme.of(context).colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
@@ -76,15 +76,15 @@ class DiscussionTitleTextField extends StatelessWidget {
                 focusNode: controller.titleFocus,
                 maxLines: null,
                 controller: controller.titleController,
-                style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-                cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                style: TextStyleHelper.headline6(color: Theme.of(context).colors().onBackground),
+                cursorColor: Theme.of(context).colors().primary.withOpacity(0.87),
                 hintText: tr('discussionTitle'),
                 cupertino: (_, __) => CupertinoTextFieldData(
                   padding: EdgeInsets.zero,
                   placeholderStyle: TextStyleHelper.headline6(
                     color: setTitleError
-                        ? Get.theme.colors().colorError
-                        : Get.theme.colors().onSurface.withOpacity(0.5),
+                        ? Theme.of(context).colors().colorError
+                        : Theme.of(context).colors().onSurface.withOpacity(0.5),
                   ),
                 ),
                 material: (_, __) => MaterialTextFieldData(
@@ -92,8 +92,8 @@ class DiscussionTitleTextField extends StatelessWidget {
                       contentPadding: EdgeInsets.zero,
                       hintStyle: TextStyleHelper.headline6(
                         color: setTitleError
-                            ? Get.theme.colors().colorError
-                            : Get.theme.colors().onSurface.withOpacity(0.5),
+                            ? Theme.of(context).colors().colorError
+                            : Theme.of(context).colors().onSurface.withOpacity(0.5),
                       ),
                       border: InputBorder.none),
                 ),

@@ -80,7 +80,7 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   Widget build(BuildContext context) {
-    final onSurfaceColor = Get.theme.colors().onSurface.withOpacity(0.4);
+    final onSurfaceColor = Theme.of(context).colors().onSurface.withOpacity(0.4);
     return Container(
       height: widget.height,
       width: widget.width,
@@ -88,7 +88,7 @@ class _SearchFieldState extends State<SearchField> {
       child: PlatformWidget(
         cupertino: (_, __) {
           return CupertinoSearchTextField(
-            style: TextStyle(color: Get.theme.colors().onBackground),
+            style: TextStyle(color: Theme.of(context).colors().onBackground),
             placeholder: widget.hintText,
             controller: widget.controller,
             onSubmitted: widget.onSubmitted,
@@ -124,7 +124,7 @@ class _SearchFieldState extends State<SearchField> {
             decoration: InputDecoration(
               hintText: widget.hintText,
               filled: true,
-              fillColor: widget.color ?? Get.theme.colors().bgDescription,
+              fillColor: widget.color ?? Theme.of(context).colors().bgDescription,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide: BorderSide.none,
@@ -176,7 +176,7 @@ class _ClearButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onSurfaceColor = Get.theme.colors().onSurface.withOpacity(0.4);
+    final onSurfaceColor = Theme.of(context).colors().onSurface.withOpacity(0.4);
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(

@@ -76,9 +76,9 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: forEditing ? tr('editSubtask') : tr('addSubtask'),
           leadingWidth: GetPlatform.isIOS ? 100 : null,
           centerTitle: !GetPlatform.isAndroid,
@@ -145,21 +145,27 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                                 // focusNode = null if subtaskEditingController
                                 focusNode: controller.titleFocus,
                                 style: TextStyleHelper.subtitle1(
-                                    color: Get.theme.colors().onBackground),
+                                    color: Theme.of(context).colors().onBackground),
                                 hintText: tr('describeSubtask'),
                                 cupertino: (_, __) => CupertinoTextFieldData(
                                   placeholderStyle: TextStyleHelper.subtitle1(
                                       color: setTiltleError
-                                          ? Get.theme.colors().colorError
-                                          : Get.theme.colors().onBackground.withOpacity(0.5)),
+                                          ? Theme.of(context).colors().colorError
+                                          : Theme.of(context)
+                                              .colors()
+                                              .onBackground
+                                              .withOpacity(0.5)),
                                 ),
                                 material: (_, __) => MaterialTextFieldData(
                                   decoration: InputDecoration.collapsed(
                                     hintText: tr('describeSubtask'),
                                     hintStyle: TextStyleHelper.subtitle1(
                                         color: setTiltleError
-                                            ? Get.theme.colors().colorError
-                                            : Get.theme.colors().onBackground.withOpacity(0.5)),
+                                            ? Theme.of(context).colors().colorError
+                                            : Theme.of(context)
+                                                .colors()
+                                                .onBackground
+                                                .withOpacity(0.5)),
                                   ),
                                 ),
                               );
@@ -186,7 +192,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                   enableUnderline: false,
                   suffixIcon: PlatformIconButton(
                     icon: Icon(PlatformIcons(context).clear,
-                        size: 20, color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                        size: 20, color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
                     onPressed: controller.deleteResponsible,
                   ),
                 ),

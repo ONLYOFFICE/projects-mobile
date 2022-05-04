@@ -76,9 +76,9 @@ class SelfProfileScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           leadingWidth: GetPlatform.isIOS ? 100 : null,
           showBackButton: showBackButton,
           leading: showBackButton
@@ -100,7 +100,7 @@ class SelfProfileScreen extends StatelessWidget {
               : null,
           title: Text(
             tr('profile'),
-            style: TextStyle(color: Get.theme.colors().onSurface),
+            style: TextStyle(color: Theme.of(context).colors().onSurface),
           ),
           centerTitle: !GetPlatform.isAndroid,
           actions: [
@@ -110,7 +110,7 @@ class SelfProfileScreen extends StatelessWidget {
                   return CupertinoIconButtonData(
                     icon: AppIcon(
                       icon: SvgIcons.settings,
-                      color: Get.theme.colors().primary,
+                      color: Theme.of(context).colors().primary,
                     ),
                     onPressed: () => Get.find<NavigationController>().to(const SettingsScreen()),
                     padding: EdgeInsets.zero,
@@ -133,7 +133,7 @@ class SelfProfileScreen extends StatelessWidget {
                       opacity: profileController.status.value == UserStatus.Terminated ? 0.4 : 1.0,
                       child: CircleAvatar(
                         radius: 60,
-                        backgroundColor: Get.theme.colors().bgDescription,
+                        backgroundColor: Theme.of(context).colors().bgDescription,
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: profileController.avatar.value),
@@ -166,7 +166,7 @@ class SelfProfileScreen extends StatelessWidget {
                   () => Text(
                     profileController.username.value,
                     style: TextStyleHelper.headline6(
-                      color: Get.theme.colors().onSurface,
+                      color: Theme.of(context).colors().onSurface,
                     ),
                   ),
                 ),
@@ -188,9 +188,9 @@ class SelfProfileScreen extends StatelessWidget {
               ),
               _ProfileInfoTile(
                 text: tr('logOut'),
-                textColor: Get.theme.colors().colorError,
+                textColor: Theme.of(context).colors().colorError,
                 icon: SvgIcons.logout,
-                iconColor: Get.theme.colors().colorError.withOpacity(0.6),
+                iconColor: Theme.of(context).colors().colorError.withOpacity(0.6),
                 onTap: () async => profileController.logout(context),
               ),
             ],
@@ -263,7 +263,7 @@ class ProfileScreen extends StatelessWidget {
                 child: Text(
                   portalUser.displayName!,
                   style: TextStyleHelper.headline6(
-                    color: Get.theme.colors().onSurface,
+                    color: Theme.of(context).colors().onSurface,
                   ),
                 ),
               ),
@@ -330,7 +330,7 @@ class _ProfileInfoTile extends StatelessWidget {
                   child: icon != null
                       ? AppIcon(
                           icon: icon,
-                          color: iconColor ?? Get.theme.colors().onSurface.withOpacity(0.6))
+                          color: iconColor ?? Theme.of(context).colors().onSurface.withOpacity(0.6))
                       : null,
                 ),
                 Expanded(
@@ -343,14 +343,15 @@ class _ProfileInfoTile extends StatelessWidget {
                         if (caption != null && caption!.isNotEmpty)
                           Text(caption!,
                               style: TextStyleHelper.caption(
-                                  color: Get.theme.colors().onBackground.withOpacity(0.75))),
+                                  color:
+                                      Theme.of(context).colors().onBackground.withOpacity(0.75))),
                         Text(text,
                             maxLines: maxLines,
                             overflow: textOverflow,
                             style: textStyle ??
                                 TextStyleHelper.subtitle1(
                                     // ignore: prefer_if_null_operators
-                                    color: textColor ?? Get.theme.colors().onSurface))
+                                    color: textColor ?? Theme.of(context).colors().onSurface))
                       ],
                     ),
                   ),

@@ -113,10 +113,10 @@ class _GetCodeViewsState extends State<GetCodeViews> {
 }
 
 TextStyle _stepStyle(BuildContext context) =>
-    TextStyleHelper.headline6(color: Get.theme.colors().onSurface);
+    TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface);
 
 TextStyle _setup1Style(BuildContext context) =>
-    TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface);
+    TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface);
 
 TextStyle _setup2Style(BuildContext context) =>
-    TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6));
+    TextStyleHelper.body2(color: Theme.of(context).colors().onSurface.withOpacity(0.6));

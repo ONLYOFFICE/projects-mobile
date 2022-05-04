@@ -143,7 +143,7 @@ class TabletLayout extends StatelessWidget {
           SafeArea(
             bottom: false,
             child: Container(
-              color: Get.theme.colors().primarySurface,
+              color: Theme.of(context).colors().primarySurface,
               width: 80,
               child: Column(
                 children: [
@@ -171,11 +171,11 @@ class TabletLayout extends StatelessWidget {
                               ),
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_dashboard,
-                                  color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                                  color: Theme.of(context).colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
                                   icon: SvgIcons.tab_bar_dashboard,
-                                  color: Get.theme.colors().onNavBar,
+                                  color: Theme.of(context).colors().onNavBar,
                                   height: _iconSize),
                               label: Text(tr('dashboard'))),
                           NavigationRailDestination(
@@ -185,11 +185,11 @@ class TabletLayout extends StatelessWidget {
                               ),
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_tasks,
-                                  color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                                  color: Theme.of(context).colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
                                   icon: SvgIcons.tab_bar_tasks,
-                                  color: Get.theme.colors().onNavBar,
+                                  color: Theme.of(context).colors().onNavBar,
                                   height: _iconSize),
                               label: Text(tr('tasks'))),
                           NavigationRailDestination(
@@ -199,11 +199,11 @@ class TabletLayout extends StatelessWidget {
                               ),
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_projects,
-                                  color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                                  color: Theme.of(context).colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
                                   icon: SvgIcons.tab_bar_projects,
-                                  color: Get.theme.colors().onNavBar,
+                                  color: Theme.of(context).colors().onNavBar,
                                   height: _iconSize),
                               label: Text(tr('projects'))),
                           NavigationRailDestination(
@@ -213,11 +213,11 @@ class TabletLayout extends StatelessWidget {
                               ),
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_discussions,
-                                  color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                                  color: Theme.of(context).colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
                                   icon: SvgIcons.tab_bar_discussions,
-                                  color: Get.theme.colors().onNavBar,
+                                  color: Theme.of(context).colors().onNavBar,
                                   height: _iconSize),
                               label: Text(tr('discussions'))),
                           NavigationRailDestination(
@@ -227,11 +227,11 @@ class TabletLayout extends StatelessWidget {
                               ),
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_documents,
-                                  color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                                  color: Theme.of(context).colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
                                   icon: SvgIcons.tab_bar_documents,
-                                  color: Get.theme.colors().onNavBar,
+                                  color: Theme.of(context).colors().onNavBar,
                                   height: _iconSize),
                               label: Text(tr('documents'))),
                         ],
@@ -262,7 +262,7 @@ class TabletLayout extends StatelessWidget {
                       icon: SvgIcons.settings,
                       width: 24,
                       height: 24,
-                      color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                      color: Theme.of(context).colors().onNavBar.withOpacity(0.4),
                     ),
                     onPressed: () => controller.toScreen(null, page: '/SettingsScreen'),
                   ),
@@ -338,44 +338,44 @@ class MobileLayout extends StatelessWidget {
                   BottomNavigationBarItem(
                     icon: AppIcon(
                         icon: SvgIcons.tab_bar_dashboard,
-                        color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                        color: Theme.of(context).colors().onNavBar.withOpacity(0.4),
                         height: iconSize),
                     activeIcon: AppIcon(
                         icon: SvgIcons.tab_bar_dashboard,
-                        color: Get.theme.colors().onNavBar,
+                        color: Theme.of(context).colors().onNavBar,
                         height: iconSize),
                     label: tr('dashboard'),
                   ),
                   BottomNavigationBarItem(
                     icon: AppIcon(
                         icon: SvgIcons.tab_bar_tasks,
-                        color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                        color: Theme.of(context).colors().onNavBar.withOpacity(0.4),
                         height: iconSize),
                     activeIcon: AppIcon(
                         icon: SvgIcons.tab_bar_tasks,
-                        color: Get.theme.colors().onNavBar,
+                        color: Theme.of(context).colors().onNavBar,
                         height: iconSize),
                     label: tr('tasks'),
                   ),
                   BottomNavigationBarItem(
                     icon: AppIcon(
                         icon: SvgIcons.tab_bar_projects,
-                        color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                        color: Theme.of(context).colors().onNavBar.withOpacity(0.4),
                         height: iconSize),
                     activeIcon: AppIcon(
                         icon: SvgIcons.tab_bar_projects,
-                        color: Get.theme.colors().onNavBar,
+                        color: Theme.of(context).colors().onNavBar,
                         height: iconSize),
                     label: tr('projects'),
                   ),
                   BottomNavigationBarItem(
                     icon: AppIcon(
                         icon: SvgIcons.tab_bar_more,
-                        color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                        color: Theme.of(context).colors().onNavBar.withOpacity(0.4),
                         height: iconSize),
                     activeIcon: AppIcon(
                         icon: SvgIcons.tab_bar_more,
-                        color: Get.theme.colors().onNavBar,
+                        color: Theme.of(context).colors().onNavBar,
                         height: iconSize),
                     label: tr('more'),
                   ),

@@ -71,9 +71,9 @@ class TeamMembersSelectionView extends StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         title: TeamMembersSelectionHeader(
           controller: controller,
           title: tr('addTeamMembers'),
@@ -135,13 +135,13 @@ class TeamMembersSelectionHeader extends StatelessWidget {
           children: <Widget>[
             Text(
               title,
-              style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+              style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
               overflow: TextOverflow.fade,
             ),
             if (controller.selectedTeamMembers.isNotEmpty as bool)
               Text(
                 plural('person', controller.selectedTeamMembers.length as int),
-                style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.caption(color: Theme.of(context).colors().onSurface),
               ),
           ],
         ),
@@ -192,7 +192,7 @@ class TeamMembersSearchBar extends StatelessWidget {
             },
             icon: AppIcon(
               icon: SvgIcons.preferences,
-              color: Get.theme.colors().primary,
+              color: Theme.of(context).colors().primary,
             ),
           ),
         ],

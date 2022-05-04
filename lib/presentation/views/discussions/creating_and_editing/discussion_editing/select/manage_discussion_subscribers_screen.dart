@@ -70,9 +70,9 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           title: _DiscussionSubscribersSelectionHeader(
             title: tr('manageSubscribers'),
             controller: controller,
@@ -196,11 +196,11 @@ class _DiscussionSubscribersSelectionHeader extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
           ),
           if (controller.subscribers.isNotEmpty)
             Text(plural('selected', controller.subscribers.length),
-                style: TextStyleHelper.caption(color: Get.theme.colors().onSurface))
+                style: TextStyleHelper.caption(color: Theme.of(context).colors().onSurface))
         ],
       ),
     );
@@ -222,7 +222,8 @@ class _UsersCategoryText extends StatelessWidget {
         padding: const EdgeInsets.only(left: 15, top: 14),
         child: Text(
           text,
-          style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+          style:
+              TextStyleHelper.body2(color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
         ),
       ),
     );

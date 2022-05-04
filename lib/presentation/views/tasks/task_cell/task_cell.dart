@@ -125,8 +125,8 @@ class _StatusText extends StatelessWidget {
                   style: TextStyleHelper.status(color: controller.getStatusTextColor)),
             ),
             Text(' • ',
-                style:
-                    TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                style: TextStyleHelper.caption(
+                    color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
           ],
         );
       },
@@ -154,7 +154,7 @@ class _SecondColumn extends StatelessWidget {
           children: <Widget>[
             CellAtributedTitle(
               text: itemController.task.value.title?.trim(),
-              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+              style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
               atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
               atributeIconVisible: itemController.task.value.priority == 1,
             ),
@@ -167,7 +167,7 @@ class _SecondColumn extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.6),
                     ),
                   ),
                 ),
@@ -207,8 +207,8 @@ class _ThirdColumn extends StatelessWidget {
                 stringDate: controller.task.value.deadline!,
               ),
               style: _deadline.isBefore(_now)
-                  ? TextStyleHelper.caption(color: Get.theme.colors().colorError)
-                  : TextStyleHelper.caption(color: Get.theme.colors().onSurface)),
+                  ? TextStyleHelper.caption(color: Theme.of(context).colors().colorError)
+                  : TextStyleHelper.caption(color: Theme.of(context).colors().onSurface)),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -220,7 +220,8 @@ class _ThirdColumn extends StatelessWidget {
               child: Text(
                 controller.task.value.subtasks!.length.toString(),
                 overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                style: TextStyleHelper.body2(
+                    color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
               ),
             ),
           ],

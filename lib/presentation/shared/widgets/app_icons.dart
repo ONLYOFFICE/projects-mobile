@@ -232,7 +232,7 @@ class AppIcon extends StatelessWidget {
   String? get iconToDisplay {
     if (!hasDarkVersion) return icon;
 
-    if (Get.theme.brightness == Brightness.dark)
+    if (Theme.of(Get.context!).brightness == Brightness.dark)
       return darkThemeIcon ?? icon!.replaceFirst('.', '_dark.');
     return icon;
   }

@@ -169,11 +169,11 @@ class DiscussionsMoreButtonWidget extends StatelessWidget {
         padding: EdgeInsets.zero,
         cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         materialIcon: Icon(
           Icons.more_vert,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),

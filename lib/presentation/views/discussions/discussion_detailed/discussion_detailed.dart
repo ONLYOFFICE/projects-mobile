@@ -101,9 +101,9 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
             child: TabBar(
                 isScrollable: true,
                 controller: _tabController,
-                indicatorColor: Get.theme.colors().primary,
-                labelColor: Get.theme.colors().onSurface,
-                unselectedLabelColor: Get.theme.colors().onSurface.withOpacity(0.6),
+                indicatorColor: Theme.of(context).colors().primary,
+                labelColor: Theme.of(context).colors().onSurface,
+                unselectedLabelColor: Theme.of(context).colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   CustomTab(

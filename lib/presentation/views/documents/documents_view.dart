@@ -132,7 +132,7 @@ class DocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        //backgroundColor: Get.theme.backgroundColor,
+        //backgroundColor: Theme.of(context).backgroundColor,
         body: NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return [
@@ -141,13 +141,13 @@ class DocumentsScreen extends StatelessWidget {
             materialTitle: Obx(
               () => Text(
                 controller.documentsScreenName.value,
-                style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
               ),
             ),
             cupertinoTitle: Obx(
               () => Text(
                 controller.documentsScreenName.value,
-                style: TextStyle(color: Get.theme.colors().onSurface),
+                style: TextStyle(color: Theme.of(context).colors().onSurface),
               ),
             ),
             actions: [
@@ -179,11 +179,11 @@ class DocumentsMoreButton extends StatelessWidget {
         padding: EdgeInsets.zero,
         cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         materialIcon: Icon(
           Icons.more_vert,
-          color: Get.theme.colors().primary,
+          color: Theme.of(context).colors().primary,
         ),
         cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),

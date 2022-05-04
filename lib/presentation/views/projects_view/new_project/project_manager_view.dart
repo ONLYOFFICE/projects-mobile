@@ -64,10 +64,10 @@ class ProjectManagerSelectionView extends StatelessWidget {
     controller.setupUsersSelection();
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
         titleText: tr('selectPM'),
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         bottom: SearchField(
           controller: usersDataSource.searchInputController,
           hintText: tr('usersSearch'),
@@ -190,7 +190,7 @@ class UsersDefault extends StatelessWidget {
                     child: Text(
                       tr('me'),
                       style: TextStyleHelper.body2(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6),
+                        color: Theme.of(context).colors().onSurface.withOpacity(0.6),
                       ),
                     ),
                   ),
@@ -209,7 +209,7 @@ class UsersDefault extends StatelessWidget {
             child: Text(
               tr('users'),
               style: TextStyleHelper.body2(
-                color: Get.theme.colors().onSurface.withOpacity(0.6),
+                color: Theme.of(context).colors().onSurface.withOpacity(0.6),
               ),
             ),
           ),

@@ -66,7 +66,7 @@ class ProjectsFilterScreen extends StatelessWidget {
     }
 
     final backgroundColor =
-        Get.find<PlatformController>().isMobile ? null : Get.theme.colors().surface;
+        Get.find<PlatformController>().isMobile ? null : Theme.of(context).colors().surface;
 
     return Scaffold(
       backgroundColor: backgroundColor,

@@ -42,13 +42,13 @@ class ListLoadingSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _decoration = BoxDecoration(
-      color: Get.theme.colors().skeleton,
+      color: Theme.of(context).colors().skeleton,
       borderRadius: BorderRadius.circular(2),
     );
 
     return Shimmer.fromColors(
-      baseColor: Get.theme.colors().skeleton,
-      highlightColor: Get.theme.colors().skeletonHighlighted,
+      baseColor: Theme.of(context).colors().skeleton,
+      highlightColor: Theme.of(context).colors().skeletonHighlighted,
       child: Column(
         children: [
           const SizedBox(height: 22),
@@ -66,7 +66,7 @@ class ListLoadingSkeleton extends StatelessWidget {
                   width: 40,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Get.theme.colors().skeleton,
+                    color: Theme.of(context).colors().skeleton,
                   ),
                 ),
                 Expanded(

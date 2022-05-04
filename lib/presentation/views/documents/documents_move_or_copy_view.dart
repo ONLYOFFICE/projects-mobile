@@ -85,7 +85,7 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
         centerTitle: GetPlatform.isIOS,
         title: Obx(() => Text(
               controller.documentsScreenName.value,
-              style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+              style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
             )),
         actions: [
           SearchButton(controller: controller),
@@ -154,7 +154,7 @@ class MoveDocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Theme.of(context).backgroundColor,
       appBar: appBar,
       body: Stack(
         children: [
@@ -162,7 +162,7 @@ class MoveDocumentsScreen extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              color: Get.theme.colors().surface,
+              color: Theme.of(context).colors().surface,
               child: SafeArea(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -292,7 +292,7 @@ class _FileCell extends StatelessWidget {
                 Text(
                     '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',
                     style: TextStyleHelper.caption(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                        color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
               ],
             ),
           ),

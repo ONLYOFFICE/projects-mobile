@@ -68,14 +68,14 @@ class NewMilestoneView extends StatelessWidget {
         },
         child: Scaffold(
           backgroundColor: platformController.isMobile
-              ? Get.theme.colors().backgroundColor
-              : Get.theme.colors().surface,
+              ? Theme.of(context).colors().backgroundColor
+              : Theme.of(context).colors().surface,
           appBar: StyledAppBar(
             leadingWidth: GetPlatform.isIOS ? 100 : null,
             centerTitle: !GetPlatform.isAndroid,
             backgroundColor: platformController.isMobile
-                ? Get.theme.colors().backgroundColor
-                : Get.theme.colors().surface,
+                ? Theme.of(context).colors().backgroundColor
+                : Theme.of(context).colors().surface,
             titleText: tr('newMilestone'),
             actions: [
               PlatformWidget(
@@ -210,8 +210,8 @@ class MilestoneInput extends StatelessWidget {
               () => AppIcon(
                 icon: SvgIcons.milestone,
                 color: controller.titleIsEmpty.isTrue
-                    ? Get.theme.colors().onBackground.withOpacity(0.4)
-                    : Get.theme.colors().onBackground.withOpacity(0.75),
+                    ? Theme.of(context).colors().onBackground.withOpacity(0.4)
+                    : Theme.of(context).colors().onBackground.withOpacity(0.75),
               ),
             ),
           ),
@@ -223,15 +223,15 @@ class MilestoneInput extends StatelessWidget {
                 focusNode: focusOnTitle ? controller.titleFocus : null,
                 maxLines: null,
                 controller: controller.titleController,
-                style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-                cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                style: TextStyleHelper.headline6(color: Theme.of(context).colors().onBackground),
+                cursorColor: Theme.of(context).colors().primary.withOpacity(0.87),
                 hintText: tr('milestoneTitle'),
                 cupertino: (_, __) => CupertinoTextFieldData(
                   padding: EdgeInsets.zero,
                   placeholderStyle: TextStyleHelper.headline6(
                       color: needToSetTitle
-                          ? Get.theme.colors().colorError
-                          : Get.theme.colors().onSurface.withOpacity(0.5)),
+                          ? Theme.of(context).colors().colorError
+                          : Theme.of(context).colors().onSurface.withOpacity(0.5)),
                 ),
                 material: (_, __) => MaterialTextFieldData(
                   decoration: InputDecoration(
@@ -239,8 +239,8 @@ class MilestoneInput extends StatelessWidget {
                       contentPadding: EdgeInsets.zero,
                       hintStyle: TextStyleHelper.headline6(
                           color: needToSetTitle
-                              ? Get.theme.colors().colorError
-                              : Get.theme.colors().onSurface.withOpacity(0.5)),
+                              ? Theme.of(context).colors().colorError
+                              : Theme.of(context).colors().onSurface.withOpacity(0.5)),
                       border: InputBorder.none),
                 ),
               );
@@ -268,13 +268,13 @@ class DescriptionTile extends StatelessWidget {
           text: _isSletected ? newMilestoneController.descriptionText.value : tr('addDescription'),
           maxLines: 1,
           icon: SvgIcons.description,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground,
           caption: _isSletected ? tr('description') : null,
           isSelected: _isSletected,
           suffix: _isSletected
               ? Icon(PlatformIcons(context).rightChevron,
-                  size: 24, color: Get.theme.colors().onBackground)
+                  size: 24, color: Theme.of(context).colors().onBackground)
               : null,
           onTap: () => Get.find<NavigationController>().toScreen(
             const NewMilestoneDescription(),
@@ -310,16 +310,17 @@ class ProjectTile extends StatelessWidget {
         return NewItemTile(
             text: _isSelected ? controller.selectedProjectTitle.value : tr('selectProject'),
             icon: SvgIcons.project,
-            iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-            selectedIconColor: Get.theme.colors().onBackground,
-            textColor: controller.needToSelectProject.value ? Get.theme.colors().colorError : null,
+            iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+            selectedIconColor: Theme.of(context).colors().onBackground,
+            textColor:
+                controller.needToSelectProject.value ? Theme.of(context).colors().colorError : null,
             isSelected: _isSelected,
             caption: _isSelected ? tr('project') : null,
             suffix: _isSelected
                 ? Icon(
                     PlatformIcons(context).rightChevron,
                     size: 24,
-                    color: Get.theme.colors().onBackground.withOpacity(0.6),
+                    color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                   )
                 : null,
             onTap: _onPressed);
@@ -345,17 +346,18 @@ class ResponsibleTile extends StatelessWidget {
         text: _isSelected
             ? '${controller.responsible.value?.portalUser.displayName}'
             : tr('addResponsible'),
-        textColor: controller.needToSelectResponsible.value ? Get.theme.colors().colorError : null,
+        textColor:
+            controller.needToSelectResponsible.value ? Theme.of(context).colors().colorError : null,
         suffix: _isSelected
             ? Icon(
                 PlatformIcons(context).rightChevron,
                 size: 24,
-                color: Get.theme.colors().onBackground.withOpacity(0.6),
+                color: Theme.of(context).colors().onBackground.withOpacity(0.6),
               )
             : null,
         icon: SvgIcons.person,
-        iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-        selectedIconColor: Get.theme.colors().onBackground,
+        iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+        selectedIconColor: Theme.of(context).colors().onBackground,
         onTap: () => {
           Get.find<NavigationController>().toScreen(
             const ProjectTeamResponsibleSelectionView(),
@@ -383,19 +385,20 @@ class DueDateTile extends StatelessWidget {
         final _isSelected = controller.dueDateText.value.isNotEmpty;
         return NewItemTile(
             icon: SvgIcons.due_date,
-            iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-            selectedIconColor: Get.theme.colors().onBackground,
+            iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+            selectedIconColor: Theme.of(context).colors().onBackground,
             text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
             caption: _isSelected ? tr('dueDate') : null,
             isSelected: _isSelected,
-            textColor: controller.needToSetDueDate.value ? Get.theme.colors().colorError : null,
+            textColor:
+                controller.needToSetDueDate.value ? Theme.of(context).colors().colorError : null,
             suffix: _isSelected
                 ? PlatformIconButton(
                     padding: EdgeInsets.zero,
                     icon: Icon(
                       PlatformIcons(context).clear,
                       size: 24,
-                      color: Get.theme.colors().onBackground,
+                      color: Theme.of(context).colors().onBackground,
                     ),
                     onPressed: () => controller.changeDueDate(null))
                 : null,

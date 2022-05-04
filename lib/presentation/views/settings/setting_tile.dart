@@ -73,7 +73,7 @@ class SettingTile extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         border: enableUnderline
-            ? Border(bottom: BorderSide(color: Get.theme.colors().outline.withOpacity(0.5)))
+            ? Border(bottom: BorderSide(color: Theme.of(context).colors().outline.withOpacity(0.5)))
             : null,
       ),
       child: SizedBox(
@@ -89,7 +89,7 @@ class SettingTile extends StatelessWidget {
                     child: icon != null
                         ? AppIcon(
                             icon: icon,
-                            color: Get.theme
+                            color: Theme.of(context)
                                 .colors()
                                 .onBackground
                                 .withOpacity(enableIconOpacity ? 0.6 : 1),
@@ -108,13 +108,13 @@ class SettingTile extends StatelessWidget {
                             overflow: textOverflow,
                             style: textStyle ??
                                 TextStyleHelper.subtitle1(
-                                    color: textColor ?? Get.theme.colors().onBackground),
+                                    color: textColor ?? Theme.of(context).colors().onBackground),
                           ),
                           if (loverText != null && loverText!.isNotEmpty)
                             Text(
                               loverText!,
                               style: TextStyleHelper.body2(
-                                color: Get.theme.colors().onBackground.withOpacity(0.75),
+                                color: Theme.of(context).colors().onBackground.withOpacity(0.75),
                               ),
                             ),
                         ],

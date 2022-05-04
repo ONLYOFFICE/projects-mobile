@@ -60,7 +60,7 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
   final TextStyle _kActionSheetActionStyle = TextStyle(
     fontFamily: '.SF Pro Text',
     fontSize: 17,
-    color: Get.theme.colors().onSurface,
+    color: Theme.of(Get.context!).colors().onSurface,
     fontWeight: FontWeight.w400,
     height: 1.3,
     letterSpacing: -0.41,

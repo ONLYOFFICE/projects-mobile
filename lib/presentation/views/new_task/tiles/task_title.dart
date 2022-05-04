@@ -64,8 +64,8 @@ class TaskTitle extends StatelessWidget {
                 () => AppIcon(
                   icon: SvgIcons.tab_bar_tasks,
                   color: controller.titleIsEmpty.value
-                      ? Get.theme.colors().onBackground.withOpacity(0.4)
-                      : Get.theme.colors().onBackground.withOpacity(0.75),
+                      ? Theme.of(context).colors().onBackground.withOpacity(0.4)
+                      : Theme.of(context).colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
@@ -78,7 +78,7 @@ class TaskTitle extends StatelessWidget {
                 if (showCaption)
                   Text('${tr('taskTitle')}:',
                       style: TextStyleHelper.caption(
-                          color: Get.theme.colors().onBackground.withOpacity(0.75))),
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.75))),
                 Obx(() {
                   final setTitleError = controller.setTitleError.value;
                   return PlatformTextField(
@@ -86,16 +86,17 @@ class TaskTitle extends StatelessWidget {
                     focusNode: focusOnTitle ? controller.titleFocus : null,
                     maxLines: null,
                     controller: controller.titleController,
-                    style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-                    cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                    style:
+                        TextStyleHelper.headline6(color: Theme.of(context).colors().onBackground),
+                    cursorColor: Theme.of(context).colors().primary.withOpacity(0.87),
                     hintText: tr('taskTitle'),
                     makeCupertinoDecorationNull: true,
                     cupertino: (_, __) => CupertinoTextFieldData(
                       padding: EdgeInsets.zero,
                       placeholderStyle: TextStyleHelper.headline6(
                           color: setTitleError
-                              ? Get.theme.colors().colorError
-                              : Get.theme.colors().onSurface.withOpacity(0.5)),
+                              ? Theme.of(context).colors().colorError
+                              : Theme.of(context).colors().onSurface.withOpacity(0.5)),
                     ),
                     material: (_, __) => MaterialTextFieldData(
                       decoration: InputDecoration(
@@ -103,8 +104,8 @@ class TaskTitle extends StatelessWidget {
                           contentPadding: EdgeInsets.zero,
                           hintStyle: TextStyleHelper.headline6(
                               color: setTitleError
-                                  ? Get.theme.colors().colorError
-                                  : Get.theme.colors().onSurface.withOpacity(0.5)),
+                                  ? Theme.of(context).colors().colorError
+                                  : Theme.of(context).colors().onSurface.withOpacity(0.5)),
                           border: InputBorder.none),
                     ),
                   );

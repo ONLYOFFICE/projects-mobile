@@ -46,7 +46,7 @@ class SortView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Get.theme.colors().surface,
+        color: Theme.of(context).colors().surface,
         borderRadius:
             const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
       ),
@@ -62,7 +62,7 @@ class SortView extends StatelessWidget {
                 width: 40,
                 child: DecoratedBox(
                     decoration: BoxDecoration(
-                        color: Get.theme.colors().onSurface.withOpacity(0.2),
+                        color: Theme.of(context).colors().onSurface.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(2))),
               ),
             ),
@@ -70,7 +70,7 @@ class SortView extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.only(left: 15, right: 16, top: 18.5),
               child: Text(tr('sortBy'),
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface))),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface))),
           sortOptions,
         ],
       ),
@@ -103,7 +103,7 @@ class SortTile extends StatelessWidget {
         if (_selected)
           AppIcon(
             icon: sortController.isSortAscending.value ? SvgIcons.up_arrow : SvgIcons.down_arrow,
-            color: Get.theme.colors().onSurface,
+            color: Theme.of(context).colors().onSurface,
           ),
         if (_selected) const SizedBox(width: 8)
       ],

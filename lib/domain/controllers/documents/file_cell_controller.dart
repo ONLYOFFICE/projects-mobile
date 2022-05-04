@@ -67,7 +67,7 @@ class FileCellController extends GetxController {
           width: 20,
           height: 20,
           icon: SvgIcons.documents,
-          color: Get.theme.colors().onSurface.withOpacity(0.6))
+          color: Theme.of(Get.context as BuildContext).colors().onSurface.withOpacity(0.6))
       .obs;
 
   String? downloadTaskId;
@@ -276,8 +276,8 @@ class FileCellController extends GetxController {
               children: [
                 LinearProgressIndicator(
                   value: value / 100,
-                  color: Get.theme.colors().primary,
-                  backgroundColor: Get.theme.colors().backgroundSecond,
+                  color: Theme.of(context as BuildContext).colors().primary,
+                  backgroundColor: Theme.of(context as BuildContext).colors().backgroundSecond,
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 0),
@@ -286,7 +286,8 @@ class FileCellController extends GetxController {
                       const Spacer(),
                       Text(
                         '$value %',
-                        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+                        style: TextStyleHelper.body2(
+                            color: Theme.of(context as BuildContext).colors().onSurface),
                       ),
                     ],
                   ),

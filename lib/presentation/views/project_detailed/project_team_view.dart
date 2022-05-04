@@ -70,7 +70,7 @@ class ProjectTeamView extends StatelessWidget {
                   onPressed: fabAction,
                   child: AppIcon(
                     icon: SvgIcons.fab_user,
-                    color: Get.theme.colors().onPrimarySurface,
+                    color: Theme.of(context).colors().onPrimarySurface,
                   ),
                 ),
               ),
