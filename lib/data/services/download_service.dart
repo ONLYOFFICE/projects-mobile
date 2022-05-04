@@ -34,12 +34,14 @@ import 'dart:async';
 import 'dart:io' show Directory, File;
 import 'dart:isolate';
 import 'dart:typed_data';
-import 'dart:ui';
+import 'package:http/http.dart' as myhttp;
+import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:android_path_provider/android_path_provider.dart';
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:http_client_helper/http_client_helper.dart';
 import 'package:path_provider/path_provider.dart';
@@ -80,13 +82,13 @@ class DownloadService {
 
 class DocumentsDownloadService {
   DocumentsDownloadService() {
-    if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName)) {
+    /*  if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName)) {
       IsolateNameServer.removePortNameMapping(_portName);
       if (!IsolateNameServer.registerPortWithName(_port.sendPort, _portName))
         debugPrint('error register port');
-    }
+    } */
 
-    _port.listen((dynamic data) async {
+    /* _port.listen((dynamic data) async {
       final id = data[0] as String;
       final status = data[1] as DownloadTaskStatus;
       final progress = data[2] as int;
@@ -100,7 +102,7 @@ class DocumentsDownloadService {
           status == DownloadTaskStatus.failed) _callbacksList.remove(id);
     });
 
-    FlutterDownloader.registerCallback(downloadCallback);
+    FlutterDownloader.registerCallback(downloadCallback); */
   }
 
   final _port = ReceivePort();
@@ -109,11 +111,14 @@ class DocumentsDownloadService {
   String? tempPath;
   String? downloadPath;
 
-  final _callbacksList = <String, Function(String id, DownloadTaskStatus status, int progress)>{};
+  //Dio? dio;
+  CancelToken cancelToken = CancelToken();
+
+  final _callbacksList = <int, Function(int id, int received, int total)>{};
 
   bool registerCallback({
-    required String taskId,
-    required Function(String id, DownloadTaskStatus status, int progress) callback,
+    required int taskId,
+    required Function(int id, int received, int total) callback,
   }) {
     _callbacksList[taskId] = callback;
 
@@ -149,19 +154,28 @@ class DocumentsDownloadService {
     if (finalUrl.contains(Get.find<PortalInfoController>().portalName!))
       headers = Get.find<PortalInfoController>().getAuthHeader;
 
-    return await FlutterDownloader.enqueue(
-      url: finalUrl,
-      fileName: fileName,
-      headers: headers,
-      savedDir: temp ? tempPath! : downloadPath!,
-      showNotification: !temp,
-    );
+    final finalPath = '${temp ? tempPath! : downloadPath!}/$fileName';
+
+    unawaited(Dio().download(
+      finalUrl,
+      finalPath,
+      cancelToken: cancelToken,
+      options: Options(headers: headers),
+      onReceiveProgress: (received, total) {
+        print('$fileName $received $total');
+
+        _callbacksList[file.id!]?.call(file.id!, received, total);
+
+        if (received == total) _callbacksList.remove(file.id);
+      },
+    ));
+
+    return finalPath;
   }
 
   Future<String> getRedirectedUrl(String initialUrl) async {
     final headers = Get.find<PortalInfoController>().getAuthHeader;
 
-    final client = Client();
     var statusCode = 302;
     var finalUrl = Uri.parse(initialUrl);
 
@@ -174,7 +188,9 @@ class DocumentsDownloadService {
       if (finalUrl.authority.contains(Get.find<PortalInfoController>().portalName!))
         request.headers.addAll(headers!);
 
+      final client = Client();
       final response = await client.send(request);
+      client.close();
 
       statusCode = response.statusCode;
       if (statusCode == 302) finalUrl = Uri.parse(response.headers['location'].toString());
@@ -215,8 +231,8 @@ class DocumentsDownloadService {
     return true;
   }
 
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+  /* static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
     final send = IsolateNameServer.lookupPortByName(_portName);
     send?.send([id, status, progress]);
-  }
+  } */
 }

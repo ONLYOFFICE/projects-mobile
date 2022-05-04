@@ -35,7 +35,6 @@ import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:projects/data/enums/file_type.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -70,16 +69,14 @@ class FileCellController extends GetxController {
           color: Get.theme.colors().onSurface.withOpacity(0.6))
       .obs;
 
-  String? downloadTaskId;
-  final status = Rxn<DownloadTaskStatus>();
-  final progress = Rx<int>(0);
+  final progress = Rx<double>(0);
+  String? downloadPath;
 
   FileCellController({required this.file}) {
     setupFileIcon();
   }
 
-  bool get downloadInProgress =>
-      status.value == DownloadTaskStatus.enqueued || status.value == DownloadTaskStatus.running;
+  bool get downloadInProgress => progress.value > 0;
 
   void setupFileIcon() {
     var iconString = '';
@@ -199,66 +196,74 @@ class FileCellController extends GetxController {
     return result != null;
   }
 
-  Future<void> downloadFileCallback(String id, DownloadTaskStatus status, int progress) async {
-    if (downloadTaskId != null && id == downloadTaskId) {
-      this.status.value = status;
+  Future<void> downloadFileCallback(int id, int received, int total) async {
+    if (id == file.id) {
+      progress.value = received / total;
 
-      if (status == DownloadTaskStatus.complete)
+      if (received == total) {
+        progress.value = 0;
+      }
+
+      /* if (status == DownloadTaskStatus.complete)
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
       else if (status == DownloadTaskStatus.failed)
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       else if (status == DownloadTaskStatus.running) {
         this.progress.value = progress;
-      }
+      } */
     }
   }
 
-  Future<void> viewFileCallback(String id, DownloadTaskStatus status, int progress) async {
-    if (downloadTaskId != null && id == downloadTaskId) {
-      this.status.value = status;
+  Future<void> viewFileCallback(int id, int received, int total) async {
+    if (id == file.id) {
+      progress.value = received / total;
 
-      if (status == DownloadTaskStatus.complete || this.progress.value == 100) {
+      if (received == total) {
         Get.back();
 
-        if ((await tryToOpenAlreadyDownloadedFile()).type != ResultType.done)
+        progress.value = 0;
+
+        if ((await tryToOpenAlreadyDownloadedFile())?.type != ResultType.done)
           MessagesHandler.showSnackBar(context: Get.context!, text: tr('openFileError'));
-      } else if (status == DownloadTaskStatus.failed) {
+      } /*  else if (status == DownloadTaskStatus.failed) {
         Get.back();
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       } else if (status == DownloadTaskStatus.running) {
         this.progress.value = progress;
-      }
+      } */
     }
   }
 
   Future<void> downloadFile() async {
     if (downloadInProgress) return;
 
-    downloadTaskId = await downloadService.downloadDocument(file);
-    if (downloadTaskId == null) {
+    downloadPath = await downloadService.downloadDocument(file);
+    if (downloadPath == null) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       return;
     }
 
-    downloadService.registerCallback(taskId: downloadTaskId!, callback: downloadFileCallback);
+    downloadService.registerCallback(taskId: file.id!, callback: downloadFileCallback);
   }
 
   Future<void> cancelDownloadFile() async {
-    if (downloadTaskId != null) await FlutterDownloader.cancel(taskId: downloadTaskId!);
+    if (downloadPath != null) {
+      downloadService.cancelToken.cancel();
+      progress.value = 0;
+    }
   }
 
-  Future<OpenResult> tryToOpenAlreadyDownloadedFile() async {
-    final res = (await FlutterDownloader.loadTasks())
-        ?.lastWhere((element) => element.taskId == downloadTaskId);
-
-    return await OpenFile.open('${res!.savedDir}/${res.filename!}');
+  Future<OpenResult?> tryToOpenAlreadyDownloadedFile() async {
+    if (downloadPath != null)
+      return await OpenFile.open(downloadPath);
+    else
+      return null;
   }
 
   Future<void> viewFile() async {
     if (downloadInProgress) return;
 
-    if (downloadTaskId != null &&
-        ((await tryToOpenAlreadyDownloadedFile()).type == ResultType.done)) return;
+    if ((await tryToOpenAlreadyDownloadedFile())?.type == ResultType.done) return;
 
     unawaited(Get.dialog(
       SingleButtonDialog(
@@ -270,43 +275,44 @@ class FileCellController extends GetxController {
         },
         content: Padding(
           padding: const EdgeInsets.only(top: 8),
-          child: Obx(() {
-            final value = progress.value;
-            return Column(
-              children: [
-                LinearProgressIndicator(
-                  value: value / 100,
+          child: Column(
+            children: [
+              Obx(
+                () => LinearProgressIndicator(
+                  value: progress.value,
                   color: Get.theme.colors().primary,
                   backgroundColor: Get.theme.colors().backgroundSecond,
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, bottom: 0),
-                  child: Row(
-                    children: [
-                      const Spacer(),
-                      Text(
-                        '$value %',
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 0),
+                child: Row(
+                  children: [
+                    const Spacer(),
+                    Obx(
+                      () => Text(
+                        '${(progress.value * 100).toStringAsFixed(0)} %',
                         style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
                       ),
-                    ],
-                  ),
-                )
-              ],
-            );
-          }),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
       barrierDismissible: false,
     ));
 
-    downloadTaskId = await downloadService.downloadDocument(file, temp: true);
-    if (downloadTaskId == null) {
+    downloadService.registerCallback(taskId: file.id!, callback: viewFileCallback);
+
+    downloadPath = await downloadService.downloadDocument(file, temp: true);
+    if (downloadPath == null) {
       Get.back();
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       return;
     }
-
-    downloadService.registerCallback(taskId: downloadTaskId!, callback: viewFileCallback);
   }
 
   Future openFile({int? parentId}) async {

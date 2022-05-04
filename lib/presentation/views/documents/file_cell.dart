@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
@@ -156,16 +155,12 @@ class FileCell extends StatelessWidget {
             ),
           ),
           Obx(() {
-            if (cellController.status.value == DownloadTaskStatus.running ||
-                cellController.status.value == DownloadTaskStatus.enqueued)
-              return Obx(() {
-                final value = cellController.progress.value;
-                return LinearProgressIndicator(
-                  value: value / 100,
-                  color: Get.theme.colors().primary,
-                  backgroundColor: Get.theme.colors().backgroundSecond,
-                );
-              });
+            if (cellController.progress.value > 0)
+              return LinearProgressIndicator(
+                value: cellController.progress.value,
+                color: Get.theme.colors().primary,
+                backgroundColor: Get.theme.colors().backgroundSecond,
+              );
             else
               return const SizedBox();
           }),
