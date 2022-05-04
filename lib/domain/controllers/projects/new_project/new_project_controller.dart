@@ -48,6 +48,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 
 class NewProjectController extends BaseProjectEditorController {
   final ProjectService _api = locator<ProjectService>();
@@ -138,7 +139,7 @@ class NewProjectController extends BaseProjectEditorController {
     // ignore: unawaited_futures
     Get.find<NavigationController>().toScreen(
       const TagsSelectionView(),
-      arguments: {'controller': this},
+      arguments: {'controller': this, 'previousPage': NewProject.pageName},
       transition: Transition.rightToLeft,
       page: '/TagsSelectionView',
     );

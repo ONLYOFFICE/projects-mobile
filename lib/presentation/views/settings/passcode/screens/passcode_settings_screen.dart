@@ -50,6 +50,9 @@ class PasscodeSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args['previousPage'] as String?;
+
     final controller = Get.put(PasscodeSettingsController());
     final platformController = Get.find<PlatformController>();
 
@@ -80,6 +83,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
         titleText: tr('passcodeLock'),
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         onLeadingPressed: controller.leavePasscodeSettingsScreen,
+        previousPageTitle: previousPage,
       ),
       body: Obx(
         () {

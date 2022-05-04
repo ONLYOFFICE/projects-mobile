@@ -42,6 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/projects_view/new_project/description_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 
 class ProjectDescriptionTile extends StatefulWidget {
   final controller;
@@ -109,7 +110,7 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
         return InkWell(
           onTap: () => Get.find<NavigationController>().toScreen(
             const NewProjectDescription(),
-            arguments: {'controller': widget.controller},
+            arguments: {'controller': widget.controller, 'previousPage': NewProject.pageName},
             transition: Transition.rightToLeft,
             page: '/NewProjectDescription',
           ),

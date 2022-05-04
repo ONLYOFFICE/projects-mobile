@@ -60,6 +60,7 @@ class TeamMembersSelectionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final controller = args['controller'];
+    final previousPage = args['previousPage'] as String?;
     final usersDataSource = Get.find<UsersDataSource>()..loaded.value = false;
 
     usersDataSource.selectedProjectManager = controller.selectedProjectManager.value as PortalUser?;
@@ -78,6 +79,9 @@ class TeamMembersSelectionView extends StatelessWidget {
           controller: controller,
           title: tr('addTeamMembers'),
         ),
+        titleWidth: getWidthText(tr('addTeamMembers'),
+            TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
+        previousPageTitle: previousPage,
         bottom: TeamMembersSearchBar(
           usersDataSource: usersDataSource,
           controller: controller,

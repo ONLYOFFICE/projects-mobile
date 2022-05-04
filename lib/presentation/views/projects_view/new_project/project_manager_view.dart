@@ -58,6 +58,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final controller = args['controller'] as BaseProjectEditorController;
+    final previousPage = args['previousPage'] as String?;
 
     controller.selectionMode = UserSelectionMode.Single;
     usersDataSource.selectionMode = UserSelectionMode.Single;
@@ -67,6 +68,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
       backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
         titleText: tr('selectPM'),
+        previousPageTitle: previousPage,
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         bottom: SearchField(
           controller: usersDataSource.searchInputController,

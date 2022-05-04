@@ -14,7 +14,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 2.0.0+221
+version: 2.0.0+223
 
 environment:
   sdk: '>=2.16.0 <3.0.0'
@@ -27,7 +27,7 @@ dependencies:
   open_file: 3.2.1
   get: ^4.6.1
   get_it: ^7.2.0
-  get_storage: ^2.0.3
+  shared_preferences: ^2.0.13
   # for http requests
   http: ^0.13.4
   # to use svg icons

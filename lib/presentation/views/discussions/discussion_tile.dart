@@ -135,7 +135,7 @@ class _DiscussionInfo extends StatelessWidget {
                 style: TextStyleHelper.caption(
                     color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
                 children: [
-                  if (discussion.status == 1)
+                  if (controller.status.value == 1)
                     TextSpan(
                         text: '${tr('archived')} • ',
                         style:

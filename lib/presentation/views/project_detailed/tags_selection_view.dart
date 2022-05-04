@@ -58,6 +58,7 @@ class TagsSelectionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final projController = args['controller'] as BaseProjectEditorController;
+    final previousPage = args['previousPage'] as String?;
 
     final controller = Get.put(ProjectTagsController());
     controller.setup(projController);
@@ -88,6 +89,9 @@ class TagsSelectionView extends StatelessWidget {
           tr('tags'),
           style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
         ),
+        titleWidth: getWidthText(
+            tr('tags'), TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
+        previousPageTitle: previousPage,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 4),
@@ -172,7 +176,7 @@ class _TagTextFieldWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final errorColor = Theme.of(context).errorColor;
     return Container(
-      constraints: const BoxConstraints(maxWidth: 300),
+      constraints: const BoxConstraints(minWidth: 300, maxWidth: 300),
       margin: const EdgeInsets.only(top: 10),
       child: PlatformTextField(
         makeCupertinoDecorationNull: true,

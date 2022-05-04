@@ -448,7 +448,7 @@ class TaskFilterController extends BaseTaskFilterController {
       'hasFilters': _hasFilters,
     };
 
-    await _storage.write('taskFilters', map);
+    await _storage.saveMapAsJson('taskFilters', map);
   }
 
   @override
@@ -472,7 +472,7 @@ class TaskFilterController extends BaseTaskFilterController {
   }
 
   Future<void> _getSavedFilters() async {
-    final savedFilters = await _storage.read('taskFilters', returnCopy: true);
+    final savedFilters = await _storage.getMapAsJson('taskFilters');
 
     if (savedFilters != null) {
       try {

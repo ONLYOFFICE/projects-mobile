@@ -161,7 +161,6 @@ class DocumentsDownloadService {
   Future<String> getRedirectedUrl(String initialUrl) async {
     final headers = Get.find<PortalInfoController>().getAuthHeader;
 
-    final client = Client();
     var statusCode = 302;
     var finalUrl = Uri.parse(initialUrl);
 
@@ -174,7 +173,9 @@ class DocumentsDownloadService {
       if (finalUrl.authority.contains(Get.find<PortalInfoController>().portalName!))
         request.headers.addAll(headers!);
 
+      final client = Client();
       final response = await client.send(request);
+      client.close();
 
       statusCode = response.statusCode;
       if (statusCode == 302) finalUrl = Uri.parse(response.headers['location'].toString());

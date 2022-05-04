@@ -70,6 +70,14 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
     getItemsFunction();
     final platformController = Get.find<PlatformController>();
 
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args['previousPage'] as String?;
+
+    final titleWidth = getWidthText(
+      appBarText,
+      TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+    );
+
     return Scaffold(
       backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
@@ -78,6 +86,8 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
           appBarText: appBarText,
           searchController: searchController,
         ),
+        titleWidth: titleWidth,
+        previousPageTitle: previousPage,
         centerTitle: !GetPlatform.isAndroid,
         actions: [AppBarSearchItem(searchController: searchController)],
       ),
@@ -113,12 +123,22 @@ mixin SelectItemMixin on StatelessWidget {
     getItemsFunction();
     final platformController = Get.find<PlatformController>();
 
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args['previousPage'] as String?;
+
+    final titleWidth = getWidthText(
+      appBarText,
+      TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+    );
+
     return Scaffold(
       backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
         titleText: appBarText,
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         onLeadingPressed: onLeadingPressed,
+        titleWidth: titleWidth,
+        previousPageTitle: previousPage,
       ),
       body: Obx(
         () {

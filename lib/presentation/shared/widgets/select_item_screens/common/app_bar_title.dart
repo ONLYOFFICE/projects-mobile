@@ -50,29 +50,22 @@ class AppBarTitleWithSearch extends StatelessWidget {
       searchController.switchToSearchView.value = !searchController.switchToSearchView.value;
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Obx(
-          () => searchController.switchToSearchView.value
-              ? Expanded(
-                  child: SearchField(
-                    controller: searchController.textController,
-                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-                    autofocus: true,
-                    alwaysShowSuffixIcon: true,
-                    hintText: tr('enterQuery'),
-                    onSubmitted: searchController.search,
-                    onChanged: searchController.search,
-                    onClearPressed: _clearFunction,
-                  ),
-                )
-              : Text(
-                  appBarText,
-                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
-                ),
-        ),
-      ],
+    return Obx(
+      () => searchController.switchToSearchView.value
+          ? SearchField(
+              controller: searchController.textController,
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              autofocus: true,
+              alwaysShowSuffixIcon: true,
+              hintText: tr('enterQuery'),
+              onSubmitted: searchController.search,
+              onChanged: searchController.search,
+              onClearPressed: _clearFunction,
+            )
+          : Text(
+              appBarText,
+              style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+            ),
     );
   }
 }

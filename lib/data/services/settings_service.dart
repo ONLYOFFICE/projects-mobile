@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';

@@ -58,6 +58,7 @@ class _Creator extends StatelessWidget {
                 const SelectUserScreen(),
                 transition: Transition.rightToLeft,
                 page: '/SelectUserScreen',
+                arguments: {'previousPage': TasksFilterScreen.pageName},
               );
               filterController.changeCreator('other', newUser);
             },

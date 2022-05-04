@@ -53,6 +53,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
 import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
+import 'package:projects/presentation/views/settings/settings_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
@@ -86,22 +87,22 @@ class SettingsController extends GetxController {
     appVersion = await _packageInfoService.version;
     buildNumber = await _packageInfoService.buildNumber;
 
-    var themeMode = await _storage.read('themeMode');
+    var themeMode = await _storage.getString('themeMode');
     if (themeMode == null) {
       themeMode = 'sameAsSystem';
-      await _storage.write(themeMode as String, themeMode);
+      await _storage.saveString('themeMode', themeMode);
     }
 
-    final analytics = await _storage.read('shareAnalytics');
+    final analytics = await _storage.getBool('shareAnalytics');
 
     if (analytics == null) {
-      await _storage.write('shareAnalytics', true);
+      await _storage.saveBool('shareAnalytics', true);
       shareAnalytics.value = true;
     } else {
-      shareAnalytics.value = analytics as bool;
+      shareAnalytics.value = analytics;
     }
 
-    currentTheme.value = themeMode as String;
+    currentTheme.value = themeMode;
 
     unawaited(setupCacheDirectorySize());
 
@@ -115,26 +116,37 @@ class SettingsController extends GetxController {
   Future setTheme(String themeMode) async {
     if (themeMode == currentTheme.value) return;
 
-    switch (themeMode) {
-      case 'darkTheme':
-        Get.changeThemeMode(ThemeMode.dark);
-        break;
-      case 'lightTheme':
-        Get.changeThemeMode(ThemeMode.light);
-        break;
-      case 'sameAsSystem':
-        Get.changeThemeMode(ThemeMode.system);
-        break;
-      default:
-        Get.changeThemeMode(ThemeMode.system);
-    }
-    currentTheme.value = themeMode;
-    await _storage.write('themeMode', themeMode);
+    await Get.dialog(StyledAlertDialog(
+      titleText: tr('reloadDialogTitle'),
+      acceptText: tr('reload').toUpperCase(),
+      cancelText: tr('notNow').toUpperCase(),
+      onAcceptTap: () async {
+        switch (themeMode) {
+          case 'darkTheme':
+            Get.changeThemeMode(ThemeMode.dark);
+            break;
+          case 'lightTheme':
+            Get.changeThemeMode(ThemeMode.light);
+            break;
+          case 'sameAsSystem':
+            Get.changeThemeMode(ThemeMode.system);
+            break;
+          default:
+            Get.changeThemeMode(ThemeMode.system);
+        }
+
+        currentTheme.value = themeMode;
+        await _storage.saveString('themeMode', themeMode);
+
+        Get.rootController.restartApp();
+      },
+      onCancelTap: Get.back,
+    ));
   }
 
   Future<void> changeAnalyticsSharingEnability(bool value) async {
     try {
-      await _storage.write('shareAnalytics', value);
+      await _storage.saveBool('shareAnalytics', value);
       shareAnalytics.value = value;
     } catch (_) {
       await Get.find<ErrorDialog>().show(tr('error'));
@@ -249,15 +261,20 @@ class SettingsController extends GetxController {
   void onAnalyticsPressed() => navigationController.toScreen(
         const AnalyticsScreen(),
         page: '/AnalyticsScreen',
+        arguments: {'previousPage': SettingsScreen.pageName},
       );
 
   void onPasscodePressed() => navigationController.toScreen(
         const PasscodeSettingsScreen(),
         page: '/PasscodeSettingsScreen',
+        arguments: {'previousPage': SettingsScreen.pageName},
       );
 
-  void onThemePressed() => navigationController.toScreen(const ColorThemeSelectionScreen(),
-      page: '/ColorThemeSelectionScreen');
+  void onThemePressed() => navigationController.toScreen(
+        const ColorThemeSelectionScreen(),
+        page: '/ColorThemeSelectionScreen',
+        arguments: {'previousPage': SettingsScreen.pageName},
+      );
 
   void back({bool closeTabletModalScreen = false}) =>
       Get.find<NavigationController>().back(closeTabletModalScreen: closeTabletModalScreen);

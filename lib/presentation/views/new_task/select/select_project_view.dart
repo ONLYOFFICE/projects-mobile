@@ -58,6 +58,7 @@ class SelectProjectView extends StatelessWidget {
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)!.settings.arguments as Map;
     final controller = arguments['controller'];
+    final previousPage = arguments['previousPage'] as String?;
 
     final projectsWithPresets = locator<ProjectsWithPresets>();
 
@@ -101,6 +102,7 @@ class SelectProjectView extends StatelessWidget {
         titleText: tr('selectProject'),
         centerTitle: GetPlatform.isIOS,
         bottomHeight: 44,
+        previousPageTitle: previousPage,
         bottom: SearchField(
           hintText: tr('searchProjects'),
           controller: searchController.textController,

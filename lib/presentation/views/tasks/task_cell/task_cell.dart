@@ -36,7 +36,6 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/extentions.dart';
@@ -47,6 +46,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
+import 'package:projects/presentation/views/tasks/tasks_view.dart';
 
 part 'status_image.dart';
 
@@ -76,7 +76,10 @@ class TaskCell extends StatelessWidget {
       enableFeedback: false,
       onTap: () => Get.find<NavigationController>().to(
         const TaskDetailedView(),
-        arguments: {'controller': itemController},
+        arguments: {
+          'controller': itemController,
+          'previousPage': TasksView.pageName,
+        },
       ),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4),

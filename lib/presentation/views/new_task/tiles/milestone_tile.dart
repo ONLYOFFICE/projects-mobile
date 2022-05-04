@@ -63,7 +63,7 @@ class MilestoneTile extends StatelessWidget {
           caption: '${tr('milestone')}:',
           onTap: () => Get.find<NavigationController>().toScreen(
             const SelectMilestoneView(),
-            arguments: {'controller': controller},
+            arguments: {'controller': controller, 'previousPage': controller.title.value},
             transition: Transition.rightToLeft,
             page: '/SelectMilestoneView',
           ),

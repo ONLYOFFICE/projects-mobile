@@ -43,6 +43,7 @@ import 'package:projects/presentation/shared/widgets/context_menu/platform_conte
 import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
 
 class SubtaskCell extends StatelessWidget {
   final Subtask subtask;
@@ -64,8 +65,10 @@ class SubtaskCell extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       constraints: const BoxConstraints(minHeight: 56),
       child: InkWell(
-        onTap: () => Get.find<NavigationController>()
-            .to(const SubtaskDetailedView(), arguments: {'controller': subtaskController}),
+        onTap: () => Get.find<NavigationController>().to(const SubtaskDetailedView(), arguments: {
+          'controller': subtaskController,
+          'previousPage': SubtasksView.pageName,
+        }),
         child: Obx(
           () => Row(
             children: [

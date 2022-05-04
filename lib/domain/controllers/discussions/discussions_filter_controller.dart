@@ -334,7 +334,7 @@ class DiscussionsFilterController extends BaseFilterController {
       'stopDate': stopDate,
     };
 
-    await _storage.write(
+    await _storage.saveMapAsJson(
       'discussionFilters',
       {
         'author': {'buttons': Map.from(author), 'value': _authorFilter},
@@ -374,7 +374,7 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   Future<void> _getSavedFilters() async {
-    final savedFilters = await _storage.read('discussionFilters', returnCopy: true);
+    final savedFilters = await _storage.getMapAsJson('discussionFilters');
 
     if (savedFilters != null) {
       try {

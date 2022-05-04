@@ -56,6 +56,8 @@ part 'filters/team_member.dart';
 class ProjectsFilterScreen extends StatelessWidget {
   const ProjectsFilterScreen({Key? key}) : super(key: key);
 
+  static String get pageName => tr('filter');
+
   @override
   Widget build(BuildContext context) {
     final filterController = Get.arguments['filterController'] as ProjectsFilterController;

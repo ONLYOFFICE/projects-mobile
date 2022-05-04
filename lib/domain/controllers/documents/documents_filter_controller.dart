@@ -261,7 +261,7 @@ class DocumentsFilterController extends BaseFilterController {
   // UNUSED
   @override
   Future<void> saveFilters() async {
-    await _storage.write(
+    await _storage.saveMapAsJson(
       'documentsFilters',
       {
         'contentTypes': {'buttons': contentTypes, 'value': _typeFilter},
@@ -302,7 +302,7 @@ class DocumentsFilterController extends BaseFilterController {
   // UNUSED
   // ignore: unused_element
   Future<void> _getSavedFilters() async {
-    final savedFilters = await _storage.read('documentFilters');
+    final savedFilters = await _storage.getMapAsJson('documentFilters');
 
     if (savedFilters != null) {
       try {

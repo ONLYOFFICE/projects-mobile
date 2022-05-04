@@ -51,6 +51,7 @@ import 'package:projects/presentation/shared/widgets/context_menu/platform_conte
 import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
+import 'package:projects/presentation/views/projects_view/projects_view.dart';
 
 class ProjectCell extends StatelessWidget {
   const ProjectCell({Key? key, required this.projectDetails}) : super(key: key);
@@ -87,7 +88,10 @@ class ProjectCell extends StatelessWidget {
       onTap: () {
         Get.find<NavigationController>().to(
           ProjectDetailedView(),
-          arguments: {'projectController': projectController},
+          arguments: {
+            'projectController': projectController,
+            'previousPage': ProjectsView.pageName
+          },
         );
       },
       child: Container(

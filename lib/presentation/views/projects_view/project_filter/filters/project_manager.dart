@@ -59,6 +59,7 @@ class _ProjectManager extends StatelessWidget {
                 const SelectUserScreen(),
                 transition: Transition.rightToLeft,
                 page: '/SelectUserScreen',
+                arguments: {'previousPage': ProjectsFilterScreen.pageName},
               );
               await filterController.changeProjectManager('other', newUser);
             },

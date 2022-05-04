@@ -38,7 +38,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
@@ -53,8 +52,6 @@ void main() async {
   HttpOverrides.global = DevHttpOverrides();
 
   WidgetsFlutterBinding.ensureInitialized();
-
-  await GetStorage.init();
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -73,6 +70,8 @@ void main() async {
   setupGetX();
   final page = await _getInitPage();
 
+  final themeMode = await ThemeService.savedThemeMode();
+
   runApp(
     EasyLocalization(
       supportedLocales: supportedLocales(),
@@ -80,7 +79,10 @@ void main() async {
       fallbackLocale: const Locale('en'),
       useFallbackTranslations: true,
       useOnlyLangCode: true,
-      child: App(initialPage: page),
+      child: App(
+        initialPage: page,
+        themeMode: themeMode,
+      ),
     ),
   );
 }
@@ -99,9 +101,9 @@ List<Locale> supportedLocales() => [
 Future<String> _getInitPage() async {
   final storage = locator<Storage>();
 
-  if (storage.getValue('firstStart') == null) {
+  if ((await storage.getBool('firstStart')) == null) {
     await locator<PasscodeService>().deletePasscode();
-    await storage.write('firstStart', false);
+    await storage.saveBool('firstStart', false);
   }
 
   final passcode = await locator<PasscodeService>().isPasscodeEnable;
@@ -132,12 +134,22 @@ Future<bool> isAuthorized() async {
 }
 
 class App extends StatelessWidget {
-  final String? initialPage;
+  final String initialPage;
+  final ThemeMode themeMode;
 
-  const App({Key? key, this.initialPage}) : super(key: key);
+  const App({
+    Key? key,
+    required this.initialPage,
+    required this.themeMode,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.window.onPlatformBrightnessChanged = () async {
+      if ((await ThemeService.savedThemeMode()) == ThemeMode.system)
+        Get.rootController.restartApp(); // TODO change brightness without restart
+    };
+
     print(context.locale.toString());
     print(context.deviceLocale.toString());
 
@@ -156,7 +168,7 @@ class App extends StatelessWidget {
         darkTheme: darkTheme.copyWith(
           splashFactory: GetPlatform.isIOS ? NoSplash.splashFactory : null,
         ),
-        themeMode: ThemeService.savedThemeMode(),
+        themeMode: themeMode,
       ),
     );
   }

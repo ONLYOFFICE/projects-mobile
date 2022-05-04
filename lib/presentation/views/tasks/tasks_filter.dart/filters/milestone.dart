@@ -62,6 +62,7 @@ class _Milestone extends StatelessWidget {
                   const SelectMilestoneScreen(),
                   transition: Transition.rightToLeft,
                   page: '/SelectMilestoneScreen',
+                  arguments: {'previousPage': TasksFilterScreen.pageName},
                 );
                 filterController.changeMilestone('other', milestone);
               },

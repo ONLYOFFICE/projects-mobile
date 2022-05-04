@@ -165,7 +165,6 @@ class DiscussionItemController extends GetxController {
         discussion.value.setStatus = result.status;
         status.value = result.status!;
 
-        locator<EventHub>().fire('needToRefreshDiscussions', {'discussion': result});
         Get.back();
       }
     } catch (e) {

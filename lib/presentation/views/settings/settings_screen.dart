@@ -48,25 +48,29 @@ import 'package:settings_ui/settings_ui.dart';
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
-  static String get pageName => '/SettingsScreen';
+  static String get pageName => tr('settings');
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args?['previousPage'] as String?;
+
     final controller = Get.put(SettingsController());
     final platformController = Get.find<PlatformController>();
 
     controller.setupCacheDirectorySize();
 
     final mobileAppBar = StyledAppBar(
-      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
+      // backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       titleText: tr('settings'),
       onLeadingPressed: controller.leave,
-      backButtonIcon:
-          platformController.isMobile ? const BackButtonIcon() : Icon(PlatformIcons(context).clear),
+      previousPageTitle: previousPage,
+      // backButtonIcon:
+      //     platformController.isMobile ? const BackButtonIcon() : Icon(PlatformIcons(context).clear),
     );
 
     final tabletAppBar = StyledAppBar(
-      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
+      backgroundColor: Theme.of(context).colors().surface,
       titleText: tr('settings'),
       leadingWidth: GetPlatform.isIOS ? 100 : null,
       leading: PlatformWidget(

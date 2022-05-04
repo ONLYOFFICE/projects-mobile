@@ -47,6 +47,7 @@ class TaskDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final controller = args['controller'] as TaskActionsController;
+    final previousPage = args['previousPage'] as String?;
 
     final platformController = Get.find<PlatformController>();
 
@@ -62,6 +63,7 @@ class TaskDescription extends StatelessWidget {
           titleText: tr('description'),
           onLeadingPressed: () =>
               controller.leaveDescriptionView(controller.descriptionController.value.text),
+          previousPageTitle: previousPage,
           actions: [
             PlatformIconButton(
                 icon: Icon(PlatformIcons(context).checkMark),

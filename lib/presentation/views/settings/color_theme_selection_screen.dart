@@ -47,6 +47,9 @@ class ColorThemeSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args['previousPage'] as String?;
+
     final controller = Get.find<SettingsController>();
     final platformController = Get.find<PlatformController>();
 
@@ -56,7 +59,8 @@ class ColorThemeSelectionScreen extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('colorTheme'),
-          onLeadingPressed: () => controller.back(),
+          onLeadingPressed: controller.back,
+          previousPageTitle: previousPage,
         ),
         body: GetPlatform.isAndroid
             ? ListView.custom(

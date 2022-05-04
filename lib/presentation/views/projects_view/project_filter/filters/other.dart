@@ -59,6 +59,7 @@ class _Other extends StatelessWidget {
                 const SelectTagScreen(),
                 transition: Transition.rightToLeft,
                 page: '/SelectTagScreen',
+                arguments: {'previousPage': ProjectsFilterScreen.pageName},
               );
               await filterController.changeOther('withTag', selectedTag);
             },

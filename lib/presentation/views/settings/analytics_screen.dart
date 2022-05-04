@@ -47,6 +47,9 @@ class AnalyticsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args['previousPage'] as String?;
+
     final controller = Get.find<SettingsController>();
     final platformController = Get.find<PlatformController>();
 
@@ -78,7 +81,8 @@ class AnalyticsScreen extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('analytics'),
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
-        onLeadingPressed: () => controller.back(),
+        onLeadingPressed: controller.back,
+        previousPageTitle: previousPage,
       ),
       body: GetPlatform.isAndroid
           ? Padding(

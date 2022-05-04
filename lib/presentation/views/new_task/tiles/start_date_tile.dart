@@ -72,7 +72,8 @@ class StartDateTile extends StatelessWidget {
             arguments: {
               'controller': controller,
               'startDate': true,
-              'initialDate': controller.startDate
+              'initialDate': controller.startDate,
+              'previousPage': controller.title.value,
             },
             transition: Transition.rightToLeft,
             page: '/SelectDateView',
