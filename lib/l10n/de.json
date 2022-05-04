@@ -487,5 +487,16 @@
 	"duplicateConfirmation": "Beide speichern",
 	"skipConfirmation": "Auslassen",
 	"loading": "Ladevorgang",
-	"disablePasscode": "Passcode deaktivieren"
+	"disablePasscode": "Passcode deaktivieren",
+	"downloadComplete": "Download abgeschlossen",
+	"downloadError": "Download-Fehler",
+	"noPermission": "Keine Berechtigung",
+	"clearCacheQuestion": "Cache löschen?",
+	"clearCacheQuestionDescription": "Durch diesen Vorgang wird Speicherplatz auf Ihrem Gerät freigegeben, indem temporäre Dateien gelöscht werden. Ihre Offline-Dateien und persönlichen Daten werden nicht entfernt.",
+	"openFileError": "Die Datei konnte nicht geöffnet werden",
+	"cancelDownload": "Download abbrechen",
+	"downloading": "Wird heruntergeladen",
+	"faceID": "Mit Face-ID öffnen",
+	"subtaskDeleted": "Teilaufgabe gelöscht",
+	"newProject": "Neues Projekt"
 }

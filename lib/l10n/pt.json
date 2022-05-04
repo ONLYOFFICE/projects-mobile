@@ -487,5 +487,16 @@
     "duplicateConfirmation": "Manter os dois",
     "skipConfirmation": "Pular",
     "loading": "Carregamento",
-    "disablePasscode": "Desabilitar o código de acesso"
+    "disablePasscode": "Desabilitar o código de acesso",
+	"downloadComplete": "Download completo",
+	"downloadError": "Erro no download",
+	"noPermission": "Sem permissão",
+	"clearCacheQuestion": "Limpar cache?",
+	"clearCacheQuestionDescription": "Esta operação liberará espaço em seu dispositivo, eliminando arquivos temporários. Seus arquivos offline e seus dados pessoais não serão removidos.",
+	"openFileError": "Não foi possível abrir o arquivo",
+	"cancelDownload": "Cancelar o download",
+	"downloading": "Transferindo",
+	"faceID": "Abrir com identificação facial",
+	"subtaskDeleted": "Subtarefa excluída",
+	"newProject": "Novo projeto"
 }

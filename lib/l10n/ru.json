@@ -487,5 +487,16 @@
     "duplicateConfirmation": "Сохранить оба",
     "skipConfirmation": "Пропустить",
     "loading": "Загрузка",
-    "disablePasscode": "Выключить код доступа"
+    "disablePasscode": "Выключить код доступа",
+	"downloadComplete": "Скачивание завершено",
+	"downloadError": "Ошибка при скачивании",
+	"noPermission": "Недостаточно прав",
+	"clearCacheQuestion": "Очистить кэш?",
+	"clearCacheQuestionDescription": "Эта операция освободит место на устройстве за счет удаления временных файлов. Автономные файлы и персональные данные не будут удалены.",
+	"openFileError": "Невозможно открыть файл",
+	"cancelDownload": "Отменить скачивание",
+	"downloading": "Скачивание",
+	"faceID": "Открыть с помощью Face ID",
+	"subtaskDeleted": "Удалена подзадача",
+	"newProject": "Новый Проект"
 }
