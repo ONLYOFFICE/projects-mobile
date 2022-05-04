@@ -59,12 +59,14 @@ class SelectMilestoneView extends StatelessWidget {
     final platformController = Get.find<PlatformController>();
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final _controller = args['controller'] as TaskActionsController;
+    final previousPage = args['previousPage'] as String?;
     _milestoneController.setup(projectId: _controller.selectedProjectId);
     return Scaffold(
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectMilestone'),
+        previousPageTitle: previousPage,
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const BackButtonIcon()
             : Icon(PlatformIcons(context).clear),

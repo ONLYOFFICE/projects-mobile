@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -52,6 +51,8 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final controller = args['controller']..setupResponsibleSelection();
+    final previousPage = args['previousPage'] as String?;
+
     final platformController = Get.find<PlatformController>();
 
     final searchTextEditingController = TextEditingController();
@@ -71,10 +72,8 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
           onSubmitted: (value) => controller.teamController.searchUsers(value),
           onChanged: (value) => controller.teamController.searchUsers(value),
         ),
-        leading: PlatformIconButton(
-          icon: const BackButtonIcon(),
-          onPressed: controller.confirmResponsiblesSelection as Function(),
-        ),
+        onLeadingPressed: controller.confirmResponsiblesSelection as Function(),
+        previousPageTitle: previousPage,
       ),
       body: Obx(
         () {

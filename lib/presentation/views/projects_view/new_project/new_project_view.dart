@@ -54,6 +54,8 @@ class NewProject extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  static String get pageName => tr('project');
+
   @override
   Widget build(BuildContext context) {
     final platformController = Get.find<PlatformController>();

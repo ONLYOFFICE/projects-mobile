@@ -58,6 +58,7 @@ class TagsSelectionView extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final projController = args['controller'] as BaseProjectEditorController;
+    final previousPage = args['previousPage'] as String?;
 
     final controller = Get.put(ProjectTagsController());
     controller.setup(projController);
@@ -88,6 +89,9 @@ class TagsSelectionView extends StatelessWidget {
           tr('tags'),
           style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
         ),
+        titleWidth: getWidthText(
+            tr('tags'), TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+        previousPageTitle: previousPage,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 4),

@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -49,6 +50,8 @@ import 'package:projects/presentation/views/tasks/tasks_shared.dart';
 
 class TasksView extends StatelessWidget {
   const TasksView({Key? key}) : super(key: key);
+
+  static String get pageName => tr('tasks');
 
   @override
   Widget build(BuildContext context) {

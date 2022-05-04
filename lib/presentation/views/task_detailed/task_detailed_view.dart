@@ -78,10 +78,16 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
 
   late TaskItemController taskItemController;
 
+  late String? previousPage;
+
   @override
   void initState() {
     super.initState();
-    taskItemController = Get.arguments['controller'] as TaskItemController;
+
+    final args = Get.arguments;
+
+    previousPage = args['previousPage'] as String?;
+    taskItemController = args['controller'] as TaskItemController;
 
     // to get full info about task
     taskItemController.reloadTask().then((value) {
@@ -108,6 +114,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: StyledAppBar(
+        previousPageTitle: previousPage,
         actions: [
           _AppBarMenu(controller: taskItemController),
           if (GetPlatform.isIOS) const SizedBox(width: 6),

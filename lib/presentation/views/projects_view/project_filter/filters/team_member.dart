@@ -58,6 +58,7 @@ class _TeamMember extends StatelessWidget {
                 const SelectUserScreen(),
                 transition: Transition.rightToLeft,
                 page: '/SelectUserScreen',
+                arguments: {'previousPage': ProjectsFilterScreen.pageName},
               );
               await filterController.changeTeamMember('other', newUser);
             },

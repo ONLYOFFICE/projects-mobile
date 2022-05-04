@@ -48,14 +48,17 @@ class SelectDateView extends StatelessWidget {
     final controller = args['controller'];
     final startDate = args['startDate'] as bool;
     final initialDate = args['initialDate'] as DateTime?;
+    final previousPage = args['previousPage'] as String?;
 
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-          titleText: startDate ? tr('selectStartDate') : tr('selectDueDate')),
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        titleText: startDate ? tr('selectStartDate') : tr('selectDueDate'),
+        previousPageTitle: previousPage,
+      ),
       body: CalendarDatePicker(
           initialDate: initialDate ?? DateTime.now(),
           currentDate: DateTime.now(),

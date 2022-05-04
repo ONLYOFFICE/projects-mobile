@@ -98,12 +98,14 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   final _activeIndex = ProjectDetailedTabs.tasks.obs;
 
   late final ProjectDetailsController projectController;
+  late final String? previousPage;
 
   @override
   void initState() {
-    if (Get.arguments['projectController'] != null)
+    if (Get.arguments['projectController'] != null) {
       projectController = Get.arguments['projectController'] as ProjectDetailsController;
-    else {
+      previousPage = Get.arguments['previousPage'] as String?;
+    } else {
       final projectDetails = Get.arguments['projectDetailed'] as ProjectDetailed;
 
       projectController = Get.put<ProjectDetailsController>(
@@ -140,6 +142,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: StyledAppBar(
+        previousPageTitle: previousPage,
         actions: [
           Obx(
             () => _ProjectAppBarActions(

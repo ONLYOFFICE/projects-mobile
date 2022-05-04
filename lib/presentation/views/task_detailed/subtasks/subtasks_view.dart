@@ -49,6 +49,8 @@ import 'package:projects/presentation/views/task_detailed/subtasks/subtask_cell.
 class SubtasksView extends StatelessWidget {
   final TaskItemController controller;
 
+  static String get pageName => tr('subtasks');
+
   const SubtasksView({
     Key? key,
     required this.controller,

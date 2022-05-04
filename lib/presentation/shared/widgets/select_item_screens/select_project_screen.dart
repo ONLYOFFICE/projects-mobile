@@ -67,6 +67,14 @@ class SelectProjectScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     searchController.refreshData();
 
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args['previousPage'] as String?;
+
+    final titleWidth = getWidthText(
+      tr('selectProject'),
+      TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+    );
+
     return Scaffold(
       backgroundColor: _platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
@@ -74,6 +82,8 @@ class SelectProjectScreen extends StatelessWidget {
         showBackButton: true,
         onLeadingPressed: navigationController.back,
         centerTitle: !GetPlatform.isAndroid,
+        titleWidth: titleWidth,
+        previousPageTitle: previousPage,
         title: AppBarTitleWithSearch(
           appBarText: tr('selectProject'),
           searchController: searchController,

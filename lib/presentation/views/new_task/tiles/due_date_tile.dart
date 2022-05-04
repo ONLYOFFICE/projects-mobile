@@ -72,7 +72,8 @@ class DueDateTile extends StatelessWidget {
             arguments: {
               'controller': controller,
               'startDate': false,
-              'initialDate': controller.dueDate
+              'initialDate': controller.dueDate,
+              'previousPage': controller.title.value,
             },
             transition: Transition.rightToLeft,
             page: '/SelectDateView',

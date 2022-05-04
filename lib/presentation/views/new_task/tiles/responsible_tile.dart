@@ -80,7 +80,7 @@ class ResponsibleTile extends StatelessWidget {
           icon: SvgIcons.person,
           onTap: () => Get.find<NavigationController>().toScreen(
             const ProjectTeamResponsibleSelectionView(),
-            arguments: {'controller': controller},
+            arguments: {'controller': controller, 'previousPage': controller.title.value},
             transition: Transition.rightToLeft,
             page: '/ProjectTeamResponsibleSelectionView',
           ),

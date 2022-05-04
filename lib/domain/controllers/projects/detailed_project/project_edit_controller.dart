@@ -48,6 +48,7 @@ import 'package:projects/domain/controllers/projects/project_status_controller.d
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class ProjectEditController extends BaseProjectEditorController {
@@ -235,7 +236,7 @@ class ProjectEditController extends BaseProjectEditorController {
   Future<void> showTags() async {
     await Get.find<NavigationController>().toScreen(
       const TagsSelectionView(),
-      arguments: {'controller': this},
+      arguments: {'controller': this, 'previousPage': EditProjectView.pageName},
       transition: Transition.rightToLeft,
       page: '/TagsSelectionView',
     );

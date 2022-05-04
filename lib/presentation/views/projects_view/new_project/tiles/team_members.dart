@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 
 class TeamMembersTile extends StatelessWidget {
@@ -75,7 +76,7 @@ class TeamMembersTile extends StatelessWidget {
               : null,
           onTap: () => Get.find<NavigationController>().toScreen(
             const TeamMembersSelectionView(),
-            arguments: {'controller': controller},
+            arguments: {'controller': controller, 'previousPage': NewProject.pageName},
             transition: Transition.rightToLeft,
             page: '/TeamMembersSelectionView',
           ),

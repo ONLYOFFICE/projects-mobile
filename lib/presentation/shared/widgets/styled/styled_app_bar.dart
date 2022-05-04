@@ -30,11 +30,15 @@
  *
  */
 
+import 'dart:io';
+
+import 'package:easy_localization/easy_localization.dart' as localizations;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -54,13 +58,15 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
   final double? leadingWidth;
   final Widget backButtonIcon;
+  final String? previousPageTitle;
+  final double? titleWidth;
 
   StyledAppBar({
     Key? key,
     this.actions,
     this.bottom,
     this.bottomHeight = 44,
-    this.centerTitle = false,
+    this.centerTitle,
     this.elevation = 1,
     this.leading,
     this.onLeadingPressed,
@@ -71,6 +77,8 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleText,
     this.leadingWidth,
     this.backgroundColor,
+    this.previousPageTitle,
+    this.titleWidth,
   })  : assert(titleText == null || title == null),
         assert(leading == null || onLeadingPressed == null),
         preferredSize = Size.fromHeight(bottom != null ? titleHeight + bottomHeight : titleHeight),
@@ -81,29 +89,59 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    var customLeadingWidth = 56.0;
+    final widthWindow =
+        Get.find<PlatformController>().isMobile ? MediaQuery.of(context).size.width : 540;
+
+    if (titleText != null && titleWidth == null) {
+      final width = getWidthText(
+        titleText!,
+        TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+      );
+      customLeadingWidth = (widthWindow - width / 2) > 56 ? (widthWindow - width) / 2 : 56.0;
+    } else {
+      if (titleWidth != null) {
+        customLeadingWidth =
+            (widthWindow - titleWidth! / 2) > 56 ? (widthWindow - titleWidth!) / 2 : 56.0;
+      }
+    }
+
+    if ((previousPageTitle != null) &&
+        (customLeadingWidth > getWidthText(previousPageTitle!, TextStyleHelper.button()) + 40) &&
+        (title != null)) {
+      customLeadingWidth = getWidthText(previousPageTitle!, TextStyleHelper.button()) + 40;
+    } else if (title == null && (previousPageTitle != null)) {
+      customLeadingWidth = getWidthText(previousPageTitle!, TextStyleHelper.button()) + 40;
+    }
     return AppBar(
-      centerTitle: centerTitle,
+      centerTitle: centerTitle ?? Platform.isIOS,
+      titleSpacing: Platform.isIOS ? 2 : null,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
       backgroundColor: backgroundColor,
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       shadowColor: Get.theme.colors().outline,
-      leadingWidth: leadingWidth,
+      leadingWidth: Platform.isIOS ? customLeadingWidth : leadingWidth,
       leading: leading == null && showBackButton
-          ? PlatformIconButton(
-              padding: EdgeInsets.zero,
-              icon: backButtonIcon,
-              onPressed: onLeadingPressed ?? Get.find<NavigationController>().back,
+          ? PlatformWidget(
+              material: (_, __) => BackButton(
+                onPressed: onLeadingPressed ?? Get.find<NavigationController>().back,
+              ),
+              cupertino: (_, __) => CupertinoStyledBackButton(
+                previousScreenName: previousPageTitle,
+                onPressed: onLeadingPressed ?? Get.find<NavigationController>().back,
+              ),
             )
           : leading,
       toolbarTextStyle: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+      titleTextStyle: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
       actions: actions,
       title: title != null
           ? PreferredSize(preferredSize: Size.fromHeight(titleHeight), child: title!)
           : titleText != null
               ? Text(
                   titleText!,
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                  textAlign: Platform.isIOS ? TextAlign.center : null,
                 )
               : null,
       bottom: bottom == null
@@ -118,14 +156,12 @@ class MainAppBar extends StatelessWidget {
     Key? key,
     this.materialTitle,
     this.cupertinoTitle,
-    this.bottom,
     this.actions = const [],
     this.isCollapsed = false,
   }) : super(key: key);
 
   final Widget? materialTitle;
   final Widget? cupertinoTitle;
-  final PreferredSizeWidget? bottom;
   final List<Widget> actions;
   final bool isCollapsed;
 
@@ -134,7 +170,6 @@ class MainAppBar extends StatelessWidget {
     return PlatformWidget(
       material: (context, target) => MaterialAppBar(
         title: materialTitle,
-        bottom: bottom,
         actions: actions,
       ),
       cupertino: (context, target) => CupertinoAppBar(
@@ -234,4 +269,137 @@ class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
     return false;
   }
+}
+
+// class CupertinoTitle extends StatelessWidget {
+//   const CupertinoTitle({Key? key, required this.title}) : super(key: key);
+//   final String title;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return LayoutBuilder(
+//       builder: (BuildContext context, BoxConstraints constraints) {
+//         final span = TextSpan(
+//           text: title,
+//           style: TextStyleHelper.headline6(),
+//         );
+//         final tp = TextPainter(
+//             maxLines: 1,
+//             textAlign: TextAlign.left,
+//             text: span,
+//             textDirection: TextDirection.ltr,
+//             ellipsis: '...');
+//         tp.layout(maxWidth: constraints.maxWidth);
+//
+//         final titleWidth = tp.width;
+//       },
+//     );
+//   }
+// }
+
+class CupertinoStyledBackButton extends StatelessWidget {
+  const CupertinoStyledBackButton({Key? key, this.onPressed, this.previousScreenName})
+      : super(key: key);
+
+  final Function()? onPressed;
+  final String? previousScreenName;
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoButton(
+      padding: const EdgeInsets.fromLTRB(16, 16, 0, 14),
+      onPressed: onPressed,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const BackButtonIcon(),
+          Expanded(child: _BackButtonText(text: previousScreenName)),
+        ],
+      ),
+    );
+  }
+}
+
+class _BackButtonText extends StatelessWidget {
+  const _BackButtonText({Key? key, required this.text}) : super(key: key);
+
+  final String? text;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (ctx, constrains) {
+        final defaultBackText = localizations.tr('back').toLowerCase().capitalizeFirst!;
+
+        if (text == null) return Text(defaultBackText);
+
+        final textStyle = TextStyleHelper.button();
+
+        var span = TextSpan(
+          text: text,
+          style: textStyle,
+        );
+
+        var tp = TextPainter(
+          maxLines: 1,
+          textAlign: TextAlign.left,
+          text: span,
+          textDirection: TextDirection.ltr,
+        );
+
+        tp.layout(maxWidth: constrains.maxWidth);
+
+        var exceeded = tp.didExceedMaxLines;
+
+        if (!exceeded) {
+          return Text(
+            text!,
+            style: textStyle,
+          );
+        }
+
+        span = TextSpan(
+          text: defaultBackText,
+          style: textStyle,
+        );
+
+        tp = TextPainter(
+          maxLines: 1,
+          textAlign: TextAlign.left,
+          text: span,
+          textDirection: TextDirection.ltr,
+        );
+
+        tp.layout(maxWidth: constrains.maxWidth);
+
+        exceeded = tp.didExceedMaxLines;
+
+        return exceeded
+            ? const SizedBox.shrink()
+            : Text(
+                defaultBackText,
+                style: textStyle,
+              );
+      },
+    );
+  }
+}
+
+double getWidthText(String text, TextStyle style) {
+  final span = TextSpan(
+    text: text,
+    style: style,
+  );
+
+  final tp = TextPainter(
+    maxLines: 1,
+    textAlign: TextAlign.left,
+    text: span,
+    textDirection: TextDirection.ltr,
+  );
+
+  tp.layout();
+
+  return tp.width;
 }

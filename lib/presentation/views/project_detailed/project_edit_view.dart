@@ -54,6 +54,8 @@ import 'package:projects/presentation/views/projects_view/new_project/tiles/titl
 class EditProjectView extends StatelessWidget {
   const EditProjectView({Key? key}) : super(key: key);
 
+  static String get pageName => tr('editProject');
+
   @override
   Widget build(BuildContext context) {
     final editProjectController = Get.find<ProjectEditController>();

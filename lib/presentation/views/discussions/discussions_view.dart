@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -45,6 +44,8 @@ import 'package:projects/presentation/views/discussions/discussions_shared.dart'
 
 class PortalDiscussionsView extends StatelessWidget {
   const PortalDiscussionsView({Key? key}) : super(key: key);
+
+  static String get pageName => tr('discussions');
 
   @override
   Widget build(BuildContext context) {

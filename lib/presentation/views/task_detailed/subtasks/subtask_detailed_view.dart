@@ -52,13 +52,16 @@ class SubtaskDetailedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'] as SubtaskController;
+    final args = Get.arguments;
+    final controller = args['controller'] as SubtaskController;
+    final previousPage = args['previousPage'] as String?;
 
     return Obx(
       () {
         final _subtask = controller.subtask.value!;
         return Scaffold(
           appBar: StyledAppBar(
+            previousPageTitle: previousPage,
             actions: [
               if (_subtask.canEdit! || controller.canCreateSubtask)
                 PlatformPopupMenuButton(

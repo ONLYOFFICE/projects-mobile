@@ -62,6 +62,8 @@ part 'filters/status.dart';
 class TasksFilterScreen extends StatelessWidget {
   const TasksFilterScreen({Key? key}) : super(key: key);
 
+  static String get pageName => tr('filter');
+
   @override
   Widget build(BuildContext context) {
     final filterController = Get.arguments['filterController'] as BaseTaskFilterController;
@@ -80,7 +82,6 @@ class TasksFilterScreen extends StatelessWidget {
         titleText: tr('filter'),
         centerTitle: GetPlatform.isIOS,
         backgroundColor: backgroundColor,
-        leadingWidth: GetPlatform.isIOS ? 100 : null,
         leading: PlatformWidget(
           cupertino: (_, __) => CupertinoButton(
             padding: const EdgeInsets.only(left: 16),

@@ -108,7 +108,10 @@ class _DescriptionTileState extends State<DescriptionTile> with TickerProviderSt
         return InkWell(
           onTap: () => Get.find<NavigationController>().toScreen(
             const TaskDescription(),
-            arguments: {'controller': widget.controller},
+            arguments: {
+              'controller': widget.controller,
+              'previousPage': widget.controller?.title.value
+            },
             transition: Transition.rightToLeft,
             page: '/TaskDescription',
           ),

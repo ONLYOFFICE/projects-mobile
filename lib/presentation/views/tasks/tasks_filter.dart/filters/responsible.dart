@@ -58,6 +58,7 @@ class _Responsible extends StatelessWidget {
                   const SelectUserScreen(),
                   transition: Transition.rightToLeft,
                   page: '/SelectUserScreen',
+                  arguments: {'previousPage': TasksFilterScreen.pageName},
                 );
                 filterController.changeResponsible('other', newUser);
               },
@@ -73,6 +74,7 @@ class _Responsible extends StatelessWidget {
                   const SelectGroupScreen(),
                   transition: Transition.rightToLeft,
                   page: '/SelectGroupScreen',
+                  arguments: {'previousPage': TasksFilterScreen.pageName},
                 );
                 filterController.changeResponsible('groups', newGroup);
               },

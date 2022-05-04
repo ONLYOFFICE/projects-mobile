@@ -54,6 +54,8 @@ import 'package:projects/presentation/views/new_task/tiles/task_title.dart';
 class NewTaskView extends StatelessWidget {
   const NewTaskView({Key? key}) : super(key: key);
 
+  static String get pageName => tr('newTask');
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<NewTaskController>();

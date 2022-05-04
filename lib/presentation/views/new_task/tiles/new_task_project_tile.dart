@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/tasks/abstract_task_actions_controll
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 
 class NewTaskProjectTile extends StatelessWidget {
@@ -63,7 +64,7 @@ class NewTaskProjectTile extends StatelessWidget {
           caption: _isNotEmpty ? '${tr('project')}:' : null,
           onTap: () => Get.find<NavigationController>().toScreen(
             const SelectProjectView(),
-            arguments: {'controller': controller},
+            arguments: {'controller': controller, 'previousPage': NewTaskView.pageName},
             transition: Transition.rightToLeft,
             page: '/SelectProjectView',
           ),

@@ -53,6 +53,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
 import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
+import 'package:projects/presentation/views/settings/settings_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
@@ -260,15 +261,20 @@ class SettingsController extends GetxController {
   void onAnalyticsPressed() => navigationController.toScreen(
         const AnalyticsScreen(),
         page: '/AnalyticsScreen',
+        arguments: {'previousPage': SettingsScreen.pageName},
       );
 
   void onPasscodePressed() => navigationController.toScreen(
         const PasscodeSettingsScreen(),
         page: '/PasscodeSettingsScreen',
+        arguments: {'previousPage': SettingsScreen.pageName},
       );
 
-  void onThemePressed() => navigationController.toScreen(const ColorThemeSelectionScreen(),
-      page: '/ColorThemeSelectionScreen');
+  void onThemePressed() => navigationController.toScreen(
+        const ColorThemeSelectionScreen(),
+        page: '/ColorThemeSelectionScreen',
+        arguments: {'previousPage': SettingsScreen.pageName},
+      );
 
   void back({bool closeTabletModalScreen = false}) =>
       Get.find<NavigationController>().back(closeTabletModalScreen: closeTabletModalScreen);

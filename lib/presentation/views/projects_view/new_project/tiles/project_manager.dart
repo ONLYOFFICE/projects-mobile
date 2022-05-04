@@ -39,6 +39,7 @@ import 'package:projects/domain/controllers/projects/base_project_editor_control
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 
 class ProjectManagerTile extends StatelessWidget {
@@ -75,7 +76,7 @@ class ProjectManagerTile extends StatelessWidget {
               : null,
           onTap: () => Get.find<NavigationController>().toScreen(
             ProjectManagerSelectionView(),
-            arguments: {'controller': controller},
+            arguments: {'controller': controller, 'previousPage': NewProject.pageName},
             transition: Transition.rightToLeft,
             page: '/ProjectManagerSelectionView',
           ),

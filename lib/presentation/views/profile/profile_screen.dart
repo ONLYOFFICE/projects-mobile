@@ -52,23 +52,26 @@ import 'package:projects/presentation/views/settings/settings_screen.dart';
 class SelfProfileScreen extends StatelessWidget {
   const SelfProfileScreen({Key? key}) : super(key: key);
 
+  static String get pageName => tr('profile');
+
   @override
   Widget build(BuildContext context) {
     final profileController = Get.find<ProfileController>(tag: 'SelfProfileScreen');
 
     // arguments may be null or may not contain needed parameters
     // then Get.arguments['param_name'] will return null
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final bool showBackButton;
-    if (Get.arguments == null) {
+    if (args == null) {
       showBackButton = false;
     } else {
-      showBackButton = Get.arguments['showBackButton'] as bool? ?? false;
+      showBackButton = args['showBackButton'] as bool? ?? false;
     }
     final bool showSettingsButton;
-    if (Get.arguments == null) {
+    if (args == null) {
       showSettingsButton = true;
     } else {
-      showSettingsButton = Get.arguments['showSettingsButton'] as bool? ?? true;
+      showSettingsButton = args['showSettingsButton'] as bool? ?? true;
     }
 
     final platformController = Get.find<PlatformController>();
@@ -79,7 +82,6 @@ class SelfProfileScreen extends StatelessWidget {
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-          leadingWidth: GetPlatform.isIOS ? 100 : null,
           showBackButton: showBackButton,
           leading: showBackButton
               ? PlatformWidget(
@@ -98,10 +100,11 @@ class SelfProfileScreen extends StatelessWidget {
                   ),
                 )
               : null,
-          title: Text(
-            tr('profile'),
-            style: TextStyle(color: Get.theme.colors().onSurface),
-          ),
+          // title: Text(
+          //   tr('profile'),
+          //   style: TextStyle(color: Get.theme.colors().onSurface),
+          // ),
+          titleText: tr('profile'),
           centerTitle: !GetPlatform.isAndroid,
           actions: [
             if (showSettingsButton)
@@ -112,7 +115,10 @@ class SelfProfileScreen extends StatelessWidget {
                       icon: SvgIcons.settings,
                       color: Get.theme.colors().primary,
                     ),
-                    onPressed: () => Get.find<NavigationController>().to(const SettingsScreen()),
+                    onPressed: () => Get.find<NavigationController>().to(
+                      const SettingsScreen(),
+                      arguments: {'previousPage': pageName},
+                    ),
                     padding: EdgeInsets.zero,
                   );
                 },
