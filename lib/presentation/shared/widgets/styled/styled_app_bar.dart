@@ -89,39 +89,38 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    var customLeadingWidth = 56.0;
+    var leadingWidthCalculated = 56.0;
+
+    var titleWidthCalculated = titleWidth;
+    if (title == null && titleText != null && titleWidthCalculated == null) {
+      titleWidthCalculated = getWidthText(
+        titleText!,
+        TextStyleHelper.headline6(),
+      );
+    }
+
     final widthWindow =
         Get.find<PlatformController>().isMobile ? MediaQuery.of(context).size.width : 540;
 
-    if (titleText != null && titleWidth == null) {
-      final width = getWidthText(
-        titleText!,
-        TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
-      );
-      customLeadingWidth = (widthWindow - width / 2) > 56 ? (widthWindow - width) / 2 : 56.0;
+    if (titleWidthCalculated != null) {
+      leadingWidthCalculated = (widthWindow - titleWidthCalculated / 2) > 56
+          ? (widthWindow - titleWidthCalculated) / 2
+          : 56.0;
+    } else if (leadingWidth != null) {
+      leadingWidthCalculated = leadingWidth!;
     } else {
-      if (titleWidth != null) {
-        customLeadingWidth =
-            (widthWindow - titleWidth! / 2) > 56 ? (widthWindow - titleWidth!) / 2 : 56.0;
-      }
+      leadingWidthCalculated = widthWindow / 2;
     }
 
-    if ((previousPageTitle != null) &&
-        (customLeadingWidth > getWidthText(previousPageTitle!, TextStyleHelper.button()) + 40) &&
-        (title != null)) {
-      customLeadingWidth = getWidthText(previousPageTitle!, TextStyleHelper.button()) + 40;
-    } else if (title == null && (previousPageTitle != null)) {
-      customLeadingWidth = getWidthText(previousPageTitle!, TextStyleHelper.button()) + 40;
-    }
     return AppBar(
       centerTitle: centerTitle ?? Platform.isIOS,
-      titleSpacing: Platform.isIOS ? 2 : null,
+      titleSpacing: Platform.isIOS ? 4 : null,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
       backgroundColor: backgroundColor,
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       shadowColor: Theme.of(context).colors().outline,
-      leadingWidth: Platform.isIOS ? customLeadingWidth : leadingWidth,
+      leadingWidth: Platform.isIOS ? leadingWidthCalculated : leadingWidth,
       leading: leading == null && showBackButton
           ? PlatformWidget(
               material: (_, __) => BackButton(
@@ -141,6 +140,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
           : titleText != null
               ? Text(
                   titleText!,
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
                   textAlign: Platform.isIOS ? TextAlign.center : null,
                 )
               : null,
@@ -271,32 +271,6 @@ class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
   }
 }
 
-// class CupertinoTitle extends StatelessWidget {
-//   const CupertinoTitle({Key? key, required this.title}) : super(key: key);
-//   final String title;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return LayoutBuilder(
-//       builder: (BuildContext context, BoxConstraints constraints) {
-//         final span = TextSpan(
-//           text: title,
-//           style: TextStyleHelper.headline6(),
-//         );
-//         final tp = TextPainter(
-//             maxLines: 1,
-//             textAlign: TextAlign.left,
-//             text: span,
-//             textDirection: TextDirection.ltr,
-//             ellipsis: '...');
-//         tp.layout(maxWidth: constraints.maxWidth);
-//
-//         final titleWidth = tp.width;
-//       },
-//     );
-//   }
-// }
-
 class CupertinoStyledBackButton extends StatelessWidget {
   const CupertinoStyledBackButton({Key? key, this.onPressed, this.previousScreenName})
       : super(key: key);
@@ -312,6 +286,7 @@ class CupertinoStyledBackButton extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           const BackButtonIcon(),
           Expanded(child: _BackButtonText(text: previousScreenName)),

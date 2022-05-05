@@ -53,27 +53,18 @@ class LoginView extends StatelessWidget {
   final passwordFocusNode = FocusNode();
 
   final styledAppBar = StyledAppBar(
-    backButtonIcon:
-        Platform.isAndroid ? Icon(PlatformIcons(Get.context!).clear) : const BackButtonIcon(),
-    leading: Platform.isIOS
-        ? Align(
-            alignment: Alignment.centerLeft,
-            child: CupertinoNavigationBarBackButton(
-              onPressed: Get.back,
-              previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
-            ),
-          )
-        : null,
-    leadingWidth: Platform.isIOS ? 150 : null,
-    elevation: Platform.isAndroid ? 1 : 0,
-    title: Platform.isAndroid
-        ? Text(
-            tr('addNewAccount'),
-            style: TextStyleHelper.headline6(color: Theme.of(Get.context!).colors().onSurface),
-          )
-        : null,
+    previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
+    onLeadingPressed: Get.back,
+    titleWidth: getWidthText(
+      tr('addNewAccount'),
+      TextStyleHelper.headline6(),
+    ),
+    elevation: 1,
+    title: Text(
+      tr('addNewAccount'),
+      style: TextStyleHelper.headline6(color: Theme.of(Get.context!).colors().onSurface),
+    ),
     titleHeight: Platform.isIOS ? 50 : 56,
-    centerTitle: Platform.isIOS,
   );
 
   @override

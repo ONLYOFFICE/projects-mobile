@@ -29,19 +29,18 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/account_tile_controller.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/authentication/account_manager/account_tile.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:projects/domain/controllers/auth/login_controller.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class AccountManagerView extends StatelessWidget {
   AccountManagerView({Key? key}) : super(key: key);
@@ -116,7 +115,7 @@ class _NewAccountButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => PortalInputView()),
+      onTap: () => Get.to(() => PortalInputView(), fullscreenDialog: true),
       child: SizedBox(
         height: 64,
         child: Row(
