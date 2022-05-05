@@ -59,12 +59,14 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final target = Get.arguments['target'] as int;
-    final initialFolderId = Get.arguments['initialFolderId'] as int?;
-    final mode = Get.arguments['mode'] as MoveOrCopyMode;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
 
-    final currentFolder = Get.arguments['currentFolder'] as Folder?;
-    final nestingCounter = Get.arguments['nestingCounter'] as int?;
+    final target = args['target'] as int;
+    final initialFolderId = args['initialFolderId'] as int?;
+    final mode = args['mode'] as MoveOrCopyMode;
+
+    final currentFolder = args['currentFolder'] as Folder?;
+    final nestingCounter = args['nestingCounter'] as int?;
 
     if (currentFolder == null)
       controller.initialSetup();

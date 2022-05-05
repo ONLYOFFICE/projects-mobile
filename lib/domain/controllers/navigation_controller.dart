@@ -114,7 +114,7 @@ class NavigationController extends GetxController {
     Transition? transition,
     bool? popGesture,
     bool fullscreenDialog = false,
-    String? page, // изменить имя на page
+    String? page,
   }) async {
     if (isMobile) {
       if (widget != null)
@@ -138,8 +138,12 @@ class NavigationController extends GetxController {
         arguments: arguments,
       );
     } else
-      return await Get.toNamed(page!,
-          id: ModalNavigationData.nestedNavigatorId, arguments: arguments);
+      return await Get.toNamed(
+        page!,
+        id: ModalNavigationData.nestedNavigatorId,
+        arguments: arguments,
+        preventDuplicates: preventDuplicates ?? false,
+      );
   }
 
   Future<void> toModalScreen(
