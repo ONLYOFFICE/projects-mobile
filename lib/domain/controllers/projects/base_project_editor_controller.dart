@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
@@ -50,6 +51,8 @@ import 'package:projects/presentation/views/projects_view/new_project/team_membe
 
 abstract class BaseProjectEditorController extends GetxController {
   final UserService _userService = locator<UserService>();
+  final _projectService = locator<ProjectService>();
+
   final usersDataSourse = Get.find<UsersDataSource>();
   UserSelectionMode selectionMode = UserSelectionMode.Single;
   final tags = [].obs;
@@ -158,6 +161,11 @@ abstract class BaseProjectEditorController extends GetxController {
   void deleteDescription() {
     descriptionText.value = descriptionController.text = '';
     Get.back();
+  }
+
+  Future followProject({int? projectId}) async {
+    if (projectId != null || projectData?.id != null)
+      await _projectService.followProject(projectId: projectData?.id ?? projectId!);
   }
 
   void changePMSelection(PortalUserItemController user) {
