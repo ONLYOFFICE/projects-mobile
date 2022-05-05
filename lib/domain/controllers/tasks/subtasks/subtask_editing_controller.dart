@@ -123,6 +123,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
     responsibles.clear();
     if (user.isSelected.value == true) {
       responsibles.add(user);
+      Get.find<NavigationController>().back();
     } else {
       responsibles.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
@@ -132,7 +133,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
   void confirmResponsiblesSelection() {
     // ignore: invalid_use_of_protected_member
     _previusSelectedResponsible = List.of(responsibles.value);
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   @override
@@ -149,7 +150,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
         onAcceptTap: () {
           responsibles.value = [_previusSelectedResponsible];
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));

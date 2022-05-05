@@ -306,10 +306,34 @@ class _BackButtonText extends StatelessWidget {
     return LayoutBuilder(
       builder: (ctx, constrains) {
         final defaultBackText = localizations.tr('back').toLowerCase().capitalizeFirst!;
-
-        if (text == null) return Text(defaultBackText);
-
         final textStyle = TextStyleHelper.button();
+
+        if (text == null) {
+          final span = TextSpan(
+            text: defaultBackText,
+            style: textStyle,
+          );
+
+          final tp = TextPainter(
+            maxLines: 1,
+            textAlign: TextAlign.left,
+            text: span,
+            textDirection: TextDirection.ltr,
+          );
+
+          tp.layout(maxWidth: constrains.maxWidth);
+
+          final exceeded = tp.didExceedMaxLines;
+
+          if (!exceeded) {
+            return Text(
+              defaultBackText,
+              style: textStyle,
+            );
+          } else {
+            return SizedBox.shrink();
+          }
+        }
 
         var span = TextSpan(
           text: text,

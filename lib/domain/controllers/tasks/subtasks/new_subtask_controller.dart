@@ -115,7 +115,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
     responsibles.clear();
     if (user.isSelected.value == true) {
       responsibles.add(user);
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
       responsibles.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
@@ -124,7 +124,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
   @override
   void confirmResponsiblesSelection() {
     _previusSelectedResponsible = List.of(responsibles);
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   @override
@@ -140,7 +140,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
         onAcceptTap: () {
           responsibles.value = List.of(_previusSelectedResponsible);
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));

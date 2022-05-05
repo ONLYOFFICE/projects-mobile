@@ -36,6 +36,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/subtasks/new_subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
 import 'package:projects/presentation/shared/project_team_responsible.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -127,7 +128,11 @@ class SubtaskResponsibleTile extends StatelessWidget {
           icon: SvgIcons.person,
           onTap: () => Get.find<NavigationController>().toScreen(
             const ProjectTeamResponsibleSelectionView(),
-            arguments: {'controller': controller},
+            arguments: {
+              'controller': controller,
+              'previousPage':
+                  controller is NewSubtaskController ? tr('editSubtask') : tr('addSubtask')
+            },
             transition: Transition.rightToLeft,
             page: '/ProjectTeamResponsibleSelectionView',
           ),
