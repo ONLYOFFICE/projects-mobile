@@ -73,25 +73,29 @@ class PortalInputView extends StatelessWidget {
       appBar: controller.accountManager.accounts.isEmpty
           ? null
           : StyledAppBar(
-              backButtonIcon:
-                  Platform.isAndroid ? Icon(PlatformIcons(context).clear) : const BackButtonIcon(),
-              leading: Platform.isIOS
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: CupertinoNavigationBarBackButton(
-                        onPressed: Get.back,
-                        previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
-                      ),
-                    )
-                  : null,
-              leadingWidth: Platform.isIOS ? 150 : null,
-              elevation: Platform.isAndroid ? 1 : 0,
-              title: Platform.isAndroid
-                  ? Text(
-                      tr('addNewAccount'),
-                      style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
-                    )
-                  : null,
+              leading: PlatformWidget(
+                cupertino: (_, __) => CupertinoButton(
+                  padding: const EdgeInsets.only(left: 16),
+                  alignment: Alignment.centerLeft,
+                  onPressed: Get.back,
+                  child: Text(
+                    tr('cancel').toLowerCase().capitalizeFirst!,
+                    style: TextStyleHelper.button(),
+                  ),
+                ),
+                material: (_, __) => IconButton(
+                  onPressed: Get.back,
+                  icon: const Icon(Icons.close),
+                ),
+              ),
+              titleWidth: getWidthText(tr('addNewAccount'),
+                  TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
+              elevation: 1,
+              title: Text(
+                tr('addNewAccount'),
+                style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+              ),
+              titleHeight: Platform.isIOS ? 50 : 56,
             ),
       body: SafeArea(
         child: SingleChildScrollView(

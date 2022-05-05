@@ -118,7 +118,9 @@ class NewProjectController extends BaseProjectEditorController {
         tags: tagsText.value);
 
     final result = await _api.createProject(project: newProject);
-    if (result != null) {
+    if (result != null && result.id != null) {
+      if (isFolowed.value) await followProject(projectId: result.id);
+
       Get.find<NavigationController>().back();
 
       locator<EventHub>().fire('needToRefreshProjects', {'all': true});
@@ -147,7 +149,7 @@ class NewProjectController extends BaseProjectEditorController {
 
   @override
   // TODO: implement projectData
-  ProjectDetailed? get projectData => throw UnimplementedError();
+  ProjectDetailed? get projectData => ProjectDetailed();
 
   @override
   Future<bool> updateStatus({int? newStatusId}) {
