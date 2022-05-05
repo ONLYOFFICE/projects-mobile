@@ -98,7 +98,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   final _activeIndex = ProjectDetailedTabs.tasks.obs;
 
   late final ProjectDetailsController projectController;
-  late final String? previousPage;
+  String? previousPage;
 
   @override
   void initState() {
