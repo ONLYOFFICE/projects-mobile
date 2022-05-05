@@ -145,11 +145,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.window.onPlatformBrightnessChanged = () async {
-      if ((await ThemeService.savedThemeMode()) == ThemeMode.system)
-        Get.rootController.restartApp(); // TODO change brightness without restart
-    };
-
     print(context.locale.toString());
     print(context.deviceLocale.toString());
 

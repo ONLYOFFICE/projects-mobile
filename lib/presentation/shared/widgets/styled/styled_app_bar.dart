@@ -267,35 +267,9 @@ class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
+    return true;
   }
 }
-
-// class CupertinoTitle extends StatelessWidget {
-//   const CupertinoTitle({Key? key, required this.title}) : super(key: key);
-//   final String title;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return LayoutBuilder(
-//       builder: (BuildContext context, BoxConstraints constraints) {
-//         final span = TextSpan(
-//           text: title,
-//           style: TextStyleHelper.headline6(),
-//         );
-//         final tp = TextPainter(
-//             maxLines: 1,
-//             textAlign: TextAlign.left,
-//             text: span,
-//             textDirection: TextDirection.ltr,
-//             ellipsis: '...');
-//         tp.layout(maxWidth: constraints.maxWidth);
-//
-//         final titleWidth = tp.width;
-//       },
-//     );
-//   }
-// }
 
 class CupertinoStyledBackButton extends StatelessWidget {
   const CupertinoStyledBackButton({Key? key, this.onPressed, this.previousScreenName})
