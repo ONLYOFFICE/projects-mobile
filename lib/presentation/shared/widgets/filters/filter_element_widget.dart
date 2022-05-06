@@ -88,7 +88,7 @@ class FilterElement extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyleHelper.body2(
                       color: isSelected
-                          ? Theme.of(context).colors().onPrimarySurface
+                          ? Theme.of(context).colors().onPrimary
                           : titleColor ?? Theme.of(context).colors().primary)),
             ),
             if (cancelButtonEnabled!)
