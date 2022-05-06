@@ -63,9 +63,10 @@ class TeamMembersTile extends StatelessWidget {
           selectedIconColor: Theme.of(context).colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
-              ? InkWell(
-                  onTap: controller.editTeamMember as Function(),
-                  child: Icon(
+              ? PlatformIconButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: controller.editTeamMember as Function(),
+                  icon: Icon(
                     controller.selectedTeamMembers.length as int >= 2
                         ? PlatformIcons(context).rightChevron
                         : PlatformIcons(context).clear,

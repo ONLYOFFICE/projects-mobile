@@ -61,8 +61,8 @@ class TagsTile extends StatelessWidget {
           selectedIconColor: Theme.of(context).colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
-              ? InkWell(
-                  onTap: controller.showTags,
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 10),
                   child: Icon(
                     PlatformIcons(context).rightChevron,
                     size: 24,

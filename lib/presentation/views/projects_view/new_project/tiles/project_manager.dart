@@ -66,9 +66,10 @@ class ProjectManagerTile extends StatelessWidget {
           selectedIconColor: Theme.of(context).colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
-              ? InkWell(
-                  onTap: controller.removeManager,
-                  child: Icon(
+              ? PlatformIconButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: controller.removeManager,
+                  icon: Icon(
                     PlatformIcons(context).clear,
                     size: 24,
                     color: Theme.of(context).colors().onBackground.withOpacity(0.6),

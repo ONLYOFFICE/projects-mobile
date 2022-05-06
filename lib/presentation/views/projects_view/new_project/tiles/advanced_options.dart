@@ -61,8 +61,8 @@ class AdvancedOptions extends StatelessWidget {
                   expandedAlignment: Alignment.topLeft,
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
                   tilePadding: const EdgeInsets.only(right: 18),
-                  iconColor: Theme.of(context).colors().onBackground.withOpacity(0.75),
-                  collapsedIconColor: Theme.of(context).colors().onBackground.withOpacity(0.75),
+                  iconColor: Theme.of(context).colors().onBackground.withOpacity(0.6),
+                  collapsedIconColor: Theme.of(context).colors().onBackground.withOpacity(0.6),
                   title: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [

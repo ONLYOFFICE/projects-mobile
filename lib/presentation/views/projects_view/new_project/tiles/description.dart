@@ -156,14 +156,15 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 5, right: 13),
+                              padding: const EdgeInsets.only(left: 5, right: 6),
                               child: PlatformIconButton(
+                                padding: EdgeInsets.zero,
                                 icon: RotationTransition(
                                   turns: _iconTurns,
                                   child: Icon(
                                     PlatformIcons(context).rightChevron,
                                     size: 24,
-                                    color: Theme.of(context).colors().onBackground,
+                                    color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                                   ),
                                 ),
                                 onPressed: changeExpansion,
