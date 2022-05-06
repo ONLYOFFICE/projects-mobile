@@ -63,7 +63,7 @@ class NewItemTile extends StatelessWidget {
     this.onTap,
     this.selectedIconColor,
     this.suffix,
-    this.suffixPadding = const EdgeInsets.symmetric(horizontal: 16),
+    this.suffixPadding = const EdgeInsets.only(right: 6),
     this.textOverflow = TextOverflow.ellipsis,
     this.textColor,
     this.textStyle,

@@ -37,15 +37,19 @@ import 'package:projects/presentation/shared/widgets/option_with_switch.dart';
 
 class PriorityTile extends StatelessWidget {
   final TaskActionsController controller;
+
   const PriorityTile({
     Key? key,
     required this.controller,
+    this.padding = const EdgeInsets.only(left: 72, right: 16),
   }) : super(key: key);
+
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 72, right: 16),
+      padding: padding,
       child: OptionWithSwitch(
           title: tr('highPriority'),
           switchValue: controller.highPriority,

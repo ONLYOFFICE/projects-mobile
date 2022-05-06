@@ -73,11 +73,14 @@ class ResponsibleTile extends StatelessWidget {
                   : plural('responsibles', controller.responsibles.length)
               : tr('addResponsible'),
           suffix: _isSelected
-              ? suffixIcon ??
-                  Icon(PlatformIcons(context).rightChevron,
-                      size: 24, color: Theme.of(context).colors().onBackground.withOpacity(0.6))
+              ? Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: suffixIcon ??
+                      Icon(PlatformIcons(context).rightChevron,
+                          size: 24,
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
+                )
               : null,
-          suffixPadding: const EdgeInsets.only(right: 8),
           icon: SvgIcons.person,
           onTap: () => Get.find<NavigationController>().toScreen(
             const ProjectTeamResponsibleSelectionView(),

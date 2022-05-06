@@ -63,8 +63,9 @@ class StartDateTile extends StatelessWidget {
           selectedIconColor: Theme.of(context).colors().onBackground,
           suffix: _isSelected
               ? PlatformIconButton(
+                  padding: EdgeInsets.zero,
                   icon: Icon(PlatformIcons(context).clear,
-                      size: 24, color: Theme.of(context).colors().onBackground),
+                      size: 24, color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
                   onPressed: () => controller.changeStartDate(null))
               : null,
           onTap: () => Get.find<NavigationController>().toScreen(
