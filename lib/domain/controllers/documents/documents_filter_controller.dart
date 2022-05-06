@@ -350,15 +350,15 @@ class DocumentsFilterController extends BaseFilterController {
   }
 
   // navigation
-  Future onUsersFilterPressed() async => await navigationController.toScreen(
-        const SelectUserScreen(),
-        page: '/SelectUserScreen',
-      );
+  Future onUsersFilterPressed() async => await navigationController
+          .toScreen(const SelectUserScreen(), page: '/SelectUserScreen', arguments: {
+        'previousPage': tr('filter'),
+      });
 
-  Future onGroupsFilterPressed() async => await navigationController.toScreen(
-        const SelectGroupScreen(),
-        page: '/SelectGroupScreen',
-      );
+  Future onGroupsFilterPressed() async => await navigationController
+          .toScreen(const SelectGroupScreen(), page: '/SelectGroupScreen', arguments: {
+        'previousPage': tr('filter'),
+      });
 
   void back() => navigationController.back();
 }
