@@ -228,30 +228,23 @@ class FilesApi {
   }
 
   Future<ApiDTO<List<Operation>>> moveDocument({
-    required String targetFolder,
+    required String destFolderId,
     required ConflictResolveType type,
-    String? movingFolder,
-    String? movingFile,
+    List<String>? folderIds,
+    List<String>? fileIds,
   }) async {
     final url = await locator.get<CoreApi>().getMoveOpsUrl();
 
-    final folderIds = [];
-    if (movingFolder != null) folderIds.add(movingFolder);
-    final fileIds = [];
-    if (movingFile != null) fileIds.add(movingFile);
-
-    final body = {
-      'destFolderId': targetFolder,
-      'folderIds': folderIds,
-      'fileIds': fileIds,
-      'conflictResolveType': type.name,
-      'deleteAfter': true
-    };
+    final body = <String, String>{};
+    body.addAll({'destFolderId': destFolderId});
+    if (folderIds?.isNotEmpty == true) body.addAll({'folderIds': folderIds!.join(',')});
+    if (fileIds?.isNotEmpty == true) body.addAll({'fileIds': fileIds!.join(',')});
+    body.addAll({'conflictResolveType': type.name});
 
     final result = ApiDTO<List<Operation>>();
 
     try {
-      final response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putFormDataRequest(url, body: body);
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
@@ -270,30 +263,23 @@ class FilesApi {
   }
 
   Future<ApiDTO<List<Operation>>> copyDocument({
-    required String targetFolder,
+    required String destFolderId,
     required ConflictResolveType type,
-    String? copyingFolder,
-    String? copyingFile,
+    List<String>? folderIds,
+    List<String>? fileIds,
   }) async {
     final url = await locator.get<CoreApi>().getCopyOpsUrl();
 
-    final folderIds = [];
-    if (copyingFolder != null) folderIds.add(copyingFolder);
-    final fileIds = [];
-    if (copyingFile != null) fileIds.add(copyingFile);
-
-    final body = {
-      'destFolderId': targetFolder,
-      'folderIds': folderIds,
-      'fileIds': fileIds,
-      'conflictResolveType': type.name,
-      'deleteAfter': false
-    };
+    final body = <String, String>{};
+    body.addAll({'destFolderId': destFolderId});
+    if (folderIds?.isNotEmpty == true) body.addAll({'folderIds': folderIds!.join(',')});
+    if (fileIds?.isNotEmpty == true) body.addAll({'fileIds': fileIds!.join(',')});
+    body.addAll({'conflictResolveType': type.name});
 
     final result = ApiDTO<List<Operation>>();
 
     try {
-      final response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putFormDataRequest(url, body: body);
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);

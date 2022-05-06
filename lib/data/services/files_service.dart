@@ -170,9 +170,9 @@ class FilesService {
     if (movingFolder != null && movingFile != null) return null;
 
     final result = await _api.moveDocument(
-      movingFolder: movingFolder,
-      targetFolder: targetFolder,
-      movingFile: movingFile,
+      folderIds: movingFolder?.split(','),
+      destFolderId: targetFolder,
+      fileIds: movingFile?.split(','),
       type: type,
     );
 
@@ -196,9 +196,9 @@ class FilesService {
     if (copyingFolder != null && copyingFile != null) return null;
 
     final result = await _api.copyDocument(
-      copyingFolder: copyingFolder,
-      targetFolder: targetFolder,
-      copyingFile: copyingFile,
+      folderIds: copyingFolder?.split(','),
+      destFolderId: targetFolder,
+      fileIds: copyingFile?.split(','),
       type: type,
     );
 
@@ -249,7 +249,6 @@ class FilesService {
   Future<String?> waitFinishOperation(String id) async {
     Operation? operationStatus;
     do {
-      // TODO garanin add pause between requests
       final activeOperations = await getActiveOperations();
       if (activeOperations == null || activeOperations.isEmpty) return tr('error');
 
@@ -257,6 +256,7 @@ class FilesService {
         (element) => element.id == id,
         orElse: () => Operation(finished: true, error: tr('error')),
       );
+      if (!operationStatus.finished!) await Future.delayed(const Duration(seconds: 1));
     } while (!operationStatus.finished!);
 
     return operationStatus.error;
