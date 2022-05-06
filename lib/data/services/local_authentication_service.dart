@@ -42,6 +42,8 @@ class LocalAuthenticationService {
     final biometrics = await _localAuth.getAvailableBiometrics();
     if (biometrics.contains(BiometricType.face) && Platform.isIOS) return BiometricType.face;
     if (biometrics.contains(BiometricType.fingerprint)) return BiometricType.fingerprint;
+    if (biometrics.contains(BiometricType.strong) && Platform.isAndroid)
+      return BiometricType.fingerprint;
     return null;
   }
 
