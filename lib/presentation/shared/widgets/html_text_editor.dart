@@ -69,10 +69,10 @@ class HtmlTextEditor extends StatelessWidget {
         mediaUploadInterceptor: (file, type) async {
           textController.setFocus();
           final result = await locator<CommentsService>().uploadImages(file);
-          if (result != null)
+          if (result != null && result.isURL)
             textController.insertNetworkImage(result);
           else
-            MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+            MessagesHandler.showSnackBar(context: Get.context!, text: result ?? tr('error'));
 
           return false;
         },
@@ -80,6 +80,10 @@ class HtmlTextEditor extends StatelessWidget {
           textController.setFocus();
           textController.insertLink(text, url, isNewWindow);
           return false;
+        },
+        mediaLinkInsertInterceptor: (link, type) {
+          textController.setFocus();
+          return true;
         },
         textStyle: TextStyleHelper.body2(color: Theme.of(context).colors().onBackground),
         defaultToolbarButtons: const [

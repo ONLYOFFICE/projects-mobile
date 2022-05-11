@@ -80,6 +80,7 @@ dependencies:
   # clear cache
   flutter_cache_manager: ^3.3.0
   flutter_platform_widgets: ^1.20.0
+  file_picker: ^4.5.1
   
   # app localization
   easy_localization: ^3.0.0
