@@ -32,6 +32,7 @@
 
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -180,11 +181,11 @@ class CommentsService {
     }
   }
 
-  Future<String?> uploadImages(image) async {
+  Future<String?> uploadImages(PlatformFile image) async {
     final file = http.MultipartFile.fromBytes(
       'upload',
-      image.bytes as List<int>,
-      filename: image.name as String?,
+      image.bytes!,
+      filename: image.name,
       contentType: MediaType('image', image.extension as String),
     );
 
@@ -199,6 +200,11 @@ class CommentsService {
       //        .split("'")[1];
 
       final responseJson = json.decode(result.response!);
+
+      final error = responseJson['error'];
+      if (error != null) {
+        return (error as Map)['message'] as String;
+      }
       final imageUrl = responseJson['url']?.toString();
       if (imageUrl?.isNotEmpty == true) return _portalInfo.portalUri! + imageUrl!;
     }

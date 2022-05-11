@@ -396,12 +396,12 @@ packages:
     source: hosted
     version: "6.1.2"
   file_picker:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: file_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.4.0"
+    version: "4.5.1"
   firebase:
     dependency: transitive
     description:
@@ -1220,6 +1220,48 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  share_plus:
+    dependency: "direct main"
+    description:
+      name: share_plus
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.4"
+  share_plus_linux:
+    dependency: transitive
+    description:
+      name: share_plus_linux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
+  share_plus_macos:
+    dependency: transitive
+    description:
+      name: share_plus_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
+  share_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: share_plus_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.2"
+  share_plus_web:
+    dependency: transitive
+    description:
+      name: share_plus_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
+  share_plus_windows:
+    dependency: transitive
+    description:
+      name: share_plus_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -1616,7 +1658,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.0"
+    version: "2.5.2"
   xdg_directories:
     dependency: transitive
     description:

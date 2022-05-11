@@ -69,9 +69,7 @@ class FileCell extends StatelessWidget {
         children: [
           Expanded(
             child: InkWell(
-              onTap: () async {
-                await cellController.openFile(parentId: documentsController.parentId);
-              },
+              onTap: () => cellController.openFile(parentId: documentsController.parentId),
               child: Row(
                 children: [
                   SizedBox(
@@ -117,7 +115,7 @@ class FileCell extends StatelessWidget {
                         ),
                         PlatformPopupMenuItem(
                           value: 'download',
-                          child: Text(cellController.downloadInProgress
+                          child: Text(cellController.progress.value > 0
                               ? tr('cancelDownload')
                               : tr('download')),
                         ),
@@ -156,12 +154,11 @@ class FileCell extends StatelessWidget {
             ),
           ),
           Obx(() {
-            if (cellController.status.value == DownloadTaskStatus.running ||
-                cellController.status.value == DownloadTaskStatus.enqueued)
+            if (cellController.fileAction.value == FileAction.OnlyDownload &&
+                cellController.progress.value > 0)
               return Obx(() {
-                final value = cellController.progress.value;
                 return LinearProgressIndicator(
-                  value: value / 100,
+                  value: cellController.progress.value,
                   color: Theme.of(context).colors().primary,
                   backgroundColor: Theme.of(context).colors().backgroundSecond,
                 );
@@ -193,10 +190,10 @@ Future<void> _onFilePopupMenuSelected(
       }
       break;
     case 'open':
-      await cellController.openFile(parentId: documentsController.parentId);
+      cellController.openFile(parentId: documentsController.parentId);
       break;
     case 'download':
-      cellController.downloadInProgress
+      cellController.progress.value > 0
           ? await cellController.cancelDownloadFile()
           : await cellController.downloadFile();
       break;
