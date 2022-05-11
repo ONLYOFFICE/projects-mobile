@@ -34,6 +34,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:projects/internal/quick_actions_provider.dart';
 import 'package:projects/main_controller.dart';
 
 class MainView extends StatelessWidget {
@@ -42,6 +43,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(MainController(), permanent: true);
+    QuickActionsProvider().setupQuickAction();
 
     return GetBuilder<MainController>(builder: (controller) {
       SchedulerBinding.instance!.addPostFrameCallback((_) {
