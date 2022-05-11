@@ -69,9 +69,7 @@ class FileCell extends StatelessWidget {
         children: [
           Expanded(
             child: InkWell(
-              onTap: () async {
-                await cellController.openFile(parentId: documentsController.parentId);
-              },
+              onTap: () => cellController.openFile(parentId: documentsController.parentId),
               child: Row(
                 children: [
                   SizedBox(
@@ -192,7 +190,7 @@ Future<void> _onFilePopupMenuSelected(
       }
       break;
     case 'open':
-      await cellController.openFile(parentId: documentsController.parentId);
+      cellController.openFile(parentId: documentsController.parentId);
       break;
     case 'download':
       cellController.progress.value > 0

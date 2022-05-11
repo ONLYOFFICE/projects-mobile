@@ -42,6 +42,7 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/loading_hud.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
@@ -55,6 +56,7 @@ import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:open_file/open_file.dart';
+import 'package:synchronized/synchronized.dart';
 
 enum FileAction { OnlyDownload, DownloadAndOpen }
 
@@ -63,6 +65,9 @@ class FileCellController extends GetxController {
   final downloadService = locator<DocumentsDownloadService>();
 
   final portalInfoController = Get.find<PortalInfoController>();
+
+  final _openFileLock = Lock();
+  final loading = LoadingHUD();
 
   late final PortalFile file;
   final fileIcon = AppIcon(
@@ -217,7 +222,7 @@ class FileCellController extends GetxController {
       if (status == DownloadTaskStatus.complete) {
         Get.back();
         this.progress.value = 0;
-        if ((await tryToOpenAlreadyDownloadedFile()).type != ResultType.done)
+        if ((await tryToOpenAlreadyDownloadedFile()) != ResultType.done)
           MessagesHandler.showSnackBar(context: Get.context!, text: tr('openFileError'));
       } else if (status == DownloadTaskStatus.failed) {
         Get.back();
@@ -244,22 +249,39 @@ class FileCellController extends GetxController {
 
   Future<void> cancelDownloadFile() async {
     if (downloadTaskId != null) await FlutterDownloader.cancel(taskId: downloadTaskId!);
+    progress.value = 0;
   }
 
-  Future<OpenResult> tryToOpenAlreadyDownloadedFile() async {
+  Future<ResultType> tryToOpenAlreadyDownloadedFile() async {
     final res = (await FlutterDownloader.loadTasks())
         ?.lastWhere((element) => element.taskId == downloadTaskId);
+
     final savedDir = fileAction.value == FileAction.OnlyDownload
         ? downloadService.downloadPath!
         : downloadService.tempPath!;
-    return await OpenFile.open('$savedDir/${res!.filename!}');
+
+    final result = (await OpenFile.open('$savedDir/${res!.filename!}')).type;
+
+    return result;
   }
 
   Future<void> viewFile() async {
     if (progress.value > 0) return;
 
-    if (downloadTaskId != null &&
-        ((await tryToOpenAlreadyDownloadedFile()).type == ResultType.done)) return;
+    if (downloadTaskId != null && ((await tryToOpenAlreadyDownloadedFile()) == ResultType.done))
+      return;
+
+    loading.showLoadingHUD(true);
+
+    downloadTaskId = await downloadService.downloadDocument(file, temp: true);
+    if (downloadTaskId == null) {
+      Get.back();
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
+      loading.showLoadingHUD(false);
+      return;
+    }
+
+    loading.showLoadingHUD(false);
 
     unawaited(Get.dialog(
       SingleButtonDialog(
@@ -301,23 +323,36 @@ class FileCellController extends GetxController {
       barrierDismissible: false,
     ));
 
-    downloadTaskId = await downloadService.downloadDocument(file, temp: true);
-    if (downloadTaskId == null) {
-      Get.back();
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
-      return;
-    }
-
     fileAction.value = FileAction.DownloadAndOpen;
 
     downloadService.registerCallback(taskId: downloadTaskId!, callback: viewFileCallback);
   }
 
-  Future openFile({int? parentId}) async {
-    if (file.fileType! < 5 || file.fileExst == '.pdf')
-      await viewFile();
-    else
-      await openFileInDocumentsApp(parentId: parentId);
+  void openFile({int? parentId}) {
+    if (_openFileLock.locked) return;
+
+    _openFileLock.synchronized(() async {
+      if (file.fileType == FileType.Audio ||
+          file.fileType == FileType.Video ||
+          file.fileType == FileType.Image ||
+          file.fileType == FileType.Archive ||
+          file.fileType == FileType.Unknown) return await viewFile();
+
+      if (file.fileExst == '.xls' ||
+          file.fileExst == '.xlsx' ||
+          file.fileExst == '.odp' ||
+          file.fileExst == '.ods' ||
+          file.fileExst == '.odt' ||
+          file.fileExst == '.otp' ||
+          file.fileExst == '.doc' ||
+          file.fileExst == '.docx' ||
+          file.fileExst == '.docxf' ||
+          file.fileExst == '.oform' ||
+          file.fileExst == '.pptx')
+        await openFileInDocumentsApp(parentId: parentId);
+      else
+        await viewFile();
+    });
   }
 
   Future openFileInDocumentsApp({int? parentId}) async {
