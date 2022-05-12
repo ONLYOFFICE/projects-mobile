@@ -191,7 +191,7 @@ class DiscussionItemController extends GetxController {
   }
 
   Future<void> deleteMessage() async {
-    await Get.dialog(StyledAlertDialog(
+    await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
       titleText: tr('deleteDiscussionTitle'),
       contentText: tr('deleteDiscussionAlert'),
       acceptText: tr('delete').toUpperCase(),

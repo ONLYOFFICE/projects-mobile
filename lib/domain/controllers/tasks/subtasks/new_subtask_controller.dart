@@ -132,7 +132,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
     if (listEquals(_previusSelectedResponsible, responsibles)) {
       Get.back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
@@ -156,7 +156,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
   @override
   void leavePage() {
     if (responsibles.isNotEmpty || _titleController.text.isNotEmpty) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),

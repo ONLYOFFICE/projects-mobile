@@ -142,7 +142,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
     if (listEquals(_previusSelectedResponsible, responsibles.value)) {
       Get.back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
@@ -169,7 +169,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
       responsible = null;
 
     if (responsible != _previousResponsibleId || _titleController.text != _previousTitle) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),

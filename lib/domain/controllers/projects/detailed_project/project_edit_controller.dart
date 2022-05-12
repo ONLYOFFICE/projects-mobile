@@ -216,7 +216,7 @@ class ProjectEditController extends BaseProjectEditorController {
 
     // warn the user if there have been changes
     if (edited) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),

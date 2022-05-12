@@ -308,7 +308,7 @@ void _renameFolder(dynamic controller, Folder element, BuildContext context) {
 
   final isErrorInputText = ValueNotifier<bool>(false);
 
-  Get.dialog(
+  Get.find<NavigationController>().showPlatformDialog(
     StyledAlertDialog(
       titleText: tr('renameFolder'),
       content: ValueListenableBuilder<bool>(

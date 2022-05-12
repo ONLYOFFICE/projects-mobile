@@ -64,7 +64,7 @@ class NewProjectController extends BaseProjectEditorController {
         isPMSelected.value ||
         selectedTeamMembers.isNotEmpty ||
         descriptionText.isNotEmpty)
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),

@@ -75,7 +75,7 @@ class TaskCommentItemController extends GetxController implements CommentItemCon
 
   @override
   Future<void> deleteComment() async {
-    await Get.dialog(StyledAlertDialog(
+    await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
       titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
       acceptText: tr('delete').toUpperCase(),

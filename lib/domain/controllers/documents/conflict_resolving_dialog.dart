@@ -37,6 +37,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/files_api.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
@@ -48,7 +49,7 @@ Future<ConflictResolveType?> showConflictResolvingDialog(List<String> titles) as
 }
 
 Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
-  return await Get.dialog(StyledAlertDialog(
+  return await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
     titleText: tr('overwriteDialogTitle'),
     content: RichText(
       textAlign: TextAlign.center,
@@ -109,7 +110,7 @@ Future<ConflictResolveType?> _showForIOS(List<String> titles) async {
 Future<ConflictResolveType?> _showForAndroid(List<String> titles) async {
   ConflictResolveType? type;
 
-  return await Get.dialog(StyledAlertDialog(
+  return await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
     titleText: tr('overwriteDialogTitle'),
     content: Column(
       mainAxisSize: MainAxisSize.min,

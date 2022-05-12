@@ -268,7 +268,7 @@ void _renameFile(FileCellController cellController) {
     }
   }
 
-  Get.dialog(
+  Get.find<NavigationController>().showPlatformDialog(
     StyledAlertDialog(
       titleText: tr('renameFile'),
       content: ValueListenableBuilder<bool>(

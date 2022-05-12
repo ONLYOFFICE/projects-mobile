@@ -85,7 +85,7 @@ abstract class DiscussionActionsController extends GetxController {
     if (t == text.value || t == '<br>') {
       Get.find<NavigationController>().back();
     } else {
-      await Get.dialog(StyledAlertDialog(
+      await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),

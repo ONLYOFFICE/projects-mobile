@@ -173,7 +173,7 @@ class NewMilestoneController extends GetxController {
     if (typedText == descriptionText.value) {
       Get.find<NavigationController>().back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
@@ -197,7 +197,7 @@ class NewMilestoneController extends GetxController {
     if (_previusSelectedResponsible == null || _previusSelectedResponsible == responsible.value) {
       Get.find<NavigationController>().back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
@@ -305,7 +305,7 @@ class NewMilestoneController extends GetxController {
         responsible.value != null ||
         descriptionText.isNotEmpty ||
         _dueDate != null) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardMilestone'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),

@@ -39,6 +39,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:projects/data/enums/file_type.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -283,7 +284,7 @@ class FileCellController extends GetxController {
 
     loading.showLoadingHUD(false);
 
-    unawaited(Get.dialog(
+    unawaited(Get.find<NavigationController>().showPlatformDialog(
       SingleButtonDialog(
         titleText: '${tr('downloading')} ${file.title!}',
         acceptText: tr('cancel'),

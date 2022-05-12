@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
@@ -133,7 +134,7 @@ class TagsSelectionView extends StatelessWidget {
       Get.back();
     }
 
-    await Get.dialog(
+    await Get.find<NavigationController>().showPlatformDialog(
       ValueListenableBuilder<bool>(
         valueListenable: validate,
         builder: (context, value, child) {

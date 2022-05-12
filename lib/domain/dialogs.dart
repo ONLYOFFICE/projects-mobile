@@ -37,6 +37,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ErrorDialog extends GetxController {
@@ -66,7 +67,7 @@ class ErrorDialog extends GetxController {
 
     final error = queue.first;
 
-    await Get.dialog(
+    await Get.find<NavigationController>().showPlatformDialog(
       WillPopScope(
         onWillPop: () {
           return Future.value(false);

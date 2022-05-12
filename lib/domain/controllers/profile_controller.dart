@@ -39,6 +39,7 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/user_photo_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -101,7 +102,7 @@ class ProfileController extends GetxController {
   }
 
   void logout(context) async {
-    await Get.dialog(StyledAlertDialog(
+    await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
       titleText: tr('logOutTitle'),
       acceptText: tr('logOut').toUpperCase(),
       acceptColor: Theme.of(context as BuildContext).colors().colorError,

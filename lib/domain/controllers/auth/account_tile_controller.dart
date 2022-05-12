@@ -45,6 +45,7 @@ import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -158,7 +159,7 @@ class AccountTileController extends GetxController {
   }
 
   Future<void> deleteAccount() async {
-    await Get.dialog(
+    await Get.find<NavigationController>().showPlatformDialog(
       StyledAlertDialog(
         titleText: tr('removeAccountTitle'),
         contentText: tr('removeAccountText'),

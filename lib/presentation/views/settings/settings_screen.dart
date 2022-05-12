@@ -35,6 +35,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -123,7 +124,7 @@ class SettingsScreen extends StatelessWidget {
                       icon: SvgIcons.clean,
                       enableUnderline: true,
                       onTap: () {
-                        Get.dialog(
+                        Get.find<NavigationController>().showPlatformDialog(
                           StyledAlertDialog(
                             title: Text(tr('clearCacheQuestion')),
                             // content: Text(tr('clearCacheQuestionDescription')),

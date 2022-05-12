@@ -388,7 +388,7 @@ Future<void> _onSelected(
       break;
 
     case PopupMenuItemValue.deleteProject:
-      await Get.dialog(StyledAlertDialog(
+      await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('deleteProject'),
         contentText: tr('deleteProjectAlert'),
         acceptText: tr('delete').toUpperCase(),

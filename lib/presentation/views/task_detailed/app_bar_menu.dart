@@ -127,7 +127,7 @@ void _onSelected(value, TaskItemController controller) async {
       break;
 
     case 'deleteTask':
-      await Get.dialog(StyledAlertDialog(
+      await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('deleteTaskTitle'),
         contentText: tr('deleteTaskAlert'),
         acceptText: tr('delete').toUpperCase(),

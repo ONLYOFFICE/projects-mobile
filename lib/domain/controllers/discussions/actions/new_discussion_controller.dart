@@ -176,7 +176,7 @@ class NewDiscussionController extends DiscussionActionsController {
     if (listEquals(_previousSelectedSubscribers, subscribers)) {
       navigationController.back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
@@ -345,7 +345,7 @@ class NewDiscussionController extends DiscussionActionsController {
         title.isNotEmpty ||
         subscribers.isNotEmpty ||
         text.isNotEmpty) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardDiscussion'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),

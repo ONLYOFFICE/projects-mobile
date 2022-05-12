@@ -285,7 +285,7 @@ class TaskItemController extends GetxController {
 
       if (task.value.status != newStatusType) {
         if (task.value.hasOpenSubtasks) {
-          await Get.dialog(StyledAlertDialog(
+          await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
             titleText: tr('closingTask'),
             contentText: tr('closingTaskWithActiveSubtasks'),
             acceptText: tr('closeTask').toUpperCase(),

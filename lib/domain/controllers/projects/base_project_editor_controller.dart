@@ -131,7 +131,7 @@ abstract class BaseProjectEditorController extends GetxController {
     if (typedText == descriptionText.value) {
       Get.find<NavigationController>().back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),

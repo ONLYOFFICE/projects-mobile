@@ -160,7 +160,7 @@ class NewTaskController extends TaskActionsController {
     if (typedText == descriptionText.value) {
       Get.find<NavigationController>().back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
@@ -188,7 +188,7 @@ class NewTaskController extends TaskActionsController {
     if (listEquals(_previusSelectedResponsibles, responsibles.value)) {
       Get.find<NavigationController>().back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
@@ -345,7 +345,7 @@ class NewTaskController extends TaskActionsController {
         descriptionText.isNotEmpty ||
         _startDate != null ||
         _dueDate != null) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardTask'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),

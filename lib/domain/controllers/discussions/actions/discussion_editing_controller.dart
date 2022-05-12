@@ -136,7 +136,7 @@ class DiscussionEditingController extends DiscussionActionsController {
       clearUserSearch();
       Get.find<NavigationController>().back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
@@ -305,7 +305,7 @@ class DiscussionEditingController extends DiscussionActionsController {
 
   void discardDiscussion() {
     if (title.value != _previusTitle || text.value != _previusText) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardDiscussion'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),

@@ -32,6 +32,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
@@ -148,12 +149,30 @@ class NavigationController extends GetxController {
 
   Future<void> toModalScreen(
       {required ModalNavigationData modalNavigationData, Map<String, dynamic>? arguments}) async {
-    await Get.dialog(
-      ModalScreenViewSkeleton(
-        modalNavigationData: modalNavigationData,
-      ),
-      arguments: arguments,
-    );
+    await showPlatformDialog(ModalScreenViewSkeleton(modalNavigationData: modalNavigationData),
+        arguments: arguments);
+  }
+
+  Future<T?> showPlatformDialog<T>(Widget widget,
+      {Object? arguments, bool? barrierDismissible}) async {
+    if (GetPlatform.isIOS)
+      return await showCupertinoDialog(
+        context: Get.context!,
+        builder: (context) {
+          return widget;
+        },
+        routeSettings: RouteSettings(arguments: arguments),
+        barrierDismissible: barrierDismissible ?? false,
+      );
+    else
+      return await showDialog(
+        context: Get.context!,
+        builder: (context) {
+          return widget;
+        },
+        routeSettings: RouteSettings(arguments: arguments),
+        barrierDismissible: barrierDismissible ?? false,
+      );
   }
 
   Future to(

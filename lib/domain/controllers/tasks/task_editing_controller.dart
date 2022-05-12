@@ -138,7 +138,7 @@ class TaskEditingController extends TaskActionsController {
     if (newStatus.statusType == 2 &&
         initialStatus!.statusType != newStatus.statusType &&
         task.hasOpenSubtasks) {
-      await Get.dialog(StyledAlertDialog(
+      await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('closingTask'),
         contentText: tr('closingTaskWithActiveSubtasks'),
         acceptText: tr('closeTask').toUpperCase(),
@@ -164,7 +164,7 @@ class TaskEditingController extends TaskActionsController {
     if (typedText == descriptionText.value) {
       Get.find<NavigationController>().back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
@@ -251,7 +251,7 @@ class TaskEditingController extends TaskActionsController {
     if (listEquals(_previusSelectedResponsibles, responsibles.value)) {
       Get.back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
@@ -320,7 +320,7 @@ class TaskEditingController extends TaskActionsController {
 
     // warn the user if there have been changes
     if (taskEdited) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
