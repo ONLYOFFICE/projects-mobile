@@ -37,20 +37,21 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:get/get.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
-class LoadingHUD {
-  LoadingHUD({String? loadingText}) {
-    if (loadingText?.isNotEmpty == true) _loadingText = loadingText!;
-  }
+class LoadingWithoutProgress {
+  /// [loadingText] is tr('loading') by default
+  /// showLoading(true) - show dialog window
+  /// showLoading(false) - close dialog window
+  /// we can do: loaded.listen((value) => loadingHud.showLoading(!value));
+
+  LoadingWithoutProgress({this.loadingText});
+
+  String? loadingText;
 
   PopupRoute? _loadingHudRoute;
 
-  String _loadingText = tr('loading');
-  set setLoadingText(String newText) {
-    _loadingText = newText;
-  }
-
-  void showLoadingHUD(bool value) {
+  void showLoading(bool value) {
     if (value) {
       if (GetPlatform.isIOS)
         _loadingHudRoute = CupertinoDialogRoute(
@@ -59,11 +60,11 @@ class LoadingHUD {
             child: Center(
               child: CupertinoPopupSurface(
                 isSurfacePainted: false,
-                child: _LoadingHUDContent(text: _loadingText),
+                child: _LoadingContent(text: loadingText ?? tr('loading')),
               ),
             ),
           ),
-          settings: const RouteSettings(name: _LoadingHUDContent.name),
+          settings: const RouteSettings(name: _LoadingContent.name),
           context: Get.context!,
         );
       else
@@ -73,11 +74,11 @@ class LoadingHUD {
             child: Center(
               child: Material(
                 type: MaterialType.card,
-                child: _LoadingHUDContent(text: _loadingText),
+                child: _LoadingContent(text: loadingText ?? tr('loading')),
               ),
             ),
           ),
-          settings: const RouteSettings(name: _LoadingHUDContent.name),
+          settings: const RouteSettings(name: _LoadingContent.name),
           context: Get.context!,
         );
       Navigator.push(Get.context!, _loadingHudRoute!);
@@ -90,11 +91,12 @@ class LoadingHUD {
   }
 }
 
-class _LoadingHUDContent extends StatelessWidget {
-  _LoadingHUDContent({Key? key, required this.text}) : super(key: key);
+class _LoadingContent extends StatelessWidget {
+  _LoadingContent({Key? key, required this.text}) : super(key: key);
 
-  static const name = '/LoadingHud';
   final String text;
+
+  static const name = '/Loading';
 
   @override
   Widget build(BuildContext context) {
@@ -113,6 +115,114 @@ class _LoadingHUDContent extends StatelessWidget {
             child: Text(text.capitalizeFirst!),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class LoadingWithProgress {
+  /// [title] is tr('loading') by default
+  /// showLoading(true) - show dialog window
+  /// showLoading(false) - close dialog window
+
+  LoadingWithProgress({
+    this.title,
+    required this.progress,
+    this.onCancelTap,
+  });
+
+  final String? title;
+  final Rx<double> progress;
+  final void Function()? onCancelTap;
+
+  PopupRoute? _loadingRoute;
+
+  void showLoading(bool value) {
+    if (value && _loadingRoute == null) {
+      if (GetPlatform.isIOS)
+        _loadingRoute = CupertinoDialogRoute(
+          builder: (_) => WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: _LoadingWithProgressContent(
+              title: title ?? tr('loading'),
+              progress: progress,
+              onCancelTap: onCancelTap,
+            ),
+          ),
+          settings: const RouteSettings(name: _LoadingWithProgressContent.name),
+          context: Get.context!,
+        );
+      else
+        _loadingRoute = DialogRoute(
+          builder: (_) => WillPopScope(
+            onWillPop: () => Future.value(false),
+            child: _LoadingWithProgressContent(
+              title: title ?? tr('loading'),
+              progress: progress,
+              onCancelTap: onCancelTap,
+            ),
+          ),
+          settings: const RouteSettings(name: _LoadingWithProgressContent.name),
+          context: Get.context!,
+        );
+      Navigator.push(Get.context!, _loadingRoute!);
+      return;
+    }
+    if (!value && _loadingRoute?.isActive == true) {
+      Navigator.removeRoute(Get.context!, _loadingRoute!);
+      _loadingRoute = null;
+    }
+  }
+}
+
+class _LoadingWithProgressContent extends StatelessWidget {
+  _LoadingWithProgressContent({
+    Key? key,
+    required this.title,
+    required this.progress,
+    this.onCancelTap,
+  }) : super(key: key);
+
+  static const name = '/LoadingWithProgress';
+
+  final String title;
+  final Rx<double> progress;
+  final void Function()? onCancelTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleButtonDialog(
+      titleText: title,
+      acceptText: onCancelTap != null ? tr('cancel') : tr('close').capitalizeFirst,
+      onAcceptTap: onCancelTap,
+      content: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(
+              () => LinearProgressIndicator(
+                value: progress.value,
+                color: Get.theme.colors().primary,
+                backgroundColor: Get.theme.colors().backgroundSecond,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 0),
+              child: Row(
+                children: [
+                  const Spacer(),
+                  Obx(
+                    () => Text(
+                      '${(progress.value * 100).toStringAsFixed(0)} %',
+                      style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

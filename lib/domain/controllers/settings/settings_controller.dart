@@ -49,7 +49,6 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
 import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';

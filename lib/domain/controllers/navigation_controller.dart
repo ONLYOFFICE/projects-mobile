@@ -214,6 +214,10 @@ class NavigationController extends GetxController {
       Get.back(result: result);
     }
   }
+
+  void close(int times) {
+    for (var i = 0; i < times; i++) back();
+  }
 }
 
 class ModalNavigationData {
