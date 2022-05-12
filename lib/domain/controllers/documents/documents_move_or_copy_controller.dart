@@ -241,7 +241,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
 
       if (type == null) return;
       if (type == ConflictResolveType.Skip && conflictsResult.isNotEmpty) {
-        Get.close(nestingCounter);
+        Get.find<NavigationController>().close(nestingCounter);
         return;
       }
 
@@ -268,7 +268,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
 
       final errorMessage = await _api.waitFinishOperation(result[0].id!);
       if (errorMessage == null) {
-        Get.close(nestingCounter);
+        Get.find<NavigationController>().close(nestingCounter);
         switch (mode) {
           case MoveOrCopyMode.CopyDocument:
             MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileCopied'));
@@ -292,7 +292,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
   void cancelCopying() {
     if (_lock.locked) return;
 
-    _lock.synchronized(() => Get.close(nestingCounter));
+    _lock.synchronized(() => Get.find<NavigationController>().close(nestingCounter));
   }
 
   @override
