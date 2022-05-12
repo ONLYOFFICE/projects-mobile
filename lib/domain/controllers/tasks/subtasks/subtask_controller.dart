@@ -64,8 +64,8 @@ class SubtaskController extends GetxController {
     required int taskId,
     required int subtaskId,
   }) async {
-    final _loading = LoadingHUD();
-    _loading.showLoadingHUD(true);
+    final _loading = LoadingWithoutProgress();
+    _loading.showLoading(true);
 
     await _userController.getUserInfo();
     final selfUser = _userController.user.value!;
@@ -78,7 +78,7 @@ class SubtaskController extends GetxController {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('subtaskAccepted'));
     }
 
-    _loading.showLoadingHUD(false);
+    _loading.showLoading(false);
   }
 
   void copySubtask(

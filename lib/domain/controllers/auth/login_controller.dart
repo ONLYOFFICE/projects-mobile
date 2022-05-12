@@ -92,7 +92,7 @@ class LoginController extends GetxController {
   final needAgreement = Get.deviceLocale!.languageCode == 'zh';
 
   final loaded = true.obs;
-  final loadingHud = LoadingHUD();
+  final loadingScreen = LoadingWithoutProgress();
 
   @override
   void onInit() {
@@ -107,7 +107,7 @@ class LoginController extends GetxController {
     accountManager =
         Get.isRegistered<AccountManager>() ? Get.find<AccountManager>() : Get.put(AccountManager());
 
-    loaded.listen((value) => loadingHud.showLoadingHUD(!value));
+    loaded.listen((value) => loadingScreen.showLoading(!value));
 
     super.onInit();
   }
