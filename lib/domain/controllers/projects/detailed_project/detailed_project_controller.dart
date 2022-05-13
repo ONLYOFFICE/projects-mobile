@@ -84,6 +84,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
     _projectDetailed.listen((details) {
       if (details == null) return;
 
+      fillProjectInfo(details);
+
       taskCount.value = details.taskCount ?? 0;
       milestoneCount.value = details.milestoneCount ?? 0;
       discussionCount.value = details.discussionCount ?? 0;

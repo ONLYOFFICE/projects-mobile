@@ -91,6 +91,13 @@ class ProjectSearchController extends BaseSearchController {
         newSearch(_searchQuery);
         return;
       }
+
+      final index = itemList.indexWhere((element) => element.id == data['projectDetails'].id);
+      if (index != -1) {
+        itemList[index] = data['projectDetails'] as ProjectDetailed;
+        loaded.value = false;
+        loaded.value = true;
+      }
     });
 
     loaded.value = true;
