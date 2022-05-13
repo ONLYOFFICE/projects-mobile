@@ -68,7 +68,7 @@ class SelectProjectScreen extends StatelessWidget {
     searchController.refreshData();
 
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
-    final previousPage = args['previousPage'] as String?;
+    final previousPage = args?['previousPage'] as String?;
 
     final titleWidth = getWidthText(
       tr('selectProject'),

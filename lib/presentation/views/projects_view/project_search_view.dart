@@ -62,7 +62,6 @@ class ProjectSearchView extends StatelessWidget {
         sortController: sortController,
       ),
     );
-    controller.clearSearch();
 
     return Scaffold(
       appBar: StyledAppBar(

@@ -35,10 +35,14 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
 abstract class BaseSearchController extends GetxController {
-  BaseSearchController({this.paginationController});
+  BaseSearchController() {
+    textController.addListener(() {
+      if (textController.text.isNotEmpty) switchToSearchView.value = true;
+    });
+  }
 
-  final PaginationController? paginationController;
-  final TextEditingController textController = TextEditingController();
+  PaginationController get paginationController;
+  final textController = TextEditingController();
 
   String? _query;
 
@@ -47,12 +51,12 @@ abstract class BaseSearchController extends GetxController {
 
   bool get nothingFound =>
       switchToSearchView.value &&
-      paginationController!.data.isEmpty &&
+      paginationController.data.isEmpty &&
       textController.text.isNotEmpty &&
       loaded.value;
 
   bool get hasResult =>
-      loaded.isTrue && switchToSearchView.isTrue && paginationController!.data.isNotEmpty;
+      loaded.isTrue && switchToSearchView.isTrue && paginationController.data.isNotEmpty;
 
   Future search(String? query, {bool needToClear = true});
 
@@ -61,9 +65,9 @@ abstract class BaseSearchController extends GetxController {
   // TODO: refact
   void addData(var result, bool needToClear) {
     if (result != null) {
-      paginationController!.total.value = result.total as int;
-      if (needToClear) paginationController!.data.clear();
-      paginationController!.data.addAll(result.response as Iterable<dynamic>);
+      paginationController.total.value = result.total as int;
+      if (needToClear) paginationController.data.clear();
+      paginationController.data.addAll(result.response as Iterable<dynamic>);
     }
   }
 
@@ -74,7 +78,7 @@ abstract class BaseSearchController extends GetxController {
   }
 
   void clearSearch() {
-    paginationController!.data.clear();
+    paginationController.data.clear();
     textController.clear();
     _query = null;
   }

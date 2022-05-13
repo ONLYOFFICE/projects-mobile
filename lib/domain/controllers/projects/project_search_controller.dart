@@ -93,6 +93,8 @@ class ProjectSearchController extends BaseSearchController {
       }
     });
 
+    loaded.value = true;
+
     super.onInit();
   }
 
@@ -106,7 +108,7 @@ class ProjectSearchController extends BaseSearchController {
     _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
       _query = query.toLowerCase();
 
-      if (_searchQuery != _query) {
+      if (_searchQuery != _query || _query == '') {
         _searchQuery = _query;
 
         if (onlyMyProjects) _searchQuery += '&participant=$_selfId';
@@ -147,7 +149,6 @@ class ProjectSearchController extends BaseSearchController {
     _searchQuery = onlyMyProjects ? '&participant=$_selfId' : '';
     textController.clear();
     paginationController.clear();
-    loaded.value = false;
   }
 
   @override

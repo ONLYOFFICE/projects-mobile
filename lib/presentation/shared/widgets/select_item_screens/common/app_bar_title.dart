@@ -42,14 +42,15 @@ class AppBarTitleWithSearch extends StatelessWidget {
   final BaseSearchController searchController;
   final String appBarText;
 
+  void _clearFunction() {
+    if (searchController.switchToSearchView.value) searchController.clearSearch();
+
+    searchController.switchToSearchView.value = !searchController.switchToSearchView.value;
+    searchController.search(null);
+  }
+
   @override
   Widget build(BuildContext context) {
-    void _clearFunction() {
-      if (searchController.switchToSearchView.value) searchController.clearSearch();
-
-      searchController.switchToSearchView.value = !searchController.switchToSearchView.value;
-    }
-
     return Obx(
       () => searchController.switchToSearchView.value
           ? SearchField(
