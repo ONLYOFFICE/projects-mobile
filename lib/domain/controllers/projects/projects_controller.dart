@@ -105,11 +105,12 @@ class ProjectsController extends BaseController {
       }
 
       if (data['projectDetails'].id != null) {
-        for (var i = 0; i < itemList.length; i++)
-          if (itemList[i].id == data['projectDetails'].id) {
-            itemList[i] = data['projectDetails'] as ProjectDetailed;
-            return;
-          }
+        final index = itemList.indexWhere((element) => element.id == data['projectDetails'].id);
+        if (index != -1) {
+          itemList[index] = data['projectDetails'] as ProjectDetailed;
+          loaded.value = false;
+          loaded.value = true;
+        }
       }
     }));
   }

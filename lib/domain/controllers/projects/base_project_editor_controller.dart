@@ -32,6 +32,7 @@
 
 import 'package:darq/darq.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
@@ -39,6 +40,7 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/user_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -164,8 +166,16 @@ abstract class BaseProjectEditorController extends GetxController {
   }
 
   Future followProject({int? projectId}) async {
-    if (projectId != null || projectData?.id != null)
-      await _projectService.followProject(projectId: projectData?.id ?? projectId!);
+    if (projectId == null && projectData?.id == null) return false;
+
+    final result = await _projectService.followProject(projectId: projectData?.id ?? projectId!);
+    if (result != null) {
+      if (projectData?.isFollow != null) {
+        projectData!.isFollow = !projectData!.isFollow!;
+        locator<EventHub>().fire('needToRefreshProjects', {'projectDetails': projectData});
+      }
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: 'error');
   }
 
   void changePMSelection(PortalUserItemController user) {

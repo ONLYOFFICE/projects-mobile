@@ -101,11 +101,10 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
     });
 
     _refreshDetailsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      if (data['projectDetails'].id == null || data['projectDetails'].id != _projectDetailed.id)
-        return;
-
-      _projectDetailed = data['projectDetails'] as ProjectDetailed;
-      fabIsVisible.value = _canCreate();
+      if (data['projectDetails'].id == _projectDetailed.id) {
+        _projectDetailed = data['projectDetails'] as ProjectDetailed;
+        fabIsVisible.value = _canCreate();
+      }
     });
   }
 

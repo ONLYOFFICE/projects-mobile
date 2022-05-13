@@ -356,8 +356,11 @@ class _ProjectContextMenu extends StatelessWidget {
         ),
       if (!(controller.projectData.security?['isInTeam'] as bool))
         PlatformPopupMenuItem(
-          onTap: controller.followProject,
-          child: controller.projectData.isFollow as bool
+          onTap: () {
+            controller.followProject();
+            Get.back();
+          },
+          child: controller.projectData.isFollow == true
               ? Text(tr('unFollowProjectButton'))
               : Text(tr('followProjectButton')),
         ),
