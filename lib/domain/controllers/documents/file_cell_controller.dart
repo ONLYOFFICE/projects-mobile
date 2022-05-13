@@ -325,7 +325,7 @@ class FileCellController extends GetxController {
           file.fileType == FileType.Archive ||
           file.fileType == FileType.Unknown) return await _viewFile();
 
-      if (file.fileExst != '.pdf' || file.fileExst != '.fb2' || file.fileExst != '.epub')
+      if (file.fileExst != '.pdf' && file.fileExst != '.fb2' && file.fileExst != '.epub')
         await _openFileInDocumentsApp(parentId: parentId);
       else
         await _viewFile();
