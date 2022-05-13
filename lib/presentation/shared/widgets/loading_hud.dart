@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -207,20 +209,21 @@ class _LoadingWithProgressContent extends StatelessWidget {
                 backgroundColor: Get.theme.colors().backgroundSecond,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 0),
-              child: Row(
-                children: [
-                  const Spacer(),
-                  Obx(
-                    () => Text(
-                      '${(progress.value * 100).toStringAsFixed(0)} %',
-                      style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+            if (Platform.isAndroid)
+              Padding(
+                padding: const EdgeInsets.only(top: 8, bottom: 0),
+                child: Row(
+                  children: [
+                    const Spacer(),
+                    Obx(
+                      () => Text(
+                        '${(progress.value * 100).toStringAsFixed(0)} %',
+                        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            )
+                  ],
+                ),
+              )
           ],
         ),
       ),

@@ -68,7 +68,6 @@ class FileCellController extends GetxController {
 
   final _openFileLock = Lock();
 
-  final loading = LoadingWithoutProgress();
   late final LoadingWithProgress loadingWithProgress;
 
   String? downloadTaskId;
@@ -86,7 +85,7 @@ class FileCellController extends GetxController {
 
   FileCellController({required this.file}) {
     loadingWithProgress = LoadingWithProgress(
-        title: '${tr('downloading')} "${file.title!}"',
+        title: tr('downloading'),
         progress: progress,
         onCancelTap: () {
           Get.back();
@@ -214,17 +213,18 @@ class FileCellController extends GetxController {
     return result != null;
   }
 
+  // TODO @garanin change flutter_downloader to dio
   Future<void> _downloadFileCallback(String id, DownloadTaskStatus status, int progress) async {
     if (downloadTaskId != null && id == downloadTaskId) {
       if (status == DownloadTaskStatus.running) {
-        if (this.progress.value != progress / 100 && progress / 100 != 1)
+        if (this.progress.value != progress / 100 && (Platform.isAndroid || progress / 100 != 1))
           this.progress.value = progress / 100;
       }
       if (status == DownloadTaskStatus.complete) {
-        this.progress.value = 1;
+        if (this.progress.value != 1) this.progress.value = 1;
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
       }
-      if (status == DownloadTaskStatus.failed) {
+      if (status == DownloadTaskStatus.failed && Platform.isIOS) {
         this.progress.value = 0;
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       }
@@ -262,17 +262,15 @@ class FileCellController extends GetxController {
     if (progress.value > 0) return;
     await downloadProgressListener?.cancel();
 
-    loading.showLoading(true);
+    fileAction.value = FileAction.OnlyDownload;
+    progress.value = 0.01;
 
     downloadTaskId = await downloadService.downloadDocument(file, temp: Platform.isIOS);
     if (downloadTaskId == null) {
+      progress.value = 0;
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
-      loading.showLoading(false);
       return;
     }
-    loading.showLoading(false);
-
-    fileAction.value = FileAction.OnlyDownload;
 
     downloadProgressListener = progress.listen((value) async {
       if (value == 1) {
@@ -290,17 +288,15 @@ class FileCellController extends GetxController {
 
     if (downloadTaskId != null && ((await _openAlreadyDownloadedFile()) == ResultType.done)) return;
 
-    loading.showLoading(true);
+    loadingWithProgress.showLoading(true);
+    fileAction.value = FileAction.DownloadAndOpen;
 
     downloadTaskId = await downloadService.downloadDocument(file, temp: true);
     if (downloadTaskId == null) {
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
-      loading.showLoading(false);
+      loadingWithProgress.showLoading(false);
       return;
     }
-    loading.showLoading(false);
-
-    fileAction.value = FileAction.DownloadAndOpen;
 
     downloadProgressListener = progress.listen((value) async {
       if (value == 0) {
