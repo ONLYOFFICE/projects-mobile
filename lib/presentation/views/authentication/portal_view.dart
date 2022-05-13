@@ -131,15 +131,17 @@ class PortalInputView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 26),
-                  WideButton(
-                    text: tr('next'),
-                    textColor: controller.needAgreement && !controller.checkBoxValue.value
-                        ? Theme.of(context).colors().onBackground.withOpacity(0.5)
-                        : null,
-                    color: controller.needAgreement && !controller.checkBoxValue.value
-                        ? Theme.of(context).colors().bgDescription
-                        : null,
-                    onPressed: controller.getPortalCapabilities,
+                  Obx(
+                    () => WideButton(
+                      text: tr('next'),
+                      textColor: controller.needAgreement && !controller.checkBoxValue.value
+                          ? Theme.of(context).colors().onBackground.withOpacity(0.5)
+                          : null,
+                      color: controller.needAgreement && !controller.checkBoxValue.value
+                          ? Theme.of(context).colors().bgDescription
+                          : null,
+                      onPressed: controller.getPortalCapabilities,
+                    ),
                   ),
                   if (controller.needAgreement)
                     PrivacyAndTermsFooter.withCheckbox()
