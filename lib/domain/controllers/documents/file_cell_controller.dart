@@ -325,17 +325,7 @@ class FileCellController extends GetxController {
           file.fileType == FileType.Archive ||
           file.fileType == FileType.Unknown) return await _viewFile();
 
-      if (file.fileExst == '.xls' ||
-          file.fileExst == '.xlsx' ||
-          file.fileExst == '.odp' ||
-          file.fileExst == '.ods' ||
-          file.fileExst == '.odt' ||
-          file.fileExst == '.otp' ||
-          file.fileExst == '.doc' ||
-          file.fileExst == '.docx' ||
-          file.fileExst == '.docxf' ||
-          file.fileExst == '.oform' ||
-          file.fileExst == '.pptx')
+      if (file.fileExst != '.pdf' || file.fileExst != '.fb2' || file.fileExst != '.epub')
         await _openFileInDocumentsApp(parentId: parentId);
       else
         await _viewFile();
