@@ -44,7 +44,7 @@ class _TeamMember extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('me'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.teamMember['me'] as bool,
               onTap: () => filterController.changeTeamMember('me')),
           FilterElement(
@@ -54,8 +54,12 @@ class _TeamMember extends StatelessWidget {
             isSelected: filterController.teamMember['other'].isNotEmpty as bool,
             cancelButtonEnabled: filterController.teamMember['other'].isNotEmpty as bool?,
             onTap: () async {
-              final newUser =
-                  await Get.find<NavigationController>().toScreen(const SelectUserScreen());
+              final newUser = await Get.find<NavigationController>().toScreen(
+                const SelectUserScreen(),
+                transition: Transition.rightToLeft,
+                page: '/SelectUserScreen',
+                arguments: {'previousPage': ProjectsFilterScreen.pageName},
+              );
               await filterController.changeTeamMember('other', newUser);
             },
             onCancelTap: () => filterController.changeTeamMember('other', null),

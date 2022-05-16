@@ -43,17 +43,22 @@ class _UserList extends StatelessWidget {
     final currentUser = Get.find<UserController>();
 
     return Obx(
-      () => PaginationListView(
-        paginationController: usersController.paginationController,
-        child: ListView.builder(
-          itemCount: usersController.paginationController.data.length,
-          itemBuilder: (BuildContext context, int index) {
-            final user = usersController.paginationController.data[index] as PortalUser;
-            if (currentUser.user!.id == user.id) return const SizedBox();
-            return _UserTile(user: user);
-          },
-        ),
-      ),
+      () {
+        final scrollController = ScrollController();
+        return PaginationListView(
+          scrollController: scrollController,
+          paginationController: usersController.paginationController,
+          child: ListView.builder(
+            controller: scrollController,
+            itemCount: usersController.paginationController.data.length,
+            itemBuilder: (BuildContext context, int index) {
+              final user = usersController.paginationController.data[index];
+              if (currentUser.user.value!.id == user.id) return const SizedBox();
+              return _UserTile(user: user);
+            },
+          ),
+        );
+      },
     );
   }
 }

@@ -42,6 +42,7 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_editing_view.dart';
 
@@ -74,10 +75,11 @@ class TaskCommentItemController extends GetxController implements CommentItemCon
 
   @override
   Future<void> deleteComment() async {
-    await Get.dialog(StyledAlertDialog(
+    await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
       titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
       acceptText: tr('delete').toUpperCase(),
+      acceptColor: Theme.of(Get.context!).colors().colorError,
       onCancelTap: Get.back,
       onAcceptTap: () async {
         final response = await _api.deleteComment(commentId: comment!.value.commentId!);
@@ -86,12 +88,7 @@ class TaskCommentItemController extends GetxController implements CommentItemCon
 
           locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
 
-          MessagesHandler.showSnackBar(
-            context: Get.context!,
-            text: tr('commentDeleted'),
-            buttonText: tr('confirm'),
-            buttonOnTap: ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar,
-          );
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('commentDeleted'));
         }
       },
     ));
@@ -99,10 +96,12 @@ class TaskCommentItemController extends GetxController implements CommentItemCon
 
   @override
   void toCommentEditingView() {
-    Get.find<NavigationController>().to(const CommentEditingView(), arguments: {
-      'commentId': comment!.value.commentId,
-      'commentBody': comment!.value.commentBody,
-      'itemController': this,
-    });
+    Get.find<NavigationController>().toScreen(const CommentEditingView(),
+        arguments: {
+          'commentId': comment!.value.commentId,
+          'commentBody': comment!.value.commentBody,
+          'itemController': this,
+        },
+        page: '/CommentEditingView');
   }
 }

@@ -30,252 +30,113 @@
  *
  */
 
-import 'dart:math' as math;
-
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
-import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/shared/widgets/nothing_found.dart';
-import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
+import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
-import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
-import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
+import 'package:projects/presentation/views/tasks/tasks_shared.dart';
 
 class TasksView extends StatelessWidget {
   const TasksView({Key? key}) : super(key: key);
 
+  static String get pageName => tr('tasks');
+
   @override
   Widget build(BuildContext context) {
-    final controller = Get.isRegistered<TasksController>(tag: 'TasksView')
-        ? Get.find<TasksController>(tag: 'TasksView')
-        : Get.put(
-            TasksController(
-              Get.find<TaskFilterController>(),
-              Get.find<PaginationController<PortalTask>>(),
-            ),
-            tag: 'TasksView');
-
-    controller.setup(PresetTaskFilters.saved);
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      controller.loadTasks();
-    });
-
-    final scrollController = ScrollController();
-    final elevation = ValueNotifier<double>(0);
-
-    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    final controller = Get.find<TasksController>(tag: 'TasksView');
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Get.theme.backgroundColor,
       floatingActionButton: Obx(
         () => Visibility(
           visible: controller.fabIsVisible.value,
           child: StyledFloatingActionButton(
-            onPressed: () => Get.find<NavigationController>()
-                .to(const NewTaskView(), arguments: {'projectDetailed': null}),
+            onPressed: () => Get.find<NavigationController>().toScreen(
+              const NewTaskView(),
+              arguments: {'projectDetailed': null},
+              transition: Transition.cupertinoDialog,
+              fullscreenDialog: true,
+              page: '/NewTaskView',
+            ),
             child: AppIcon(
               icon: SvgIcons.add_fab,
-              color: Get.theme.colors().onPrimarySurface,
+              color: Theme.of(context).colors().onPrimarySurface,
             ),
           ),
         ),
       ),
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 101),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, double value, __) => StyledAppBar(
-            showBackButton: false,
-            titleText: controller.screenName,
-            elevation: value,
-            actions: [
-              IconButton(
-                icon: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.search,
-                  color: Get.theme.colors().primary,
+      body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return [
+              MainAppBar(
+                materialTitle: Text(
+                  controller.screenName,
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
                 ),
-                onPressed: controller.showSearch,
+                cupertinoTitle: Text(
+                  controller.screenName,
+                  style: TextStyle(color: Theme.of(context).colors().onSurface),
+                ),
+                actions: [
+                  SearchButton(controller: controller),
+                  TasksFilterButton(controller: controller),
+                  TasksMoreButtonWidget(controller: controller),
+                ],
               ),
-              IconButton(
-                icon: FiltersButton(controler: controller),
-                onPressed: () async => Get.find<NavigationController>().toScreen(
-                    const TasksFilterScreen(),
-                    preventDuplicates: false,
-                    arguments: {'filterController': controller.filterController}),
-              ),
-              const SizedBox(width: 4),
-            ],
-            bottom: TasksHeader(controller: controller),
-          ),
-        ),
-      ),
-      body: Obx(
-        () {
-          if (!controller.loaded.value || !controller.taskStatusesLoaded.value)
-            return const ListLoadingSkeleton();
-
-          return PaginationListView(
-              paginationController: controller.paginationController,
-              child: () {
-                if (controller.loaded.value &&
-                    controller.taskStatusesLoaded.value &&
-                    controller.paginationController.data.isEmpty &&
-                    !controller.filterController.hasFilters.value)
-                  return Center(
-                      child:
-                          EmptyScreen(icon: SvgIcons.task_not_created, text: tr('noTasksCreated')));
-
-                if (controller.loaded.value &&
-                    controller.taskStatusesLoaded.value &&
-                    controller.paginationController.data.isEmpty &&
-                    controller.filterController.hasFilters.value) {
-                  return Center(
-                    child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
-                  );
-                }
-                if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
-                  return ListView.builder(
-                    controller: scrollController,
-                    itemCount: controller.paginationController.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return TaskCell(task: controller.paginationController.data[index]);
-                    },
-                  );
-              }() as Widget);
-        },
-      ),
+            ];
+          },
+          body: TasksContent(controller: controller)),
     );
   }
 }
 
-class TasksHeader extends StatelessWidget {
-  const TasksHeader({Key? key, required this.controller}) : super(key: key);
-
-  final TasksController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 44,
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(8, 0, 16, 0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(right: 4),
-              child: _TasksSortButton(controller: controller),
-            ),
-            Obx(
-              () => Text(
-                tr('total', args: [controller.paginationController.total.value.toString()]),
-                style: TextStyleHelper.body2(
-                  color: Get.theme.colors().onSurface.withOpacity(0.6),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
-  const _TasksSortButton({
+class TasksMoreButtonWidget extends StatelessWidget {
+  const TasksMoreButtonWidget({
     Key? key,
     required this.controller,
   }) : super(key: key);
 
   final TasksController controller;
 
-  List<SortTile> _getSortTile() {
-    return [
-      SortTile(sortParameter: 'deadline', sortController: controller.sortController),
-      SortTile(sortParameter: 'priority', sortController: controller.sortController),
-      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
-      SortTile(sortParameter: 'start_date', sortController: controller.sortController),
-      SortTile(sortParameter: 'title', sortController: controller.sortController),
-      SortTile(sortParameter: 'sort_order', sortController: controller.sortController),
-    ];
-  }
-
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () async {
-        if (Get.find<PlatformController>().isMobile) {
-          final options = Column(
-            children: [
-              const SizedBox(height: 14.5),
-              const Divider(height: 9, thickness: 1),
-              ..._getSortTile(),
-              const SizedBox(height: 20)
-            ],
-          );
-
-          await Get.bottomSheet(
-            SortView(sortOptions: options),
-            isScrollControlled: true,
-          );
-        } else {
-          await showPopupMenu(
-            context: context,
-            options: _getSortTile(),
-            offset: const Offset(0, 40),
-          );
-        }
-      },
-      child: Row(
-        children: [
-          Obx(
-            () => Text(
-              controller.sortController.currentSortTitle.value,
-              style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Obx(
-            () => (controller.sortController.currentSortOrder == 'ascending')
-                ? AppIcon(
-                    icon: SvgIcons.sorting_4_ascend,
-                    color: Get.theme.colors().primary,
-                    width: 20,
-                    height: 20,
-                  )
-                : Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationX(math.pi),
-                    child: AppIcon(
-                      icon: SvgIcons.sorting_4_ascend,
-                      color: Get.theme.colors().primary,
-                      width: 20,
-                      height: 20,
-                    ),
-                  ),
-          ),
-        ],
+    return PlatformPopupMenuButton(
+      padding: EdgeInsets.zero,
+      icon: PlatformIconButton(
+        padding: EdgeInsets.zero,
+        cupertinoIcon: Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Theme.of(context).colors().primary,
+        ),
+        materialIcon: Icon(
+          Icons.more_vert,
+          color: Theme.of(context).colors().primary,
+        ),
+        cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
       ),
+      itemBuilder: (context) {
+        return [
+          for (final tile in controller.sortController.getSortTile())
+            PlatformPopupMenuItem(
+              onTap: () {
+                tile.sortController.changeSort(tile.sortParameter);
+                Get.back();
+              },
+              child: tile,
+            ),
+        ];
+      },
     );
   }
 }

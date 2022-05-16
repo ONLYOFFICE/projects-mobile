@@ -31,16 +31,19 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-
-import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_group_item.dart';
 
 class GroupMembersSelectionView extends StatelessWidget {
@@ -50,37 +53,57 @@ class GroupMembersSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'];
 
     final groupsDataSource = Get.find<GroupsDataSource>();
+    final platformController = Get.find<PlatformController>();
+
+    void onActionPressed() => controller.confirmGroupSelection();
 
     groupsDataSource.getGroups();
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('addMembersOf'),
-        elevation: 2,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+        previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
+        centerTitle: GetPlatform.isIOS,
+        // leading: PlatformIconButton(
+        //   icon: const BackButtonIcon(),
+        //   onPressed: Get.find<NavigationController>().back,
+        //   cupertino: (_, __) => CupertinoIconButtonData(
+        //     padding: const EdgeInsets.only(left: 16),
+        //     alignment: Alignment.centerLeft,
+        //   ),
+        // ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.check_outlined),
-            onPressed: () => controller.confirmGroupSelection(),
-          )
+          PlatformWidget(
+            material: (platformContext, __) => IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: onActionPressed,
+            ),
+            cupertino: (platformContext, __) => CupertinoButton(
+              onPressed: onActionPressed,
+              padding: const EdgeInsets.only(right: 16),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                tr('done'),
+                style: TextStyleHelper.headline7(),
+              ),
+            ),
+          ),
         ],
       ),
       body: Obx(
         () {
-          if (groupsDataSource.loaded.value == true &&
-              groupsDataSource.groupsList.isNotEmpty) {
+          if (groupsDataSource.loaded.value == true && groupsDataSource.groupsList.isNotEmpty) {
             return GroupsOverview(
               groupsDataSource: groupsDataSource,
-              onTapFunction: controller.selectGroupMembers as Function(
-                  PortalGroupItemController),
+              onTapFunction: controller.selectGroupMembers as Function(PortalGroupItemController),
             );
           } else if (groupsDataSource.loaded.value == true) {
-            return Column(children: const [NothingFound()]);
+            return const NothingFound();
           }
           return const ListLoadingSkeleton();
         },
@@ -100,7 +123,7 @@ class GroupsOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
+    return StyledSmartRefresher(
       enablePullDown: false,
       enablePullUp: false,
       controller: groupsDataSource.refreshController,
@@ -109,14 +132,15 @@ class GroupsOverview extends StatelessWidget {
         itemCount: groupsDataSource.groupsList.length,
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        padding: const EdgeInsets.symmetric(vertical: 22),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         separatorBuilder: (BuildContext c, int i) {
-          return const SizedBox(height: 25);
+          return const SizedBox(height: 10);
         },
         itemBuilder: (BuildContext c, int i) {
           return PortalGroupItem(
-              groupController: groupsDataSource.groupsList[i],
-              onTapFunction: onTapFunction);
+            groupController: groupsDataSource.groupsList[i],
+            onTapFunction: onTapFunction,
+          );
         },
       ),
     );

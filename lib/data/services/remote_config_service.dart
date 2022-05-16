@@ -31,6 +31,7 @@
  */
 
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:flutter/widgets.dart';
 
 class RemoteConfigService {
   RemoteConfigService._privateConstructor();
@@ -64,8 +65,13 @@ class RemoteConfigService {
   }
 
 // Fetch remote values
-  static Future<void> fetchAndActivate() async =>
-      _remoteConfig.fetchAndActivate();
+  static Future<void> fetchAndActivate() async {
+    try {
+      await _remoteConfig.fetchAndActivate();
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
 
   /// Gets the value for a given key as a bool.
   static bool getBool(String key) {

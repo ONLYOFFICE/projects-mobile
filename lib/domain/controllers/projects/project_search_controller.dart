@@ -32,101 +32,133 @@
 
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/base/base_search_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
+import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ProjectSearchController extends GetxController {
-  static const PAGINATION_LENGTH = 25;
+class ProjectSearchController extends BaseSearchController {
+  final _api = locator<ProjectService>();
 
-  final ProjectService _api = locator<ProjectService>();
+  late String _selfId;
   final bool onlyMyProjects;
 
-  ProjectSearchController({this.onlyMyProjects = false});
+  final _paginationController = PaginationController<ProjectDetailed>();
 
-  var searchResult = <ProjectDetailed>[].obs;
-  RxBool loaded = true.obs;
-  TextEditingController searchInputController = TextEditingController();
+  @override
+  PaginationController get paginationController => _paginationController;
 
-  RxBool nothingFound = false.obs;
-  // for select project view
-  RxBool switchToSearchView = false.obs;
-  int _startIndex = 0;
-  late String _query;
-  var _selfId;
+  RxList<ProjectDetailed> get itemList => _paginationController.data;
 
-  bool get pullUpEnabled => searchResult.length >= PAGINATION_LENGTH;
+  final ProjectsSortController? sortController;
+  final ProjectsFilterController? filterController;
+
+  ProjectSearchController(
+      {this.sortController, this.filterController, this.onlyMyProjects = false});
+
+  String _query = '';
+  String _searchQuery = '';
 
   Timer? _searchDebounce;
 
-  RefreshController refreshController = RefreshController();
+  StreamSubscription? _refreshProjectsSubscription;
 
-  int _totalProjects = 0;
+  @override
+  void onClose() {
+    _refreshProjectsSubscription?.cancel();
+    super.onClose();
+  }
 
   @override
   Future<void> onInit() async {
+    paginationController.startIndex = 0;
+    _paginationController.loadDelegate = () async => await _performSearch(needToClear: false);
+    _paginationController.refreshDelegate = () async => await refreshData();
+
     if (onlyMyProjects) {
-      _selfId = await Get.find<UserController>().getUserId();
-      _query = '&participant=$_selfId';
+      _selfId = (await Get.find<UserController>().getUserId())!;
+      _searchQuery = '&participant=$_selfId';
     }
+
+    _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (data['all'] == true) {
+        newSearch(_searchQuery);
+        return;
+      }
+      if (data['projectDetails'].id != null) {
+        final index = itemList.indexWhere((element) => element.id == data['projectDetails'].id);
+        if (index != -1) {
+          itemList[index] = data['projectDetails'] as ProjectDetailed;
+          loaded.value = false;
+          loaded.value = true;
+        }
+      }
+    });
+
+    loaded.value = true;
+
     super.onInit();
   }
 
-  Future<void> onLoading() async {
-    _startIndex += PAGINATION_LENGTH;
-    if (_startIndex >= _totalProjects) {
-      refreshController.loadComplete();
-      _startIndex -= PAGINATION_LENGTH;
-      return;
-    }
-    await _performSearch();
-    refreshController.loadComplete();
+  @override
+  Future<void> refreshData() async {
+    await _performSearch(needToClear: true);
   }
 
-  void newSearch(String query) {
+  void newSearch(String query, {bool needToClear = true}) {
     _searchDebounce?.cancel();
     _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
-      if (_query != query) {
-        _query = query;
-        if (onlyMyProjects) _query += '&participant=$_selfId';
-        _startIndex = 0;
-       await _performSearch();
+      _query = query.toLowerCase();
+
+      if (_searchQuery != _query || _query == '') {
+        _searchQuery = _query;
+
+        if (onlyMyProjects) _searchQuery += '&participant=$_selfId';
+
+        await _performSearch(needToClear: needToClear);
       }
     });
   }
 
-  Future<void> _performSearch() async {
-    loaded.value = false;
-    nothingFound.value = false;
-    switchToSearchView.value = true;
-    searchResult.clear();
+  Future<void> _performSearch({bool needToClear = true}) async {
+    if (needToClear) loaded.value = false;
 
-    final result =
-        await _api.getProjectsByParams(startIndex: _startIndex, query: _query.toLowerCase());
+    if (needToClear) paginationController.startIndex = 0;
+
+    final result = await _api.getProjectsByParams(
+      startIndex: paginationController.startIndex,
+      sortBy: sortController?.currentSortfilter,
+      sortOrder: sortController?.currentSortOrder,
+      projectManagerFilter: filterController?.projectManagerFilter,
+      participantFilter: filterController?.teamMemberFilter,
+      otherFilter: filterController?.otherFilter,
+      statusFilter: filterController?.statusFilter,
+      query: _searchQuery.toLowerCase(),
+    );
 
     if (result != null) {
-      _totalProjects = result.total;
+      paginationController.total.value = result.total;
 
-      if (result.response!.isEmpty) {
-        nothingFound.value = true;
-      } else {
-        searchResult.addAll(result.response ?? <ProjectDetailed>[]);
-      }
+      if (needToClear) paginationController.data.clear();
+
+      paginationController.data.addAll(result.response ?? <ProjectDetailed>[]);
     }
-    loaded.value = true;
+    if (needToClear) loaded.value = true;
   }
 
+  @override
   void clearSearch() {
-    _startIndex = 0;
-    _query = onlyMyProjects ? '&participant=$_selfId' : '';
-    searchResult.clear();
-    searchInputController.clear();
-    nothingFound.value = false;
-    switchToSearchView.value = false;
+    _searchQuery = onlyMyProjects ? '&participant=$_selfId' : '';
+    textController.clear();
+    paginationController.clear();
   }
+
+  @override
+  Future<void> search(String? query, {bool needToClear = true}) async => newSearch(query ?? '');
 }

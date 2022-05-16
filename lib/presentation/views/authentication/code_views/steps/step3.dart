@@ -97,28 +97,25 @@ class _Code extends StatelessWidget {
             child: Text(
               tr('code'),
               style: TextStyleHelper.caption(
-                  color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                  color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
             ),
           ),
           Row(
             children: [
               const SizedBox(width: 12),
               Text(code,
-                  style: TextStyleHelper.subtitle2(
-                      color: Get.theme.colors().onSurface)),
+                  style: TextStyleHelper.subtitle2(color: Theme.of(context).colors().onSurface)),
               const Expanded(child: SizedBox()),
               GestureDetector(
                 onTap: () {
-                  Clipboard.setData(
-                      ClipboardData(text: code.removeAllWhitespace));
-                  MessagesHandler.showSnackBar(
-                      context: context, text: tr('keyCopied'));
+                  Clipboard.setData(ClipboardData(text: code.removeAllWhitespace));
+                  MessagesHandler.showSnackBar(context: Get.context!, text: tr('keyCopied'));
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(right: 12, bottom: 10),
                   child: AppIcon(
                     icon: SvgIcons.copy,
-                    color: Get.theme.colors().onBackground,
+                    color: Theme.of(context).colors().onBackground,
                   ),
                 ),
               ),

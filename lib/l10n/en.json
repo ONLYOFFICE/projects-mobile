@@ -471,5 +471,32 @@
 	"removeAccount": "remove",
 	"addNewAccount": "Add new account",
 	"noGroups": "No groups here yet",
-	"searchTags": "Search for tags..."
+	"searchTags": "Search for tags...",
+	"done": "Done",
+	"closeLowerCase": "Close",
+	"discussionIsOpen": "Open",
+	"discussionInArchive": "Archived",
+	"openDiscussion": "Open",
+	"archiveDiscussion": "To archive",
+	"overwriteDialogTitle": "Duplicate name",
+	"overwriteDialogContent": {
+		"beforeText": "The file with the name",
+      "afterText": "already exists in the destination folder."
+    },
+  "overwriteConfirmation": "Overwrite",
+  "duplicateConfirmation": "Keep both",
+	"skipConfirmation": "Skip",
+	"loading": "Loading",
+	"disablePasscode": "Disable the passcode",
+	"downloadComplete": "Download complete",
+	"downloadError": "Download error",
+	"noPermission": "No permission",
+	"clearCacheQuestion": "Clear cache?",
+	"clearCacheQuestionDescription": "This operation will free up space on your device by deleting temporary files. Your offline files and personal data won't be removed.",
+	"openFileError": "Could not open file",
+	"cancelDownload": "Cancel downloading",
+	"downloading": "Downloading",
+	"faceID": "Open with Face ID",
+	"subtaskDeleted": "Subtask deleted",
+	"newProject": "New Project"
 }

@@ -55,18 +55,14 @@ class DiscussionItemService {
     }
   }
 
-  Future<Discussion?> updateMessage(
-      {required int id, required NewDiscussionDTO discussion}) async {
+  Future<Discussion?> updateMessage({required int id, required NewDiscussionDTO discussion}) async {
     final result = await _api.updateMessage(id: id, discussion: discussion);
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
@@ -75,18 +71,14 @@ class DiscussionItemService {
     }
   }
 
-  Future<Discussion?> updateMessageStatus(
-      {required int id, required String newStatus}) async {
+  Future<Discussion?> updateMessageStatus({required int id, required String newStatus}) async {
     final result = await _api.updateMessageStatus(id: id, newStatus: newStatus);
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
@@ -100,12 +92,9 @@ class DiscussionItemService {
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
@@ -119,12 +108,9 @@ class DiscussionItemService {
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {

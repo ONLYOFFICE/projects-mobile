@@ -66,7 +66,7 @@ class AccountTile extends StatelessWidget {
                   height: 40,
                   child: CircleAvatar(
                     radius: 20,
-                    backgroundColor: Get.theme.colors().bgDescription,
+                    backgroundColor: Theme.of(context).colors().bgDescription,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Obx(() {
@@ -93,14 +93,14 @@ class AccountTile extends StatelessWidget {
                                   userController!.name!.replaceAll(' ', '\u00A0'),
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyleHelper.subtitle1(
-                                    color: Get.theme.colors().onSurface,
+                                    color: Theme.of(context).colors().onSurface,
                                   ),
                                 ),
                                 Text(
                                   userController!.portal!.replaceAll(' ', '\u00A0'),
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyleHelper.caption(
-                                    color: Get.theme.colors().onSurface.withOpacity(0.6),
+                                    color: Theme.of(context).colors().onSurface.withOpacity(0.6),
                                   ),
                                 ),
                               ],

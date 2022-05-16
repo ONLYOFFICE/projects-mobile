@@ -44,7 +44,7 @@ class _MilestoneResponsible extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('me'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.milestoneResponsible?['me'] as bool,
               onTap: () => filterController.changeResponsible('me')),
           FilterElement(
@@ -54,8 +54,11 @@ class _MilestoneResponsible extends StatelessWidget {
             isSelected: filterController.milestoneResponsible?['other'].isNotEmpty as bool,
             cancelButtonEnabled: filterController.milestoneResponsible?['other'].isNotEmpty as bool,
             onTap: () async {
-              final newUser =
-                  await Get.find<NavigationController>().toScreen(const SelectUserScreen());
+              final newUser = await Get.find<NavigationController>().toScreen(
+                const SelectUserScreen(),
+                transition: Transition.rightToLeft,
+                page: '/SelectUserScreen',
+              );
               await filterController.changeResponsible('other', newUser);
             },
             onCancelTap: () => filterController.changeResponsible('other', null),

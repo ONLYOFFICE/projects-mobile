@@ -30,28 +30,59 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_divider.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
+import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
+import 'package:projects/presentation/views/discussions/discussions_shared.dart';
+import 'package:projects/presentation/views/documents/documents_shared.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
-import 'package:projects/presentation/views/documents/entity_documents_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_milestones_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
+import 'package:projects/presentation/views/tasks/tasks_shared.dart';
+
+class ProjectDetailedTabs {
+  static const overview = 0;
+  static const tasks = 1;
+  static const milestones = 2;
+  static const discussions = 3;
+  static const documents = 4;
+  static const team = 5;
+
+  static const length = 6;
+}
+
+class PopupMenuItemValue {
+  static const editProject = 'editProject';
+  static const followProject = 'followProject';
+  static const deleteProject = 'deleteProject';
+  static const sortTasks = 'sortTasks';
+  static const sortMilestones = 'sortMilestones';
+  static const sortDiscussions = 'sortDiscussions';
+  static const sortDocuments = 'sortDocuments';
+}
 
 class ProjectDetailedView extends StatefulWidget {
   ProjectDetailedView({Key? key}) : super(key: key);
@@ -62,175 +93,309 @@ class ProjectDetailedView extends StatefulWidget {
 
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
-  TabController? _tabController;
-  final _activeIndex = 0.obs;
+  late final TabController _tabController;
 
-  final ProjectDetailsController projectController = Get.find<ProjectDetailsController>();
-  final DocumentsController documentsController = Get.find<DocumentsController>();
+  final _activeIndex = ProjectDetailedTabs.tasks.obs;
+
+  late final ProjectDetailsController projectController;
+  String? previousPage;
 
   @override
   void initState() {
-    var projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
+    if (Get.arguments['projectController'] != null) {
+      projectController = Get.arguments['projectController'] as ProjectDetailsController;
+      previousPage = Get.arguments['previousPage'] as String?;
+    } else {
+      final projectDetails = Get.arguments['projectDetailed'] as ProjectDetailed;
 
-    documentsController.setupFolder(
-        folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
+      projectController = Get.put<ProjectDetailsController>(
+        ProjectDetailsController(),
+        tag: projectDetails.id.toString(),
+      );
+      projectController.fillProjectInfo(projectDetails);
+    }
 
-    projectController.setup(projectDetailed).then((value) {
-      projectDetailed = projectController.projectData!;
-      documentsController.setupFolder(
-          folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
-    });
+    projectController.setup();
 
     _tabController = TabController(
+      initialIndex: _activeIndex.value,
       vsync: this,
-      length: 6,
+      length: ProjectDetailedTabs.length,
     );
+
+    _tabController.addListener(() {
+      if (_activeIndex.value == _tabController.index) return;
+
+      _activeIndex.value = _tabController.index;
+    });
 
     super.initState();
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     super.dispose();
-    _tabController!.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _tabController!.addListener(() {
-      if (_activeIndex.value == _tabController!.index) return;
-
-      _activeIndex.value = _tabController!.index;
-    });
-
-    return Obx(
-      () => Scaffold(
-        appBar: StyledAppBar(
-          actions: [
-            if (projectController.projectData!.canEdit!)
-              IconButton(
-                  icon: const Icon(Icons.edit_outlined),
-                  onPressed: () => Get.find<NavigationController>().to(
-                      EditProjectView(projectDetailed: projectController.projectData),
-                      arguments: {'projectDetailed': projectController.projectData}))
-            else
-              const SizedBox(),
-            if (!(projectController.projectData!.security!['isInTeam'] as bool) ||
-                projectController.projectData!.canDelete!)
-              _ProjectContextMenu(controller: projectController)
-          ],
-          bottom: SizedBox(
-            height: 40,
-            child: TabBar(
+    return Scaffold(
+      appBar: StyledAppBar(
+        previousPageTitle: previousPage,
+        actions: [
+          Obx(
+            () => _ProjectAppBarActions(
+              projectController: projectController,
+              index: _activeIndex.value,
+            ),
+          ),
+          Obx(
+            () => _ProjectContextMenu(
+              controller: projectController,
+              index: _activeIndex.value,
+            ),
+          ),
+          if (GetPlatform.isIOS) const SizedBox(width: 6),
+        ],
+        bottom: SizedBox(
+          height: 40,
+          child: Obx(
+            () => TabBar(
                 isScrollable: true,
                 controller: _tabController,
-                indicatorColor: Get.theme.colors().primary,
-                labelColor: Get.theme.colors().onSurface,
-                unselectedLabelColor: Get.theme.colors().onSurface.withOpacity(0.6),
+                indicatorColor: Theme.of(context).colors().primary,
+                labelColor: Theme.of(context).colors().onSurface,
+                unselectedLabelColor: Theme.of(context).colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   Tab(text: tr('overview')),
                   CustomTab(
                       title: tr('tasks'),
-                      currentTab: _activeIndex.value == 1,
-                      count: projectController.tasksCount.value),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.tasks,
+                      count: projectController.taskCount.value),
                   CustomTab(
                       title: tr('milestones'),
-                      currentTab: _activeIndex.value == 2,
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.milestones,
                       count: projectController.milestoneCount.value),
                   CustomTab(
                       title: tr('discussions'),
-                      currentTab: _activeIndex.value == 3,
-                      count: projectController.projectData!.discussionCount),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.discussions,
+                      count: projectController.discussionCount.value),
                   CustomTab(
                       title: tr('documents'),
-                      currentTab: _activeIndex.value == 4,
-                      count: documentsController.filesCount.value),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.documents,
+                      count: projectController.projectDocumentsController?.filesCount.value ?? 0),
                   CustomTab(
                       title: tr('team'),
-                      currentTab: _activeIndex.value == 5,
-                      count: projectController.projectData!.participantCount),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.team,
+                      count: projectController.projectTeamDataSource?.usersList.length ?? 0),
                 ]),
           ),
         ),
-        body: TabBarView(controller: _tabController, children: [
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
           ProjectOverview(projectController: projectController, tabController: _tabController),
-          ProjectTaskScreen(projectDetailed: projectController.projectData),
-          ProjectMilestonesScreen(projectDetailed: projectController.projectData),
-          ProjectDiscussionsScreen(projectDetailed: projectController.projectData!),
-          EntityDocumentsView(
-            folderId: projectController.projectData!.projectFolder,
-            folderName: projectController.projectData!.title,
-            documentsController: documentsController,
-          ),
+          ProjectTaskScreen(projectTasksController: projectController.projectTasksController!),
+          ProjectMilestonesScreen(controller: projectController.projectMilestonesController!),
+          ProjectDiscussionsScreen(controller: projectController.projectDiscussionsController!),
+          ProjectDocumentsScreen(controller: projectController.projectDocumentsController!),
           ProjectTeamView(
-              projectDetailed: projectController.projectData,
+              projectTeamDataSource: projectController.projectTeamDataSource!,
               fabAction: projectController.manageTeamMembers),
-        ]),
+        ],
       ),
     );
   }
 }
 
-class _ProjectContextMenu extends StatelessWidget {
-  final ProjectDetailsController controller;
-  const _ProjectContextMenu({Key? key, required this.controller}) : super(key: key);
+class _ProjectAppBarActions extends StatelessWidget {
+  final ProjectDetailsController projectController;
+  final int index;
+
+  const _ProjectAppBarActions({Key? key, required this.projectController, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      icon: const Icon(Icons.more_vert, size: 26),
-      offset: const Offset(0, 25),
-      onSelected: (dynamic value) => _onSelected(value, controller, context),
-      itemBuilder: (context) {
-        return [
-          // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
-          // if (controller.projectDetailed.canEdit)
-          //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
-          if (!(controller.projectData?.security?['isInTeam'] as bool))
-            PopupMenuItem(
-              value: 'follow',
-              child: controller.projectData?.isFollow as bool
-                  ? Text(tr('unFollowProjectButton'))
-                  : Text(tr('followProjectButton')),
-            ),
-          if (controller.projectData?.canDelete as bool)
-            PopupMenuItem(
-              textStyle: Get.theme.popupMenuTheme.textStyle
-                  ?.copyWith(color: Get.theme.colors().colorError),
-              value: 'delete',
-              child: Text(
-                tr('delete'),
-                style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-              ),
-            )
-        ];
-      },
-    );
+    return () {
+      if (index == ProjectDetailedTabs.tasks && projectController.projectTasksController != null)
+        return Row(
+          children: [
+            SearchButton(controller: projectController.projectTasksController!),
+            TasksFilterButton(controller: projectController.projectTasksController!),
+          ],
+        );
+
+      if (index == ProjectDetailedTabs.milestones &&
+          projectController.projectMilestonesController != null)
+        return Row(
+          children: [
+            SearchButton(controller: projectController.projectMilestonesController!),
+            ProjectMilestonesFilterButton(
+                controller: projectController.projectMilestonesController!)
+          ],
+        );
+
+      if (index == ProjectDetailedTabs.discussions &&
+          projectController.projectDiscussionsController != null)
+        return Row(
+          children: [
+            SearchButton(controller: projectController.projectDiscussionsController!),
+            DiscussionsFilterButton(controller: projectController.projectDiscussionsController!)
+          ],
+        );
+
+      if (index == ProjectDetailedTabs.documents &&
+          projectController.projectDocumentsController != null)
+        return Row(
+          children: [
+            SearchButton(controller: projectController.projectDocumentsController!),
+            DocumentsFilterButton(controller: projectController.projectDocumentsController!),
+          ],
+        );
+
+      return const SizedBox();
+    }();
   }
 }
 
-Future<void> _onSelected(value, controller, BuildContext context) async {
+class _ProjectContextMenu extends StatelessWidget {
+  final ProjectDetailsController controller;
+  final int index;
+
+  const _ProjectContextMenu({Key? key, required this.controller, required this.index})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformPopupMenuButton(
+      padding: EdgeInsets.zero,
+      icon: PlatformIconButton(
+        padding: EdgeInsets.zero,
+        cupertinoIcon: Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Theme.of(context).colors().primary,
+        ),
+        materialIcon: Icon(
+          Icons.more_vert,
+          color: Theme.of(context).colors().primary,
+        ),
+        cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
+      ),
+      onSelected: (value) => _onSelected(value as String, controller, context),
+      itemBuilder: (context) {
+        final items = getSortTiles();
+        final projectTiles = getProjectTiles();
+
+        if (items.isNotEmpty && projectTiles.isNotEmpty)
+          items.add(const PlatformPopupMenuDivider());
+
+        return items + projectTiles;
+      },
+    );
+  }
+
+  List<PopupMenuEntry<dynamic>> getSortTiles() {
+    return [
+      if (index == ProjectDetailedTabs.tasks &&
+          controller.projectTasksController != null &&
+          controller.projectTasksController!.itemList.isNotEmpty)
+        for (final tile in controller.projectTasksController!.sortController.getSortTile())
+          PlatformPopupMenuItem(
+            onTap: () {
+              tile.sortController.changeSort(tile.sortParameter);
+              Get.back();
+            },
+            child: tile,
+          ),
+      if (index == ProjectDetailedTabs.milestones &&
+          controller.projectMilestonesController != null &&
+          controller.projectMilestonesController!.itemList.isNotEmpty)
+        for (final tile in controller.projectMilestonesController!.sortController.getSortTile())
+          PlatformPopupMenuItem(
+            onTap: () {
+              tile.sortController.changeSort(tile.sortParameter);
+              Get.back();
+            },
+            child: tile,
+          ),
+      if (index == ProjectDetailedTabs.discussions &&
+          controller.projectDiscussionsController != null &&
+          controller.projectDiscussionsController!.itemList.isNotEmpty)
+        for (final tile in controller.projectDiscussionsController!.sortController.getSortTile())
+          PlatformPopupMenuItem(
+            onTap: () {
+              tile.sortController.changeSort(tile.sortParameter);
+              Get.back();
+            },
+            child: tile,
+          ),
+      if (index == ProjectDetailedTabs.documents &&
+          controller.projectDocumentsController != null &&
+          controller.projectDocumentsController!.itemList.isNotEmpty)
+        for (final tile in controller.projectDocumentsController!.sortController.getSortTile())
+          PlatformPopupMenuItem(
+            onTap: () {
+              tile.sortController.changeSort(tile.sortParameter);
+              Get.back();
+            },
+            child: tile,
+          ),
+    ];
+  }
+
+  List<PopupMenuEntry<dynamic>> getProjectTiles() {
+    return [
+      if (controller.projectData.canEdit!)
+        PlatformPopupMenuItem(
+          value: PopupMenuItemValue.editProject,
+          child: Text(tr('editProject')),
+        ),
+      if (!(controller.projectData.security?['isInTeam'] as bool))
+        PlatformPopupMenuItem(
+          onTap: () {
+            controller.followProject();
+            Get.back();
+          },
+          child: controller.projectData.isFollow == true
+              ? Text(tr('unFollowProjectButton'))
+              : Text(tr('followProjectButton')),
+        ),
+      if (controller.projectData.canDelete as bool)
+        PlatformPopupMenuItem(
+          textStyle: TextStyleHelper.subtitle1(color: Theme.of(Get.context!).colors().colorError),
+          value: PopupMenuItemValue.deleteProject,
+          isDestructiveAction: true,
+          child: Text(tr('delete')),
+        ),
+    ];
+  }
+}
+
+Future<void> _onSelected(
+    String value, ProjectDetailsController controller, BuildContext context) async {
   switch (value) {
-    case 'copyLink':
-      controller.copyLink();
+    case PopupMenuItemValue.editProject:
+      unawaited(
+        Get.find<NavigationController>().toScreen(
+          const EditProjectView(),
+          transition: GetPlatform.isAndroid ? Transition.downToUp : Transition.cupertinoDialog,
+          fullscreenDialog: true,
+          arguments: {'projectDetailed': controller.projectData},
+          page: '/EditProjectView',
+        ),
+      );
       break;
 
-    // case 'edit':
-    //   await Get.find<NavigationController>().navigateToFullscreen(
-    //       ProjectEditingView(),
-    //       arguments: {'projectDetailed': controller.projectDetailed});
-    //   break;
-
-    case 'follow':
-      controller.followProject();
-      break;
-
-    case 'delete':
-      await Get.dialog(StyledAlertDialog(
+    case PopupMenuItemValue.deleteProject:
+      await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('deleteProject'),
         contentText: tr('deleteProjectAlert'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Theme.of(context).colors().colorError,
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           final result = await controller.deleteProject();
@@ -241,9 +406,9 @@ Future<void> _onSelected(value, controller, BuildContext context) async {
               context: context,
               text: tr('projectDeleted'),
             );
-            locator<EventHub>().fire('needToRefreshProjects', ['all']);
+            locator<EventHub>().fire('needToRefreshProjects', {'all': true});
           } else {
-            print('ERROR');
+            MessagesHandler.showSnackBar(context: context, text: tr('error'));
           }
         },
       ));

@@ -30,62 +30,101 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/base_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task/task_service.dart';
+import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
-class ProjectTasksController extends GetxController {
+class ProjectTasksController extends BaseTasksController {
   final TaskService _api = locator<TaskService>();
 
-  final paginationController =
-      Get.put(PaginationController<PortalTask>(), tag: 'ProjectTasksController');
+  @override
+  RxList<PortalTask> get itemList => _paginationController.data;
+  @override
+  PaginationController<PortalTask> get paginationController => _paginationController;
+  final _paginationController = PaginationController<PortalTask>();
 
+  @override
+  TasksSortController get sortController => _sortController;
   final _sortController = Get.put(TasksSortController(), tag: 'ProjectTasksController');
 
+  @override
+  ProjectTaskFilterController get filterController => _filterController;
   final _filterController = Get.find<ProjectTaskFilterController>();
 
-  late ProjectDetailed _projectDetailed;
+  @override
+  RxBool get hasFilters => _filterController.hasFilters;
 
-  ProjectTaskFilterController get filterController => _filterController;
-  TasksSortController get sortController => _sortController;
+  ProjectDetailed get projectDetailed => _projectDetailed;
+  ProjectDetailed _projectDetailed = ProjectDetailed();
 
-  RxBool loaded = false.obs;
+  final fabIsVisible = false.obs;
 
-  RxBool hasFilters = false.obs;
-
-  int? _projectId;
-
-  RxBool fabIsVisible = false.obs;
+  late StreamSubscription _refreshTasksSubscription;
+  late StreamSubscription _refreshDetailsSubscription;
 
   ProjectTasksController() {
     _sortController.updateSortDelegate = () async => await loadTasks();
     _filterController.applyFiltersDelegate = () async => loadTasks();
-    paginationController.loadDelegate = () async => await _getTasks();
-    paginationController.refreshDelegate = () async => await refreshData();
-    paginationController.pullDownEnabled = true;
+
+    _paginationController.loadDelegate = () async => await _getTasks();
+    _paginationController.refreshDelegate = () async => await loadTasks();
+    _paginationController.pullDownEnabled = true;
+
+    _refreshTasksSubscription = locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+      if (data['all'] == true) {
+        loadTasks();
+        return;
+      }
+
+      if (data['task'].id != null) {
+        for (var i = 0; i < itemList.length; i++)
+          if (itemList[i].id == data['task'].id) {
+            itemList[i] = data['task'] as PortalTask;
+            return;
+          }
+      }
+    });
+
+    _refreshDetailsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (data['projectDetails'].id == _projectDetailed.id) {
+        _projectDetailed = data['projectDetails'] as ProjectDetailed;
+        fabIsVisible.value = _canCreate();
+      }
+    });
   }
 
-  RxList get itemList => paginationController.data;
-
-  Future<void> refreshData() async {
-    loaded.value = false;
-
-    //await _getTasks(needToClear: true);
-    locator<EventHub>().fire('needToRefreshProjects', ['all']);
-
-    loaded.value = true;
+  @override
+  void onClose() {
+    _refreshTasksSubscription.cancel();
+    _refreshDetailsSubscription.cancel();
+    super.dispose();
   }
 
-  Future loadTasks() async {
+  @override
+  void showSearch() => Get.find<NavigationController>().to(const TasksSearchScreen(), arguments: {
+        'projectId': projectDetailed.id,
+        'tasksFilterController': filterController,
+        'tasksSortController': sortController
+      });
+
+  Future<void> loadTasks() async {
     loaded.value = false;
 
-    paginationController.startIndex = 0;
+    unawaited(updateDetails());
+
+    _paginationController.startIndex = 0;
     await _getTasks(needToClear: true);
 
     loaded.value = true;
@@ -93,34 +132,48 @@ class ProjectTasksController extends GetxController {
 
   Future<bool> _getTasks({bool needToClear = false}) async {
     final result = await _api.getTasksByParams(
-        startIndex: paginationController.startIndex,
+        startIndex: _paginationController.startIndex,
         sortBy: _sortController.currentSortfilter,
         sortOrder: _sortController.currentSortOrder,
+        statusFilter: _filterController.statusFilter,
         responsibleFilter: _filterController.responsibleFilter,
         creatorFilter: _filterController.creatorFilter,
         projectFilter: _filterController.projectFilter,
         milestoneFilter: _filterController.milestoneFilter,
         deadlineFilter: _filterController.deadlineFilter,
-        projectId: _projectId.toString());
+        projectId: _projectDetailed.id.toString());
 
-    if (result == null) return Future.value(false);
+    if (result == null) {
+      return Future.value(false);
+    }
 
-    paginationController.total.value = result.total;
-    if (needToClear) paginationController.data.clear();
-    paginationController.data.addAll(result.response ?? <PortalTask>[]);
+    _paginationController.total.value = result.total;
+    if (needToClear) _paginationController.data.clear();
+    _paginationController.data.addAll(result.response ?? <PortalTask>[]);
 
     return Future.value(true);
   }
 
-  Future<void> setup(ProjectDetailed projectDetailed) async {
+  void setup(ProjectDetailed projectDetailed) {
     loaded.value = false;
+
     _projectDetailed = projectDetailed;
-    _projectId = projectDetailed.id;
-    _filterController.projectId = _projectId.toString();
+    _filterController.projectId = projectDetailed.id.toString();
     fabIsVisible.value = _canCreate();
 
-    await loadTasks();
+    loadTasks();
   }
 
-  bool _canCreate() => _projectDetailed.security!['canCreateTask'] ?? false;
+  bool _canCreate() => _projectDetailed.security?['canCreateTask'] ?? false;
+
+  Future<void> updateDetails() async {
+    final response =
+        await locator<ProjectService>().getProjectById(projectId: _projectDetailed.id!);
+    if (response == null) return;
+
+    _projectDetailed = response;
+    fabIsVisible.value = _canCreate();
+
+    locator<EventHub>().fire('needToRefreshProjects', {'projectDetails': response});
+  }
 }

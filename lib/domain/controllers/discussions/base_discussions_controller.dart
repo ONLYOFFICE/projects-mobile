@@ -29,44 +29,14 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
+abstract class BaseDiscussionsController extends BaseController {
+  DiscussionsSortController get sortController;
+  BaseFilterController get filterController;
 
-class CustomSearchBar extends StatelessWidget {
-  const CustomSearchBar({
-    Key? key,
-    required this.controller,
-    this.searchFunction,
-    this.clearFunction,
-  }) : super(key: key);
-
-  final controller;
-  final Function(String value)? searchFunction;
-  final VoidCallback? clearFunction;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              autofocus: true,
-              textInputAction: TextInputAction.search,
-              controller: controller.searchInputController as TextEditingController?,
-              decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
-              onSubmitted: searchFunction ?? controller.newSearch as Function(String)?,
-              onChanged: searchFunction ?? controller.newSearch as Function(String)?,
-            ),
-          ),
-          InkResponse(
-            onTap: clearFunction ?? controller.clearSearch as Function()?,
-            child: const Icon(Icons.close, color: Colors.blue),
-          )
-        ],
-      ),
-    );
-  }
+  void toDetailed(DiscussionItemController discussionItemController) {}
 }

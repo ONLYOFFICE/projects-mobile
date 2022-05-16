@@ -38,18 +38,29 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/milestone_service.dart';
+import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/milestones_search_screen.dart';
 
-class MilestonesDataSource extends GetxController {
+class MilestonesDataSource extends BaseController {
   final MilestoneService _api = locator<MilestoneService>();
 
-  final paginationController =
-      Get.put(PaginationController<Milestone>(), tag: 'MilestonesDataSource');
+  int get itemCount => _paginationController.data.length;
+  @override
+  RxList<Milestone> get itemList => _paginationController.data;
+  @override
+  PaginationController get paginationController => _paginationController;
+  final _paginationController = PaginationController<Milestone>();
 
+  MilestonesSortController get sortController => _sortController;
   final _sortController = Get.find<MilestonesSortController>();
+
+  MilestonesFilterController get filterController => _filterController;
   final _filterController = Get.find<MilestonesFilterController>();
 
   final searchTextEditingController = TextEditingController();
@@ -58,36 +69,50 @@ class MilestonesDataSource extends GetxController {
 
   Timer? _searchDebounce;
 
+  ProjectDetailed get projectDetailed => _projectDetailed ?? ProjectDetailed();
   ProjectDetailed? _projectDetailed;
-
-  MilestonesSortController get sortController => _sortController;
-  MilestonesFilterController get filterController => _filterController;
-
-  int get itemCount => paginationController.data.length;
-  RxList<Milestone> get itemList => paginationController.data;
-
-  RxBool loaded = false.obs;
-
-  RxBool hasFilters = false.obs;
 
   int? _projectId;
 
-  RxBool fabIsVisible = false.obs;
+  final fabIsVisible = false.obs;
+
+  late StreamSubscription _refreshMilestonesSubscription;
+  late StreamSubscription _refreshDetailsSubscription;
 
   MilestonesDataSource() {
     _sortController.updateSortDelegate = () async => loadMilestones();
     _filterController.applyFiltersDelegate = () async => loadMilestones();
-    paginationController.loadDelegate = () async => _getMilestones();
-    paginationController.refreshDelegate = () async => loadMilestones();
-    paginationController.pullDownEnabled = true;
+    _paginationController.loadDelegate = () async => _getMilestones();
+    _paginationController.refreshDelegate = () async => loadMilestones();
+    _paginationController.pullDownEnabled = true;
+
+    _refreshMilestonesSubscription =
+        locator<EventHub>().on('needToRefreshMilestones', (dynamic data) {
+      loadMilestones();
+    });
+
+    _refreshDetailsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (data['projectDetails'].id == _projectDetailed?.id) {
+        _projectDetailed = data['projectDetails'] as ProjectDetailed;
+        fabIsVisible.value = _canCreate();
+      }
+    });
+  }
+
+  @override
+  void onClose() {
+    _refreshMilestonesSubscription.cancel();
+    _refreshDetailsSubscription.cancel();
+    searchTextEditingController.dispose();
+    super.onClose();
   }
 
   Future loadMilestones() async {
     loaded.value = false;
 
-    paginationController.startIndex = 0;
+    unawaited(updateDetails());
+    _paginationController.startIndex = 0;
     await _getMilestones(needToClear: true);
-    locator<EventHub>().fire('needToRefreshMilestones', ['all']);
 
     loaded.value = true;
   }
@@ -99,33 +124,33 @@ class MilestonesDataSource extends GetxController {
       projectId: _projectId?.toString(),
       milestoneResponsibleFilter: _filterController.milestoneResponsibleFilter,
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
-      statusFilter: '&status=open',
+      statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
       query: searchQuery,
     );
     if (result == null) return Future.value(false);
 
-    paginationController.total.value = result.length;
-    if (needToClear) paginationController.data.clear();
-    paginationController.data.addAll(result);
+    _paginationController.total.value = result.length;
+    if (needToClear) _paginationController.data.clear();
+    _paginationController.data.addAll(result);
 
     return Future.value(true);
   }
 
-  Future<void> setup({ProjectDetailed? projectDetailed, int? projectId}) async {
+  void setup({ProjectDetailed? projectDetailed, int? projectId}) {
+    assert(projectDetailed != null || projectId != null);
+
     loaded.value = false;
+
     _projectDetailed = projectDetailed;
     _projectId = projectId ?? projectDetailed!.id;
     _filterController.projectId = _projectId.toString();
+    fabIsVisible.value = _canCreate();
 
-    // ignore: unawaited_futures
     loadMilestones();
-
-    fabIsVisible.value = _canCreate()!;
   }
 
-  bool? _canCreate() =>
-      _projectDetailed == null ? false : _projectDetailed!.security!['canCreateMilestone'] as bool;
+  bool _canCreate() => _projectDetailed?.security?['canCreateMilestone'] ?? false;
 
   void loadMilestonesWithFilterByName(String searchText) {
     _searchDebounce?.cancel();
@@ -143,9 +168,22 @@ class MilestonesDataSource extends GetxController {
     loadMilestones();
   }
 
-  @override
-  void onClose() {
-    searchTextEditingController.dispose();
-    super.onClose();
+  Future<void> updateDetails() async {
+    final response = await locator<ProjectService>()
+        .getProjectById(projectId: _projectDetailed?.id ?? _projectId!);
+    if (response == null) return;
+
+    _projectDetailed = response;
+    fabIsVisible.value = _canCreate();
+
+    locator<EventHub>().fire('needToRefreshProjects', {'projectDetails': response});
   }
+
+  @override
+  void showSearch() =>
+      Get.find<NavigationController>().to(const MileStonesSearchScreen(), arguments: {
+        'projectId': projectDetailed.id,
+        'tasksFilterController': filterController,
+        'tasksSortController': sortController
+      });
 }

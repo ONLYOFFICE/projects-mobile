@@ -33,9 +33,9 @@
 part of '../documents_filter_screen.dart';
 
 class _Author extends StatelessWidget {
-  final filterController;
+  final DocumentsFilterController filterController;
 
-  const _Author({Key? key, this.filterController}) : super(key: key);
+  const _Author({Key? key, required this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class _Author extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               isSelected: filterController.author['me'] as bool,
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               onTap: () => filterController.changeAuthorFilter('me')),
           FilterElement(
               title: filterController.author['users'].isEmpty as bool
@@ -55,8 +55,7 @@ class _Author extends StatelessWidget {
               isSelected: filterController.author['users'].isNotEmpty as bool,
               cancelButtonEnabled: filterController.author['users'].isNotEmpty as bool,
               onTap: () async {
-                final newUser =
-                    await Get.find<NavigationController>().toScreen(const SelectUserScreen());
+                final newUser = await filterController.onUsersFilterPressed();
                 await filterController.changeAuthorFilter('users', newUser);
               },
               onCancelTap: () => filterController.changeAuthorFilter('users', null)),
@@ -67,8 +66,7 @@ class _Author extends StatelessWidget {
               isSelected: filterController.author['groups'].isNotEmpty as bool,
               cancelButtonEnabled: filterController.author['groups'].isNotEmpty as bool,
               onTap: () async {
-                final newGroup =
-                    await Get.find<NavigationController>().toScreen(const SelectGroupScreen());
+                final newGroup = await filterController.onGroupsFilterPressed();
                 await filterController.changeAuthorFilter('groups', newGroup);
               },
               onCancelTap: () => filterController.changeAuthorFilter('groups', null)),

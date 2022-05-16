@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestone_search_controller.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
@@ -56,7 +57,7 @@ class SelectMilestoneScreen extends StatelessWidget with SelectItemWithSearchMix
   VoidCallback get getItemsFunction => () async => await controller.getMilestones();
 
   @override
-  Widget get nothingFound => Column(children: const [NothingFound()]);
+  Widget get nothingFound => const NothingFound();
 
   @override
   Widget get itemList => const _MilestoneList();
@@ -64,6 +65,9 @@ class SelectMilestoneScreen extends StatelessWidget with SelectItemWithSearchMix
   @override
   Widget get searchResult =>
       _SearchResult(paginationController: searchController.paginationController);
+
+  @override
+  VoidCallback get onLeadingPressed => Get.find<NavigationController>().back;
 }
 
 class _MilestoneList extends StatelessWidget with SelectItemListMixin {
@@ -79,7 +83,8 @@ class _MilestoneList extends StatelessWidget with SelectItemListMixin {
         final milestone = paginationController.data[i] as Milestone;
         return SelectItemTile(
             title: milestone.title,
-            onSelect: () => Get.back(result: {'id': milestone.id, 'title': milestone.title}));
+            onSelect: () => Get.find<NavigationController>()
+                .back(result: {'id': milestone.id, 'title': milestone.title}));
       };
 }
 
@@ -98,6 +103,7 @@ class _SearchResult extends StatelessWidget with SelectItemListMixin {
         final milestone = paginationController.data[i] as Milestone;
         return SelectItemTile(
             title: milestone.title,
-            onSelect: () => Get.back(result: {'id': milestone.id, 'title': milestone.title}));
+            onSelect: () => Get.find<NavigationController>()
+                .back(result: {'id': milestone.id, 'title': milestone.title}));
       };
 }

@@ -32,27 +32,25 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-import 'package:projects/presentation/views/discussions/discussions_view.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/views/discussions/discussions_shared.dart';
 
 class ProjectDiscussionsScreen extends StatelessWidget {
-  final ProjectDetailed projectDetailed;
+  final ProjectDiscussionsController controller;
+
   const ProjectDiscussionsScreen({
     Key? key,
-    required this.projectDetailed,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = ProjectDiscussionsController(projectDetailed);
-
     return Stack(
       children: [
-        DiscussionsList(controller: controller, scrollController: ScrollController()),
+        DiscussionsContent(controller: controller),
         Align(
           alignment: Alignment.bottomRight,
           child: Padding(
@@ -64,7 +62,7 @@ class ProjectDiscussionsScreen extends StatelessWidget {
                   onPressed: controller.toNewDiscussionScreen,
                   child: AppIcon(
                     icon: SvgIcons.add_discussion,
-                    color: Get.theme.colors().onPrimarySurface,
+                    color: Theme.of(context).colors().onPrimarySurface,
                   ),
                 ),
               ),

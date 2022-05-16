@@ -32,10 +32,12 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
+import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -43,46 +45,35 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
-class SelectMilestoneView extends StatefulWidget {
+class SelectMilestoneView extends StatelessWidget {
   final selectedId;
+
   const SelectMilestoneView({
     Key? key,
     this.selectedId,
   }) : super(key: key);
 
   @override
-  _SelectMilestoneViewState createState() => _SelectMilestoneViewState();
-}
-
-class _SelectMilestoneViewState extends State<SelectMilestoneView> {
-  final _controller = Get.arguments['controller'];
-  final _milestoneController = Get.find<MilestonesDataSource>();
-  final platformController = Get.find<PlatformController>();
-
-  @override
-  void initState() {
-    _milestoneController.setup(
-        projectId: _controller.selectedProjectId as int?);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _milestoneController = Get.find<MilestonesDataSource>();
+    final platformController = Get.find<PlatformController>();
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final _controller = args['controller'] as TaskActionsController;
+    final previousPage = args['previousPage'] as String?;
+    _milestoneController.setup(projectId: _controller.selectedProjectId);
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('selectMilestone'),
+        previousPageTitle: previousPage,
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? const BackButtonIcon()
+            : Icon(PlatformIcons(context).clear),
         bottomHeight: 44,
         bottom: SearchField(
           hintText: tr('searchMilestone'),
           controller: _milestoneController.searchTextEditingController,
-          showClearIcon: true,
           onChanged: _milestoneController.loadMilestonesWithFilterByName,
           onSubmitted: _milestoneController.loadMilestonesWithFilterByName,
           onClearPressed: _milestoneController.clearSearchAndReloadMilestones,
@@ -93,21 +84,22 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
           Obx(
             () {
               if (_milestoneController.loaded.value == true) {
+                final scrollController = ScrollController();
+
                 return Expanded(
                   child: PaginationListView(
-                    paginationController:
-                        _milestoneController.paginationController,
+                    scrollController: scrollController,
+                    paginationController: _milestoneController.paginationController,
                     child: ListView.separated(
+                      controller: scrollController,
                       itemCount: _milestoneController.itemCount + 1,
                       separatorBuilder: (BuildContext context, int index) {
-                        return const Divider(
-                            indent: 16, endIndent: 16, height: 1);
+                        return const Divider(indent: 16, endIndent: 16, height: 1);
                       },
                       itemBuilder: (BuildContext context, int index) {
                         if (index == 0) {
                           return _None(
-                            onTap: _controller.changeMilestoneSelection
-                                as Function(),
+                            onTap: _controller.changeMilestoneSelection,
                             isSelected: _controller.newMilestoneId == null,
                           );
                         }
@@ -115,14 +107,12 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
                           onTap: () {
                             return _controller.changeMilestoneSelection(
                               id: _milestoneController.itemList[index - 1].id,
-                              title: _milestoneController
-                                  .itemList[index - 1].title,
+                              title: _milestoneController.itemList[index - 1].title,
                             );
                           },
                           milestone: _milestoneController.itemList[index - 1],
-                          isSelected:
-                              _milestoneController.itemList[index - 1].id ==
-                                  _controller.newMilestoneId,
+                          isSelected: _milestoneController.itemList[index - 1].id ==
+                              _controller.newMilestoneId,
                         );
                       },
                     ),
@@ -158,11 +148,10 @@ class _None extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(tr('none'),
-                style: TextStyleHelper.subtitle1(
-                    color: Get.theme.colors().onSurface)),
+                style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface)),
             if (isSelected)
-              Icon(Icons.check_rounded,
-                  color: Get.theme.colors().onBackground.withOpacity(0.6))
+              Icon(PlatformIcons(context).checkMark,
+                  color: Theme.of(context).colors().onBackground.withOpacity(0.6))
           ],
         ),
       ),
@@ -200,19 +189,18 @@ class _MilestoneSelectionTile extends StatelessWidget {
                 children: [
                   Text(
                     milestone.title!,
-                    style: TextStyleHelper.projectTitle,
+                    style: TextStyleHelper.subtitle1(),
                   ),
                   Text(milestone.responsible!.displayName!,
                       style: TextStyleHelper.caption(
-                              color:
-                                  Get.theme.colors().onSurface.withOpacity(0.6))
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6))
                           .copyWith(height: 1.667)),
                 ],
               ),
             ),
             if (isSelected)
-              Icon(Icons.check_rounded,
-                  color: Get.theme.colors().onBackground.withOpacity(0.6))
+              Icon(PlatformIcons(context).checkMark,
+                  color: Theme.of(context).colors().onBackground.withOpacity(0.6))
           ],
         ),
       ),

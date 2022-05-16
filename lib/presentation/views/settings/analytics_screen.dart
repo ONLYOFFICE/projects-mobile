@@ -31,44 +31,126 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/option_with_switch.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:settings_ui/settings_ui.dart';
 
 class AnalyticsScreen extends StatelessWidget {
   const AnalyticsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args['previousPage'] as String?;
+
     final controller = Get.find<SettingsController>();
     final platformController = Get.find<PlatformController>();
 
+    Color backgroundColor;
+    if (GetPlatform.isAndroid) {
+      if (platformController.isMobile) {
+        Theme.of(context).brightness == Brightness.dark
+            ? backgroundColor = Theme.of(context).colors().background
+            : backgroundColor = Theme.of(context).colors().surface;
+      } else {
+        backgroundColor = Theme.of(context).colors().surface;
+      }
+    } else {
+      if (platformController.isMobile) {
+        Theme.of(context).brightness == Brightness.dark
+            ? backgroundColor = Theme.of(context).colors().backgroundSecond
+            : backgroundColor = CupertinoColors.systemGrey6;
+      } else {
+        Theme.of(context).brightness == Brightness.dark
+            ? backgroundColor = Theme.of(context).colors().surface
+            : backgroundColor = CupertinoColors.systemGrey6;
+      }
+    }
+
+    final scaleFactor = MediaQuery.of(context).textScaleFactor;
+
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('analytics'),
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
+        onLeadingPressed: controller.back,
+        previousPageTitle: previousPage,
       ),
-      body: Obx(
-        () => SwitchListTile(
-          value: controller.shareAnalytics.value,
-          activeColor: Get.theme.colors().primary,
-          contentPadding: const EdgeInsets.fromLTRB(16, 14, 5, 30),
-          title: Text(tr('shareAnalytics'),
-              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground)),
-          subtitle: Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Text(tr('shareAnalyticsDescription'),
-                  style: TextStyleHelper.body2(
-                      color: Theme.of(context).colors().onSurface.withOpacity(0.6)))),
-          onChanged: controller.changeAnalyticsSharingEnability,
-        ),
-      ),
+      body: GetPlatform.isAndroid
+          ? Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  const SizedBox(height: 3),
+                  OptionWithSwitch(
+                    title: tr('shareAnalytics'),
+                    switchOnChanged: controller.changeAnalyticsSharingEnability,
+                    switchValue: controller.shareAnalytics,
+                    style:
+                        TextStyleHelper.subtitle1(color: Theme.of(context).colors().onBackground),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.only(top: 2),
+                      child: Text(tr('shareAnalyticsDescription'),
+                          style: TextStyleHelper.body2(
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6)))),
+                ],
+              ),
+            )
+          : Obx(
+              () => ListView.custom(
+                childrenDelegate: SliverChildListDelegate(
+                  [
+                    SettingsList(
+                      shrinkWrap: true,
+                      darkTheme: const SettingsThemeData().copyWith(
+                        settingsListBackground: platformController.isMobile
+                            ? Theme.of(context).colors().backgroundSecond
+                            : Theme.of(context).colors().surface,
+                        settingsSectionBackground: platformController.isMobile
+                            ? null
+                            : Theme.of(context).colors().bgDescription,
+                      ),
+                      applicationType: ApplicationType.cupertino,
+                      sections: [
+                        SettingsSection(
+                          margin: EdgeInsetsDirectional.only(
+                            top: 14.0 * scaleFactor,
+                            bottom: 10 * scaleFactor,
+                            start: 16,
+                            end: 16,
+                          ),
+                          tiles: [
+                            SettingsTile.switchTile(
+                              initialValue: controller.shareAnalytics.value,
+                              onToggle: controller.changeAnalyticsSharingEnability,
+                              title: Text(
+                                tr('shareAnalytics'),
+                              ),
+                              activeSwitchColor: Theme.of(context).colors().primary,
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 27.5),
+                      child: Text(
+                        tr('shareAnalyticsDescription'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 }

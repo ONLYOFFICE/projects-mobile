@@ -44,11 +44,7 @@ class SmsCodeService {
     required String password,
     required String mobilePhone,
   }) async {
-    final body = {
-      'userName': userName,
-      'password': password,
-      'mobilePhone': mobilePhone
-    };
+    final body = {'userName': userName, 'password': password, 'mobilePhone': mobilePhone};
 
     final result = await _api.setPhone(body);
 

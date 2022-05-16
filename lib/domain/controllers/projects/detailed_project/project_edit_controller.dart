@@ -30,20 +30,26 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class ProjectEditController extends BaseProjectEditorController {
@@ -143,10 +149,15 @@ class ProjectEditController extends BaseProjectEditorController {
     titleController.text = titleController.text.trim();
     needToFillTitle.value = titleController.text.isEmpty;
 
-    needToFillManager.value =
-        selectedProjectManager.value == null || selectedProjectManager.value!.id == null;
+    needToFillManager.value = selectedProjectManager.value?.id == null;
 
-    if (needToFillTitle.value == true || needToFillManager.value == true) return;
+    if (needToFillTitle.value || needToFillManager.value) {
+      unawaited(900.milliseconds.delay().then((value) {
+        needToFillTitle.value = false;
+        needToFillManager.value = false;
+      }));
+      return;
+    }
 
     final participants = <Participant>[];
 
@@ -173,15 +184,16 @@ class ProjectEditController extends BaseProjectEditorController {
       notify: notificationEnabled.value,
     );
 
-    final success =
-        await _projectService.editProject(project: newProject, projectId: _projectDetailed!.id!);
+    final success = await _projectService.editProject(
+      project: newProject,
+      projectId: _projectDetailed!.id!,
+    );
     if (success) {
-      {
-        locator<EventHub>().fire('needToRefreshProjects', ['all']);
-      }
-
       Get.back();
-    }
+
+      locator<EventHub>().fire('needToRefreshProjects', {'all': true});
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   void discardChanges() {
@@ -204,10 +216,11 @@ class ProjectEditController extends BaseProjectEditorController {
 
     // warn the user if there have been changes
     if (edited) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.back();
@@ -220,8 +233,13 @@ class ProjectEditController extends BaseProjectEditorController {
     }
   }
 
+  @override
   Future<void> showTags() async {
-    await Get.find<NavigationController>()
-        .toScreen(const TagsSelectionView(), arguments: {'controller': this});
+    await Get.find<NavigationController>().toScreen(
+      const TagsSelectionView(),
+      arguments: {'controller': this, 'previousPage': EditProjectView.pageName},
+      transition: Transition.rightToLeft,
+      page: '/TagsSelectionView',
+    );
   }
 }

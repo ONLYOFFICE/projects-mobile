@@ -30,10 +30,17 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
@@ -43,19 +50,51 @@ class UsersFromGroups extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'] as DiscussionActionsController;
+    final platformController = Get.find<PlatformController>();
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'] as DiscussionActionsController;
 
     final groupsDataSource = Get.find<GroupsDataSource>();
     groupsDataSource.getGroups();
 
     return Scaffold(
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: 'Users from groups',
+        centerTitle: GetPlatform.isIOS,
+        leadingWidth: GetPlatform.isIOS ? 100 : null,
+        leading: PlatformWidget(
+          cupertino: (_, __) => CupertinoButton(
+            padding: const EdgeInsets.only(left: 16),
+            alignment: Alignment.centerLeft,
+            onPressed: Get.find<NavigationController>().back,
+            child: Text(
+              tr('closeLowerCase'),
+              style: TextStyleHelper.button(),
+            ),
+          ),
+          material: (_, __) => IconButton(
+            onPressed: Get.find<NavigationController>().back,
+            icon: const Icon(Icons.close),
+          ),
+        ),
         actions: [
-          IconButton(
-            onPressed: controller.confirmGroupSelection,
-            icon: const Icon(Icons.done),
-          )
+          PlatformWidget(
+            material: (platformContext, __) => IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: controller.confirmGroupSelection,
+            ),
+            cupertino: (platformContext, __) => CupertinoButton(
+              onPressed: controller.confirmGroupSelection,
+              padding: const EdgeInsets.only(right: 16),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                tr('done'),
+                style: TextStyleHelper.headline7(),
+              ),
+            ),
+          ),
         ],
       ),
       body: Obx(

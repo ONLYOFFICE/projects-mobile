@@ -30,5 +30,26 @@
  *
  */
 
-// ignore: constant_identifier_names
-enum ViewState { Idle, Busy }
+import 'dart:async';
+
+import 'package:flutter/services.dart';
+
+abstract class BaseAccountProvider {
+  MethodChannel channel = const MethodChannel('accountProvider');
+
+  Future<bool?> addAccount({String accountData = '', String accountId = ''}) async {
+    return await channel
+        .invokeMethod('addAccount', {'accountData': accountData, 'accountId': accountId});
+  }
+
+  Future<List<String>> getAccounts();
+
+  Future<bool?> deleteAccount({String accountId = '', String accountData = ''}) async {
+    return await channel.invokeMethod('deleteAccount', {'accountData': accountData});
+  }
+
+  Future<bool?> updateAccount({String accountData = '', String accountId = ''}) async {
+    return await channel
+        .invokeMethod('updateAccount', {'accountData': accountData, 'accountId': accountId});
+  }
+}

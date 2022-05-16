@@ -31,6 +31,7 @@
  */
 
 import 'package:projects/domain/controllers/base/base_sort_controller.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class MilestonesSortController extends BaseSortController {
   MilestonesSortController() {
@@ -38,14 +39,11 @@ class MilestonesSortController extends BaseSortController {
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
 
-  // @override
-  // String getFilterLabel(value) {
-  //   return _filtersMapping[value];
-  // }
+  List<SortTile> getSortTile() {
+    return [
+      SortTile(sortParameter: 'deadline', sortController: this),
+      SortTile(sortParameter: 'create_on', sortController: this),
+      SortTile(sortParameter: 'title', sortController: this),
+    ];
+  }
 }
-
-// const _filtersMapping = {
-//   'create_on': 'Creation date',
-//   'deadline': 'Deadline',
-//   'title': 'Title',
-// };

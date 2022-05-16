@@ -50,14 +50,15 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectProjectView extends StatelessWidget {
   const SelectProjectView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final controller = arguments['controller'];
+    final previousPage = arguments['previousPage'] as String?;
 
     final projectsWithPresets = locator<ProjectsWithPresets>();
 
@@ -65,11 +66,11 @@ class SelectProjectView extends StatelessWidget {
 
     final userController = Get.find<UserController>();
 
-    if (userController.user != null &&
-        (userController.user!.isAdmin! ||
-            userController.user!.isOwner! ||
-            (userController.user!.listAdminModules != null &&
-                userController.user!.listAdminModules!.contains('projects')))) {
+    if (userController.user.value != null &&
+        (userController.user.value!.isAdmin! ||
+            userController.user.value!.isOwner! ||
+            (userController.user.value!.listAdminModules != null &&
+                userController.user.value!.listAdminModules!.contains('projects')))) {
       projectsController = projectsWithPresets.activeProjectsController;
     } else if (controller is NewTaskController || controller is DiscussionActionsController) {
       projectsController = projectsWithPresets.myMembershipProjectController;
@@ -77,65 +78,77 @@ class SelectProjectView extends StatelessWidget {
       projectsController = projectsWithPresets.myManagedProjectController;
     }
 
-    final searchController = Get.put(ProjectSearchController(onlyMyProjects: true));
-
     final platformController = Get.find<PlatformController>();
 
+    final searchController = Get.put(
+      ProjectSearchController(
+          sortController: projectsController.sortController,
+          filterController: projectsController.filterController,
+          onlyMyProjects: true),
+    );
+    searchController.textController.addListener(() {
+      if (searchController.textController.text.isNotEmpty)
+        searchController.switchToSearchView.value = true;
+      else {
+        searchController.switchToSearchView.value = false;
+        searchController.clearSearch();
+      }
+    });
+
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('selectProject'),
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+        centerTitle: GetPlatform.isIOS,
         bottomHeight: 44,
+        previousPageTitle: previousPage ?? tr('back').toLowerCase().capitalizeFirst,
         bottom: SearchField(
           hintText: tr('searchProjects'),
-          controller: searchController.searchInputController,
-          showClearIcon: true,
+          controller: searchController.textController,
           onChanged: searchController.newSearch,
           onSubmitted: searchController.newSearch,
           onClearPressed: searchController.clearSearch,
         ),
       ),
       body: Obx(() {
-        if (searchController.switchToSearchView.value == true &&
-            searchController.searchResult.isNotEmpty) {
-          return SmartRefresher(
-            enablePullDown: false,
-            enablePullUp: searchController.pullUpEnabled,
-            controller: searchController.refreshController,
-            onLoading: searchController.onLoading,
-            child: ListView.separated(
-              itemCount: searchController.searchResult.length,
-              separatorBuilder: (BuildContext context, int index) {
-                return const StyledDivider(leftPadding: 16, rightPadding: 16);
-              },
-              itemBuilder: (c, i) =>
-                  _ProjectCell(item: searchController.searchResult[i], controller: controller),
-            ),
-          );
-        }
-        if (searchController.switchToSearchView.value == true &&
-            searchController.searchResult.isEmpty &&
-            searchController.loaded.value == true) {
-          return Column(children: const [NothingFound()]);
-        }
-        if (projectsController!.loaded.value == true &&
-            searchController.switchToSearchView.value == false) {
+        final scrollController = ScrollController();
+
+        if (searchController.switchToSearchView.value) {
+          if (!searchController.loaded.value) return const ListLoadingSkeleton();
+
           return PaginationListView(
+              scrollController: scrollController,
+              paginationController: searchController.paginationController,
+              child: () {
+                if (searchController.nothingFound) return const NothingFound();
+
+                return ListView.separated(
+                  controller: scrollController,
+                  itemCount: searchController.itemList.length,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return const StyledDivider(leftPadding: 16, rightPadding: 16);
+                  },
+                  itemBuilder: (c, i) =>
+                      _ProjectCell(item: searchController.itemList[i], controller: controller),
+                );
+              }());
+        } else if (projectsController.loaded.value) {
+          return PaginationListView(
+            scrollController: scrollController,
             paginationController: projectsController.paginationController,
             child: ListView.separated(
+              controller: scrollController,
               itemCount: projectsController.paginationController.data.length,
               separatorBuilder: (BuildContext context, int index) {
                 return const StyledDivider(leftPadding: 16, rightPadding: 16);
               },
               itemBuilder: (c, i) => _ProjectCell(
-                  item: projectsController!.paginationController.data[i], controller: controller),
+                  item: projectsController.paginationController.data[i], controller: controller),
             ),
           );
         }
+
         return const ListLoadingSkeleton();
       }),
     );
@@ -146,15 +159,16 @@ class _ProjectCell extends StatelessWidget {
   const _ProjectCell({Key? key, required this.item, required this.controller}) : super(key: key);
   final ProjectDetailed item;
   final controller;
+
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Get.find<PlatformController>().isMobile
-          ? Get.theme.colors().backgroundColor
-          : Get.theme.colors().surface,
+          ? Theme.of(context).colors().backgroundColor
+          : Theme.of(context).colors().surface,
       child: InkWell(
         onTap: () {
-          controller.changeProjectSelection(id: item.id, title: item.title);
+          controller.changeProjectSelection(item);
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -166,11 +180,11 @@ class _ProjectCell extends StatelessWidget {
                   children: [
                     Text(
                       item.title!,
-                      style: TextStyleHelper.projectTitle,
+                      style: TextStyleHelper.subtitle1(),
                     ),
                     Text(item.responsible!.displayName!,
                         style: TextStyleHelper.caption(
-                                color: Get.theme.colors().onSurface.withOpacity(0.6))
+                                color: Theme.of(context).colors().onSurface.withOpacity(0.6))
                             .copyWith(height: 1.667)),
                   ],
                 ),

@@ -31,7 +31,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/domain/controllers/passcode/passcode_settings_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -118,7 +117,7 @@ class PasscodeNumber extends StatelessWidget {
           child: Text(
             number.toString(),
             style: TextStyleHelper.headline4(
-              color: Get.theme.colors().onBackground,
+              color: Theme.of(context).colors().onBackground,
             ).copyWith(height: 1),
           ),
         ),
@@ -145,7 +144,7 @@ class DeleteButton extends StatelessWidget {
         child: Center(
           child: AppIcon(
             icon: SvgIcons.delete_number,
-            color: Get.theme.colors().onBackground,
+            color: Theme.of(context).colors().onBackground,
           ),
         ),
       ),
@@ -153,22 +152,27 @@ class DeleteButton extends StatelessWidget {
   }
 }
 
-class FingerprintButton extends StatelessWidget {
-  const FingerprintButton({
+class BiometricButton extends StatelessWidget {
+  const BiometricButton({
     Key? key,
     required this.onTap,
+    required this.isFingerprint,
   }) : super(key: key);
 
+  final bool isFingerprint;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
+    final icon = isFingerprint
+        ? const AppIcon(icon: SvgIcons.finger_print)
+        : const AppIcon(icon: SvgIcons.faceID);
+    return InkWell(
       onTap: onTap,
-      child: const SizedBox(
+      child: SizedBox(
         height: 72,
         width: 72,
-        child: Center(child: AppIcon(icon: SvgIcons.finger_print)),
+        child: Center(child: icon),
       ),
     );
   }

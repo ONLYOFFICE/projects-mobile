@@ -32,43 +32,43 @@
 
 import 'dart:async';
 
-import 'package:event_hub/event_hub.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
-import 'package:projects/internal/locator.dart';
+import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 
 class NavigationController extends GetxController {
-  RxInt tabIndex = 0.obs;
-  RxBool onMoreView = false.obs;
-  final _userController = Get.find<UserController>();
-  Rx<PortalUserItemController> selfUserItem =
-      Rx(PortalUserItemController(portalUser: PortalUser()));
+  final tabIndex = 0.obs;
+  final onMoreView = false.obs;
+  final selfUserItem = Rx(PortalUserItemController(portalUser: PortalUser()));
+  final platformController = Get.find<PlatformController>();
 
+  late bool isMobile;
   int treeLength = 0;
 
   @override
   void onInit() {
-    _userController.getUserInfo().then((value) =>
-        selfUserItem.value = PortalUserItemController(portalUser: _userController.user!));
+    Get.find<UserController>().user.listen((value) {
+      if (value == null) return;
 
+      selfUserItem.value = PortalUserItemController(portalUser: value);
+    });
+
+    isMobile = platformController.isMobile;
     super.onInit();
   }
 
   void showMoreView() {
-    if (onMoreView.value != true) locator<EventHub>().fire('moreViewVisibilityChanged', true);
-
     onMoreView.value = true;
   }
 
   void hideMoreView() {
-    if (onMoreView.value != false) locator<EventHub>().fire('moreViewVisibilityChanged', false);
-
     onMoreView.value = false;
   }
 
@@ -109,36 +109,92 @@ class NavigationController extends GetxController {
   void clearCurrentIndex() => tabIndex.value = 0;
 
   Future toScreen(
+    Widget? widget, {
+    bool? preventDuplicates,
+    Map<String, dynamic>? arguments,
+    Transition? transition,
+    bool? popGesture,
+    bool fullscreenDialog = false,
+    String? page,
+  }) async {
+    if (isMobile) {
+      if (widget != null)
+        return await Get.to(
+          () => widget,
+          preventDuplicates: preventDuplicates ?? false,
+          fullscreenDialog: fullscreenDialog,
+          arguments: arguments,
+          transition: transition ?? Transition.native,
+          popGesture: popGesture,
+        );
+      else
+        return await Get.toNamed(
+          page!,
+          arguments: arguments,
+          preventDuplicates: preventDuplicates ?? false,
+        );
+    } else if (ModalNavigationData.key!.currentState == null) {
+      return await toModalScreen(
+        modalNavigationData: ModalNavigationData(initialPage: page!),
+        arguments: arguments,
+      );
+    } else
+      return await Get.toNamed(
+        page!,
+        id: ModalNavigationData.nestedNavigatorId,
+        arguments: arguments,
+        preventDuplicates: preventDuplicates ?? false,
+      );
+  }
+
+  Future<void> toModalScreen(
+      {required ModalNavigationData modalNavigationData, Map<String, dynamic>? arguments}) async {
+    await showPlatformDialog(ModalScreenViewSkeleton(modalNavigationData: modalNavigationData),
+        arguments: arguments);
+  }
+
+  Future<T?> showPlatformDialog<T>(Widget widget,
+      {Object? arguments, bool? barrierDismissible}) async {
+    if (GetPlatform.isIOS)
+      return await showCupertinoDialog(
+        context: Get.context!,
+        builder: (context) {
+          return widget;
+        },
+        routeSettings: RouteSettings(arguments: arguments),
+        barrierDismissible: barrierDismissible ?? false,
+      );
+    else
+      return await showDialog(
+        context: Get.context!,
+        builder: (context) {
+          return widget;
+        },
+        routeSettings: RouteSettings(arguments: arguments),
+        barrierDismissible: barrierDismissible ?? false,
+      );
+  }
+
+  Future to(
     Widget widget, {
     bool? preventDuplicates,
     Map<String, dynamic>? arguments,
+    Transition? transition,
+    bool? popGesture,
+    bool fullscreenDialog = false,
   }) async {
-    if (Get.find<PlatformController>().isMobile) {
+    if (isMobile) {
       return await Get.to(
         () => widget,
+        popGesture: popGesture,
+        fullscreenDialog: fullscreenDialog,
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
-      );
-    } else {
-      //TODO modal dialog also overlap dimmed background, fix if possible
-      return await Get.dialog(
-        ModalScreenView(contentView: widget),
-        barrierDismissible: false,
-        arguments: arguments,
-      );
-    }
-  }
-
-  Future to(Widget widget, {bool? preventDuplicates, Map<String, dynamic>? arguments}) async {
-    if (Get.find<PlatformController>().isMobile) {
-      await Get.to(
-        () => widget,
-        preventDuplicates: preventDuplicates ?? false,
-        arguments: arguments,
+        transition: transition ?? Transition.native,
       );
     } else {
       treeLength++;
-      await Get.to(
+      return await Get.to(
         () => TabletLayout(contentView: widget),
         transition: Transition.noTransition,
         preventDuplicates: preventDuplicates ?? false,
@@ -146,4 +202,44 @@ class NavigationController extends GetxController {
       );
     }
   }
+
+  void back<T>({
+    bool closeTabletModalScreen = false,
+    T? result,
+  }) {
+    final canPop = ModalNavigationData.key?.currentState?.canPop();
+    if (canPop == true) {
+      Get.back(id: ModalNavigationData.nestedNavigatorId, result: result);
+    } else {
+      Get.back(result: result);
+    }
+  }
+
+  void close(int times) {
+    for (var i = 0; i < times; i++) back();
+  }
+}
+
+class ModalNavigationData {
+  static const nestedNavigatorId = 1;
+
+  static final _pages = getxPages();
+
+  static Route onGenerateRoute(RouteSettings settings) {
+    final getPage = _pages.firstWhere((getPage) => getPage.name == settings.name);
+    return GetPageRoute(page: getPage.page, settings: settings);
+  }
+
+  static List<Route<dynamic>> onGenerateInitialRoutes(_, initialRouteName) {
+    final getPage = _pages.firstWhere((getPage) => getPage.name == initialRouteName);
+    return [GetPageRoute(page: getPage.page)];
+  }
+
+  static GlobalKey<NavigatorState>? get key => Get.nestedKey(nestedNavigatorId);
+
+  String initialPage;
+
+  ModalNavigationData({
+    required this.initialPage,
+  });
 }

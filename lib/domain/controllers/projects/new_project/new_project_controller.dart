@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
@@ -42,9 +44,11 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 
 class NewProjectController extends BaseProjectEditorController {
   final ProjectService _api = locator<ProjectService>();
@@ -56,28 +60,38 @@ class NewProjectController extends BaseProjectEditorController {
   }
 
   void discardChanges() {
-    Get.dialog(StyledAlertDialog(
-      titleText: tr('discardChanges'),
-      contentText: tr('changesWillBeLost'),
-      acceptText: tr('discard'),
-      onAcceptTap: () {
-        Get.back();
-        Get.back();
-      },
-      onCancelTap: Get.back,
-    ));
+    if (!titleIsEmpty.value ||
+        isPMSelected.value ||
+        selectedTeamMembers.isNotEmpty ||
+        descriptionText.isNotEmpty)
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
+        titleText: tr('discardChanges'),
+        contentText: tr('changesWillBeLost'),
+        acceptText: tr('discard'),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
+        onAcceptTap: () {
+          Get.back();
+          Get.find<NavigationController>().back();
+        },
+        onCancelTap: Get.back,
+      ));
+    else
+      Get.back();
   }
 
-  Future<void> confirm(BuildContext context) async {
+  Future<void> confirm() async {
     titleController.text = titleController.text.trim();
     needToFillTitle.value = titleController.text.isEmpty;
 
-    needToFillManager.value =
-        selectedProjectManager.value == null || selectedProjectManager.value!.id == null;
+    needToFillManager.value = selectedProjectManager.value?.id == null;
 
-    if (needToFillTitle.value == true || needToFillManager.value == true) return;
-
-    Get.back();
+    if (needToFillTitle.value == true || needToFillManager.value == true) {
+      unawaited(900.milliseconds.delay().then((value) {
+        needToFillTitle.value = false;
+        needToFillManager.value = false;
+      }));
+      return;
+    }
 
     final participants = <Participant>[];
 
@@ -104,32 +118,38 @@ class NewProjectController extends BaseProjectEditorController {
         tags: tagsText.value);
 
     final result = await _api.createProject(project: newProject);
-    if (result != null) {
-      locator<EventHub>().fire('needToRefreshProjects', ['all']);
+    if (result != null && result.id != null) {
+      if (isFolowed.value) await followProject(projectId: result.id);
+
+      Get.find<NavigationController>().back();
+
+      locator<EventHub>().fire('needToRefreshProjects', {'all': true});
 
       MessagesHandler.showSnackBar(
-        context: context,
+        context: Get.context!,
         text: tr('projectCreated'),
         buttonOnTap: () => Get.find<NavigationController>()
             .to(ProjectDetailedView(), arguments: {'projectDetailed': result}),
         buttonText: tr('open').toUpperCase(),
       );
     } else
-      MessagesHandler.showSnackBar(
-        context: context,
-        text: tr('error'),
-      );
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
+  @override
   Future<void> showTags() async {
     // ignore: unawaited_futures
-    Get.find<NavigationController>()
-        .toScreen(const TagsSelectionView(), arguments: {'controller': this});
+    Get.find<NavigationController>().toScreen(
+      const TagsSelectionView(),
+      arguments: {'controller': this, 'previousPage': NewProject.pageName},
+      transition: Transition.rightToLeft,
+      page: '/TagsSelectionView',
+    );
   }
 
   @override
   // TODO: implement projectData
-  ProjectDetailed? get projectData => throw UnimplementedError();
+  ProjectDetailed? get projectData => ProjectDetailed();
 
   @override
   Future<bool> updateStatus({int? newStatusId}) {

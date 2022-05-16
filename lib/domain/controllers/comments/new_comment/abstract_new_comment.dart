@@ -30,9 +30,13 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 abstract class NewCommentController extends GetxController {
   final int? idFrom;
@@ -43,15 +47,34 @@ abstract class NewCommentController extends GetxController {
     this.idFrom,
   });
 
-  RxBool setTitleError = false.obs;
+  final setTitleError = false.obs;
 
-  HtmlEditorController get textController;
+  final _textController = HtmlEditorController();
+  HtmlEditorController get textController => _textController;
 
-  void addComment(BuildContext context);
+  void addComment();
 
-  void addReplyComment(BuildContext context);
+  void addReplyComment();
 
-  void leavePage();
+  void leavePage() async {
+    final text = await _textController.getText();
+    if (text.isNotEmpty && text != '<br>') {
+      await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
+        onAcceptTap: () {
+          _textController.clear();
+          Get.back();
+          Get.back();
+        },
+        onCancelTap: Get.back,
+      ));
+    } else {
+      Get.back();
+    }
+  }
 
   Future<void> emptyTitleError() async {
     setTitleError.value = true;

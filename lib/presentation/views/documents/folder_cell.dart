@@ -33,9 +33,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -44,6 +45,8 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
@@ -56,74 +59,71 @@ class FolderCell extends StatelessWidget {
   }) : super(key: key);
 
   final Folder entity;
-  final DocumentsController controller;
+  final BaseDocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
+    return InkWell(
       onTap: () {
         Get.find<NavigationController>().to(FolderContentView(),
             preventDuplicates: false,
             arguments: {'folderName': entity.title, 'folderId': entity.id});
       },
-      child: SizedBox(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
         height: 72,
         child: Row(
           children: [
             const FolderCellAvatar(),
-            FolderCellTitle(element: entity),
-            SizedBox(
-              width: 60,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: PopupMenuButton(
-                  onSelected: (dynamic value) => _onFolderPopupMenuSelected(
-                    value,
-                    entity,
-                    context,
-                    controller,
-                  ),
-                  icon: Icon(Icons.more_vert, color: Get.theme.colors().onSurface.withOpacity(0.5)),
-                  itemBuilder: (context) {
-                    return [
-                      PopupMenuItem(
-                        value: 'open',
-                        child: Text(tr('open')),
-                      ),
-                      PopupMenuItem(
-                        value: 'copyLink',
-                        child: Text(tr('copyLink')),
-                      ),
-                      if (Security.documents.canEdit(entity))
-                        PopupMenuItem(
-                          value: 'copy',
-                          child: Text(tr('copy')),
-                        ),
-                      if (!Security.documents.isRoot(entity) &&
-                          Security.documents.canDelete(entity))
-                        PopupMenuItem(
-                          value: 'move',
-                          child: Text(tr('move')),
-                        ),
-                      if (!Security.documents.isRoot(entity) && Security.documents.canEdit(entity))
-                        PopupMenuItem(
-                          value: 'rename',
-                          child: Text(tr('rename')),
-                        ),
-                      if (!Security.documents.isRoot(entity) &&
-                          Security.documents.canDelete(entity))
-                        PopupMenuItem(
-                          value: 'delete',
-                          child: Text(
-                            tr('delete'),
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                          ),
-                        ),
-                    ];
-                  },
-                ),
+            Expanded(child: FolderCellTitle(element: entity)),
+            const SizedBox(width: 16),
+            PlatformPopupMenuButton(
+              padding: EdgeInsets.zero,
+              onSelected: (dynamic value) => _onFolderPopupMenuSelected(
+                value,
+                entity,
+                context,
+                controller,
               ),
+              icon: Icon(PlatformIcons(context).ellipsis,
+                  color: Theme.of(context).colors().onSurface.withOpacity(0.5)),
+              itemBuilder: (context) {
+                return [
+                  PlatformPopupMenuItem(
+                    value: 'open',
+                    child: Text(tr('open')),
+                  ),
+                  PlatformPopupMenuItem(
+                    value: 'copyLink',
+                    child: Text(tr('copyLink')),
+                  ),
+                  if (Security.documents.canEdit(entity))
+                    PlatformPopupMenuItem(
+                      value: 'copy',
+                      child: Text(tr('copy')),
+                    ),
+                  if (!Security.documents.isRoot(entity) && Security.documents.canDelete(entity))
+                    PlatformPopupMenuItem(
+                      value: 'move',
+                      child: Text(tr('move')),
+                    ),
+                  if (!Security.documents.isRoot(entity) && Security.documents.canEdit(entity))
+                    PlatformPopupMenuItem(
+                      value: 'rename',
+                      child: Text(tr('rename')),
+                    ),
+                  if (!Security.documents.isRoot(entity) && Security.documents.canDelete(entity))
+                    PlatformPopupMenuItem(
+                      value: 'delete',
+                      isDestructiveAction: true,
+                      textStyle:
+                          TextStyleHelper.subtitle1(color: Theme.of(context).colors().colorError),
+                      child: Text(tr('delete')),
+                    ),
+                ];
+              },
             ),
+            const SizedBox(width: 8),
           ],
         ),
       ),
@@ -143,24 +143,30 @@ class MoveFolderCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
+    return InkWell(
       onTap: () {
-        final target = controller.target;
-        Get.find<NavigationController>()
-            .to(MoveFolderContentView(), preventDuplicates: false, arguments: {
-          'mode': controller.mode,
-          'target': target,
-          'currentFolder': element,
-          'initialFolderId': controller.initialFolderId,
-          'foldersCount': controller.foldersCount,
-        });
+        Get.find<NavigationController>().toScreen(
+          DocumentsMoveOrCopyView(),
+          preventDuplicates: false,
+          arguments: {
+            'mode': controller.mode,
+            'target': controller.target,
+            'currentFolder': element,
+            'initialFolderId': controller.initialFolderId,
+            'nestingCounter': controller.nestingCounter,
+          },
+          transition: Transition.rightToLeft,
+          page: '/DocumentsMoveOrCopyView',
+        );
       },
-      child: SizedBox(
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
         height: 72,
         child: Row(
           children: [
             const FolderCellAvatar(),
-            FolderCellTitle(element: element),
+            Expanded(child: FolderCellTitle(element: element)),
+            const SizedBox(width: 16)
           ],
         ),
       ),
@@ -181,7 +187,7 @@ class FolderCellAvatar extends StatelessWidget {
         child: AppIcon(
           width: 20,
           height: 20,
-          color: Get.theme.colors().onSurface.withOpacity(0.8),
+          color: Theme.of(context).colors().onSurface.withOpacity(0.8),
           icon: SvgIcons.folder,
         ),
       ),
@@ -199,25 +205,33 @@ class FolderCellTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(
-            child: Text(element.title!.replaceAll(' ', '\u00A0'),
-                maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyleHelper.projectTitle),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Flexible(
+          child: Text(
+            element.title!.replaceAll(' ', '\u00A0'),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyleHelper.subtitle1(),
           ),
-          Text(
-              tr('documentsCaption', args: [
-                formatedDate(element.updated!),
-                element.filesCount.toString(),
-                element.foldersCount.toString()
-              ]),
-              // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
-              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6))),
-        ],
-      ),
+        ),
+        Text(
+          tr(
+            'documentsCaption',
+            args: [
+              formatedDate(element.updated!),
+              element.filesCount.toString(),
+              element.foldersCount.toString()
+            ],
+          ),
+          // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
+          style: TextStyleHelper.caption(
+            color: Theme.of(context).colors().onSurface.withOpacity(0.6),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -226,7 +240,7 @@ Future<void> _onFolderPopupMenuSelected(
   value,
   Folder selectedFolder,
   BuildContext context,
-  DocumentsController controller,
+  dynamic controller,
 ) async {
   switch (value) {
     case 'copyLink':
@@ -237,9 +251,9 @@ Future<void> _onFolderPopupMenuSelected(
 
         if (link.isURL) {
           await Clipboard.setData(ClipboardData(text: link));
-          MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
         } else
-          MessagesHandler.showSnackBar(context: context, text: tr('error'));
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
       }
       break;
     case 'open':
@@ -248,20 +262,30 @@ Future<void> _onFolderPopupMenuSelected(
           arguments: {'folderName': selectedFolder.title, 'folderId': selectedFolder.id});
       break;
     case 'copy':
-      await Get.find<NavigationController>()
-          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': 'copyFolder',
-        'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolder,
-      });
+      await Get.find<NavigationController>().toScreen(
+        DocumentsMoveOrCopyView(),
+        preventDuplicates: false,
+        arguments: {
+          'mode': MoveOrCopyMode.CopyFolder,
+          'target': selectedFolder.id,
+          'initialFolderId': controller.currentFolderID,
+        },
+        transition: Transition.rightToLeft,
+        page: '/DocumentsMoveOrCopyView',
+      );
       break;
     case 'move':
-      await Get.find<NavigationController>()
-          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': 'moveFolder',
-        'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolder,
-      });
+      await Get.find<NavigationController>().toScreen(
+        DocumentsMoveOrCopyView(),
+        preventDuplicates: false,
+        arguments: {
+          'mode': MoveOrCopyMode.MoveFolder,
+          'target': selectedFolder.id,
+          'initialFolderId': controller.currentFolderID,
+        },
+        transition: Transition.rightToLeft,
+        page: '/DocumentsMoveOrCopyView',
+      );
 
       break;
     case 'rename':
@@ -270,21 +294,21 @@ Future<void> _onFolderPopupMenuSelected(
     case 'delete':
       final success = await controller.deleteFolder(selectedFolder);
 
-      if (success) {
-        MessagesHandler.showSnackBar(context: context, text: tr('folderDeleted'));
+      if (success as bool) {
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderDeleted'));
       }
       break;
     default:
   }
 }
 
-void _renameFolder(DocumentsController controller, Folder element, BuildContext context) {
+void _renameFolder(dynamic controller, Folder element, BuildContext context) {
   final inputController = TextEditingController();
   inputController.text = element.title!;
 
   final isErrorInputText = ValueNotifier<bool>(false);
 
-  Get.dialog(
+  Get.find<NavigationController>().showPlatformDialog(
     StyledAlertDialog(
       titleText: tr('renameFolder'),
       content: ValueListenableBuilder<bool>(
@@ -300,17 +324,21 @@ void _renameFolder(DocumentsController controller, Folder element, BuildContext 
       cancelText: tr('cancel'),
       onAcceptTap: () async {
         inputController.text = inputController.text.trim();
+        inputController.selection = TextSelection.fromPosition(
+          TextPosition(offset: inputController.text.length),
+        );
+
         if (inputController.text.isEmpty) {
           isErrorInputText.value = true;
         } else {
           if (inputController.text != element.title) {
-            final success = await controller.renameFolder(element, inputController.text);
+            final success = await controller.renameFolder(element, inputController.text) as bool;
             if (success) {
-              MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
               Get.back();
-            }
-          } else
-            Get.back();
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderRenamed'));
+            } else
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+          }
         }
       },
       onCancelTap: Get.back,
@@ -328,42 +356,63 @@ class _NameFolderTextFieldWidget extends StatelessWidget {
   }) : super(key: key);
 
   final TextEditingController inputController;
-  final DocumentsController controller;
+  final dynamic controller;
   final Folder element;
   final ValueNotifier<bool> isErrorInputText;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return PlatformTextField(
+      makeCupertinoDecorationNull: true,
       autofocus: true,
       textInputAction: TextInputAction.done,
       controller: inputController,
-      decoration: InputDecoration.collapsed(
-        hintText: tr('enterFolderName'),
-        hintStyle: TextStyleHelper.body2(
+      hintText: tr('enterFolderName'),
+      style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface),
+      cupertino: (_, __) => CupertinoTextFieldData(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colors().background,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        placeholderStyle: TextStyleHelper.body2(
           color: isErrorInputText.value
-              ? Get.theme.colors().colorError
-              : Get.theme.colors().onSurface.withOpacity(0.5),
+              ? Theme.of(context).colors().colorError
+              : Theme.of(context).colors().onSurface.withOpacity(0.5),
         ),
       ),
-      onChanged: (_) {
-        if (isErrorInputText.value) {
+      material: (_, __) => MaterialTextFieldData(
+        decoration: InputDecoration.collapsed(
+          hintText: tr('enterFolderName'),
+          fillColor: Theme.of(context).colors().background,
+          hintStyle: TextStyleHelper.body2(
+            color: isErrorInputText.value
+                ? Theme.of(context).colors().colorError
+                : Theme.of(context).colors().onSurface.withOpacity(0.5),
+          ),
+        ),
+      ),
+      onChanged: (value) {
+        if (isErrorInputText.value && value.isNotEmpty) {
           isErrorInputText.value = false;
         }
       },
       onSubmitted: (_) async {
         inputController.text = inputController.text.trim();
+        inputController.selection = TextSelection.fromPosition(
+          TextPosition(offset: inputController.text.length),
+        );
+
         if (inputController.text.isEmpty) {
           isErrorInputText.value = true;
         } else {
           if (inputController.text != element.title) {
-            final success = await controller.renameFolder(element, inputController.text);
+            final success = await controller.renameFolder(element, inputController.text) as bool;
             if (success) {
-              MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
               Get.back();
-            }
-          } else
-            Get.back();
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderRenamed'));
+            } else
+              MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+          }
         }
       },
     );

@@ -43,8 +43,7 @@ class MilestonesController extends GetxController {
 
   @override
   void onInit() {
-    paginationController =
-        Get.put(PaginationController(), tag: 'MilestonesController');
+    paginationController = Get.put(PaginationController(), tag: 'MilestonesController');
 
     paginationController.loadDelegate = () async => await _getMilestones();
     paginationController.refreshDelegate = () async => await refreshData();

@@ -44,6 +44,7 @@ import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
@@ -61,15 +62,18 @@ import 'package:projects/presentation/views/project_detailed/project_detailed_vi
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:synchronized/synchronized.dart';
 
 class TaskItemController extends GetxController {
-  final TaskItemService _api = locator<TaskItemService>();
+  final _api = locator<TaskItemService>();
 
-  Rx<PortalTask> task = PortalTask().obs;
-  Rx<Status> status = Status().obs;
+  final task = PortalTask().obs;
+  final status = Status().obs;
 
-  RxBool loaded = false.obs;
-  RxBool isStatusLoaded = false.obs;
+  final loaded = false.obs;
+  final isStatusLoaded = false.obs;
+
+  final documentsController = Get.find<DocumentsController>();
 
   RefreshController get refreshController {
     return RefreshController();
@@ -85,7 +89,7 @@ class TaskItemController extends GetxController {
 
   set setLoaded(bool value) => loaded.value = value;
 
-  final TaskStatusHandler _statusHandler = TaskStatusHandler();
+  final _statusHandler = TaskStatusHandler();
 
   bool get canEdit => task.value.canEdit! && task.value.status != 2;
 
@@ -103,36 +107,42 @@ class TaskItemController extends GetxController {
   }
 
   // to show overview screen without loading
-  RxBool firstReload = true.obs;
+  final firstReload = true.obs;
 
   final commentsListController = ScrollController();
 
-  late StreamSubscription _refreshParentTaskSubscription;
-  late StreamSubscription _scrollToLastCommentSubscription;
+  final _ss = <StreamSubscription>[];
+  final _toProjectOverviewLock = Lock();
 
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
 
-    _refreshParentTaskSubscription =
-        locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
+    documentsController.entityType = 'task';
+    documentsController.setupFolder(folderId: task.value.id, folderName: task.value.title!);
+
+    _ss.add(locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         final showLoading = data.length > 1 ? data[1] as bool : false;
         await reloadTask(showLoading: showLoading);
       }
-    });
+    }));
 
-    _scrollToLastCommentSubscription =
-        locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
+    _ss.add(locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         scrollToLastComment();
       }
-    });
+    }));
+  }
+
+  void setup(PortalTask portalTask) {
+    task.value = portalTask;
   }
 
   @override
   void onClose() {
-    _refreshParentTaskSubscription.cancel();
-    _scrollToLastCommentSubscription.cancel();
+    for (final element in _ss) {
+      element.cancel();
+    }
     super.onClose();
   }
 
@@ -176,7 +186,7 @@ class TaskItemController extends GetxController {
     controller.addResponsible(
       PortalUserItemController(
         isSelected: true,
-        portalUser: Get.find<UserController>().user!,
+        portalUser: Get.find<UserController>().user.value!,
       ),
     );
     await controller.acceptTask();
@@ -207,7 +217,7 @@ class TaskItemController extends GetxController {
     final copiedTask = await _api.copyTask(copyFrom: task.value.id!, newTask: newTask);
 
     if (copiedTask != null) {
-      locator<EventHub>().fire('needToRefreshTasks');
+      locator<EventHub>().fire('needToRefreshTasks', {'all': true});
 
       final newTaskController =
           Get.put(TaskItemController(copiedTask), tag: copiedTask.id.toString());
@@ -233,7 +243,11 @@ class TaskItemController extends GetxController {
     final t = await _api.getTaskByID(id: task.value.id!);
     if (t != null) {
       task.value = t;
-      await initTaskStatus(task.value);
+
+      unawaited(initTaskStatus(task.value));
+      unawaited(documentsController.refreshContent());
+
+      locator<EventHub>().fire('needToRefreshTasks', {'task': t});
     }
 
     final team = Get.find<ProjectTeamController>()..setup(projectId: task.value.projectOwner!.id);
@@ -247,18 +261,15 @@ class TaskItemController extends GetxController {
       task.value.responsibles!.add(user.portalUser);
     }
 
-    locator<EventHub>().fire('needToRefreshTasks');
-
     if (showLoading) loaded.value = true;
   }
 
-  Future<void> openStatuses(BuildContext context) async {
+  void openStatuses(BuildContext context) {
     if (task.value.canEdit! && isStatusLoaded.isTrue) {
-      if (Get.find<PlatformController>().isMobile) {
+      if (Get.find<PlatformController>().isMobile)
         showsStatusesBS(context: context, taskItemController: this);
-      } else {
-        await showsStatusesPM(context: context, taskItemController: this);
-      }
+      else
+        showsStatusesPM(context: context, taskItemController: this);
     }
   }
 
@@ -269,35 +280,40 @@ class TaskItemController extends GetxController {
   }) async {
     if (newStatusId == status.value.id) return;
 
-    if (newStatusType == 2 && task.value.status != newStatusType && task.value.hasOpenSubtasks) {
-      await Get.dialog(StyledAlertDialog(
-        titleText: tr('closingTask'),
-        contentText: tr('closingTaskWithActiveSubtasks'),
-        acceptText: tr('closeTask').toUpperCase(),
-        onAcceptTap: () async {
+    if (newStatusType == 2) {
+      await reloadTask();
+
+      if (task.value.status != newStatusType) {
+        if (task.value.hasOpenSubtasks) {
+          await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
+            titleText: tr('closingTask'),
+            contentText: tr('closingTaskWithActiveSubtasks'),
+            acceptText: tr('closeTask').toUpperCase(),
+            onAcceptTap: () async {
+              await _changeTaskStatus(
+                  id: id, newStatusId: newStatusId, newStatusType: newStatusType);
+              Get.back();
+            },
+          ));
+        } else
           await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
-          Get.back();
-        },
-      ));
-    } else {
+      }
+    } else
       await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
-    }
   }
 
   Future _changeTaskStatus(
       {required int id, required int newStatusId, required int newStatusType}) async {
-    loaded.value = false;
     final t = await _api.updateTaskStatus(
         taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
 
     if (t != null) {
       final newTask = PortalTask.fromJson(t as Map<String, dynamic>);
-      task.value = newTask;
-      await initTaskStatus(newTask);
+      unawaited(initTaskStatus(newTask));
 
-      locator<EventHub>().fire('needToRefreshTasks');
-    }
-    loaded.value = true;
+      locator<EventHub>().fire('needToRefreshTasks', {'task': newTask});
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   Future<bool> deleteTask({required int taskId}) async {
@@ -317,15 +333,19 @@ class TaskItemController extends GetxController {
   }
 
   Future<void> toProjectOverview() async {
-    final projectService = locator<ProjectService>();
-    final project = await projectService.getProjectById(
-      projectId: task.value.projectOwner!.id!,
-    );
-    if (project != null) {
-      await Get.find<NavigationController>().to(
-        ProjectDetailedView(),
-        arguments: {'projectDetailed': project},
+    if (_toProjectOverviewLock.locked) return;
+
+    unawaited(_toProjectOverviewLock.synchronized(() async {
+      final projectService = locator<ProjectService>();
+      final project = await projectService.getProjectById(
+        projectId: task.value.projectOwner!.id!,
       );
-    }
+      if (project != null) {
+        await Get.find<NavigationController>().to(
+          ProjectDetailedView(),
+          arguments: {'projectDetailed': project},
+        );
+      }
+    }));
   }
 }

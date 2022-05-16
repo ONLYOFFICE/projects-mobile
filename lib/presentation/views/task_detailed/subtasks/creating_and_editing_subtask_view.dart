@@ -31,12 +31,16 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/new_subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_editing_controller.dart';
+import 'package:projects/presentation/shared/platform_icons_ext.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
@@ -64,22 +68,52 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
       controller.init(projectId: projectId);
     }
 
+    final platformController = Get.find<PlatformController>();
+
     return WillPopScope(
       onWillPop: () async {
         controller.leavePage();
         return false;
       },
       child: Scaffold(
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: forEditing ? tr('editSubtask') : tr('addSubtask'),
-          onLeadingPressed: controller.leavePage,
+          leadingWidth: GetPlatform.isIOS ? 100 : null,
+          centerTitle: !GetPlatform.isAndroid,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.done_rounded),
-              onPressed: () =>
-                  controller.confirm(context: context, taskId: taskId ?? -1), // TODO FIX
-            )
+            PlatformWidget(
+              material: (platformContext, __) => IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: () => controller.confirm(context: platformContext, taskId: taskId ?? -1),
+              ),
+              cupertino: (platformContext, __) => CupertinoButton(
+                onPressed: () => controller.confirm(context: platformContext, taskId: taskId ?? -1),
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  tr('done'),
+                  style: TextStyleHelper.headline7(),
+                ),
+              ),
+            ),
           ],
+          leading: PlatformWidget(
+            cupertino: (_, __) => CupertinoButton(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+              onPressed: controller.leavePage,
+              child: Text(
+                tr('cancel').toLowerCase().capitalizeFirst!,
+                style: TextStyleHelper.button(),
+              ),
+            ),
+            material: (_, __) => IconButton(
+              onPressed: controller.leavePage,
+              icon: const Icon(Icons.close),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -92,31 +126,50 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: 56,
+                          width: 72,
                           child: Icon(
                             controller.status!.value == 1
-                                ? Icons.check_box_outline_blank
-                                : Icons.check_box,
+                                ? PlatformIcons(context).unchecked
+                                : PlatformIcons(context).checked,
                             color: const Color(0xFF666666),
                           ),
                         ),
                         Expanded(
                           child: Center(
-                            child: Obx(() => TextField(
-                                  controller: controller.titleController,
-                                  maxLines: null,
-                                  // focusNode = null if subtaskEditingController
-                                  focusNode: controller.titleFocus,
-                                  style: TextStyleHelper.subtitle1(
-                                      color: Get.theme.colors().onBackground),
+                            child: Obx(() {
+                              final setTiltleError = controller.setTiltleError!.value;
+                              return PlatformTextField(
+                                makeCupertinoDecorationNull: true,
+                                controller: controller.titleController,
+                                maxLines: null,
+                                // focusNode = null if subtaskEditingController
+                                focusNode: controller.titleFocus,
+                                style: TextStyleHelper.subtitle1(
+                                    color: Theme.of(context).colors().onBackground),
+                                hintText: tr('describeSubtask'),
+                                cupertino: (_, __) => CupertinoTextFieldData(
+                                  placeholderStyle: TextStyleHelper.subtitle1(
+                                      color: setTiltleError
+                                          ? Theme.of(context).colors().colorError
+                                          : Theme.of(context)
+                                              .colors()
+                                              .onBackground
+                                              .withOpacity(0.5)),
+                                ),
+                                material: (_, __) => MaterialTextFieldData(
                                   decoration: InputDecoration.collapsed(
                                     hintText: tr('describeSubtask'),
                                     hintStyle: TextStyleHelper.subtitle1(
-                                        color: controller.setTiltleError!.value == true
-                                            ? Get.theme.colors().colorError
-                                            : Get.theme.colors().onBackground.withOpacity(0.5)),
+                                        color: setTiltleError
+                                            ? Theme.of(context).colors().colorError
+                                            : Theme.of(context)
+                                                .colors()
+                                                .onBackground
+                                                .withOpacity(0.5)),
                                   ),
-                                )),
+                                ),
+                              );
+                            }),
                           ),
                         ),
                         const SizedBox(width: 4),
@@ -124,7 +177,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const StyledDivider(leftPadding: 56)
+                  const StyledDivider(leftPadding: 72)
                 ],
               ),
               Listener(
@@ -134,12 +187,12 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                         controller.titleFocus!.hasFocus) controller.titleFocus!.unfocus();
                   }
                 },
-                child: ResponsibleTile(
+                child: SubtaskResponsibleTile(
                   controller: controller,
                   enableUnderline: false,
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.clear_rounded,
-                        size: 20, color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                  suffixIcon: PlatformIconButton(
+                    icon: Icon(PlatformIcons(context).clear,
+                        size: 20, color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
                     onPressed: controller.deleteResponsible,
                   ),
                 ),

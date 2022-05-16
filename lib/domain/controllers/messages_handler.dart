@@ -114,7 +114,7 @@ SnackBar _styledSnackBar({
                         child: Text(
                           buttonText,
                           style: TextStyleHelper.button(
-                                  color: Get.theme.colors().primary.withOpacity(0.5))
+                                  color: Theme.of(context).colors().primary.withOpacity(0.5))
                               .copyWith(height: 1),
                         ),
                       ),
@@ -135,7 +135,7 @@ SnackBar _styledSnackBar({
                       child: Center(
                         child: Text(tr('ok'),
                             style: TextStyleHelper.button(
-                                    color: Get.theme.colors().primary.withOpacity(0.5))
+                                    color: Theme.of(context).colors().primary.withOpacity(0.5))
                                 .copyWith(height: 1)),
                       ),
                     ),
@@ -146,7 +146,7 @@ SnackBar _styledSnackBar({
         );
       },
     ),
-    backgroundColor: Get.theme.colors().snackBarColor,
+    backgroundColor: Theme.of(context).colors().snackBarColor,
     padding: const EdgeInsets.only(top: 2, bottom: 2, left: 16, right: 10),
     margin: const EdgeInsets.only(left: 8, right: 8, bottom: 9),
     behavior: SnackBarBehavior.floating,

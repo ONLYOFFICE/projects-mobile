@@ -54,20 +54,24 @@ Future<void> statusSelectionBS(
     headerHeight: 60,
     initHeight: _getInititalSize(statusCount: _statusesController.statuses.length),
     decoration: BoxDecoration(
-        color: Get.theme.colors().surface,
+        color: Theme.of(context).colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 18.5),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(tr('selectStatus'),
-                style: TextStyleHelper.h6(color: Get.theme.colors().onSurface)),
-          ),
-          const SizedBox(height: 18.5),
-        ],
+      return Container(
+        decoration: BoxDecoration(
+            color: Theme.of(context as BuildContext).colors().surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(tr('selectStatus'),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
+            ),
+          ],
+        ),
       );
     },
     builder: (context, bottomSheetOffset) {
@@ -77,7 +81,9 @@ Future<void> statusSelectionBS(
             () => DecoratedBox(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(width: 1, color: Get.theme.colors().outline.withOpacity(0.5)),
+                  top: BorderSide(
+                      width: 1,
+                      color: Theme.of(context as BuildContext).colors().outline.withOpacity(0.5)),
                 ),
               ),
               child: Column(
@@ -90,7 +96,7 @@ Future<void> statusSelectionBS(
                         Get.back();
                       },
                       child: StatusTile(
-                          title: _statusesController.statuses[i].title,
+                          title: _statusesController.statuses[i].title!,
                           icon: StatusIcon(
                             canEditTask: true,
                             status: _statusesController.statuses[i],

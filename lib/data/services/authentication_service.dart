@@ -88,7 +88,8 @@ class AuthService {
   }) async {
     var authResponse = await _api.loginByUsername(email: email, pass: pass);
 
-    if (authResponse.error is CustomError && authResponse.error?.message == 'Redirect') {
+    if (authResponse.error is CustomError &&
+        authResponse.error?.message.contains('authentication failed') == false) {
       locator.get<CoreApi>().redirectPortal();
       authResponse = await _api.loginByUsername(email: email, pass: pass);
     }

@@ -31,13 +31,19 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/option_with_switch.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/views/project_detailed/project_overview.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/project_manager.dart';
@@ -46,35 +52,57 @@ import 'package:projects/presentation/views/projects_view/new_project/tiles/team
 import 'package:projects/presentation/views/projects_view/new_project/tiles/title.dart';
 
 class EditProjectView extends StatelessWidget {
-  final ProjectDetailed? projectDetailed;
+  const EditProjectView({Key? key}) : super(key: key);
 
-  const EditProjectView({Key? key, required this.projectDetailed})
-      : super(
-          key: key,
-        );
+  static String get pageName => tr('editProject');
 
   @override
   Widget build(BuildContext context) {
     final editProjectController = Get.find<ProjectEditController>();
     editProjectController.setupEditor(Get.arguments['projectDetailed'] as ProjectDetailed);
-
+    final platformController = Get.find<PlatformController>();
     return WillPopScope(
       onWillPop: () async {
         editProjectController.discardChanges();
         return false;
       },
       child: Scaffold(
-        backgroundColor: Get.theme.backgroundColor,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('editProject'),
-          elevation: 1,
-          onLeadingPressed: editProjectController.discardChanges,
+          centerTitle: !GetPlatform.isAndroid,
+          leadingWidth: GetPlatform.isIOS ? 100 : null,
+          leading: PlatformWidget(
+            cupertino: (_, __) => CupertinoButton(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+              onPressed: editProjectController.discardChanges,
+              child: Text(
+                tr('cancel').toLowerCase().capitalizeFirst!,
+                style: TextStyleHelper.button(),
+              ),
+            ),
+            material: (_, __) => IconButton(
+              onPressed: editProjectController.discardChanges,
+              icon: const Icon(Icons.close),
+            ),
+          ),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.check_outlined),
-              onPressed: () => {
-                editProjectController.confirmChanges(),
-              },
+            PlatformWidget(
+              material: (platformContext, __) => IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: editProjectController.confirmChanges,
+              ),
+              cupertino: (platformContext, __) => CupertinoButton(
+                onPressed: editProjectController.confirmChanges,
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  tr('done'),
+                  style: TextStyleHelper.headline7(),
+                ),
+              ),
             ),
           ],
         ),
@@ -87,31 +115,34 @@ class EditProjectView extends StatelessWidget {
                     controller: editProjectController,
                     showCaption: true,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 72, bottom: 10, top: 10),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: ProjectStatusButton(projectController: editProjectController)),
-                  ),
+                  const StyledDivider(leftPadding: 72),
                   ProjectDescriptionTile(controller: editProjectController),
                   ProjectManagerTile(controller: editProjectController),
                   TeamMembersTile(controller: editProjectController),
                   TagsTile(controller: editProjectController),
                   AdvancedOptions(
-                    options: <Widget>[
-                      OptionWithSwitch(
-                        title: tr('privateProject'),
-                        switchValue: editProjectController.isPrivate,
-                        switchOnChanged: (bool value) {
-                          editProjectController.setPrivate(value);
-                        },
+                    options: [
+                      const StyledDivider(leftPadding: 72),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                        child: OptionWithSwitch(
+                          title: tr('privateProject'),
+                          switchValue: editProjectController.isPrivate,
+                          switchOnChanged: (bool value) {
+                            editProjectController.setPrivate(value);
+                          },
+                        ),
                       ),
-                      OptionWithSwitch(
-                        title: tr('notifyPM'),
-                        switchValue: editProjectController.notificationEnabled,
-                        switchOnChanged: (bool value) {
-                          editProjectController.enableNotification(value);
-                        },
+                      const StyledDivider(leftPadding: 72),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                        child: OptionWithSwitch(
+                          title: tr('notifyPM'),
+                          switchValue: editProjectController.notificationEnabled,
+                          switchOnChanged: (bool value) {
+                            editProjectController.enableNotification(value);
+                          },
+                        ),
                       ),
                     ],
                   ),

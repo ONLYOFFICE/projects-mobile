@@ -32,14 +32,15 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
-import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
-import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 
 class ProjectManagerTile extends StatelessWidget {
   const ProjectManagerTile({
@@ -56,25 +57,31 @@ class ProjectManagerTile extends StatelessWidget {
         final _isNotEmpty = controller.isPMSelected.value;
 
         return NewItemTile(
-          caption: _isNotEmpty ? '${tr('project')}:' : null,
+          caption: _isNotEmpty ? '${tr('projectManager')}:' : null,
           text: _isNotEmpty ? controller.managerName.value : tr('choosePM'),
           icon: SvgIcons.user,
-          textColor: controller.needToFillManager.value ? Get.theme.colors().colorError : null,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
+          textColor:
+              controller.needToFillManager.value ? Theme.of(context).colors().colorError : null,
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
-              ? InkWell(
-                  onTap: controller.removeManager,
-                  child: Icon(
-                    Icons.close,
+              ? PlatformIconButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: controller.removeManager,
+                  icon: Icon(
+                    PlatformIcons(context).clear,
                     size: 24,
-                    color: Get.theme.colors().onBackground,
+                    color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                   ),
                 )
               : null,
-          onTap: () => Get.find<NavigationController>()
-              .toScreen(const ProjectManagerSelectionView(), arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>().toScreen(
+            ProjectManagerSelectionView(),
+            arguments: {'controller': controller, 'previousPage': NewProject.pageName},
+            transition: Transition.rightToLeft,
+            page: '/ProjectManagerSelectionView',
+          ),
         );
       },
     );

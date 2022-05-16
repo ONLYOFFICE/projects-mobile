@@ -471,5 +471,32 @@
 	"removeAccount": "löschen",
 	"addNewAccount": "Neues Konto hinzufügen",
 	"noGroups": "Keine Gruppen gefunden",
-	"searchTags": "Suchen nach Tags..."
+	"searchTags": "Suchen nach Tags...",
+	"done": "Fertig",
+	"closeLowerCase": "Schließen",
+	"discussionIsOpen": "Offen",
+	"discussionInArchive": "Im Archiv",
+	"openDiscussion": "Öffnen",
+	"archiveDiscussion": "Archivieren",
+	"overwriteDialogTitle": "Name duplizieren",
+	"overwriteDialogContent": {
+		"beforeText": "Es gibt schon eine Datei mit dem Namen",
+		"afterText": "im ausgewählten Ordner."
+	},
+	"overwriteConfirmation": "Überschreiben",
+	"duplicateConfirmation": "Beide speichern",
+	"skipConfirmation": "Auslassen",
+	"loading": "Ladevorgang",
+	"disablePasscode": "Passcode deaktivieren",
+	"downloadComplete": "Download abgeschlossen",
+	"downloadError": "Download-Fehler",
+	"noPermission": "Keine Berechtigung",
+	"clearCacheQuestion": "Cache löschen?",
+	"clearCacheQuestionDescription": "Durch diesen Vorgang wird Speicherplatz auf Ihrem Gerät freigegeben, indem temporäre Dateien gelöscht werden. Ihre Offline-Dateien und persönlichen Daten werden nicht entfernt.",
+	"openFileError": "Die Datei konnte nicht geöffnet werden",
+	"cancelDownload": "Download abbrechen",
+	"downloading": "Wird heruntergeladen",
+	"faceID": "Mit Face-ID öffnen",
+	"subtaskDeleted": "Teilaufgabe gelöscht",
+	"newProject": "Neues Projekt"
 }

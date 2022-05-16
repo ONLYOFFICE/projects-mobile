@@ -31,13 +31,18 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 
 abstract class BaseController extends GetxController {
   late String screenName;
-  RxList<dynamic> get itemList;
-  final hasFilters = false.obs;
 
+  final hasFilters = false.obs;
+  final loaded = false.obs;
   final showAll = false.obs;
   final expandedCardView = true.obs;
+
   void showSearch() {}
+
+  PaginationController get paginationController;
+  RxList get itemList;
 }

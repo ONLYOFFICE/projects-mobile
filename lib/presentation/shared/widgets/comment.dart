@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
@@ -42,6 +43,8 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
@@ -80,56 +83,49 @@ class Comment extends StatelessWidget {
         );
       }
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 4),
-            child: _CommentAuthor(comment: comment, controller: controller),
-          ),
-          const SizedBox(height: 28),
-          Obx(
-            () {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: HtmlWidget(
-                      controller.comment?.value.commentBody ?? '',
-                      textStyle: TextStyle(
-                        color: Get.theme.colors().onBackground,
-                      ),
-                      customStylesBuilder: (element) {
-                        if (element.attributes.containsKey('style') &&
-                            element.attributes['style']!.contains('color')) {
-                          element.attributes['style'] = '';
-                        }
-                      },
-                      factoryBuilder: () => _HTMLWidgetFactory(),
-                    ),
-                  ),
-                  if (comment.isResponsePermissions!) const SizedBox(height: 5),
-                  if (comment.isResponsePermissions!)
-                    GestureDetector(
-                      onTap: () async {
-                        return await Get.find<NavigationController>()
-                            .toScreen(const ReplyCommentView(), arguments: {
-                          'comment': controller.comment!.value,
-                          'discussionId': discussionId,
-                          'taskId': taskId,
-                        });
-                      },
-                      child: Text(
-                        tr('reply'),
-                        style: TextStyleHelper.caption(color: Get.theme.colors().primary),
-                      ),
-                    ),
-                ],
-              );
-            },
-          ),
-        ],
+      return Container(
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _CommentAuthor(comment: comment, controller: controller),
+            const SizedBox(height: 8),
+            Obx(
+              () => HtmlWidget(
+                controller.comment?.value.commentBody?.trim() ?? '',
+                textStyle: TextStyleHelper.body1(color: Theme.of(context).colors().onBackground),
+                customStylesBuilder: (element) {
+                  if (element.attributes.containsKey('style') &&
+                      element.attributes['style']!.contains('color')) {
+                    element.attributes['style'] = '';
+                  }
+                },
+                factoryBuilder: () => _HTMLWidgetFactory(),
+              ),
+            ),
+            if (comment.isResponsePermissions!)
+              PlatformTextButton(
+                padding: const EdgeInsets.only(top: 8),
+                onPressed: () async {
+                  return await Get.find<NavigationController>().toScreen(
+                    const ReplyCommentView(),
+                    arguments: {
+                      'comment': controller.comment!.value,
+                      'discussionId': discussionId,
+                      'taskId': taskId,
+                    },
+                    page: '/ReplyCommentView',
+                  );
+                },
+                alignment: Alignment.centerLeft,
+                cupertino: (_, __) => CupertinoTextButtonData(minSize: 0),
+                child: Text(
+                  tr('reply'),
+                  style: TextStyleHelper.caption(color: Theme.of(context).colors().primary),
+                ),
+              ),
+          ],
+        ),
       );
     }
     if (comment.show) return const _DeletedComment();
@@ -143,14 +139,35 @@ class _HTMLWidgetFactory extends WidgetFactory {
   @override
   Widget? buildImage(BuildMetadata meta, ImageMetadata data) {
     final url = meta.element.attributes['src'];
-    if (url != null && url.isNotEmpty && url.contains(_portalInfo.portalName!)) {
+    if (url == null || url.isEmpty) return null;
+
+    if (!url.contains('http'))
+      return Image.network(
+        _portalInfo.portalUri! + url,
+        headers: _portalInfo.headers,
+        loadingBuilder: _imageLoadingBuilder,
+      );
+
+    if (url.contains(_portalInfo.portalName!))
       return Image.network(
         url,
-        headers: _portalInfo.headers as Map<String, String>?,
+        headers: _portalInfo.headers,
+        loadingBuilder: _imageLoadingBuilder,
       );
-    }
 
     return super.buildImage(meta, data);
+  }
+
+  Widget _imageLoadingBuilder(
+      BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+    if (loadingProgress == null) return child;
+    return Center(
+      child: CircularProgressIndicator.adaptive(
+        value: loadingProgress.expectedTotalBytes != null
+            ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+            : null,
+      ),
+    );
   }
 }
 
@@ -185,47 +202,41 @@ class _CommentAuthor extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(comment.userFullName!, style: TextStyleHelper.projectTitle),
+              Text(comment.userFullName!, style: TextStyleHelper.subtitle1()),
               Text(comment.timeStampStr!,
                   style: TextStyleHelper.caption(
-                      color: Get.theme.colors().onBackground.withOpacity(0.6))),
+                      color: Theme.of(context).colors().onBackground.withOpacity(0.6))),
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 7),
-          child: SizedBox(
-            width: 60,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 35),
-              child: PopupMenuButton(
-                onSelected: (String value) => _onSelected(value, controller),
-                icon: Icon(Icons.more_vert_rounded,
-                    size: 25, color: Get.theme.colors().onSurface.withOpacity(0.5)),
-                itemBuilder: (context) {
-                  return [
-                    PopupMenuItem(
-                      value: 'Copy link',
-                      child: Text(tr('copyLink')),
-                    ),
-                    if (comment.isEditPermissions!)
-                      PopupMenuItem(
-                        value: 'Edit',
-                        child: Text(tr('edit')),
-                      ),
-                    if (comment.isEditPermissions!)
-                      PopupMenuItem(
-                        value: 'Delete',
-                        child: Text(
-                          tr('delete'),
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                        ),
-                      ),
-                  ];
-                },
-              ),
-            ),
+        PlatformPopupMenuButton(
+          padding: EdgeInsets.zero,
+          onSelected: (value) => _onSelected(value as String, controller),
+          icon: Icon(
+            PlatformIcons(context).ellipsis,
+            color: Theme.of(context).colors().onSurface.withOpacity(0.5),
           ),
+          itemBuilder: (context) {
+            return [
+              PlatformPopupMenuItem(
+                value: 'Copy link',
+                child: Text(tr('copyLink')),
+              ),
+              if (comment.isEditPermissions!)
+                PlatformPopupMenuItem(
+                  value: 'Edit',
+                  child: Text(tr('edit')),
+                ),
+              if (comment.isEditPermissions!)
+                PlatformPopupMenuItem(
+                  value: 'Delete',
+                  isDestructiveAction: true,
+                  textStyle:
+                      TextStyleHelper.subtitle1(color: Theme.of(context).colors().colorError),
+                  child: Text(tr('delete')),
+                ),
+            ];
+          },
         ),
       ],
     );
@@ -240,8 +251,13 @@ class _DeletedComment extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Text(tr('commentDeleted'), style: TextStyleHelper.body2()),
+        padding: const EdgeInsets.only(top: 8),
+        child: Text(
+          tr('commentDeleted'),
+          style: TextStyleHelper.body2(
+            color: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          ),
+        ),
       ),
     );
   }

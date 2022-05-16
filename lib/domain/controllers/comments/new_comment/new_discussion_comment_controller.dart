@@ -31,98 +31,70 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class NewDiscussionCommentController extends NewCommentController {
   final CommentsService _api = locator<CommentsService>();
 
-  @override
-  // ignore: overridden_fields
-  final int? idFrom;
-  @override
-  // ignore: overridden_fields
-  final String? parentId;
-
   NewDiscussionCommentController({
-    this.parentId,
-    this.idFrom,
-  });
-
-  final HtmlEditorController _textController = HtmlEditorController();
+    String? parentId,
+    int? idFrom,
+  }) : super(idFrom: idFrom, parentId: parentId);
 
   @override
-  HtmlEditorController get textController => _textController;
-
-  @override
-  Future addComment(BuildContext context) async {
-    final text = await _textController.getText();
-    if (text.isEmpty) {
+  Future addComment() async {
+    final text = await textController.getText();
+    if (text.isEmpty || text == '<br>')
       await emptyTitleError();
-    } else {
+    else {
       setTitleError.value = false;
-      final newComment =
-          await _api.addMessageComment(content: text, messageId: idFrom!);
+
+      final newComment = await _api.addMessageComment(content: text, messageId: idFrom!);
       if (newComment != null) {
-        _textController.clear();
-        final discussionController = Get.find<DiscussionItemController>();
+        textController.clear();
+
+        final discussionController = Get.find<DiscussionItemController>(tag: idFrom.toString());
         await discussionController.onRefresh(showLoading: false);
         discussionController.scrollToLastComment();
+
         Get.back();
-        MessagesHandler.showSnackBar(
-            context: context, text: tr('commentCreated'));
-      }
+
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('commentCreated'));
+      } else
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
     }
   }
 
   @override
-  Future addReplyComment(BuildContext context) async {
-    final text = await _textController.getText();
-    if (text.isEmpty) {
+  Future addReplyComment() async {
+    final text = await textController.getText();
+    if (text.isEmpty || text == '<br>')
       await emptyTitleError();
-    } else {
+    else {
       setTitleError.value = false;
+
       final newComment = await _api.addMessageReplyComment(
         content: text,
         messageId: idFrom!,
         parentId: parentId!,
       );
-      if (newComment != null) {
-        _textController.clear();
-        final discussionController = Get.find<DiscussionItemController>();
-        // ignore: unawaited_futures
-        discussionController.onRefresh();
-        Get.back();
-        MessagesHandler.showSnackBar(
-            context: context, text: tr('commentCreated'));
-      }
-    }
-  }
 
-  @override
-  Future<void> leavePage() async {
-    final text = await _textController.getText();
-    if (text.isNotEmpty) {
-      await Get.dialog(StyledAlertDialog(
-        titleText: tr('discardChanges'),
-        contentText: tr('lostOnLeaveWarning'),
-        acceptText: tr('delete').toUpperCase(),
-        onAcceptTap: () {
-          _textController.clear();
-          Get.back();
-          Get.back();
-        },
-        onCancelTap: Get.back,
-      ));
-    } else {
-      Get.back();
+      if (newComment != null) {
+        textController.clear();
+
+        final discussionController = Get.find<DiscussionItemController>(tag: idFrom.toString());
+        await discussionController.onRefresh(showLoading: false);
+
+        Get.back();
+
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('commentCreated'));
+      } else
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
     }
   }
 }

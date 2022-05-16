@@ -30,20 +30,22 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:darq/darq.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
@@ -51,10 +53,11 @@ import 'package:projects/domain/controllers/projects/new_project/portal_group_it
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
-class NewDiscussionController extends GetxController implements DiscussionActionsController {
+class NewDiscussionController extends DiscussionActionsController {
   final DiscussionsService _api = locator<DiscussionsService>();
 
   int? _selectedProjectId;
@@ -65,24 +68,13 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   // final _userController = Get.find<UserController>();
   final UserService _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
+  final navigationController = Get.find<NavigationController>();
   List<PortalGroupItemController> selectedGroups = <PortalGroupItemController>[];
   final _manualSelectedPersons = [];
 
-  @override
-  final title = RxString('');
-
-  @override
-  final selectedProjectTitle = RxString('');
-
-  @override
-  final text = RxString('');
-
-  @override
-  HtmlEditorController textController = HtmlEditorController();
-
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _userSearchController = TextEditingController();
-  final FocusNode _titleFocus = FocusNode();
+  final _titleController = TextEditingController();
+  final _userSearchController = TextEditingController();
+  final _titleFocus = FocusNode();
 
   @override
   TextEditingController get titleController => _titleController;
@@ -93,23 +85,8 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   @override
   FocusNode get titleFocus => _titleFocus;
 
-  @override
-  final otherUsers = <PortalUserItemController>[].obs;
-
   var _team = [];
-  @override
-  final subscribers = <PortalUserItemController>[].obs;
   var _previousSelectedSubscribers = []; // to track changes
-
-  @override
-  RxBool selectProjectError = false.obs;
-  @override
-  RxBool setTitleError = false.obs;
-  @override
-  RxBool setTextError = false.obs;
-
-  @override
-  RxBool titleIsEmpty = true.obs;
 
   NewDiscussionController({int? projectId, String? projectTitle}) {
     if (projectId != null && projectTitle != null) {
@@ -141,11 +118,11 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   void changeTitle(String newText) => title.value = newText;
 
   @override
-  void changeProjectSelection({int? id, String? title}) {
+  void changeProjectSelection(ProjectDetailed? _details) {
     if (_projectIsLocked) return;
-    if (id != null && title != null) {
-      selectedProjectTitle.value = title;
-      _selectedProjectId = id;
+    if (_details != null) {
+      selectedProjectTitle.value = _details.title!;
+      _selectedProjectId = _details.id;
       selectProjectError.value = false;
 
       saveManualSelectedPersons();
@@ -154,7 +131,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     } else {
       removeProjectSelection();
     }
-    Get.back();
+    navigationController.back();
   }
 
   void addTeam() {
@@ -182,32 +159,6 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   }
 
   @override
-  Future<void> confirmText() async {
-    text.value = await textController.getText();
-    Get.back();
-  }
-
-  @override
-  Future<void> leaveTextView() async {
-    final t = await textController.getText();
-
-    if (t == text.value) {
-      Get.back();
-    } else {
-      await Get.dialog(StyledAlertDialog(
-        titleText: tr('discardChanges'),
-        contentText: tr('lostOnLeaveWarning'),
-        acceptText: tr('delete').toUpperCase(),
-        onAcceptTap: () {
-          Get.back();
-          Get.back();
-        },
-        onCancelTap: Get.back,
-      ));
-    }
-  }
-
-  @override
   void confirmSubscribersSelection() {
     for (final user in _usersDataSource.usersList) {
       if (!subscribers.any((it) => it.id == user.id) && user.isSelected.value) {
@@ -217,23 +168,24 @@ class NewDiscussionController extends GetxController implements DiscussionAction
 
     _previousSelectedSubscribers = List.of(subscribers);
     clearUserSearch();
-    Get.back();
+    navigationController.back();
   }
 
   @override
   void leaveSubscribersSelectionView() {
     if (listEquals(_previousSelectedSubscribers, subscribers)) {
-      Get.back();
+      navigationController.back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           subscribers.value = RxList.from(_previousSelectedSubscribers);
           clearUserSearch();
           Get.back();
-          Get.back();
+          navigationController.back();
         },
         onCancelTap: Get.back,
       ));
@@ -323,7 +275,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     await _getSelectedSubscribers();
     await _usersDataSource.updateUsers();
 
-    Get.back();
+    navigationController.back();
   }
 
   @override
@@ -332,7 +284,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     _usersDataSource.clearSearch();
   }
 
-  Future<void> confirm(BuildContext context) async {
+  Future<void> confirm() async {
     if (_selectedProjectId == null) selectProjectError.value = true;
 
     title.value = title.value.trim();
@@ -341,9 +293,14 @@ class NewDiscussionController extends GetxController implements DiscussionAction
 
     if (text.isEmpty) setTextError.value = true;
 
-    if (_selectedProjectId == null || title.isEmpty || text.isEmpty) return;
-
-    Get.back();
+    if (selectProjectError.value || setTitleError.value || setTextError.value) {
+      unawaited(900.milliseconds.delay().then((value) {
+        selectProjectError.value = false;
+        setTitleError.value = false;
+        setTextError.value = false;
+      }));
+      return;
+    }
 
     // ignore: omit_local_variable_types
     final List<String?> subscribersIds = [];
@@ -364,19 +321,23 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     );
 
     if (createdDiss != null) {
-      locator<EventHub>().fire('needToRefreshDetails', [_selectedProjectId]);
-      locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
+      navigationController.back();
+
+      final discussionController = Get.put<DiscussionItemController>(DiscussionItemController(),
+          tag: createdDiss.id.toString());
+      discussionController.setup(createdDiss);
+      locator<EventHub>().fire('needToRefreshDiscussions', {'all': true});
 
       MessagesHandler.showSnackBar(
-          context: context,
+          context: Get.context!,
           text: tr('discussionCreated'),
           buttonText: tr('open').toUpperCase(),
           buttonOnTap: () {
             return Get.find<NavigationController>()
-                .to(DiscussionDetailed(), arguments: {'discussion': createdDiss});
+                .to(DiscussionDetailed(), arguments: {'controller': discussionController});
           });
     } else
-      MessagesHandler.showSnackBar(context: context, text: tr('error'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   void discardDiscussion() {
@@ -384,36 +345,22 @@ class NewDiscussionController extends GetxController implements DiscussionAction
         title.isNotEmpty ||
         subscribers.isNotEmpty ||
         text.isNotEmpty) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardDiscussion'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          navigationController.back();
         },
         onCancelTap: Get.back,
       ));
     } else {
-      Get.back();
+      navigationController.back(closeTabletModalScreen: true);
     }
   }
 
   @override
   void removeSubscriber(PortalUserItemController user) {}
-
-  @override
-  set selectedProjectTitle(RxString _selectedProjectTitle) {
-    // TODO: implement selectedProjectTitle
-  }
-
-  @override
-  set text(RxString _text) {
-    // TODO: implement text
-  }
-
-  @override
-  set title(RxString _title) {
-    // TODO: implement title
-  }
 }

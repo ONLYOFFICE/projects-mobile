@@ -38,6 +38,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -50,7 +51,7 @@ class CodeView extends StatefulWidget {
 
 class _CodeViewState extends State<CodeView> {
   // TODO make Stateless?
-  LoginController controller = Get.find<LoginController>();
+  final controller = Get.find<LoginController>();
   TextEditingController codeController = TextEditingController();
 
   @override
@@ -62,11 +63,10 @@ class _CodeViewState extends State<CodeView> {
           body: SingleChildScrollView(
             child: Center(
               child: Container(
-                color: Get.theme.backgroundColor,
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Column(
                   children: [
-                    SizedBox(height: Get.height * 0.165),
+                    SizedBox(height: Get.height * 0.1),
                     //TODO fix dark theme icon
                     const AppIcon(
                       hasDarkVersion: true,
@@ -79,7 +79,8 @@ class _CodeViewState extends State<CodeView> {
                     SizedBox(height: Get.height * 0.0347),
                     Text(tr('tfaTitle'),
                         textAlign: TextAlign.center,
-                        style: TextStyleHelper.headline5(color: Get.theme.colors().onSurface)),
+                        style:
+                            TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
                     SizedBox(height: Get.height * 0.0222),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -87,16 +88,18 @@ class _CodeViewState extends State<CodeView> {
                         tr('tfaGAcodeDescription'),
                         textAlign: TextAlign.center,
                         style: TextStyleHelper.body2(
-                            color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                            color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
                       ),
                     ),
                     SizedBox(height: Get.height * 0.0333),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 36),
-                      child: TextField(
+                      child: AuthTextField(
                         controller: codeController,
-                        textAlign: TextAlign.center,
-                        style: TextStyleHelper.subtitle1(),
+                        hintText: tr('code'),
+                        keyboardType: TextInputType.number,
+                        onSubmitted: controller.sendCode,
+                        //textAlign: TextAlign.center,
                       ),
                     ),
                     SizedBox(height: Get.height * 0.055),

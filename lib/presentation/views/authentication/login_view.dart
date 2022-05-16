@@ -30,12 +30,14 @@
  *
  */
 
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
@@ -45,113 +47,117 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class LoginView extends StatelessWidget {
-  const LoginView({Key? key}) : super(key: key);
+  LoginView({Key? key}) : super(key: key);
+
+  final controller = Get.find<LoginController>();
+  final passwordFocusNode = FocusNode();
+
+  final styledAppBar = StyledAppBar(
+    previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
+    onLeadingPressed: Get.back,
+    titleWidth: TextUtils.getTextWidth(
+      tr('addNewAccount'),
+      TextStyleHelper.headline6(),
+    ),
+    elevation: 1,
+    title: Text(
+      tr('addNewAccount'),
+      style: TextStyleHelper.headline6(color: Theme.of(Get.context!).colors().onSurface),
+    ),
+    titleHeight: Platform.isIOS ? 50 : 56,
+  );
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<LoginController>();
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      controller.setState(ViewState.Idle);
-    });
-
     return WillPopScope(
       onWillPop: () async {
         controller.leaveLoginScreen();
         return false;
       },
-      child: Obx(
-        () => controller.state.value == ViewState.Busy
-            ? Scaffold(
-                body: SizedBox(
-                    height: Get.height, child: const Center(child: CircularProgressIndicator())))
-            : Scaffold(
-                appBar: StyledAppBar(
-                  onLeadingPressed: controller.leaveLoginScreen,
-                  title: Text(
-                    tr('addNewAccount'),
-                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                  ),
+      child: Scaffold(
+        appBar: styledAppBar,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                constraints: BoxConstraints(
+                  maxWidth: 480,
+                  maxHeight: Get.height -
+                      styledAppBar.titleHeight -
+                      styledAppBar.getBottomHeight -
+                      MediaQuery.of(context).padding.bottom -
+                      MediaQuery.of(context).padding.top,
                 ),
-                body: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      SizedBox(height: Get.height * 0.094),
-                      Text('${tr('portalAdress')}:',
-                          style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
-                      Text(controller.portalAdress,
-                          style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
-                      Center(
-                        child: Container(
-                          color: Get.theme.backgroundColor,
-                          constraints: const BoxConstraints(maxWidth: 480),
-                          child: Padding(
-                            padding: const EdgeInsets.all(36),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Obx(
-                                  () => Form(
-                                    child: Column(
-                                      children: [
-                                        AuthTextField(
-                                          hintText: tr('email'),
-                                          controller: controller.emailController,
-                                          autofillHint: AutofillHints.email,
-                                          hasError: controller.emailFieldError.value,
-                                        ),
-                                        SizedBox(height: Get.height * 0.0444),
-                                        AuthTextField(
-                                          hintText: tr('password'),
-                                          controller: controller.passwordController,
-                                          hasError: controller.passwordFieldError.value,
-                                          autofillHint: AutofillHints.password,
-                                          obscureText: true,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: Get.height * 0.0333),
-                                DecoratedBox(
-                                  decoration: BoxDecoration(boxShadow: [
-                                    BoxShadow(
-                                        blurRadius: 3,
-                                        offset: const Offset(0, 0.85),
-                                        color: Get.theme.colors().onBackground.withOpacity(0.19)),
-                                    BoxShadow(
-                                        blurRadius: 3,
-                                        offset: const Offset(0, 0.25),
-                                        color: Get.theme.colors().onBackground.withOpacity(0.04)),
-                                  ]),
-                                  child: WideButton(
-                                    text: tr('next'),
-                                    onPressed: () async => await controller.loginByPassword(),
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                TextButton(
-                                  onPressed: () async => Get.to<PasswordRecoveryScreen1>(
-                                    () => const PasswordRecoveryScreen1(),
-                                    arguments: {'email': controller.emailController.text},
-                                  ),
-                                  child: Text(
-                                    tr('forgotPassword'),
-                                    style: TextStyleHelper.subtitle2(
-                                      color: Get.theme.colors().primary,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: Get.height * 0.18),
-                                PrivacyAndTermsFooter(),
-                              ],
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const Spacer(flex: 2),
+                    Text('${tr('portalAdress')}:',
+                        style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface)),
+                    const SizedBox(height: 8),
+                    Text(controller.portalAdress,
+                        style:
+                            TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
+                    const Spacer(),
+                    Obx(
+                      () => Form(
+                        child: Column(
+                          children: [
+                            AuthTextField(
+                              hintText: tr('email'),
+                              controller: controller.emailController,
+                              autofillHint: AutofillHints.email,
+                              hasError: controller.emailFieldError.value,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              onSubmitted: (_) {
+                                FocusScope.of(context).requestFocus(passwordFocusNode);
+                              },
                             ),
-                          ),
+                            const SizedBox(height: 20),
+                            AuthTextField(
+                              hintText: tr('password'),
+                              focusNode: passwordFocusNode,
+                              controller: controller.passwordController,
+                              hasError: controller.passwordFieldError.value,
+                              autofillHint: AutofillHints.password,
+                              textInputAction: TextInputAction.done,
+                              obscureText: true,
+                              keyboardType: TextInputType.visiblePassword,
+                              onSubmitted: (_) async => await controller.loginByPassword(),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(height: 26),
+                    WideButton(
+                      text: tr('next'),
+                      onPressed: controller.loginByPassword,
+                    ),
+                    const SizedBox(height: 4),
+                    PlatformTextButton(
+                      onPressed: () async => Get.to<PasswordRecoveryScreen1>(
+                        () => const PasswordRecoveryScreen1(),
+                        arguments: {'email': controller.emailController.text},
+                      ),
+                      child: Text(
+                        tr('forgotPassword'),
+                        style: TextStyleHelper.subtitle2(
+                          color: Theme.of(context).colors().primary,
+                        ),
+                      ),
+                    ),
+                    const Spacer(flex: 3),
+                    PrivacyAndTermsFooter(),
+                  ],
                 ),
               ),
+            ),
+          ),
+        ),
       ),
     );
   }

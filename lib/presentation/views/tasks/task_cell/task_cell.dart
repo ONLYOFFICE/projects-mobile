@@ -31,11 +31,11 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/extentions.dart';
@@ -46,50 +46,53 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
+import 'package:projects/presentation/views/tasks/tasks_view.dart';
 
 part 'status_image.dart';
 
 class TaskCell extends StatelessWidget {
   final PortalTask task;
+
   TaskCell({Key? key, required this.task}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final itemController = TaskItemController(task);
-    Get.put(
-      itemController,
-      tag: task.id.toString(),
-    );
-    WidgetsBinding.instance!.addPostFrameCallback(
-      (_) async => await itemController.initTaskStatus(task),
-    );
+    TaskItemController itemController;
+
+    if (Get.isRegistered<TaskItemController>(tag: task.id.toString()))
+      itemController = Get.find<TaskItemController>(tag: task.id.toString());
+    else {
+      itemController = Get.put(
+        TaskItemController(task),
+        tag: task.id.toString(),
+      );
+    }
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      itemController.setup(task);
+      itemController.initTaskStatus(task);
+    });
 
     return InkWell(
-      onTap: () => Get.find<NavigationController>()
-          .to(const TaskDetailedView(), arguments: {'controller': itemController}),
-      child: SizedBox(
+      enableFeedback: false,
+      onTap: () => Get.find<NavigationController>().to(
+        const TaskDetailedView(),
+        arguments: {
+          'controller': itemController,
+          'previousPage': TasksView.pageName,
+        },
+      ),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
         height: 72,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _StatusImage(controller: itemController),
             Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        _SecondColumn(itemController: itemController),
-                        const SizedBox(width: 8),
-                        _ThirdColumn(controller: itemController),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              child: _SecondColumn(itemController: itemController),
             ),
+            const SizedBox(width: 24),
+            _ThirdColumn(controller: itemController),
             const SizedBox(width: 16),
           ],
         ),
@@ -104,10 +107,9 @@ class _StatusText extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
-  final TaskItemController? controller;
+  final TaskItemController controller;
 
-  bool get _loading =>
-      controller!.isStatusLoaded.isFalse || controller?.status.value.isNull != false;
+  bool get _loading => controller.isStatusLoaded.isFalse || controller.status.value.isNull != false;
 
   @override
   Widget build(BuildContext context) {
@@ -120,14 +122,14 @@ class _StatusText extends StatelessWidget {
           children: [
             ConstrainedBox(
               constraints: BoxConstraints(maxWidth: Get.width * 0.25),
-              child: Text(controller!.status.value.title!,
+              child: Text(controller.status.value.title!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.status(color: controller!.getStatusTextColor)),
+                  style: TextStyleHelper.status(color: controller.getStatusTextColor)),
             ),
             Text(' • ',
-                style:
-                    TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                style: TextStyleHelper.caption(
+                    color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
           ],
         );
       },
@@ -137,7 +139,7 @@ class _StatusText extends StatelessWidget {
 
 // refactor
 class _SecondColumn extends StatelessWidget {
-  final TaskItemController? itemController;
+  final TaskItemController itemController;
 
   const _SecondColumn({
     Key? key,
@@ -148,34 +150,33 @@ class _SecondColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        return Expanded(
-          flex: 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CellAtributedTitle(
-                text: itemController!.task.value.title,
-                style: TextStyleHelper.projectTitle,
-                atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
-                atributeIconVisible: itemController!.task.value.priority == 1,
-              ),
-              Wrap(
-                children: [
-                  _StatusText(controller: itemController),
-                  Text(
-                    itemController!.displayName!,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CellAtributedTitle(
+              text: itemController.task.value.title?.trim(),
+              style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
+              atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
+              atributeIconVisible: itemController.task.value.priority == 1,
+            ),
+            Row(
+              children: [
+                _StatusText(controller: itemController),
+                Expanded(
+                  child: Text(
+                    itemController.displayName!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.6),
                     ),
                   ),
-                ],
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+          ],
         );
       },
     );
@@ -183,7 +184,7 @@ class _SecondColumn extends StatelessWidget {
 }
 
 class _ThirdColumn extends StatelessWidget {
-  final TaskItemController? controller;
+  final TaskItemController controller;
 
   const _ThirdColumn({
     Key? key,
@@ -195,8 +196,8 @@ class _ThirdColumn extends StatelessWidget {
     final _now = DateTime.now();
 
     DateTime? _deadline;
-    if (controller!.task.value.deadline != null)
-      _deadline = DateTime.parse(controller!.task.value.deadline!);
+    if (controller.task.value.deadline != null)
+      _deadline = DateTime.parse(controller.task.value.deadline!);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -206,11 +207,11 @@ class _ThirdColumn extends StatelessWidget {
           Text(
               formatedDateFromString(
                 now: _now,
-                stringDate: controller!.task.value.deadline!,
+                stringDate: controller.task.value.deadline!,
               ),
               style: _deadline.isBefore(_now)
-                  ? TextStyleHelper.caption(color: Get.theme.colors().colorError)
-                  : TextStyleHelper.caption(color: Get.theme.colors().onSurface)),
+                  ? TextStyleHelper.caption(color: Theme.of(context).colors().colorError)
+                  : TextStyleHelper.caption(color: Theme.of(context).colors().onSurface)),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -220,9 +221,10 @@ class _ThirdColumn extends StatelessWidget {
             SizedBox(
               width: 20,
               child: Text(
-                controller!.task.value.subtasks!.length.toString(),
+                controller.task.value.subtasks!.length.toString(),
                 overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                style: TextStyleHelper.body2(
+                    color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
               ),
             ),
           ],

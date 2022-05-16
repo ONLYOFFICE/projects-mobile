@@ -33,7 +33,7 @@
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 
-class MoveFolderResponse {
+class Operation {
   String? id;
   int? operation;
   int? progress;
@@ -44,7 +44,7 @@ class MoveFolderResponse {
   List<PortalFile>? files;
   List<Folder>? folders;
 
-  MoveFolderResponse(
+  Operation(
       {this.id,
       this.operation,
       this.progress,
@@ -55,7 +55,7 @@ class MoveFolderResponse {
       this.files,
       this.folders});
 
-  MoveFolderResponse.fromJson(Map<String, dynamic> json) {
+  Operation.fromJson(Map<String, dynamic> json) {
     id = json['id'] as String?;
     operation = json['operation'] as int?;
     progress = json['progress'] as int?;

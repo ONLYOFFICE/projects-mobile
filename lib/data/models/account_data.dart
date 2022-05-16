@@ -120,4 +120,29 @@ class AccountData {
     data['expires'] = expires;
     return data;
   }
+
+  AccountData.fromIOSJson(Map<String, dynamic> json) {
+    // id = json['id'] as String?;
+    login = json['email'] as String?;
+    portal = Uri.parse(json['portal'] as String).authority;
+    scheme = '${Uri.parse(json['portal'] as String).scheme}://';
+    name = json['displayName'] as String?;
+    avatarUrl = json['avatar'] as String?;
+    token = (json['token'] as String?)?.replaceAll(RegExp(r'\s+\b|\b\s|\s|\b'), '');
+
+    expires = json['expires'] as String?;
+  }
+
+  Map<String, dynamic> toIOSJson() {
+    final data = <String, dynamic>{};
+    data['email'] = login;
+    data['portal'] = '$scheme$portal';
+    data['displayName'] = name;
+    data['avatar'] = avatarUrl;
+
+    data['token'] = token;
+
+    data['expires'] = expires;
+    return data;
+  }
 }

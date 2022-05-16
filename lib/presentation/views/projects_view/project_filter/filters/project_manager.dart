@@ -44,7 +44,7 @@ class _ProjectManager extends StatelessWidget {
         options: <Widget>[
           FilterElement(
             title: tr('me'),
-            titleColor: Get.theme.colors().onSurface,
+            titleColor: Theme.of(context).colors().onSurface,
             isSelected: filterController.projectManager['me'] as bool,
             onTap: () => filterController.changeProjectManager('me'),
           ),
@@ -55,8 +55,12 @@ class _ProjectManager extends StatelessWidget {
             isSelected: filterController.projectManager['other'].isNotEmpty as bool,
             cancelButtonEnabled: filterController.projectManager['other'].isNotEmpty as bool?,
             onTap: () async {
-              final newUser =
-                  await Get.find<NavigationController>().toScreen(const SelectUserScreen());
+              final newUser = await Get.find<NavigationController>().toScreen(
+                const SelectUserScreen(),
+                transition: Transition.rightToLeft,
+                page: '/SelectUserScreen',
+                arguments: {'previousPage': ProjectsFilterScreen.pageName},
+              );
               await filterController.changeProjectManager('other', newUser);
             },
             onCancelTap: () => filterController.changeProjectManager('other', null),

@@ -471,5 +471,32 @@
 	"removeAccount": "supprimer",
 	"addNewAccount": "Ajouter un nouveau compte",
 	"noGroups": "Aucun groupe ici pour le moment",
-	"searchTags": "Rechercher des tags..."
+	"searchTags": "Rechercher des tags...",
+	"done": "Terminé",
+    "closeLowerCase": "Fermer",
+    "discussionIsOpen": "Ouverte",
+    "discussionInArchive": "Archivée",
+    "openDiscussion": "Ouvrir",
+    "archiveDiscussion": "Dans l'archive",
+    "overwriteDialogTitle": "Nom en double",
+    "overwriteDialogContent": {
+        "beforeText": "Le fichier portant le nom",
+        "afterText": "existe déjà dans le dossier de destination."
+    },
+    "overwriteConfirmation": "Remplacer",
+    "duplicateConfirmation": "Conserver les deux",
+    "skipConfirmation": "Ignorer",
+    "loading": "Chargement en cours",
+    "disablePasscode": "Désactiver le mot de passe",
+	"downloadComplete": "Téléchargement terminé",
+	"downloadError": "Erreur de téléchargement",
+	"noPermission": "Pas d'autorisation",
+	"clearCacheQuestion": "Vider le cache ?",
+	"clearCacheQuestionDescription": "Cette opération libère de l'espace sur votre appareil en supprimant les fichiers temporaires. Vos fichiers hors ligne et vos données personnelles ne seront pas supprimés.",
+	"openFileError": "Impossible d'ouvrir le fichier.",
+	"cancelDownload": "Annuler le téléchargement",
+	"downloading": "Téléchargement",
+	"faceID": "Ouvrir avec Face ID",
+	"subtaskDeleted": "Sous-tâche supprimée",
+	"newProject": "Nouveau Projet"
 }

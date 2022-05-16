@@ -70,22 +70,27 @@ class _Step4 extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 480),
-              child: TextField(
+              child: PlatformTextField(
+                makeCupertinoDecorationNull: true,
+                onSubmitted: (str) async => await controller.sendCode(str),
+                hintText: tr('code'),
                 controller: codeController,
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    labelText: tr('code'),
-                    contentPadding:
-                        const EdgeInsets.only(left: 12, bottom: 8, top: 2),
-                    focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 0.5,
-                            color:
-                                Get.theme.colors().onSurface.withOpacity(0.6))),
-                    labelStyle: TextStyleHelper.caption(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
-                style: TextStyleHelper.subtitle1(
-                    color: Get.theme.colors().onSurface),
+                cupertino: (_, __) => CupertinoTextFieldData(
+                  padding: const EdgeInsets.only(left: 12, bottom: 8, top: 2),
+                ),
+                material: (_, __) => MaterialTextFieldData(
+                  decoration: InputDecoration(
+                      labelText: tr('code'),
+                      contentPadding: const EdgeInsets.only(left: 12, bottom: 8, top: 2),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 0.5,
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
+                      labelStyle: TextStyleHelper.caption(
+                          color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
+                ),
+                style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
               ),
             ),
           ),
@@ -108,8 +113,7 @@ class _Step4 extends StatelessWidget {
               constraints: const BoxConstraints(maxWidth: 480),
               child: WideButton(
                 text: tr('confirm'),
-                onPressed: () async =>
-                    await controller.sendCode(codeController.text),
+                onPressed: () async => await controller.sendCode(codeController.text),
               ),
             ),
           ),

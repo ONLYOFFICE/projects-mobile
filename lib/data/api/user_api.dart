@@ -49,11 +49,10 @@ class UserApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            (responseJson['response'] as List)
+        result.response = (responseJson['response'] as List)
             .cast<Map<String, dynamic>>()
-            .map((i) => PortalUser.fromJson(i))
-                .toList();
+            .map(PortalUser.fromJson)
+            .toList();
       } else {
         result.error = response as CustomError;
       }
@@ -90,11 +89,10 @@ class UserApi {
         final responseJson = json.decode(response.body);
         result.total = responseJson['total'] as int;
         {
-          result.response =
-              (responseJson['response'] as List)
+          result.response = (responseJson['response'] as List)
               .cast<Map<String, dynamic>>()
-              .map((i) => PortalUser.fromJson(i))
-                  .toList();
+              .map(PortalUser.fromJson)
+              .toList();
         }
       } else {
         result.error = response as CustomError;

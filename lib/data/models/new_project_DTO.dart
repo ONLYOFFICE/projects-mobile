@@ -45,16 +45,17 @@ class NewProjectDTO {
   // List<Null> milestones;
   bool? notifyResponsibles;
 
-  NewProjectDTO({this.title,
-    this.description,
-    this.responsibleId,
-    this.tags,
-    this.private,
-    this.participants,
-    this.notify,
-    // tasks,
-    // milestones,
-    this.notifyResponsibles});
+  NewProjectDTO(
+      {this.title,
+      this.description,
+      this.responsibleId,
+      this.tags,
+      this.private,
+      this.participants,
+      this.notify,
+      // tasks,
+      // milestones,
+      this.notifyResponsibles});
 
   NewProjectDTO.fromJson(Map<String, dynamic> json) {
     title = json['title'] as String?;

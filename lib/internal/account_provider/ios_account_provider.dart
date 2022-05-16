@@ -30,34 +30,20 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:projects/internal/account_provider/base_account_provider.dart';
 
-mixin ShowPopupMenuMixin on Widget {
-  Future<void> showPopupMenu(
-      {required BuildContext context,
-      required List<Widget> options,
-      required Offset offset}) async {
-    final items = options.map((e) => PopupMenuItem(child: e)).toList();
+class IOSAccountProvider extends BaseAccountProvider {
+  @override
+  Future<List<String>> getAccounts() async {
+    final accounts = <String>[];
+    final result = await channel.invokeMethod('getAccounts');
+    final accountss = jsonDecode(result as String);
 
-// calculate the menu position, offset dy: 50
-    // final offset = const Offset(0, 50);
-    final button = context.findRenderObject() as RenderBox;
-    final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
-    final position = RelativeRect.fromRect(
-      Rect.fromPoints(
-        button.localToGlobal(
-          offset,
-          ancestor: overlay,
-        ),
-        button.localToGlobal(
-          button.size.bottomRight(Offset.zero) + offset,
-          ancestor: overlay,
-        ),
-      ),
-      Offset.zero & overlay.size,
-    );
-
-    await showMenu(context: context, position: position, items: items);
+    for (final item in accountss) {
+      accounts.add(jsonEncode(item));
+    }
+    return accounts;
   }
 }

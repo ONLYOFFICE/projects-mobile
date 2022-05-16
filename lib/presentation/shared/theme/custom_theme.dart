@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/app_colors.dart';
@@ -47,7 +48,7 @@ extension ThemeDataExtensions on ThemeData {
 final AppColors lightColors = AppColors(
   background: const Color(0xffFBFBFB),
   backgroundColor: const Color(0xffffffff),
-  bgDescription: const Color(0xffF1F3F8),
+  bgDescription: const Color(0xffEFEFF0),
   colorError: const Color(0xffFF0C3E),
   lightSecondary: const Color(0xffED7309),
   links: const Color(0xff0C76D5),
@@ -66,6 +67,8 @@ final AppColors lightColors = AppColors(
   tabbarBackground: const Color(0xff2E4057),
   backgroundSecond: const Color(0xffF4F4F4),
   inactiveGrey: const Color(0xff666666),
+  skeleton: const Color(0xffE7E7E7),
+  skeletonHighlighted: const Color.fromRGBO(237, 237, 237, 0.5),
 );
 
 final AppColors darkColors = AppColors(
@@ -90,6 +93,8 @@ final AppColors darkColors = AppColors(
   tabbarBackground: const Color(0xff2E4057),
   backgroundSecond: const Color(0xff080808),
   inactiveGrey: const Color(0xff646464),
+  skeleton: const Color.fromRGBO(81, 82, 85, 0.3),
+  skeletonHighlighted: const Color.fromRGBO(83, 84, 87, 1),
 );
 
 final ThemeData lightTheme = ThemeData.light().copyWith(
@@ -102,6 +107,15 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
     titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
     // lightColors.onSurface),
     // text
+  ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData().copyWith(
+    unselectedItemColor: lightColors.onNavBar.withOpacity(0.4),
+    selectedItemColor: lightColors.onNavBar,
+    showSelectedLabels: true,
+    showUnselectedLabels: true,
+    type: BottomNavigationBarType.fixed,
+    backgroundColor: lightColors.primarySurface,
+    elevation: 0,
   ),
   navigationRailTheme: NavigationRailThemeData(backgroundColor: lightColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(
@@ -122,6 +136,15 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
     backgroundColor: darkColors.backgroundColor,
     titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
   ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData().copyWith(
+    unselectedItemColor: darkColors.onNavBar.withOpacity(0.4),
+    selectedItemColor: darkColors.onNavBar,
+    showSelectedLabels: true,
+    showUnselectedLabels: true,
+    type: BottomNavigationBarType.fixed,
+    backgroundColor: darkColors.primarySurface,
+    elevation: 0,
+  ),
   navigationRailTheme: NavigationRailThemeData(backgroundColor: darkColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(
     textStyle: TextStyleHelper.subtitle1(color: darkColors.onSurface),
@@ -130,4 +153,11 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
   dialogTheme: DialogTheme(
       titleTextStyle: TextStyleHelper.subtitle1(color: darkColors.onSurface),
       contentTextStyle: TextStyleHelper.body2(color: darkColors.onSurface.withOpacity(0.6))),
+);
+
+final CupertinoThemeData cupertinoTheme = CupertinoThemeData(
+  brightness: Brightness.light,
+  primaryColor: CupertinoColors.white,
+  barBackgroundColor: lightColors.backgroundColor,
+  scaffoldBackgroundColor: lightColors.backgroundColor,
 );

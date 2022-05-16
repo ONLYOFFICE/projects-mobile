@@ -31,32 +31,16 @@
  */
 
 import 'dart:async';
-import 'package:flutter/services.dart';
+import 'package:projects/internal/account_provider/base_account_provider.dart';
 
-class AccountProvider {
-  static const MethodChannel _channel = MethodChannel('accountProvider');
-
-  static Future<bool?> addAccount({String accountData = '', String accountId = ''}) async {
-    return await _channel
-        .invokeMethod('addAccount', {'accountData': accountData, 'accountId': accountId});
-  }
-
-  static Future<List<String>> getAccounts() async {
+class AndroidAccountProvider extends BaseAccountProvider {
+  @override
+  Future<List<String>> getAccounts() async {
     final accounts = <String>[];
-    final result = await _channel.invokeMethod('getAccounts');
+    final result = await channel.invokeMethod('getAccounts');
     for (final item in result) {
       accounts.add(item['account'] as String);
     }
     return accounts;
-  }
-
-  static Future<bool?> deleteAccount({String accountId = '', String accountData = ''}) async {
-    return await _channel
-        .invokeMethod('deleteAccount', {'accountId': accountId, 'accountData': accountData});
-  }
-
-  static Future<bool?> updateAccount({String accountData = '', String accountId = ''}) async {
-    return await _channel
-        .invokeMethod('updateAccount', {'accountData': accountData, 'accountId': accountId});
   }
 }

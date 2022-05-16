@@ -31,23 +31,22 @@
  */
 
 import 'package:projects/domain/controllers/base/base_sort_controller.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class TasksSortController extends BaseSortController {
   TasksSortController() {
     currentSortfilter = 'deadline';
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
-  // @override
-  // String getFilterLabel(value) {
-  //   return tr(value);
-  // }
-}
 
-// const _filtersMapping = {
-//   'deadline': tr('deadline'),
-//   'priority': tr('priority'),
-//   'create_on': tr('create_on date'),
-//   'start_date': tr('start_date date'),
-//   'title': tr('title'),
-//   'sort_order': tr('sort_order'),
-// };
+  List<SortTile> getSortTile() {
+    return [
+      SortTile(sortParameter: 'deadline', sortController: this),
+      SortTile(sortParameter: 'priority', sortController: this),
+      SortTile(sortParameter: 'create_on', sortController: this),
+      SortTile(sortParameter: 'start_date', sortController: this),
+      SortTile(sortParameter: 'title', sortController: this),
+      SortTile(sortParameter: 'sort_order', sortController: this),
+    ];
+  }
+}

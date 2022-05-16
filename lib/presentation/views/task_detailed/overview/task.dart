@@ -45,29 +45,33 @@ class _Task extends StatelessWidget {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 10),
+              padding: const EdgeInsets.only(top: 16),
               child: SizedBox(
                 width: 72,
                 child: AppIcon(
                   icon: SvgIcons.tab_bar_tasks,
-                  color: Get.theme.colors().onBackground.withOpacity(0.6),
+                  color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                 ),
               ),
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(top: 20, right: 16, bottom: 22),
+                padding: const EdgeInsets.only(top: 26, right: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(tr('task').toUpperCase(), style: TextStyleHelper.overline()),
+                    Text(
+                      tr('task'),
+                      style: TextStyleHelper.overline(
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
+                    ),
                     Obx(
                       () => Text(
                         taskController!.task.value.title!,
                         maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyleHelper.headline6(
-                          color: Get.theme.colors().onSurface,
+                          color: Theme.of(context).colors().onSurface,
                         ),
                       ),
                     ),
@@ -78,10 +82,10 @@ class _Task extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 72, bottom: 16),
+          padding: const EdgeInsets.only(left: 72, bottom: 16, top: 16, right: 16),
           child: Obx(
             () => StatusButton(
-              canEdit: taskController!.task.value.canEdit,
+              canEdit: taskController!.task.value.canEdit!,
               text: taskController?.status.value.title ?? '',
               onPressed: taskController!.openStatuses,
             ),

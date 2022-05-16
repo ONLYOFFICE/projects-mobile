@@ -44,7 +44,7 @@ class _Author extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('me'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController!.author['me'] as bool,
               onTap: () => filterController!.changeAuthor('me')),
           FilterElement(
@@ -54,8 +54,14 @@ class _Author extends StatelessWidget {
             isSelected: filterController!.author['other'].isNotEmpty as bool,
             cancelButtonEnabled: filterController!.author['other'].isNotEmpty as bool?,
             onTap: () async {
-              final newUser =
-                  await Get.find<NavigationController>().toScreen(const SelectUserScreen());
+              final newUser = await Get.find<NavigationController>().toScreen(
+                const SelectUserScreen(),
+                page: '/SelectUserScreen',
+                arguments: {
+                  'previousPage': tr('filter'),
+                },
+                // navigatorKey: int.parse(state.widget.key.toString()),
+              );
               await filterController!.changeAuthor('other', newUser);
             },
             onCancelTap: () => filterController!.changeAuthor('other', null),

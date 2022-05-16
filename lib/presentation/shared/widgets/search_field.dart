@@ -30,14 +30,15 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class SearchField extends StatefulWidget {
   final bool autofocus;
-  final bool showClearIcon;
+  final bool alwaysShowSuffixIcon;
   final Color? color;
   final double? width;
   final double height;
@@ -51,23 +52,23 @@ class SearchField extends StatefulWidget {
   final Function()? onClearPressed;
   final TextInputAction? textInputAction;
 
-  const SearchField(
-      {Key? key,
-      this.autofocus = false,
-      this.color,
-      this.controller,
-      this.height = 32,
-      this.hintText,
-      this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 4),
-      this.onChanged,
-      this.onClearPressed,
-      this.onSubmitted,
-      this.onSuffixTap,
-      this.showClearIcon = false,
-      this.suffixIcon,
-      this.width,
-      this.textInputAction = TextInputAction.search})
-      : super(key: key);
+  const SearchField({
+    Key? key,
+    this.autofocus = false,
+    this.color,
+    this.controller,
+    this.height = 32,
+    this.hintText,
+    this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 8),
+    this.onChanged,
+    this.onClearPressed,
+    this.onSubmitted,
+    this.onSuffixTap,
+    this.alwaysShowSuffixIcon = false,
+    this.suffixIcon,
+    this.width,
+    this.textInputAction = TextInputAction.search,
+  }) : super(key: key);
 
   @override
   State<SearchField> createState() => _SearchFieldState();
@@ -78,69 +79,85 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   Widget build(BuildContext context) {
-    final onSurfaceColor = Get.theme.colors().onSurface.withOpacity(0.4);
+    final onSurfaceColor = Theme.of(context).colors().onSurface.withOpacity(0.4);
     return Container(
       height: widget.height,
       width: widget.width,
       margin: widget.margin,
-      child: TextField(
-        controller: widget.controller,
-        onSubmitted: widget.onSubmitted,
-        onChanged: (value) {
-          if (!showClearButton && value.isNotEmpty) {
-            setState(() {
-              showClearButton = true;
-            });
-          }
-          if (showClearButton && value.isEmpty) {
-            setState(() {
-              showClearButton = false;
-            });
-          }
-          widget.onChanged?.call(value);
+      child: PlatformWidget(
+        cupertino: (_, __) {
+          return CupertinoSearchTextField(
+            style: TextStyle(color: Theme.of(context).colors().onBackground),
+            placeholder: widget.hintText,
+            controller: widget.controller,
+            onSubmitted: widget.onSubmitted,
+            onChanged: widget.onChanged,
+            autofocus: widget.autofocus,
+            prefixInsets: const EdgeInsetsDirectional.fromSTEB(6, 1, 0, 4),
+            padding: const EdgeInsetsDirectional.fromSTEB(3.8, 6, 4, 8),
+            suffixMode: widget.alwaysShowSuffixIcon
+                ? OverlayVisibilityMode.always
+                : OverlayVisibilityMode.editing,
+            onSuffixTap: widget.onClearPressed ?? widget.onSuffixTap,
+          );
         },
-        autofocus: widget.autofocus,
-        textInputAction: widget.textInputAction,
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          filled: true,
-          fillColor: widget.color ?? Get.theme.colors().bgDescription,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide.none,
-          ),
-          labelStyle: TextStyleHelper.body2(color: onSurfaceColor),
-          hintStyle: TextStyleHelper.body2(color: onSurfaceColor),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-          prefixIcon: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const SizedBox(width: 16, height: 20),
-              Icon(
-                Icons.search,
-                size: 20,
-                color: onSurfaceColor,
+        material: (_, __) {
+          return TextField(
+            controller: widget.controller,
+            onSubmitted: widget.onSubmitted,
+            onChanged: (value) {
+              if (!showClearButton && value.isNotEmpty) {
+                setState(() {
+                  showClearButton = true;
+                });
+              }
+              if (showClearButton && value.isEmpty) {
+                setState(() {
+                  showClearButton = false;
+                });
+              }
+              widget.onChanged?.call(value);
+            },
+            autofocus: widget.autofocus,
+            textInputAction: widget.textInputAction,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              filled: true,
+              fillColor: widget.color ?? Theme.of(context).colors().bgDescription,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide.none,
               ),
-              const SizedBox(width: 8, height: 20),
-            ],
-          ),
-          prefixIconConstraints: BoxConstraints.tight(const Size(44, 20)),
-          suffixIcon: widget.showClearIcon
-              ? _ClearButton(
-                  widget: widget,
-                  showClearButton: showClearButton,
-                  onTap: () {
-                    widget.onClearPressed?.call();
-                    setState(() {
-                      showClearButton = false;
-                    });
-                  },
-                )
-              : GestureDetector(
-                  onTap: widget.onSuffixTap,
-                  child: SizedBox(height: 32, child: widget.suffixIcon),
-                ),
-        ),
+              labelStyle: TextStyleHelper.body2(color: onSurfaceColor),
+              hintStyle: TextStyleHelper.body2(color: onSurfaceColor),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              prefixIcon: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(width: 16, height: 20),
+                  Icon(
+                    Icons.search,
+                    size: 20,
+                    color: onSurfaceColor,
+                  ),
+                  const SizedBox(width: 8, height: 20),
+                ],
+              ),
+              prefixIconConstraints: BoxConstraints.tight(const Size(44, 20)),
+              suffixIcon: showClearButton || widget.alwaysShowSuffixIcon
+                  ? _ClearButton(
+                      suffixIcon: widget.suffixIcon,
+                      onTap: () {
+                        widget.onClearPressed?.call();
+                        setState(() {
+                          showClearButton = false;
+                        });
+                      },
+                    )
+                  : const SizedBox(),
+            ),
+          );
+        },
       ),
     );
   }
@@ -149,29 +166,27 @@ class _SearchFieldState extends State<SearchField> {
 class _ClearButton extends StatelessWidget {
   const _ClearButton({
     Key? key,
-    required this.widget,
-    required this.showClearButton,
+    required this.suffixIcon,
     required this.onTap,
   }) : super(key: key);
 
-  final SearchField widget;
-  final bool showClearButton;
+  final Widget? suffixIcon;
   final Function() onTap;
 
   @override
   Widget build(BuildContext context) {
-    final onSurfaceColor = Get.theme.colors().onSurface.withOpacity(0.4);
-    return showClearButton
-        ? GestureDetector(
-            onTap: onTap,
-            child: SizedBox(
-              height: 32,
-              width: 32,
-              child: Icon(
-                Icons.clear_rounded,
-                color: onSurfaceColor,
-              ),
-            ))
-        : const SizedBox.shrink();
+    final onSurfaceColor = Theme.of(context).colors().onSurface.withOpacity(0.4);
+    return GestureDetector(
+      onTap: onTap,
+      child: SizedBox(
+        height: 32,
+        width: 32,
+        child: suffixIcon ??
+            Icon(
+              Icons.clear_rounded,
+              color: onSurfaceColor,
+            ),
+      ),
+    );
   }
 }

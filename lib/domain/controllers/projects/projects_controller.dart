@@ -36,108 +36,105 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 
 class ProjectsController extends BaseController {
-  final ProjectService _api = locator<ProjectService>();
+  final _api = locator<ProjectService>();
 
-  RxBool loaded = false.obs;
+  final tags = <ProjectTag>[].obs;
 
-  RxList<ProjectTag> tags = <ProjectTag>[].obs;
-
-  late PaginationController<ProjectDetailed> _paginationController;
-  PaginationController<ProjectDetailed> get paginationController => _paginationController;
+  final _paginationController = PaginationController<ProjectDetailed>();
   @override
-  RxList get itemList => _paginationController.data;
+  PaginationController<ProjectDetailed> get paginationController => _paginationController;
+
+  @override
+  RxList<ProjectDetailed> get itemList => _paginationController.data;
 
   PresetProjectFilters? _preset;
 
   final _sortController = Get.find<ProjectsSortController>();
   ProjectsSortController get sortController => _sortController;
 
-  ProjectsFilterController? _filterController;
-  ProjectsFilterController? get filterController => _filterController;
+  final _filterController = Get.find<ProjectsFilterController>();
+  ProjectsFilterController get filterController => _filterController;
 
-  final _userController = Get.find<UserController>();
-
-  RxBool fabIsVisible = false.obs;
+  final fabIsVisible = false.obs;
 
   var _withFAB = true;
 
-  StreamSubscription? fabSubscription;
-  late StreamSubscription _refreshProjectsSubscription;
+  final _ss = <StreamSubscription>[];
 
-  ProjectsController(
-    ProjectsFilterController filterController,
-    PaginationController<ProjectDetailed> paginationController,
-  ) {
+  ProjectsController() {
     screenName = tr('projects');
-    _paginationController = paginationController;
-    _sortController.updateSortDelegate = updateSort;
-    _filterController = filterController;
-    _filterController!.applyFiltersDelegate = () async => await loadProjects();
 
-    paginationController.loadDelegate = () async => await _getProjects();
-    paginationController.refreshDelegate = () async => await refreshData();
+    _sortController.updateSortDelegate = loadProjects;
+    _filterController.applyFiltersDelegate = loadProjects;
+
+    paginationController.loadDelegate = _getProjects;
+    paginationController.refreshDelegate = refreshData;
     paginationController.pullDownEnabled = true;
 
-    _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      if (data.any((elem) => elem == 'all') as bool) {
+    if (_withFAB) {
+      getFabVisibility(false);
+      _ss.add(Get.find<UserController>().dataUpdated.listen(getFabVisibility));
+
+      _ss.add(Get.find<NavigationController>().onMoreView.listen((moreOpen) {
+        if (moreOpen) {
+          fabIsVisible.value = false;
+          return;
+        }
+
+        getFabVisibility(false);
+      }));
+    }
+
+    _ss.add(locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (data['all'] == true) {
         loadProjects();
         return;
       }
-    });
 
-    _userController.loaded.listen((_loaded) async =>
-        {if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()});
-
-    getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
-    fabSubscription ??= locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
-      fabIsVisible.value = data as bool ? false : await getFabVisibility();
-    });
+      if (data['projectDetails'].id != null) {
+        final index = itemList.indexWhere((element) => element.id == data['projectDetails'].id);
+        if (index != -1) {
+          itemList[index] = data['projectDetails'] as ProjectDetailed;
+          loaded.value = false;
+          loaded.value = true;
+        }
+      }
+    }));
   }
 
   @override
   void onClose() {
-    fabSubscription?.cancel();
-    _refreshProjectsSubscription.cancel();
+    for (final element in _ss) {
+      element.cancel();
+    }
     super.onClose();
-  }
-
-  Future<bool> getFabVisibility() async {
-    if (!_withFAB) return false;
-    await _userController.getUserInfo();
-    await _userController.getSecurityInfo();
-    if (_userController.user == null) return Future.value(false);
-    return _userController.user!.isAdmin! ||
-        _userController.user!.isOwner! ||
-        (_userController.user!.listAdminModules != null &&
-            _userController.user!.listAdminModules!.contains('projects')) ||
-        _userController.securityInfo!.canCreateProject!;
   }
 
   @override
   void showSearch() {
-    Get.find<NavigationController>().to(ProjectSearchView());
-  }
-
-  void updateSort() {
-    loadProjects();
+    Get.find<NavigationController>().to(ProjectSearchView(),
+        arguments: {'filtersController': _filterController, 'sortController': _sortController});
   }
 
   Future<void> refreshData() async {
     loaded.value = false;
+
+    unawaited(Get.find<UserController>().updateData());
     await _getProjects(needToClear: true);
+
     loaded.value = true;
   }
 
@@ -148,14 +145,12 @@ class ProjectsController extends BaseController {
 
   Future<void> loadProjects() async {
     loaded.value = false;
+
     paginationController.startIndex = 0;
-    if (_preset != null) {
-      await _filterController!
-          .setupPreset(_preset)
-          .then((value) => _getProjects(needToClear: true));
-    } else {
-      await _getProjects(needToClear: true);
-    }
+    if (_preset != null) await _filterController.setupPreset(_preset!);
+
+    await _getProjects(needToClear: true);
+
     loaded.value = true;
   }
 
@@ -164,16 +159,18 @@ class ProjectsController extends BaseController {
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
-      projectManagerFilter: _filterController!.projectManagerFilter,
-      participantFilter: _filterController!.teamMemberFilter,
-      otherFilter: _filterController!.otherFilter,
-      statusFilter: _filterController!.statusFilter,
+      projectManagerFilter: _filterController.projectManagerFilter,
+      participantFilter: _filterController.teamMemberFilter,
+      otherFilter: _filterController.otherFilter,
+      statusFilter: _filterController.statusFilter,
     );
-    if (needToClear) paginationController.data.clear();
     if (result == null) return;
+
+    if (needToClear) paginationController.data.clear();
 
     paginationController.total.value = result.total;
     paginationController.data.addAll(result.response ?? <ProjectDetailed>[]);
+
     expandedCardView.value = paginationController.data.isNotEmpty;
   }
 
@@ -188,6 +185,31 @@ class ProjectsController extends BaseController {
   }
 
   void createNewProject() {
-    Get.find<NavigationController>().to(const NewProject());
+    Get.find<NavigationController>().toScreen(
+      const NewProject(),
+      transition: Transition.cupertinoDialog,
+      fullscreenDialog: true,
+      page: '/NewProject',
+    );
+  }
+
+  void getFabVisibility(bool _) {
+    if (Get.find<NavigationController>().onMoreView.value) {
+      fabIsVisible.value = false;
+      return;
+    }
+
+    final user = Get.find<UserController>().user.value;
+    final info = Get.find<UserController>().securityInfo.value;
+
+    if (user == null || info == null) return;
+
+    if ((user.isAdmin ?? false) ||
+        (user.isOwner ?? false) ||
+        (user.listAdminModules != null && user.listAdminModules!.contains('projects')) ||
+        (info.canCreateProject ?? false))
+      fabIsVisible.value = true;
+    else
+      fabIsVisible.value = false;
   }
 }

@@ -30,14 +30,14 @@
  *
  */
 
+import 'package:local_auth/local_auth.dart';
 import 'package:projects/data/services/local_authentication_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/internal/locator.dart';
 
 class PasscodeService {
   final SecureStorage _storage = locator<SecureStorage>();
-  final LocalAuthenticationService _biometricService =
-      locator<LocalAuthenticationService>();
+  final LocalAuthenticationService _biometricService = locator<LocalAuthenticationService>();
 
   Future<String?> get getPasscode async => await _storage.getString('passcode');
 
@@ -48,29 +48,26 @@ class PasscodeService {
 
   Future<void> deletePasscode() async => await _storage.delete('passcode');
 
-  Future<void> setFingerprintStatus(bool isEnable) async {
+  Future<BiometricType?> getBiometricType() async {
+    return await _biometricService.availableBiometrics;
+  }
+
+  Future<void> setBiometricStatus(bool isEnable) async {
     final status = isEnable ? 'true' : 'false';
-    await _storage.delete('isFingerprintEnable');
-    await _storage.putString('isFingerprintEnable', status);
+    await _storage.delete('isBiometricEnable');
+    await _storage.putString('isBiometricEnable', status);
   }
 
-  Future<bool> get isFingerprintEnable async {
-    final isFingerprintEnable =
-        await _storage.getString('isFingerprintEnable') ?? false;
-
-    return isFingerprintEnable == 'true' ? true : false;
+  Future<bool> get isBiometricEnable async {
+    final isBiometricEnable = await _storage.getString('isBiometricEnable') ?? false;
+    return isBiometricEnable == 'true';
   }
 
-  Future<bool> get isFingerprintAvailable async {
-    final isFingerprintAvailable =
-        await _biometricService.isFingerprintAvailable;
-
-    return isFingerprintAvailable;
+  Future<bool> get isBiometricAvailable async {
+    return await _biometricService.isBiometricAvailable;
   }
 
   Future<bool> get isPasscodeEnable async {
-    final isPasscodeEnable = await _storage.getString('passcode') ?? false;
-    if (isPasscodeEnable != false) return true;
-    return false;
+    return (await _storage.getString('passcode'))?.isNotEmpty ?? false;
   }
 }

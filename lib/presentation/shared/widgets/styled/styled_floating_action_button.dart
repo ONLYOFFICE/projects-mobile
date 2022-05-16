@@ -31,7 +31,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
@@ -42,7 +41,7 @@ class StyledFloatingActionButton extends StatelessWidget {
 
   const StyledFloatingActionButton({
     Key? key,
-    this.backgroundColor, //= Get.theme.customColors().lightSecondary,
+    this.backgroundColor, //= Theme.of(context).customColors().lightSecondary,
     this.onPressed,
     this.child,
   }) : super(key: key);
@@ -71,9 +70,10 @@ class StyledFloatingActionButton extends StatelessWidget {
               ],
             ),
             child: FloatingActionButton(
-              backgroundColor: Get.theme.colors().lightSecondary,
+              backgroundColor: Theme.of(context).colors().lightSecondary,
               onPressed: onPressed,
               elevation: 0,
+              heroTag: null,
               child: child,
             ),
           ),

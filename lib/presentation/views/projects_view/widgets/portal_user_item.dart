@@ -31,10 +31,12 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/presentation/shared/platform_icons_ext.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -46,22 +48,24 @@ class PortalUserItem extends StatelessWidget {
     required this.userController,
   }) : super(key: key);
 
-  final Function? onTapFunction;
-  final PortalUserItemController? userController;
+  final Function(PortalUserItemController) onTapFunction;
+  final PortalUserItemController userController;
 
   @override
   Widget build(BuildContext context) {
-    final user = userController!.portalUser;
+    final user = userController.portalUser;
     return InkWell(
       onTap: () {
-        userController!.onTap();
-        onTapFunction?.call(userController);
+        userController.onTap();
+        onTapFunction.call(userController);
       },
-      child: SizedBox(
-        height: 48,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        height: 72,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            if (GetPlatform.isIOS) _MultipleSelection(userController: userController),
             SizedBox(
               width: 72,
               child: SizedBox(
@@ -74,11 +78,11 @@ class PortalUserItem extends StatelessWidget {
                       opacity: user.status == UserStatus.Terminated ? 0.4 : 1.0,
                       child: CircleAvatar(
                         radius: 20,
-                        backgroundColor: Get.theme.colors().bgDescription,
+                        backgroundColor: Theme.of(context).colors().bgDescription,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Obx(() {
-                            return userController!.avatar.value;
+                            return userController.avatar.value;
                           }),
                         ),
                       ),
@@ -108,70 +112,76 @@ class PortalUserItem extends StatelessWidget {
             ),
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                user.displayName!.replaceAll(' ', '\u00A0'),
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyleHelper.subtitle1(),
-                              ),
-                              Obx(
-                                () => userController!.userTitle.isNotEmpty
-                                    ? Text(
-                                        userController!.userTitle.replaceAll(' ', '\u00A0'),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyleHelper.body2(
-                                          color: Get.theme.colors().onBackground,
-                                        ),
-                                      )
-                                    : const SizedBox(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  Text(
+                    user.displayName!.replaceAll(' ', '\u00A0'),
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                        TextStyleHelper.subtitle1(color: Theme.of(context).colors().onBackground),
+                  ),
+                  Obx(
+                    () => userController.userTitle.isNotEmpty
+                        ? Text(
+                            userController.userTitle.replaceAll(' ', '\u00A0'),
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyleHelper.body2(
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.6),
+                            ),
+                          )
+                        : const SizedBox(),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 54),
-              child: Obx(() {
-                if (userController!.selectionMode.value == UserSelectionMode.Multiple) {
-                  if (userController!.isSelected.value == true) {
-                    return Icon(Icons.check_box, color: Get.theme.colors().primary);
-                  } else {
-                    return Icon(
-                      Icons.check_box_outline_blank,
-                      color: Get.theme.colors().inactiveGrey,
-                    );
-                  }
-                } else {
-                  if (userController!.isSelected.value == true) {
-                    return Icon(
-                      Icons.check,
-                      color: Get.theme.colors().primary,
-                    );
-                  } else {
-                    return const SizedBox(width: 72);
-                  }
-                }
-              }),
-            ),
+            if (GetPlatform.isAndroid) _MultipleSelection(userController: userController),
+            Obx(() {
+              if (userController.selectionMode.value == UserSelectionMode.Single &&
+                  userController.isSelected.value == true)
+                return Icon(
+                  PlatformIcons(context).checkMarkAlt,
+                  color: Theme.of(context).colors().primary,
+                );
+
+              return const SizedBox();
+            }),
             const SizedBox(width: 16),
           ],
         ),
       ),
     );
+  }
+}
+
+class _MultipleSelection extends StatelessWidget {
+  const _MultipleSelection({Key? key, required this.userController}) : super(key: key);
+
+  final PortalUserItemController userController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      if (userController.selectionMode.value == UserSelectionMode.Multiple) {
+        if (userController.isSelected.value == true) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Icon(
+              PlatformIcons(context).checked,
+              color: Theme.of(context).colors().primary,
+            ),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Icon(
+              PlatformIcons(context).unchecked,
+              color: Theme.of(context).colors().inactiveGrey,
+            ),
+          );
+        }
+      }
+      return const SizedBox();
+    });
   }
 }

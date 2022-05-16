@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
@@ -58,15 +57,18 @@ class DiscussionTile extends StatelessWidget {
     final discussion = controller.discussion;
     return InkWell(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        height: 72,
         child: Row(
           children: [
+            const SizedBox(width: 16),
             _Image(avatarUrl: controller.avatarUrl),
             const SizedBox(width: 16),
-            _DiscussionInfo(discussion: discussion.value),
-            const SizedBox(width: 11.33),
-            _CommentsCount(commentsCount: discussion.value.commentsCount),
+            Expanded(child: _DiscussionInfo(controller: controller)),
+            const SizedBox(width: 8),
+            _CommentsCount(commentsCount: discussion.value.commentsCount ?? 0),
+            const SizedBox(width: 16),
           ],
         ),
       ),
@@ -84,9 +86,9 @@ class _Image extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 40,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(30),
+      width: 44,
+      height: 44,
+      child: ClipOval(
         child: Obx(
           () => CustomNetworkImage(
             image: avatarUrl.value,
@@ -100,51 +102,61 @@ class _Image extends StatelessWidget {
 }
 
 class _DiscussionInfo extends StatelessWidget {
-  final Discussion? discussion;
+  final DiscussionItemController controller;
   const _DiscussionInfo({
     Key? key,
-    required this.discussion,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            discussion!.title!,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Obx(
+          () => Text(
+            controller.discussion.value.title!.trim(),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyleHelper.projectTitle.copyWith(
-              color:
-                  discussion!.status == 1 ? Get.theme.colors().onBackground.withOpacity(0.6) : null,
-            ),
+            style: TextStyleHelper.subtitle1(
+                color: controller.discussion.value.status == 1
+                    ? Theme.of(context).colors().onBackground.withOpacity(0.6)
+                    : null),
           ),
-          RichText(
-            text: TextSpan(
-              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
-              children: [
-                if (discussion!.status == 1)
+        ),
+        Obx(
+          () {
+            final discussion = controller.discussion.value;
+            return RichText(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              text: TextSpan(
+                style: TextStyleHelper.caption(
+                    color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
+                children: [
+                  if (controller.status.value == 1)
+                    TextSpan(
+                        text: '${tr('archived')} • ',
+                        style:
+                            TextStyleHelper.status(color: Theme.of(context).colors().onBackground)),
+                  TextSpan(text: formatedDate(discussion.created!)),
+                  const TextSpan(text: ' • '),
                   TextSpan(
-                      text: '${tr('archived')} • ',
-                      style: TextStyleHelper.status(color: Get.theme.colors().onBackground)),
-                TextSpan(text: formatedDate(discussion!.created!)),
-                const TextSpan(text: ' • '),
-                TextSpan(
-                  text: NameFormatter.formateName(discussion!.createdBy!),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
+                    text: NameFormatter.formateName(discussion.createdBy!),
+                  )
+                ],
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }
 
 class _CommentsCount extends StatelessWidget {
-  final int? commentsCount;
+  final int commentsCount;
   const _CommentsCount({
     Key? key,
     required this.commentsCount,
@@ -155,10 +167,13 @@ class _CommentsCount extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        AppIcon(icon: SvgIcons.comments, color: Get.theme.colors().onBackground.withOpacity(0.6)),
+        AppIcon(
+            icon: SvgIcons.comments,
+            color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
         const SizedBox(width: 5.33),
         Text(commentsCount.toString(),
-            style: TextStyleHelper.body2(color: Get.theme.colors().onBackground.withOpacity(0.6))),
+            style: TextStyleHelper.body2(
+                color: Theme.of(context).colors().onBackground.withOpacity(0.6))),
       ],
     );
   }

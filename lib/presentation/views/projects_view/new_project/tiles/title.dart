@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -52,7 +53,7 @@ class ProjectTitleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: 16, bottom: 10, top: showCaption ? 26 : 10),
+      padding: const EdgeInsets.only(right: 16, bottom: 10, top: 10),
       child: Row(
         children: [
           Padding(
@@ -63,8 +64,8 @@ class ProjectTitleTile extends StatelessWidget {
                 () => AppIcon(
                   icon: SvgIcons.project,
                   color: controller.titleIsEmpty.value
-                      ? Get.theme.colors().onBackground.withOpacity(0.4)
-                      : Get.theme.colors().onBackground.withOpacity(0.75),
+                      ? Theme.of(context).colors().onBackground.withOpacity(0.4)
+                      : Theme.of(context).colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
@@ -77,23 +78,36 @@ class ProjectTitleTile extends StatelessWidget {
                 if (showCaption)
                   Text('${tr('projectTitle')}:',
                       style: TextStyleHelper.caption(
-                          color: Get.theme.colors().onBackground.withOpacity(0.75))),
-                Obx(
-                  () => TextField(
-                      focusNode: focusOnTitle ? controller.titleFocus : null,
-                      maxLines: null,
-                      controller: controller.titleController,
-                      style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-                      cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.75))),
+                Obx(() {
+                  final needToFillTitle = controller.needToFillTitle.value;
+                  return PlatformTextField(
+                    makeCupertinoDecorationNull: true,
+                    focusNode: focusOnTitle ? controller.titleFocus : null,
+                    maxLines: null,
+                    controller: controller.titleController,
+                    style:
+                        TextStyleHelper.headline6(color: Theme.of(context).colors().onBackground),
+                    cursorColor: Theme.of(context).colors().primary.withOpacity(0.87),
+                    hintText: tr('projectTitle'),
+                    cupertino: (_, __) => CupertinoTextFieldData(
+                      padding: EdgeInsets.zero,
+                      placeholderStyle: TextStyleHelper.headline6(
+                          color: needToFillTitle
+                              ? Theme.of(context).colors().colorError
+                              : Theme.of(context).colors().onSurface.withOpacity(0.5)),
+                    ),
+                    material: (_, __) => MaterialTextFieldData(
                       decoration: InputDecoration(
-                          hintText: tr('projectTitle'),
                           contentPadding: EdgeInsets.zero,
                           hintStyle: TextStyleHelper.headline6(
-                              color: controller.needToFillTitle.value == true
-                                  ? Get.theme.colors().colorError
-                                  : Get.theme.colors().onSurface.withOpacity(0.5)),
-                          border: InputBorder.none)),
-                ),
+                              color: needToFillTitle
+                                  ? Theme.of(context).colors().colorError
+                                  : Theme.of(context).colors().onSurface.withOpacity(0.5)),
+                          border: InputBorder.none),
+                    ),
+                  );
+                }),
               ],
             ),
           ),

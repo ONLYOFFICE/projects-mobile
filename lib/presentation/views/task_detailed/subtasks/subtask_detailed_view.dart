@@ -31,13 +31,17 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
@@ -48,42 +52,57 @@ class SubtaskDetailedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'] as SubtaskController;
+    final args = Get.arguments;
+    final controller = args['controller'] as SubtaskController;
+    final previousPage = args['previousPage'] as String?;
 
     return Obx(
       () {
         final _subtask = controller.subtask.value!;
         return Scaffold(
           appBar: StyledAppBar(
+            previousPageTitle: previousPage,
             actions: [
               if (_subtask.canEdit! || controller.canCreateSubtask)
-                PopupMenuButton(
-                  icon: const Icon(Icons.more_vert, size: 26),
-                  offset: const Offset(0, 25),
+                PlatformPopupMenuButton(
+                  padding: GetPlatform.isIOS ? const EdgeInsets.only(right: 6) : EdgeInsets.zero,
+                  icon: PlatformIconButton(
+                    padding: EdgeInsets.zero,
+                    cupertinoIcon: Icon(
+                      CupertinoIcons.ellipsis_circle,
+                      color: Theme.of(context).colors().primary,
+                    ),
+                    materialIcon: Icon(
+                      Icons.more_vert,
+                      color: Theme.of(context).colors().primary,
+                    ),
+                  ),
                   onSelected: (dynamic value) => _onSelected(context, value, controller),
                   itemBuilder: (context) {
                     return [
                       if (controller.canEdit && _subtask.responsible == null)
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'accept',
                           child: Text(tr('acceptSubtask')),
                         ),
                       if (controller.canEdit)
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'edit',
                           child: Text(tr('edit')),
                         ),
                       if (controller.canCreateSubtask)
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'copy',
                           child: Text(tr('copy')),
                         ),
                       if (_subtask.canEdit!)
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'delete',
+                          isDestructiveAction: true,
                           child: Text(
                             tr('delete'),
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                            style: TextStyleHelper.subtitle1(
+                                color: Theme.of(context).colors().colorError),
                           ),
                         ),
                     ];
@@ -96,7 +115,7 @@ class SubtaskDetailedView extends StatelessWidget {
               children: [
                 Column(
                   children: [
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 10),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
@@ -111,7 +130,7 @@ class SubtaskDetailedView extends StatelessWidget {
                         const SizedBox(width: 4),
                       ],
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: 10),
                     const StyledDivider(leftPadding: 72)
                   ],
                 ),
@@ -122,27 +141,29 @@ class SubtaskDetailedView extends StatelessWidget {
                         width: 72,
                         child: AppIcon(
                             icon: SvgIcons.person,
-                            color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                            color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(tr('assignedTo'),
                               style: TextStyleHelper.caption(
-                                  color: Get.theme.colors().onBackground.withOpacity(0.75))),
+                                  color:
+                                      Theme.of(context).colors().onBackground.withOpacity(0.75))),
                           Text(
                             _subtask.responsible?.displayName ?? tr('noResponsible'),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                            style: TextStyleHelper.subtitle1(
+                                color: Theme.of(context).colors().onSurface),
                           ),
                         ],
                       ),
                     ),
-                    if (_subtask.responsible != null && _subtask.canEdit!)
-                      IconButton(
-                        icon: Icon(Icons.clear_rounded,
-                            color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                    if (_subtask.responsible != null && controller.canEdit && _subtask.status != 2)
+                      PlatformIconButton(
+                        icon: Icon(PlatformIcons(context).clear,
+                            color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
                         onPressed: () => controller.deleteSubtaskResponsible(
                             taskId: _subtask.taskId!, subtaskId: _subtask.id!),
                       )
@@ -166,12 +187,18 @@ void _onSelected(BuildContext context, value, SubtaskController controller) {
       );
       break;
     case 'edit':
-      Get.find<NavigationController>().to(const CreatingAndEditingSubtaskView(), arguments: {
-        'taskId': controller.subtask.value!.taskId,
-        'projectId': controller.parentTask!.projectOwner!.id,
-        'forEditing': true,
-        'itemController': controller,
-      });
+      Get.find<NavigationController>().toScreen(
+        const CreatingAndEditingSubtaskView(),
+        arguments: {
+          'taskId': controller.subtask.value!.taskId,
+          'projectId': controller.parentTask.projectOwner!.id,
+          'forEditing': true,
+          'itemController': controller,
+        },
+        transition: Transition.cupertinoDialog,
+        fullscreenDialog: true,
+        page: '/CreatingAndEditingSubtaskView',
+      );
       break;
     case 'copy':
       controller.copySubtask(

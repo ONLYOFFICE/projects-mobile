@@ -30,9 +30,12 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
@@ -42,13 +45,15 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectTeamController extends GetxController {
-  final ProjectService _api = locator<ProjectService>();
-  RxList<PortalUserItemController> usersList = <PortalUserItemController>[].obs;
-  RxBool loaded = true.obs;
-  RxBool nothingFound = false.obs;
+  final _api = locator<ProjectService>();
+
+  final usersList = <PortalUserItemController>[].obs;
+  final loaded = true.obs;
+  final nothingFound = false.obs;
   var _startIndex = 0;
 
   RefreshController _refreshController = RefreshController();
+
   RefreshController get refreshController {
     if (!_refreshController.isLoading && !_refreshController.isRefresh)
       _refreshController = RefreshController();
@@ -57,17 +62,30 @@ class ProjectTeamController extends GetxController {
 
   int totalProfiles = 0;
   int _projectId = 0;
-  RxBool isSearchResult = false.obs;
-  RxList<PortalUserItemController> searchResult = <PortalUserItemController>[].obs;
+  final isSearchResult = false.obs;
+  final searchResult = <PortalUserItemController>[].obs;
   UserSelectionMode selectionMode = UserSelectionMode.None;
 
   bool _withoutVisitors = false;
   bool _withoutBlocked = false;
-  RxBool fabIsVisible = false.obs;
+  final fabIsVisible = false.obs;
 
   ProjectDetailed? _projectDetailed;
 
   bool get pullUpEnabled => usersList.length != totalProfiles;
+
+  late final StreamSubscription _ss;
+  ProjectTeamController() {
+    getFabVisibility(Get.find<UserController>().user.value);
+    _ss = Get.find<UserController>().user.listen(getFabVisibility);
+  }
+
+  @override
+  void onClose() {
+    _ss.cancel();
+
+    super.onClose();
+  }
 
   Future onLoading() async {
     _startIndex += 25;
@@ -111,31 +129,15 @@ class ProjectTeamController extends GetxController {
     await _loadTeam(needToClear: needToClear);
 
     if (_projectDetailed?.status == ProjectStatusCode.closed.index) {
+      _ss.pause();
       fabIsVisible.value = false;
-
-      loaded.value = true;
-      return Future.value(true);
-    }
-
-    final _userController = Get.find<UserController>();
-    final response = await _userController.getUserInfo();
-    if (!response) return Future.value(false);
-    final selfUser = _userController.user!;
-
-    if (_projectDetailed != null && (_projectDetailed!.security?['canEditTeam'] ?? false)) {
-      fabIsVisible.value = true;
     } else {
-      if (selfUser.isAdmin! ||
-          selfUser.isOwner! ||
-          (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
-        fabIsVisible.value = true;
-      }
+      _ss.resume();
+      getFabVisibility(Get.find<UserController>().user.value);
     }
-
-    if (selfUser.isVisitor!) fabIsVisible.value = false;
 
     loaded.value = true;
-    return Future.value(true);
+    return true;
   }
 
   void searchUsers(String query) {
@@ -165,5 +167,17 @@ class ProjectTeamController extends GetxController {
     _withoutBlocked = withoutBlocked;
     _projectId = projectId ?? projectDetailed!.id!;
     _projectDetailed = projectDetailed;
+  }
+
+  void getFabVisibility(PortalUser? user) {
+    if (user == null) return;
+
+    if ((_projectDetailed?.security?['canEditTeam'] ?? false) ||
+        (user.isAdmin ?? false) ||
+        (user.isOwner ?? false) ||
+        (user.listAdminModules != null && user.listAdminModules!.contains('projects')))
+      fabIsVisible.value = true;
+    else
+      fabIsVisible.value = false;
   }
 }

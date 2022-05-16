@@ -31,9 +31,15 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/option_with_switch.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
@@ -48,8 +54,11 @@ class NewProject extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  static String get pageName => tr('project');
+
   @override
   Widget build(BuildContext context) {
+    final platformController = Get.find<PlatformController>();
     final controller = Get.find<NewProjectController>();
     return WillPopScope(
       onWillPop: () async {
@@ -57,17 +66,44 @@ class NewProject extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Get.theme.backgroundColor,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('project'),
-          onLeadingPressed: controller.discardChanges,
-          elevation: 2,
+          leadingWidth: GetPlatform.isIOS ? 100 : null,
+          centerTitle: GetPlatform.isIOS,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.check_outlined),
-              onPressed: () => controller.confirm(context),
-            )
+            PlatformWidget(
+              material: (platformContext, __) => IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: controller.confirm,
+              ),
+              cupertino: (platformContext, __) => CupertinoButton(
+                onPressed: controller.confirm,
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  tr('done'),
+                  style: TextStyleHelper.headline7(),
+                ),
+              ),
+            ),
           ],
+          leading: PlatformWidget(
+            cupertino: (_, __) => CupertinoButton(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+              onPressed: controller.discardChanges,
+              child: Text(
+                tr('cancel').toLowerCase().capitalizeFirst!,
+                style: TextStyleHelper.button(),
+              ),
+            ),
+            material: (_, __) => IconButton(
+              onPressed: controller.discardChanges,
+              icon: const Icon(Icons.close),
+            ),
+          ),
         ),
         body: Listener(
           onPointerDown: (_) {
@@ -76,7 +112,6 @@ class NewProject extends StatelessWidget {
           },
           child: ListView(
             children: [
-              const SizedBox(height: 10),
               ProjectTitleTile(controller: controller),
               const StyledDivider(leftPadding: 72.5),
               ProjectManagerTile(controller: controller),
@@ -84,37 +119,56 @@ class NewProject extends StatelessWidget {
               ProjectDescriptionTile(controller: controller),
               TagsTile(controller: controller),
               AdvancedOptions(
-                options: <Widget>[
-                  OptionWithSwitch(
-                    title: tr('notifyPM'),
-                    switchValue: controller.notificationEnabled,
-                    switchOnChanged: (bool value) {
-                      controller.enableNotification(value);
-                    },
+                options: [
+                  const StyledDivider(
+                    leftPadding: 72,
+                    height: 1,
+                    thickness: 1,
                   ),
-                  OptionWithSwitch(
-                    title: tr('privateProject'),
-                    switchValue: controller.isPrivate,
-                    switchOnChanged: (bool value) {
-                      controller.setPrivate(value);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                    child: Obx(
+                      () => OptionWithSwitch(
+                        title: tr('notifyPM'),
+                        switchValue: controller.notificationEnabled,
+                        switchOnChanged: controller.selectedProjectManager.value?.id !=
+                                controller.selfUserItem.id!
+                            ? controller.enableNotification
+                            : null,
+                      ),
+                    ),
                   ),
-                  Obx(() {
-                    if (controller.selfUserItem?.id == controller.selectedProjectManager.value?.id)
-                      return OptionWithSwitch(
-                        title: tr('followProject'),
-                        switchValue: false.obs,
-                        switchOnChanged: (v) => {},
-                      );
-                    else
-                      return OptionWithSwitch(
+                  const StyledDivider(
+                    leftPadding: 72,
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                    child: OptionWithSwitch(
+                      title: tr('privateProject'),
+                      switchValue: controller.isPrivate,
+                      switchOnChanged: controller.setPrivate,
+                    ),
+                  ),
+                  const StyledDivider(
+                    leftPadding: 72,
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                    child: Obx(
+                      () => OptionWithSwitch(
                         title: tr('followProject'),
                         switchValue: controller.isFolowed,
-                        switchOnChanged: (bool value) {
-                          controller.folow(value);
-                        },
-                      );
-                  }),
+                        switchOnChanged: controller.selfUserItem.id! ==
+                                controller.selectedProjectManager.value?.id
+                            ? null
+                            : controller.folow,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],

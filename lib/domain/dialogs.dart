@@ -35,8 +35,9 @@ import 'dart:collection';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ErrorDialog extends GetxController {
@@ -66,7 +67,7 @@ class ErrorDialog extends GetxController {
 
     final error = queue.first;
 
-    await Get.dialog(
+    await Get.find<NavigationController>().showPlatformDialog(
       WillPopScope(
         onWillPop: () {
           return Future.value(false);
@@ -80,7 +81,7 @@ class ErrorDialog extends GetxController {
             dialogIsShown = false,
             if (_blockingErrors[error.toLowerCase()] != null)
               {
-                await Get.put(AccountManagerController()).clearToken(),
+                await Get.put(AccountManager()).clearToken(),
                 Get.find<LoginController>().logout(),
                 dialogIsShown = false,
                 queue.clear(),
@@ -109,9 +110,10 @@ class ErrorDialog extends GetxController {
 
 Map _blockingErrors = {
   'unauthorized': 'unauthorized',
-  'bad gateway': 'Bad Gateway',
+  // 'bad gateway': 'Bad Gateway',
   'forbidden': 'Forbidden',
   'payment required': 'Payment required',
+  'paymentrequired': 'Payment required',
   'the paid period is over': 'The paid period is over',
   'access to the projects module is forbidden': 'Access to the Projects module is Forbidden',
   'contact the portal administrator for access to the projects module.':

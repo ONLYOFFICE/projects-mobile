@@ -31,7 +31,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -41,52 +40,57 @@ class AuthTextField extends StatelessWidget {
   final Function(String value)? onChanged;
   final String? hintText;
   final String? autofillHint;
-  final TextEditingController? controller;
+  final TextEditingController controller;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final Function(String)? onSubmitted;
+  final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
 
-  const AuthTextField({
-    Key? key,
-    this.autofillHint,
-    this.controller,
-    this.hintText,
-    this.keyboardType,
-    this.obscureText = false,
-    this.onChanged,
-    this.validator,
-    this.hasError = false,
-  }) : super(key: key);
+  const AuthTextField(
+      {Key? key,
+      this.autofillHint,
+      required this.controller,
+      this.hintText,
+      this.keyboardType,
+      this.obscureText = false,
+      this.onChanged,
+      this.validator,
+      this.hasError = false,
+      this.onSubmitted,
+      this.textInputAction,
+      this.focusNode})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autocorrect: false,
+      focusNode: focusNode,
       controller: controller,
-      autofillHints: [autofillHint!],
+      autofillHints: autofillHint != null ? [autofillHint!] : null,
       onChanged: onChanged,
       obscureText: obscureText,
       obscuringCharacter: '*',
       keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      onFieldSubmitted: onSubmitted,
       validator: validator,
       style: TextStyleHelper.subtitle1(
-        color: hasError
-            ? Get.theme.colors().colorError
-            : Get.theme.colors().onSurface,
+        color:
+            hasError ? Theme.of(context).colors().colorError : Theme.of(context).colors().onSurface,
       ),
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
-        // labelText: hintText,
+        labelText: hintText,
         labelStyle: TextStyleHelper.caption(
-            color: Get.theme.colors().onSurface.withOpacity(0.6)),
-        hintText: hintText,
-        hintStyle: TextStyleHelper.subtitle1(
-          color: !hasError
-              ? Get.theme.colors().onSurface.withOpacity(0.6)
-              : Get.theme.colors().colorError,
+          color: hasError && controller.text.isEmpty
+              ? Theme.of(context).colors().colorError
+              : Theme.of(context).colors().onSurface.withOpacity(0.6),
         ),
         focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-                color: Get.theme.colors().onSurface.withOpacity(0.42))),
+            borderSide: BorderSide(color: Theme.of(context).colors().onSurface.withOpacity(0.42))),
       ),
     );
   }

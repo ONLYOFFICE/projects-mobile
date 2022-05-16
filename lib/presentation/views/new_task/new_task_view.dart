@@ -32,8 +32,10 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -49,14 +51,15 @@ import 'package:projects/presentation/views/new_task/tiles/responsible_tile.dart
 import 'package:projects/presentation/views/new_task/tiles/start_date_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/task_title.dart';
 
-part 'tiles/tile_with_switch.dart';
-
 class NewTaskView extends StatelessWidget {
   const NewTaskView({Key? key}) : super(key: key);
+
+  static String get pageName => tr('newTask');
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<NewTaskController>();
+    final platformController = Get.find<PlatformController>();
     final projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed?;
     controller.init(projectDetailed);
 
@@ -66,14 +69,38 @@ class NewTaskView extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Get.theme.colors().backgroundColor,
+        backgroundColor: platformController.isMobile
+            ? Theme.of(context).colors().backgroundColor
+            : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
+          backgroundColor: platformController.isMobile
+              ? Theme.of(context).colors().backgroundColor
+              : Theme.of(context).colors().surface,
           titleText: tr('newTask'),
+          leadingWidth: GetPlatform.isIOS ? 100 : null,
+          centerTitle: GetPlatform.isIOS,
           actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded), onPressed: () => controller.confirm(context))
+            PlatformIconButton(
+              materialIcon: const Icon(Icons.check_rounded),
+              cupertinoIcon: Text(
+                tr('done'),
+                style: TextStyleHelper.headline7(color: Theme.of(context).colors().primary),
+              ),
+              onPressed: controller.confirm,
+            ),
           ],
-          onLeadingPressed: controller.discardTask,
+          leading: PlatformIconButton(
+            materialIcon: const Icon(Icons.close),
+            cupertinoIcon: Text(
+              tr('cancel').toLowerCase().capitalizeFirst!,
+              style: TextStyleHelper.body1(color: Theme.of(context).colors().primary),
+            ),
+            onPressed: controller.discardTask,
+            cupertino: (_, __) => CupertinoIconButtonData(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           child: Obx(
@@ -92,14 +119,14 @@ class NewTaskView extends StatelessWidget {
                   child: Column(
                     children: [
                       NewTaskProjectTile(controller: controller),
-                      if (controller.selectedProjectTitle!.value.isNotEmpty)
+                      if (controller.selectedProjectTitle.value.isNotEmpty)
                         MilestoneTile(controller: controller),
-                      if (controller.selectedProjectTitle!.value.isNotEmpty)
+                      if (controller.selectedProjectTitle.value.isNotEmpty)
                         ResponsibleTile(controller: controller),
-                      if (controller.responsibles!.isNotEmpty)
+                      if (controller.responsibles.isNotEmpty)
                         NotifyResponsiblesTile(controller: controller),
                       DescriptionTile(controller: controller),
-                      GestureDetector(child: StartDateTile(controller: controller)),
+                      StartDateTile(controller: controller),
                       DueDateTile(controller: controller),
                       const SizedBox(height: 5),
                       PriorityTile(controller: controller)

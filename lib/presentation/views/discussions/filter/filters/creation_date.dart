@@ -44,26 +44,29 @@ class _CreatingDate extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('today'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController!.creationDate['today'] as bool,
               onTap: () => filterController!.changeCreationDate('today')),
           FilterElement(
               title: tr('last7Days'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController!.creationDate['last7Days'] as bool,
               onTap: () => filterController!.changeCreationDate('last7Days')),
           FilterElement(
               title: tr('customPeriod'),
               isSelected: filterController!.creationDate['custom']['selected'] as bool,
               onTap: () async {
+                // TODO: refact DI
                 final pickedRange = await Get.find<NavigationController>().toScreen(
-                  StyledDateRangePickerDialog(
-                    initialDateRange: DateTimeRange(
-                      start: filterController!.creationDate['custom']['startDate'] as DateTime,
-                      end: filterController!.creationDate['custom']['stopDate'] as DateTime,
-                    ),
-                  ),
-                );
+                    const StyledDateRangePickerDialog(),
+                    transition: Transition.rightToLeft,
+                    arguments: {
+                      'initialDateRange': DateTimeRange(
+                        start: filterController!.creationDate['custom']['startDate'] as DateTime,
+                        end: filterController!.creationDate['custom']['stopDate'] as DateTime,
+                      ),
+                    },
+                    page: '/StyledDateRangePickerDialog');
                 if (pickedRange != null) {
                   await filterController!.changeCreationDate(
                     'custom',

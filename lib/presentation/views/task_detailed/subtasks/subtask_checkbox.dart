@@ -31,7 +31,11 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
+import 'package:projects/presentation/shared/platform_icons_ext.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class SubtaskCheckBox extends StatelessWidget {
   const SubtaskCheckBox({
@@ -39,25 +43,35 @@ class SubtaskCheckBox extends StatelessWidget {
     required this.subtaskController,
   }) : super(key: key);
 
-  final SubtaskController? subtaskController;
+  final SubtaskController subtaskController;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 72,
-      child: IgnorePointer(
-        ignoring: !subtaskController!.canEdit,
-        child: Checkbox(
-          value: subtaskController!.subtask.value!.status == 2,
-          activeColor: const Color(0xFF666666),
-          onChanged: (value) {
-            subtaskController!.updateSubtaskStatus(
-              context: context,
-              taskId: subtaskController!.subtask.value!.taskId!,
-              subtaskId: subtaskController!.subtask.value!.id!,
+      child: GestureDetector(
+        onTap: !subtaskController.canEdit
+            ? null
+            : () {
+                subtaskController.updateSubtaskStatus(
+                  taskId: subtaskController.subtask.value!.taskId!,
+                  subtaskId: subtaskController.subtask.value!.id!,
+                );
+              },
+        child: Obx(() {
+          if (subtaskController.subtask.value!.status == 2)
+            return Icon(
+              PlatformIcons(context).checked,
+              color: !subtaskController.canEdit
+                  ? Theme.of(context).colors().inactiveGrey
+                  : Theme.of(context).colors().primary,
             );
-          },
-        ),
+          else
+            return Icon(
+              PlatformIcons(context).unchecked,
+              color: Theme.of(context).colors().inactiveGrey,
+            );
+        }),
       ),
     );
   }

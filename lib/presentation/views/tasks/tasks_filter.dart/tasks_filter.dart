@@ -31,17 +31,19 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
-import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
 import 'package:projects/presentation/shared/widgets/filters/filter_element_widget.dart';
+import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
+import 'package:projects/presentation/shared/widgets/reset_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_group_screen.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_milestone_screen.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_project_screen.dart';
@@ -50,45 +52,52 @@ import 'package:projects/presentation/shared/widgets/select_item_screens/users/s
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_date_range_picker.dart';
 
-part 'filters/responsible.dart';
 part 'filters/creator.dart';
-part 'filters/project.dart';
-part 'filters/milestone.dart';
-part 'filters/status.dart';
 part 'filters/duedate.dart';
+part 'filters/milestone.dart';
+part 'filters/project.dart';
+part 'filters/responsible.dart';
+part 'filters/status.dart';
 
 class TasksFilterScreen extends StatelessWidget {
   const TasksFilterScreen({Key? key}) : super(key: key);
 
+  static String get pageName => tr('filter');
+
   @override
   Widget build(BuildContext context) {
-    final filterController =
-        Get.arguments['filterController'] as BaseTaskFilterController;
-    final platformController = Get.find<PlatformController>();
+    final filterController = Get.arguments['filterController'] as BaseTaskFilterController;
+
+    void onLeadingPressed() {
+      filterController.restoreFilters();
+      Get.back();
+    }
+
+    final backgroundColor =
+        Get.find<PlatformController>().isMobile ? null : Theme.of(context).colors().surface;
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: backgroundColor,
       appBar: StyledAppBar(
-        onLeadingPressed: () {
-          filterController.restoreFilters();
-          Get.back();
-        },
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('filter'),
-        showBackButton: true,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
-        actions: [
-          TextButton(
-              onPressed: () async => filterController.resetFilters(),
-              child: Text(tr('reset'),
-                  style: TextStyleHelper.button(
-                      color: Get.theme.colors().systemBlue))),
-          SizedBox(width: platformController.isMobile ? 8 : 12),
-        ],
+        centerTitle: GetPlatform.isIOS,
+        backgroundColor: backgroundColor,
+        leading: PlatformWidget(
+          cupertino: (_, __) => CupertinoButton(
+            padding: const EdgeInsets.only(left: 16),
+            alignment: Alignment.centerLeft,
+            onPressed: onLeadingPressed,
+            child: Text(
+              tr('closeLowerCase'),
+              style: TextStyleHelper.button(),
+            ),
+          ),
+          material: (_, __) => IconButton(
+            onPressed: onLeadingPressed,
+            icon: const Icon(Icons.close),
+          ),
+        ),
+        actions: [ResetFiltersButton(filterController: filterController)],
       ),
       body: Stack(
         children: [
@@ -101,7 +110,8 @@ class TasksFilterScreen extends StatelessWidget {
                   const SizedBox(height: 12.5),
                   _Responsible(filterController: filterController),
                   _Creator(filterController: filterController),
-                  _Project(filterController: filterController),
+                  if (filterController.projectId == null)
+                    _Project(filterController: filterController),
                   _Milestone(filterController: filterController),
                   _Status(filterController: filterController),
                   _DueDate(filterController: filterController),

@@ -64,10 +64,8 @@ class DiscussionsApi {
       url += '&FilterValue=$parsedData';
     }
 
-    if (sortBy != null &&
-        sortBy.isNotEmpty &&
-        sortOrder != null &&
-        sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+    if (sortBy != null && sortBy.isNotEmpty && sortOrder != null && sortOrder.isNotEmpty)
+      url += '&sortBy=$sortBy&sortOrder=$sortOrder';
 
     url += authorFilter ?? '';
     url += statusFilter ?? '';
@@ -103,18 +101,15 @@ class DiscussionsApi {
 
   Future<ApiDTO<Discussion>> addMessage(
       {required int projectId, required NewDiscussionDTO newDiss}) async {
-    final url =
-        await locator.get<CoreApi>().addMessageUrl(projectId: projectId);
+    final url = await locator.get<CoreApi>().addMessageUrl(projectId: projectId);
     final result = ApiDTO<Discussion>();
 
     try {
-      final response =
-          await locator.get<CoreApi>().postRequest(url, newDiss.toJson());
+      final response = await locator.get<CoreApi>().postRequest(url, newDiss.toJson());
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = Discussion.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -126,8 +121,7 @@ class DiscussionsApi {
   }
 
   Future<ApiDTO<Discussion>> getMessageDetailed({required int id}) async {
-    final url =
-        await locator.get<CoreApi>().discussionDetailedUrl(messageId: id);
+    final url = await locator.get<CoreApi>().discussionDetailedUrl(messageId: id);
     final result = ApiDTO<Discussion>();
 
     try {
@@ -135,8 +129,7 @@ class DiscussionsApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = Discussion.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -159,8 +152,7 @@ class DiscussionsApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = Discussion.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -173,8 +165,7 @@ class DiscussionsApi {
 
   Future<ApiDTO<Discussion>> updateMessageStatus(
       {required int id, required String newStatus}) async {
-    final url =
-        await locator.get<CoreApi>().updateMessageStatusUrl(messageId: id);
+    final url = await locator.get<CoreApi>().updateMessageStatusUrl(messageId: id);
     final result = ApiDTO<Discussion>();
 
     try {
@@ -184,8 +175,7 @@ class DiscussionsApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = Discussion.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -207,8 +197,7 @@ class DiscussionsApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = Discussion.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -228,8 +217,7 @@ class DiscussionsApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = Discussion.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }

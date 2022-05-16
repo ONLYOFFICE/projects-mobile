@@ -39,34 +39,33 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/enums/viewstate.dart';
-import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
+import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/loading_hud.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
+  late AccountManager accountManager;
+
   late TextEditingController _portalAdressController;
-
-  late AccountManagerController accountManager;
-
   TextEditingController get portalAdressController => _portalAdressController;
 
   late TextEditingController _emailController;
@@ -75,11 +74,10 @@ class LoginController extends GetxController {
   late TextEditingController _passwordController;
   TextEditingController get passwordController => _passwordController;
 
-  RxBool portalFieldError = false.obs;
-  RxBool emailFieldError = false.obs;
-  RxBool passwordFieldError = false.obs;
+  final portalFieldError = false.obs;
+  final emailFieldError = false.obs;
+  final passwordFieldError = false.obs;
 
-  Capabilities? capabilities;
   String? _pass;
   String? _email;
   String? _tfaKey;
@@ -93,11 +91,8 @@ class LoginController extends GetxController {
   final checkBoxValue = false.obs;
   final needAgreement = Get.deviceLocale!.languageCode == 'zh';
 
-  final _state = ViewState.Idle.obs;
-  Rx<ViewState> get state => _state;
-  void setState(ViewState viewState) {
-    if (state.value != viewState) state.value = viewState;
-  }
+  final loaded = true.obs;
+  final loadingScreen = LoadingWithoutProgress();
 
   @override
   void onInit() {
@@ -105,16 +100,22 @@ class LoginController extends GetxController {
     _passwordController = TextEditingController();
     _portalAdressController = TextEditingController();
 
-    accountManager = Get.isRegistered<AccountManagerController>()
-        ? Get.find<AccountManagerController>()
-        : Get.put(AccountManagerController());
+    _portalAdressController.addListener(() {
+      checkBoxValue.value = false;
+    });
+
+    accountManager =
+        Get.isRegistered<AccountManager>() ? Get.find<AccountManager>() : Get.put(AccountManager());
+
+    loaded.listen((value) => loadingScreen.showLoading(!value));
 
     super.onInit();
   }
 
   void setup() {
-    portalAdressController.text = '';
-    emailController.text = '';
+    _portalAdressController.text = '';
+    _emailController.text = '';
+    _passwordController.text = '';
   }
 
   Future<void> loginByPassword() async {
@@ -122,44 +123,34 @@ class LoginController extends GetxController {
       final email = _emailController.text;
       final password = _passwordController.text;
 
-      setState(ViewState.Busy);
+      loaded.value = false;
 
       final result = await _authService.login(pass: password, email: email);
 
       if (result.response == null) {
-        setState(ViewState.Idle);
+        loaded.value = true;
         return;
       }
 
       if (result.response!.token != null) {
-        await saveLoginData(token: result.response!.token, expires: result.response!.expires);
+        await _login(result.response!.token!, result.response!.expires!);
 
-        await Get.find<AccountManagerController>()
-            .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
-
-        await cookieManager.setCookies([
-          Cookie('asc_auth_key', result.response!.token!)
-            ..domain = portalAdress
-            ..expires = DateTime.now().add(const Duration(days: 10))
-            ..httpOnly = false
-        ]);
-
-        locator<EventHub>().fire('loginSuccess');
+        loaded.value = true;
       } else if (result.response!.tfa == true) {
         _email = email;
         _pass = password;
-        setState(ViewState.Idle);
+        loaded.value = true;
 
         if (result.response!.tfaKey != null) {
           _tfaKey = result.response!.tfaKey;
           await Get.to<GetCodeViews>(() => const GetCodeViews());
         } else {
-          await Get.to<CodeView>(() => CodeView());
+          await Get.to<CodeView>(CodeView.new);
         }
       } else if (result.response!.sms == true) {
         _email = email;
         _pass = password;
-        setState(ViewState.Idle);
+        loaded.value = true;
         if (result.response!.phoneNoise != null) {
           await Get.to<EnterSMSCodeScreen>(
             () => const EnterSMSCodeScreen(),
@@ -170,6 +161,7 @@ class LoginController extends GetxController {
             },
           );
         } else {
+          loaded.value = true;
           await Get.to<TFASmsScreen>(
             () => const TFASmsScreen(),
             arguments: {'login': _email, 'password': _pass},
@@ -179,7 +171,7 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> saveLoginData({String? token, String? expires}) async {
+  Future<void> saveLoginData({required String token, required String expires}) async {
     GetIt.instance.resetLazySingleton<CoreApi>();
     await saveToken(token, expires);
     await sendRegistrationType();
@@ -219,14 +211,20 @@ class LoginController extends GetxController {
     return result;
   }
 
-  Future saveToken(String? token, String? expires) async {
+  Future saveToken(String token, String expires) async {
     //TODO: replace with AccountData
     await _secureStorage.putString('token', token);
     await _secureStorage.putString('expires', expires);
   }
 
+  Future clearToken() async {
+    //TODO: replace with AccountData
+    await _secureStorage.delete('token');
+    await _secureStorage.delete('expires');
+  }
+
   Future<bool> sendCode(String code, {String? userName, String? password}) async {
-    setState(ViewState.Busy);
+    loaded.value = false;
 
     _email ??= userName;
     _pass ??= password;
@@ -235,24 +233,44 @@ class LoginController extends GetxController {
         email: _email!, pass: _pass!, code: code.removeAllWhitespace);
 
     if (result.response == null) {
-      setState(ViewState.Idle);
+      loaded.value = true;
       return false;
     }
 
     if (result.response!.token != null) {
-      await saveLoginData(token: result.response!.token, expires: result.response!.expires);
-      await Get.find<AccountManagerController>()
-          .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
+      await _login(result.response!.token!, result.response!.expires!);
 
-      locator<EventHub>().fire('loginSuccess');
+      loaded.value = true;
       return true;
     } else if (result.response!.tfa!) {
-      setState(ViewState.Idle);
-      await Get.to(() => CodeView());
+      loaded.value = true;
+      await Get.to(CodeView.new);
       return true;
     }
 
     return false;
+  }
+
+  Future<bool> _login(String token, String expires) async {
+    await saveToken(token, expires);
+    if (await Get.find<UserController>().getUserId() == null) {
+      unawaited(clearToken());
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+      return false;
+    }
+
+    await saveLoginData(token: token, expires: expires);
+    await Get.find<AccountManager>().addAccount(tokenString: token, expires: expires);
+
+    await cookieManager.setCookies([
+      Cookie('asc_auth_key', token)
+        ..domain = portalAdress
+        ..expires = DateTime.parse(expires)
+        ..httpOnly = false
+    ]);
+
+    locator<EventHub>().fire('loginSuccess');
+    return true;
   }
 
   Future<void> getPortalCapabilities() async {
@@ -263,25 +281,24 @@ class LoginController extends GetxController {
 
     final portalString = setupPortalUri();
 
-    if (!portalURI.hasAuthority) {
+    if (!portalURI.hasAuthority || portalString.isEmpty) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
     } else {
-      setState(ViewState.Busy);
+      loaded.value = false;
 
       locator.get<CoreApi>().setPortalName(portalString);
 
       final _capabilities = await _portalService.portalCapabilities();
 
       if (_capabilities != null) {
-        capabilities = _capabilities;
         checkBoxValue.value = false;
-        await Get.to(() => const LoginView());
-        return;
+        loaded.value = true;
+        await Get.to(() => LoginView());
       }
 
-      setState(ViewState.Idle);
+      loaded.value = true;
     }
   }
 
@@ -293,12 +310,18 @@ class LoginController extends GetxController {
 
     var portalString = _portalAdressController.text;
 
-    if (portalString[portalString.length - 1] == '.')
-      portalString = portalString.substring(0, portalString.length - 1);
+    if (portalString.isNotEmpty) {
+      if (portalString[portalString.length - 1] == '.')
+        portalString = portalString.substring(0, portalString.length - 1);
 
-    if (!portalString.contains('http')) portalString = 'https://$portalString';
+      if (portalString.isURL) {
+        if (!portalString.contains('http')) portalString = 'https://$portalString';
 
-    portalURI = Uri.parse(portalString);
+        portalURI = Uri.parse(portalString);
+      } else
+        return '';
+    }
+
     return portalString;
   }
 
@@ -312,9 +335,8 @@ class LoginController extends GetxController {
 
     locator.get<CoreApi>().cancellationToken.cancel();
 
-    await _secureStorage.delete('expires');
     await _secureStorage.delete('portalName');
-    await _secureStorage.delete('token');
+    await clearToken();
 
     await storage.remove('taskFilters');
     await storage.remove('projectFilters');
@@ -325,14 +347,23 @@ class LoginController extends GetxController {
     Get.find<PortalInfoController>().logout();
     Get.find<UserController>().clear();
 
+    await RemoteConfigService.fetchAndActivate();
+
     locator<EventHub>().fire('logoutSuccess');
-    setState(ViewState.Idle);
+    loaded.value = true;
   }
 
   // TODO: check dispose textControllers
   @override
   void onClose() {
     clearInputFields();
+
+    _portalAdressController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+
+    loaded.close();
+
     super.onClose();
   }
 
@@ -341,7 +372,6 @@ class LoginController extends GetxController {
     _emailController.clear();
     _passwordController.clear();
 
-    capabilities = null;
     _pass = null;
     _email = null;
     _tfaKey = null;
@@ -359,7 +389,6 @@ class LoginController extends GetxController {
     _emailController.clear();
     _passwordController.clear();
 
-    capabilities = null;
     _pass = null;
     _email = null;
     _tfaKey = null;

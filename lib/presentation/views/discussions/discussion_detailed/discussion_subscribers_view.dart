@@ -31,7 +31,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -40,12 +39,12 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DiscussionSubscribersView extends StatelessWidget {
-  final DiscussionItemController? controller;
+  final DiscussionItemController controller;
   const DiscussionSubscribersView({
     Key? key,
     required this.controller,
@@ -55,30 +54,34 @@ class DiscussionSubscribersView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller!.loaded.value == false)
+        if (controller.loaded.value == false)
           return const ListLoadingSkeleton();
         else {
-          final discussion = controller!.discussion.value;
+          final discussion = controller.discussion.value;
           return Stack(
             children: [
-              SmartRefresher(
-                controller: controller!.subscribersRefreshController,
-                onRefresh: controller!.onRefresh,
+              StyledSmartRefresher(
+                controller: controller.subscribersRefreshController,
+                onRefresh: controller.onRefresh,
                 child: ListView.separated(
                   itemCount: discussion.subscribers!.length,
-                  padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
                   separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 24);
+                    return const SizedBox();
                   },
                   itemBuilder: (BuildContext context, int index) {
                     final userController =
                         PortalUserItemController(portalUser: discussion.subscribers![index]);
                     return PortalUserItem(
-                        userController: userController,
-                        onTapFunction: (value) => {
-                              Get.find<NavigationController>().toScreen(const ProfileScreen(),
-                                  arguments: {'controller': userController})
-                            });
+                      userController: userController,
+                      onTapFunction: (value) => {
+                        Get.find<NavigationController>().toScreen(
+                          const ProfileScreen(),
+                          transition: Transition.rightToLeft,
+                          arguments: {'controller': userController},
+                          page: '/ProfileScreen',
+                        )
+                      },
+                    );
                   },
                 ),
               ),
@@ -88,12 +91,12 @@ class DiscussionSubscribersView extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 16, bottom: 24),
                   child: Obx(
                     () => Visibility(
-                      visible: controller!.fabIsVisible.value,
+                      visible: controller.fabIsVisible.value,
                       child: StyledFloatingActionButton(
-                        onPressed: () => controller!.toSubscribersManagingScreen(context),
+                        onPressed: () => controller.toSubscribersManagingScreen(context),
                         child: AppIcon(
                           icon: SvgIcons.add_fab,
-                          color: Get.theme.colors().onPrimarySurface,
+                          color: Theme.of(context).colors().onPrimarySurface,
                         ),
                       ),
                     ),

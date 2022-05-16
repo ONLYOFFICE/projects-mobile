@@ -31,55 +31,35 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
-class DocumentsSortOption extends StatelessWidget {
-  const DocumentsSortOption({
+class SearchButton extends StatelessWidget {
+  const SearchButton({
     Key? key,
     required this.controller,
   }) : super(key: key);
 
-  final BaseDocumentsController controller;
-
-  List<SortTile> getSortTile() {
-    return [
-      SortTile(
-        sortParameter: 'dateandtime',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'create_on',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'AZ',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'type',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'size',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'author',
-        sortController: controller.sortController,
-      ),
-    ];
-  }
+  final BaseController controller;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        ...getSortTile(),
-        const SizedBox(height: 20),
-      ],
-    );
+    return Obx(() {
+      if (controller.itemList.isNotEmpty)
+        return PlatformIconButton(
+          icon: AppIcon(
+            icon: SvgIcons.search,
+            color: Theme.of(context).colors().primary,
+          ),
+          padding: EdgeInsets.zero,
+          onPressed: controller.showSearch,
+          cupertino: (_, __) => CupertinoIconButtonData(minSize: 36),
+        );
+
+      return const SizedBox();
+    });
   }
 }

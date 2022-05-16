@@ -31,174 +31,105 @@
  */
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
-import 'package:projects/data/services/files_service.dart';
-import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectDetailsController extends BaseProjectEditorController {
-  final ProjectService _projectService = locator<ProjectService>();
-  final FilesService _docApi = locator<FilesService>();
+  final _projectService = locator<ProjectService>();
 
-  RefreshController refreshController = RefreshController();
-  RxBool loaded = true.obs;
+  ProjectTasksController? projectTasksController;
+  MilestonesDataSource? projectMilestonesController;
+  ProjectDiscussionsController? projectDiscussionsController;
+  DocumentsController? projectDocumentsController;
+  ProjectTeamController? projectTeamDataSource;
 
-  final statuses = [].obs;
+  final loaded = false.obs;
 
-  RxString projectTitleText = ''.obs;
+  final projectTitleText = ''.obs;
+  final managerText = ''.obs;
+  final creationDateText = ''.obs;
 
-  RxString managerText = ''.obs;
-  RxList<PortalUserItemController> teamMembers = <PortalUserItemController>[].obs;
-  RxInt teamMembersCount = 0.obs;
-
-  RxString creationDateText = ''.obs;
-
-  RxInt tasksCount = 0.obs;
-  RxInt docsCount = (-1).obs;
-  RxInt milestoneCount = (-1).obs;
-
-  int currentTab = -1.obs;
-
-  bool markedToDelete = false;
-
-  final Rx<ProjectDetailed?> _projectDetailed = ProjectDetailed().obs;
+  final taskCount = 0.obs;
+  final milestoneCount = 0.obs;
+  final discussionCount = 0.obs;
 
   @override
-  ProjectDetailed? get projectData => _projectDetailed.value;
+  ProjectDetailed get projectData => _projectDetailed.value!;
+  final _projectDetailed = Rxn<ProjectDetailed>();
 
-  late StreamSubscription _refreshProjectsSubscription;
-  late StreamSubscription _refreshDetailsSubscription;
-  late StreamSubscription _refreshMilestonesSubscription;
+  StreamSubscription? _refreshProjectsSubscription;
+  StreamSubscription? _taskCountSubscription;
 
   final _userController = Get.find<UserController>();
 
   ProjectDetailsController() {
-    _userController.getUserInfo().whenComplete(() => {
-          selfUserItem = PortalUserItemController(portalUser: _userController.user!),
-        });
+    _projectDetailed.listen((details) {
+      if (details == null) return;
 
-    _refreshProjectsSubscription = locator<EventHub>().on(
-      'needToRefreshProjects',
-      (dynamic data) {
-        if (markedToDelete) {
-          _refreshProjectsSubscription.cancel();
-          return;
-        }
+      fillProjectInfo(details);
 
-        if (data.any((elem) => elem == _projectDetailed.value!.id || elem == 'all') as bool)
-          refreshData();
-      },
-    );
-
-    _refreshDetailsSubscription = locator<EventHub>().on(
-      'needToRefreshDetails',
-      (dynamic data) {
-        if (markedToDelete) {
-          _refreshDetailsSubscription.cancel();
-          return;
-        }
-
-        if (data.any((elem) => elem == _projectDetailed.value!.id || elem == 'all') as bool)
-          refreshProjectDetails();
-      },
-    );
-
-    _refreshMilestonesSubscription = locator<EventHub>().on(
-      'needToRefreshMilestones',
-      (dynamic data) {
-        if (markedToDelete) {
-          _refreshMilestonesSubscription.cancel();
-          return;
-        }
-
-        if (data.any((elem) => elem == _projectDetailed.value!.id || elem == 'all') as bool)
-          refreshProjectMilestones();
-      },
-    );
+      taskCount.value = details.taskCount ?? 0;
+      milestoneCount.value = details.milestoneCount ?? 0;
+      discussionCount.value = details.discussionCount ?? 0;
+    });
   }
 
   @override
   void onClose() {
-    _refreshProjectsSubscription.cancel();
-    _refreshDetailsSubscription.cancel();
-    _refreshMilestonesSubscription.cancel();
+    _refreshProjectsSubscription?.cancel();
+    _taskCountSubscription?.cancel();
     super.onClose();
   }
 
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
+  bool setup({ProjectDetailed? projectDetailed}) {
+    if (projectDetailed != null) _projectDetailed.value = projectDetailed;
+
+    projectTasksController = Get.find<ProjectTasksController>();
+    projectMilestonesController = Get.find<MilestonesDataSource>();
+    projectDiscussionsController = Get.find<ProjectDiscussionsController>();
+    projectDocumentsController = Get.find<DocumentsController>();
+    projectTeamDataSource = Get.find<ProjectTeamController>();
+
+    _refreshProjectsSubscription?.cancel();
+    _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (data['all'] == true) {
+        refreshData();
+        return;
+      }
+
+      if (data['projectDetails'].id == _projectDetailed.value!.id)
+        _projectDetailed.value = data['projectDetails'] as ProjectDetailed;
+    });
+
+    _userController.getUserInfo().then((res) {
+      selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
+    });
+
+    refreshData(hidden: true);
+
+    return true;
   }
 
-  Future<bool> refreshProjectDetails() async {
-    final response = await _projectService.getProjectById(projectId: _projectDetailed.value!.id!);
-    if (response != null) _projectDetailed.value = response;
-
-    await fillProjectInfo();
-    if (response!.tags != null) {
-      tags.addAll(response.tags!);
-      tagsText.value = response.tags!.join(', ');
-    }
-
-    tasksCount.value = _projectDetailed.value!.taskCountTotal!;
-
-    final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
-    creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.value!.created!));
-
-    return Future.value(true);
-  }
-
-  Future<bool> refreshProjectMilestones() async {
-    final response = await locator<MilestoneService>()
-        .milestonesByFilter(projectId: _projectDetailed.value!.id.toString());
-
-    if (response == null) return Future.value(false);
-
-    milestoneCount.value = response.length;
-
-    return Future.value(true);
-  }
-
-  Future<void> setup(ProjectDetailed projectDetailed) async {
+  void fillProjectInfo(ProjectDetailed projectDetailed) {
     _projectDetailed.value = projectDetailed;
-    setPrivate(projectDetailed.isPrivate ?? false);
-
-    await refreshProjectDetails();
-    await refreshProjectMilestones();
-
-    await _docApi.getFilesByParams(folderId: _projectDetailed.value!.projectFolder).then(
-      (value) {
-        if (value != null) docsCount.value = value.files!.length;
-      },
-    );
-  }
-
-  Future<void> fillProjectInfo() async {
-    teamMembersCount.value = _projectDetailed.value!.participantCount!;
-
-    final tream = Get.find<ProjectTeamController>()..setup(projectDetailed: _projectDetailed.value);
-    // ignore: unawaited_futures
-    tream.getTeam().then((value) => {
-          teamMembers.clear(),
-          teamMembers.addAll(tream.usersList),
-          teamMembers.removeWhere(
-              (element) => element.portalUser.id == _projectDetailed.value!.responsible!.id),
-        });
 
     statusText.value =
         tr('projectStatus', args: [ProjectStatus.toName(_projectDetailed.value!.status)]);
@@ -207,58 +138,87 @@ class ProjectDetailsController extends BaseProjectEditorController {
     descriptionText.value = _projectDetailed.value!.description!;
     managerText.value = _projectDetailed.value!.responsible!.displayName!;
 
-    milestoneCount.value = _projectDetailed.value!.milestoneCount!;
+    final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
+    creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.value!.created!));
+
+    if (_projectDetailed.value!.tags != null) {
+      tags.addAll(_projectDetailed.value!.tags!);
+      tagsText.value = _projectDetailed.value!.tags!.join(', ');
+    }
+
+    setPrivate(projectDetailed.isPrivate ?? false);
+
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      loaded.value = true;
+    });
   }
 
-  Future<void> refreshData() async {
-    loaded.value = false;
+  Future<void> refreshData({bool hidden = false}) async {
+    if (!hidden) loaded.value = false;
 
-    await setup(_projectDetailed.value!);
+    final response = await _projectService.getProjectById(
+        projectId: _projectDetailed.value!.id!); // TODO move to new method
+    if (response != null) _projectDetailed.value = response;
+
+    fillProjectInfo(_projectDetailed.value!);
+
+    projectTasksController!.setup(_projectDetailed.value!);
+    projectMilestonesController!.setup(projectDetailed: _projectDetailed.value);
+    projectDiscussionsController!.setup(_projectDetailed.value!);
+    unawaited(projectDocumentsController!.setupFolder(
+      folderName: _projectDetailed.value!.title!,
+      folderId: _projectDetailed.value!.projectFolder,
+    ));
+    projectTeamDataSource!.setup(projectDetailed: _projectDetailed.value);
+    unawaited(projectTeamDataSource!.getTeam());
 
     loaded.value = true;
   }
 
   Future manageTeamMembers() async {
-    selectedProjectManager.value = projectData!.responsible;
+    selectedProjectManager.value = _projectDetailed.value!.responsible;
 
     selectedTeamMembers.clear();
 
-    for (final user in teamMembers) {
+    for (final user in projectTeamDataSource!.usersList) {
       selectedTeamMembers.add(user);
     }
-    await Get.find<NavigationController>()
-        .to(const TeamMembersSelectionView(), arguments: {'controller': this});
+    await Get.find<NavigationController>().toScreen(
+      const TeamMembersSelectionView(),
+      arguments: {'controller': this},
+      page: '/TeamMembersSelectionView',
+    );
   }
 
   Future<void> copyLink() async {}
 
   Future deleteProject() async {
-    markedToDelete = true;
-    return _projectService.deleteProject(projectId: _projectDetailed.value!.id!);
+    final responce = await _projectService.deleteProject(projectId: _projectDetailed.value!.id!);
+    if (responce) await _refreshProjectsSubscription?.cancel();
+
+    return responce;
   }
 
   @override
   Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
       .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed.value!);
 
-  Future followProject() async {
-    await _projectService.followProject(projectId: _projectDetailed.value!.id!);
-    await refreshData();
-  }
-
   @override
   Future<void> confirmTeamMembers() async {
-    Get.find<UsersDataSource>().loaded.value = false;
     final users = <String>[];
-
     for (final user in selectedTeamMembers) {
       users.add(user.id!);
     }
 
-    await _projectService.addToProjectTeam(projectData!.id!, users);
-    await refreshData();
-    Get.find<UsersDataSource>().loaded.value = true;
+    await _projectService.addToProjectTeam(_projectDetailed.value!.id!, users);
+    unawaited(projectTeamDataSource!.getTeam());
 
     Get.back();
+  }
+
+  @override
+  Future<void> showTags() {
+    // TODO: implement showTags
+    throw UnimplementedError();
   }
 }

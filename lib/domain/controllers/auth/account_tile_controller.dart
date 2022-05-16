@@ -30,25 +30,28 @@
  *
  */
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/account_data.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
+import 'package:synchronized/synchronized.dart';
 
 class AccountTileController extends GetxController {
   final _downloadService = locator<DownloadService>();
@@ -68,11 +71,16 @@ class AccountTileController extends GetxController {
 
   Rx<Widget> avatar =
       // ignore: unnecessary_cast
-      (AppIcon(width: 40, height: 40, icon: SvgIcons.avatar, color: Get.theme.colors().onSurface)
-              as Widget)
+      (AppIcon(
+              width: 40,
+              height: 40,
+              icon: SvgIcons.avatar,
+              color: Theme.of(Get.context!).colors().onSurface) as Widget)
           .obs;
 
   String? get displayName => accountData!.name;
+
+  final _onTapLock = Lock();
 
   Future<void> loadAvatar() async {
     try {
@@ -105,8 +113,7 @@ class AccountTileController extends GetxController {
       if (accountData!.token!.isNotEmpty) {
         final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
 
-        if (!isAuthValid)
-          await Get.find<AccountManagerController>().clearTokenForAccount(accountData!);
+        if (!isAuthValid) await Get.find<AccountManager>().clearTokenForAccount(accountData!);
       }
     }
 
@@ -116,7 +123,7 @@ class AccountTileController extends GetxController {
   Future<void> loginToSavedAccount() async {
     final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
     if (!isAuthValid) {
-      await Get.find<AccountManagerController>().clearTokenForAccount(accountData!);
+      await Get.find<AccountManager>().clearTokenForAccount(accountData!);
     }
 
     if (accountData?.token == '') {
@@ -127,12 +134,14 @@ class AccountTileController extends GetxController {
       loginController.setupPortalUri();
       locator.get<CoreApi>().setPortalName('${accountData!.scheme}${accountData!.portal}');
 
-      await Get.to(() => const LoginView());
+      await Get.to(() => LoginView());
     } else {
       await locator<SecureStorage>()
           .putString('portalName', '${accountData!.scheme}${accountData!.portal}');
       await Get.find<LoginController>()
-          .saveLoginData(token: accountData!.token, expires: accountData!.expires);
+          .saveLoginData(token: accountData!.token!, expires: accountData!.expires!);
+
+      // TODO @garanin add cookie
 
       await locator<SecureStorage>()
           .putString('currentAccount', json.encode(accountData!.toJson()));
@@ -141,24 +150,28 @@ class AccountTileController extends GetxController {
     }
   }
 
-  Future<void> onTap() async => loginToSavedAccount();
+  Future<void> onTap() async {
+    if (_onTapLock.locked) return;
+
+    unawaited(_onTapLock.synchronized(() async {
+      await loginToSavedAccount();
+    }));
+  }
 
   Future<void> deleteAccount() async {
-    await Get.dialog(
-      Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24),
-        child: StyledAlertDialog(
-          titleText: tr('removeAccountTitle'),
-          contentText: tr('removeAccountText'),
-          acceptText: tr('removeAccount').toUpperCase(),
-          cancelText: tr('cancel').toUpperCase(),
-          onAcceptTap: () async => {
-            await Get.find<AccountManagerController>().deleteAccounts(
-                accountId: accountData!.id!, accountData: jsonEncode(accountData!.toJson())),
-            Get.back(),
-          },
-          onCancelTap: Get.back,
-        ),
+    await Get.find<NavigationController>().showPlatformDialog(
+      StyledAlertDialog(
+        titleText: tr('removeAccountTitle'),
+        contentText: tr('removeAccountText'),
+        acceptText: tr('removeAccount').toUpperCase(),
+        cancelText: tr('cancel').toUpperCase(),
+        onAcceptTap: () async => {
+          await Get.find<AccountManager>().deleteAccounts(accountData: accountData!
+              // accountId: accountData!.id!, accountData: jsonEncode(accountData!.toJson())
+              ),
+          Get.back(),
+        },
+        onCancelTap: Get.back,
       ),
     );
   }

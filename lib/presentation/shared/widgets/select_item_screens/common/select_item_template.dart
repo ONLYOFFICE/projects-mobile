@@ -32,16 +32,19 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base/base_search_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 
@@ -61,29 +64,43 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
 
   VoidCallback get getItemsFunction;
 
-  Key get _searchIconKey => const Key('srch');
-  Key get _clearIconKey => const Key('clr');
+  VoidCallback? get onLeadingPressed;
 
   @override
   Widget build(BuildContext context) {
     getItemsFunction();
     final platformController = Get.find<PlatformController>();
 
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args['previousPage'] as String?;
+
+    final titleWidth = TextUtils.getTextWidth(
+      appBarText,
+      TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+    );
+
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        title: _AppBarTitle(
-          appBarText: appBarText,
-          searchController: searchController,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
+        titleText: appBarText,
+        titleWidth: titleWidth,
+        previousPageTitle: previousPage,
+        centerTitle: !GetPlatform.isAndroid,
+        bottom: SearchField(
+          controller: searchController.textController,
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          autofocus: true,
+          alwaysShowSuffixIcon: true,
+          hintText: tr('enterQuery'),
+          onSubmitted: searchController.search,
+          onChanged: searchController.search,
+          onClearPressed: () {
+            if (searchController.switchToSearchView.value) searchController.clearSearch();
+            searchController.switchToSearchView.value = !searchController.switchToSearchView.value;
+            searchController.search(null);
+          },
         ),
-        actions: [
-          _AppBarIcon(
-            searchController: searchController,
-            searchIconKey: _searchIconKey,
-            clearIconKey: _clearIconKey,
-          )
-        ],
       ),
       body: Obx(
         () {
@@ -110,16 +127,29 @@ mixin SelectItemMixin on StatelessWidget {
 
   VoidCallback get getItemsFunction;
 
+  VoidCallback? get onLeadingPressed;
+
   @override
   Widget build(BuildContext context) {
     getItemsFunction();
     final platformController = Get.find<PlatformController>();
 
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args['previousPage'] as String?;
+
+    final titleWidth = TextUtils.getTextWidth(
+      appBarText,
+      TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+    );
+
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
         titleText: appBarText,
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
+        onLeadingPressed: onLeadingPressed,
+        titleWidth: titleWidth,
+        previousPageTitle: previousPage,
       ),
       body: Obx(
         () {
@@ -142,9 +172,13 @@ mixin SelectItemListMixin on StatelessWidget {
       if (paginationController.data.isEmpty) {
         return Center(child: EmptyScreen(icon: SvgIcons.group, text: tr('noGroups')));
       } else {
+        final scrollController = ScrollController();
+
         return PaginationListView(
+          scrollController: scrollController,
           paginationController: paginationController,
           child: ListView.separated(
+            controller: scrollController,
             itemCount: paginationController.data.length,
             padding: const EdgeInsets.symmetric(vertical: 8),
             separatorBuilder: (BuildContext context, int index) {
@@ -188,7 +222,7 @@ class SelectItemTile extends StatelessWidget {
                 Flexible(
                   child: Text(
                     title!,
-                    style: TextStyleHelper.projectTitle,
+                    style: TextStyleHelper.subtitle1(),
                   ),
                 ),
               ],

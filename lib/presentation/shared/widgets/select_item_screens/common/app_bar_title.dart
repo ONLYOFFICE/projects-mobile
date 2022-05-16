@@ -32,8 +32,8 @@
 
 part of 'select_item_template.dart';
 
-class _AppBarTitle extends StatelessWidget {
-  const _AppBarTitle({
+class AppBarTitleWithSearch extends StatelessWidget {
+  const AppBarTitleWithSearch({
     Key? key,
     required this.appBarText,
     required this.searchController,
@@ -42,33 +42,31 @@ class _AppBarTitle extends StatelessWidget {
   final BaseSearchController searchController;
   final String appBarText;
 
+  void _clearFunction() {
+    if (searchController.switchToSearchView.value) searchController.clearSearch();
+
+    searchController.switchToSearchView.value = !searchController.switchToSearchView.value;
+    searchController.search(null);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Obx(() => AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          reverseDuration: const Duration(milliseconds: 300),
-          switchInCurve: Curves.easeOutSine,
-          switchOutCurve: Curves.fastOutSlowIn,
-          child: searchController.switchToSearchView.value == true
-              ? TextField(
-                  autofocus: true,
-                  controller: searchController.textController,
-                  decoration:
-                      InputDecoration.collapsed(hintText: tr('enterQuery')),
-                  style: TextStyleHelper.headline6(
-                    color: Get.theme.colors().onSurface,
-                  ),
-                  onSubmitted: (value) async =>
-                      await searchController.search(query: value),
-                )
-              : Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    appBarText,
-                    style: TextStyleHelper.headerStyle(
-                        color: Get.theme.colors().onSurface),
-                  ),
-                ),
-        ));
+    return Obx(
+      () => searchController.switchToSearchView.value
+          ? SearchField(
+              controller: searchController.textController,
+              margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              autofocus: true,
+              alwaysShowSuffixIcon: true,
+              hintText: tr('enterQuery'),
+              onSubmitted: searchController.search,
+              onChanged: searchController.search,
+              onClearPressed: _clearFunction,
+            )
+          : Text(
+              appBarText,
+              style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+            ),
+    );
   }
 }

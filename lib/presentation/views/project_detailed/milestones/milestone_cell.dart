@@ -42,27 +42,35 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 
 class MilestoneCell extends StatelessWidget {
-  final Milestone? milestone;
-  const MilestoneCell({Key? key, this.milestone}) : super(key: key);
+  final Milestone milestone;
+  const MilestoneCell({Key? key, required this.milestone}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final itemController =
-        Get.put(MilestoneCellController(milestone), tag: milestone!.id.toString());
+    MilestoneCellController itemController;
 
-    return Container(
-      height: 72,
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _MilestoneIcon(
-            itemController: itemController,
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: InkWell(
-              onTap: () => {},
+    if (Get.isRegistered<MilestoneCellController>(tag: milestone.id.toString())) {
+      itemController = Get.find<MilestoneCellController>(tag: milestone.id.toString());
+
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        itemController.setup(milestone);
+      });
+    } else {
+      itemController = Get.put(
+        MilestoneCellController(milestone),
+        tag: milestone.id.toString(),
+      );
+    }
+
+    return InkWell(
+      onTap: () => {},
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 4),
+        height: 72,
+        child: Row(
+          children: [
+            _MilestoneIcon(itemController: itemController),
+            Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -70,35 +78,28 @@ class MilestoneCell extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        _SecondColumn(
-                          milestone: milestone,
-                          itemController: itemController,
-                        ),
+                        _SecondColumn(itemController: itemController),
                         const SizedBox(width: 8),
-                        _ThirdColumn(
-                          milestone: milestone,
-                          controller: itemController,
-                        ),
+                        _ThirdColumn(controller: itemController),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-        ],
+            const SizedBox(width: 16),
+          ],
+        ),
       ),
     );
   }
 }
 
 class _SecondColumn extends StatelessWidget {
-  final Milestone? milestone;
   final MilestoneCellController itemController;
 
   const _SecondColumn({
     Key? key,
-    required this.milestone,
     required this.itemController,
   }) : super(key: key);
 
@@ -113,21 +114,21 @@ class _SecondColumn extends StatelessWidget {
         children: <Widget>[
           Obx(() {
             TextStyle style;
-            if (itemController.milestone.value!.status == 1) {
-              style = TextStyleHelper.projectTitle.copyWith(
+            if (itemController.milestone.value.status == 1) {
+              style = TextStyleHelper.subtitle1().copyWith(
                   decoration: TextDecoration.lineThrough,
-                  color: Get.theme.colors().onSurface.withOpacity(0.6));
-            } else if (itemController.milestone.value!.status == 2) {
-              style = TextStyleHelper.projectTitle
-                  .copyWith(color: Get.theme.colors().onSurface.withOpacity(0.6));
+                  color: Theme.of(context).colors().onSurface.withOpacity(0.6));
+            } else if (itemController.milestone.value.status == 2) {
+              style = TextStyleHelper.subtitle1()
+                  .copyWith(color: Theme.of(context).colors().onSurface.withOpacity(0.6));
             } else {
-              style = TextStyleHelper.projectTitle;
+              style = TextStyleHelper.subtitle1();
             }
             return CellAtributedTitle(
-              text: milestone!.title,
+              text: itemController.milestone.value.title,
               style: style,
               atributeIcon: const AppIcon(icon: SvgIcons.atribute),
-              atributeIconVisible: itemController.milestone.value!.isKey,
+              atributeIconVisible: itemController.milestone.value.isKey,
             );
           }),
           Row(
@@ -135,9 +136,9 @@ class _SecondColumn extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Obx(() {
-                final color = itemController.milestone.value!.canEdit!
-                    ? Get.theme.colors().primary
-                    : Get.theme.colors().onBackground;
+                final color = itemController.milestone.value.canEdit!
+                    ? Theme.of(context).colors().primary
+                    : Theme.of(context).colors().onBackground;
                 return Text(
                   itemController.statusName,
                   style: TextStyleHelper.status(color: color),
@@ -145,13 +146,15 @@ class _SecondColumn extends StatelessWidget {
               }),
               Text(' • ',
                   style: TextStyleHelper.caption(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
               Flexible(
-                child: Text(milestone!.responsible!.displayName!.replaceAll(' ', '\u00A0'),
+                child: Text(
+                    itemController.milestone.value.responsible!.displayName!
+                        .replaceAll(' ', '\u00A0'),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                        color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
               ),
             ],
           ),
@@ -162,12 +165,10 @@ class _SecondColumn extends StatelessWidget {
 }
 
 class _ThirdColumn extends StatelessWidget {
-  final Milestone? milestone;
   final MilestoneCellController controller;
 
   const _ThirdColumn({
     Key? key,
-    required this.milestone,
     required this.controller,
   }) : super(key: key);
 
@@ -179,12 +180,12 @@ class _ThirdColumn extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        if (milestone!.deadline != null)
+        if (controller.milestone.value.deadline != null)
           Text(
-            formatedDate(milestone!.deadline!),
-            style: milestone!.deadline!.isBefore(_now)
-                ? TextStyleHelper.caption(color: Get.theme.colors().colorError)
-                : TextStyleHelper.caption(color: Get.theme.colors().onSurface),
+            formatedDate(controller.milestone.value.deadline!),
+            style: controller.milestone.value.deadline!.isBefore(_now)
+                ? TextStyleHelper.caption(color: Theme.of(context).colors().colorError)
+                : TextStyleHelper.caption(color: Theme.of(context).colors().onSurface),
           ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -197,9 +198,9 @@ class _ThirdColumn extends StatelessWidget {
               height: 20,
             ),
             Text(
-              milestone!.activeTaskCount.toString(),
+              controller.milestone.value.activeTaskCount.toString(),
               style: TextStyleHelper.body2(
-                color: Get.theme.colors().onSurface.withOpacity(0.6),
+                color: Theme.of(context).colors().onSurface.withOpacity(0.6),
               ),
             ),
           ],
@@ -224,11 +225,11 @@ class _MilestoneIcon extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Obx(() {
-          final color = itemController.milestone.value!.canEdit!
-              ? Get.theme.colors().primary
-              : Get.theme.colors().onBackground;
+          final color = itemController.milestone.value.canEdit!
+              ? Theme.of(context).colors().primary
+              : Theme.of(context).colors().onBackground;
           return SizedBox(
-            width: 48,
+            width: 72,
             child: Stack(
               alignment: Alignment.center,
               children: <Widget>[
@@ -242,23 +243,23 @@ class _MilestoneIcon extends StatelessWidget {
                 ),
                 Positioned(
                   bottom: 0,
-                  right: 0,
+                  right: 10,
                   child: Container(
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 1,
-                        color: Get.theme.colors().primary.withOpacity(0.1),
+                        color: Theme.of(context).colors().primary.withOpacity(0.1),
                       ),
-                      color: Get.theme.colors().background,
+                      color: Theme.of(context).colors().background,
                       shape: BoxShape.circle,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(4),
                       child: AppIcon(
                         icon: SvgIcons.milestone,
-                        color: Get.theme.colors().onBackground.withOpacity(0.6),
+                        color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                         width: 16,
                         height: 16,
                       ),

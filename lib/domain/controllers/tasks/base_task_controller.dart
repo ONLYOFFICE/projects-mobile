@@ -30,39 +30,11 @@
  *
  */
 
-import 'package:flutter/material.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 
-class LoginItem extends StatelessWidget {
-  final String? serviceName;
-  final Function? onTap;
-  const LoginItem({Key? key, this.serviceName, this.onTap}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap as void Function()?,
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: const [
-              BoxShadow(
-                  blurRadius: 3,
-                  offset: Offset(0, 2),
-                  color: Color.fromARGB(80, 0, 0, 0))
-            ]),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              serviceName!,
-              style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+abstract class BaseTasksController extends BaseController {
+  TasksSortController get sortController;
+  BaseTaskFilterController get filterController;
 }

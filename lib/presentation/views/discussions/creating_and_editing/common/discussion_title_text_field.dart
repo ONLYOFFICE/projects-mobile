@@ -32,10 +32,12 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class DiscussionTitleTextField extends StatelessWidget {
@@ -59,32 +61,44 @@ class DiscussionTitleTextField extends StatelessWidget {
                 () => AppIcon(
                   icon: SvgIcons.discussions,
                   color: controller.titleIsEmpty.value
-                      ? Get.theme.colors().onBackground.withOpacity(0.4)
-                      : Get.theme.colors().onBackground.withOpacity(0.75),
+                      ? Theme.of(context).colors().onBackground.withOpacity(0.4)
+                      : Theme.of(context).colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
           ),
           Expanded(
-            child: Obx(
-              () => TextField(
+            child: Obx(() {
+              final setTitleError = controller.setTitleError.value;
+              return PlatformTextField(
+                makeCupertinoDecorationNull: true,
                 onChanged: controller.changeTitle,
                 focusNode: controller.titleFocus,
                 maxLines: null,
                 controller: controller.titleController,
-                style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-                cursorColor: Get.theme.colors().primary.withOpacity(0.87),
-                decoration: InputDecoration(
-                    hintText: tr('discussionTitle'),
-                    contentPadding: EdgeInsets.zero,
-                    hintStyle: TextStyleHelper.headline6(
-                      color: controller.setTitleError.value == true
-                          ? Get.theme.colors().colorError
-                          : Get.theme.colors().onSurface.withOpacity(0.5),
-                    ),
-                    border: InputBorder.none),
-              ),
-            ),
+                style: TextStyleHelper.headline6(color: Theme.of(context).colors().onBackground),
+                cursorColor: Theme.of(context).colors().primary.withOpacity(0.87),
+                hintText: tr('discussionTitle'),
+                cupertino: (_, __) => CupertinoTextFieldData(
+                  padding: EdgeInsets.zero,
+                  placeholderStyle: TextStyleHelper.headline6(
+                    color: setTitleError
+                        ? Theme.of(context).colors().colorError
+                        : Theme.of(context).colors().onSurface.withOpacity(0.5),
+                  ),
+                ),
+                material: (_, __) => MaterialTextFieldData(
+                  decoration: InputDecoration(
+                      contentPadding: EdgeInsets.zero,
+                      hintStyle: TextStyleHelper.headline6(
+                        color: setTitleError
+                            ? Theme.of(context).colors().colorError
+                            : Theme.of(context).colors().onSurface.withOpacity(0.5),
+                      ),
+                      border: InputBorder.none),
+                ),
+              );
+            }),
           )
         ],
       ),

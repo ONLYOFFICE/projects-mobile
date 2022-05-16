@@ -125,8 +125,7 @@ class ProjectService {
     int? startIndex,
     String? query,
   }) async {
-    final tags =
-        await _api.getTagsPaginated(query: query, startIndex: startIndex);
+    final tags = await _api.getTagsPaginated(query: query, startIndex: startIndex);
 
     final success = tags.response != null;
 
@@ -151,20 +150,15 @@ class ProjectService {
     }
   }
 
-  Future<List<PortalUser>?> addToProjectTeam(
-      int projectID, List<String> users) async {
-    final team =
-        await _api.addToProjectTeam(projectID: projectID, users: users);
+  Future<List<PortalUser>?> addToProjectTeam(int projectID, List<String> users) async {
+    final team = await _api.addToProjectTeam(projectID: projectID, users: users);
 
     final success = team.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.project
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.project
       });
       return team.response;
     } else {
@@ -173,39 +167,31 @@ class ProjectService {
     }
   }
 
-  Future<ProjectDetailed?> createProject(
-      {required NewProjectDTO project}) async {
+  Future<ProjectDetailed?> createProject({required NewProjectDTO project}) async {
     final result = await _api.createProject(project: project);
 
     if (result.response != null) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.project
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.project
       });
 
       return result.response;
-    } else {
+    } else
       await Get.find<ErrorDialog>().show(result.error!.message);
-    }
+
+    return null;
   }
 
-  Future<bool> editProject(
-      {required EditProjectDTO project, required int projectId}) async {
-    final result =
-        await _api.editProject(project: project, projectId: projectId);
+  Future<bool> editProject({required EditProjectDTO project, required int projectId}) async {
+    final result = await _api.editProject(project: project, projectId: projectId);
 
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.project
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.project
       });
       return success;
     } else {
@@ -220,12 +206,9 @@ class ProjectService {
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.project
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.project
       });
       return success;
     } else {
@@ -236,18 +219,14 @@ class ProjectService {
 
   Future<ProjectDetailed?> updateProjectStatus(
       {required int projectId, required String newStatus}) async {
-    final result = await _api.updateProjectStatus(
-        projectId: projectId, newStatus: newStatus);
+    final result = await _api.updateProjectStatus(projectId: projectId, newStatus: newStatus);
 
     final success = result.error == null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.project
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.project
       });
       return result.response;
     } else {
@@ -262,12 +241,9 @@ class ProjectService {
     final success = result.error == null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.project
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.project
       });
       return result.response;
     } else {
@@ -282,12 +258,9 @@ class ProjectService {
     final success = result.error == null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.project
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.project
       });
       return result.response;
     } else {

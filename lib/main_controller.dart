@@ -44,7 +44,7 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -68,9 +68,7 @@ class MainController extends GetxController {
   // ignore: unnecessary_cast
   Widget portalInputView = AccountManagerView() as Widget;
 
-  bool noInternet = false;
   bool isSessionStarted = false;
-  bool correctPasscodeChecked = false;
 
   final subscriptions = <StreamSubscription>[];
 
@@ -78,11 +76,6 @@ class MainController extends GetxController {
 
   @override
   void onInit() {
-    Connectivity().checkConnectivity().then((result) => {
-          noInternet = result == ConnectivityResult.none,
-          if (result == ConnectivityResult.none) Get.to(const NoInternetScreen())
-        });
-
     _setupSubscriptions();
 
     super.onInit();
@@ -98,28 +91,24 @@ class MainController extends GetxController {
     if (subscriptions.isNotEmpty) cancelAllSubscriptions();
 
     subscriptions.add(Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
-      if (noInternet == (result == ConnectivityResult.none)) return;
       if (result == ConnectivityResult.none) {
-        Get.to(const NoInternetScreen());
+        Get.to(() => const NoInternetScreen());
 
         locator.get<CoreApi>().cancellationToken.cancel();
       } else {
-        GetIt.instance.resetLazySingleton<CoreApi>();
+        locator.resetLazySingleton<CoreApi>();
+
         if (isSessionStarted)
           Get.back();
         else
-          Get.offAll(() => const MainView());
+          Get.offAll(() => const MainView(), transition: Transition.noTransition);
       }
-      noInternet = result == ConnectivityResult.none;
-
-      setupMainPage();
     }));
 
     subscriptions.add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
       mainPage.value = navigationView;
       Get.offAll(() => const MainView());
-      Get.find<UserController>().getUserInfo();
-      Get.find<UserController>().getSecurityInfo();
+      Get.find<UserController>().updateData();
 
       Get.find<PortalInfoController>().setup();
 
@@ -141,13 +130,16 @@ class MainController extends GetxController {
   }
 
   Future<void> setupMainPage() async {
-    final connection = await Connectivity().checkConnectivity();
-    if (connection == ConnectivityResult.none) return;
+    if (await Connectivity().checkConnectivity() == ConnectivityResult.none) {
+      Get.to(() => const NoInternetScreen());
+
+      locator.get<CoreApi>().cancellationToken.cancel();
+      return;
+    }
 
     isSessionStarted = true;
-    final accountManager = Get.isRegistered<AccountManagerController>()
-        ? Get.find<AccountManagerController>()
-        : Get.put(AccountManagerController());
+    final accountManager =
+        Get.isRegistered<AccountManager>() ? Get.find<AccountManager>() : Get.put(AccountManager());
 
     isAuthorized().then((isAuthorized) async {
       return {
@@ -198,12 +190,11 @@ class MainController extends GetxController {
       await cookieManager.setCookies([
         Cookie('asc_auth_key', token)
           ..domain = Uri.parse(portalName).authority
-          ..expires = DateTime.now().add(const Duration(days: 10))
+          ..expires = expiration
           ..httpOnly = false
       ]);
 
-      await Get.find<AccountManagerController>()
-          .addAccount(tokenString: token, expires: expirationDate);
+      await Get.find<AccountManager>().addAccount(tokenString: token, expires: expirationDate);
     }
 
     return isAuthValid;
@@ -222,7 +213,7 @@ class MainController extends GetxController {
 
     await cookieManager.clearCookies();
 
-    await Get.put(AccountManagerController()).clearToken();
+    await Get.put(AccountManager()).clearToken();
 
     Get.find<PortalInfoController>().logout();
   }

@@ -33,8 +33,10 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/internal/utils/debug_print.dart';
+import 'package:projects/main_controller.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -47,7 +49,7 @@ class NoInternetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = Get.theme.brightness == Brightness.light
+    final icon = Theme.of(context).brightness == Brightness.light
         ? SvgIcons.no_internet
         : SvgIcons.no_internet.replaceFirst('.', '_dark.');
 
@@ -78,14 +80,14 @@ class NoInternetScreen extends StatelessWidget {
                 Text(
                   tr('noInternetConnectionTitle'),
                   textAlign: TextAlign.center,
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
                 ),
                 const SizedBox(height: 16),
                 Text(
                   tr('noInternetConnectionSubtitle'),
                   textAlign: TextAlign.center,
                   style: TextStyleHelper.subtitle1(
-                      color: Get.theme.colors().onSurface.withOpacity(0.75)),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.75)),
                 ),
                 const SizedBox(height: 48),
                 Padding(
@@ -93,22 +95,31 @@ class NoInternetScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 280,
                     height: 48,
-                    child: TextButton(
+                    child: PlatformTextButton(
                       onPressed: () async {
-                        await Connectivity().checkConnectivity();
+                        if (await Connectivity().checkConnectivity() != ConnectivityResult.none) {
+                          if (Get.find<MainController>().isSessionStarted)
+                            Get.back();
+                          else {} // TODO refactor UserController
+                        }
                       },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
-                            (_) => const EdgeInsets.fromLTRB(10, 10, 10, 12)),
-                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                            (_) => Get.theme.colors().primary),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
+                      material: (context, platform) => MaterialTextButtonData(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                              (_) => Theme.of(context).colors().primary),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                          ),
                         ),
                       ),
+                      cupertino: (context, platform) => CupertinoTextButtonData(
+                          color: Theme.of(context).colors().primary,
+                          borderRadius: BorderRadius.circular(6)),
                       child: Text(tr('tryAgain'),
                           textAlign: TextAlign.center,
-                          style: TextStyleHelper.button(color: Get.theme.colors().onPrimary)),
+                          style:
+                              TextStyleHelper.button(color: Theme.of(context).colors().onPrimary)),
                     ),
                   ),
                 ),

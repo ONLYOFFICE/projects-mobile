@@ -32,8 +32,10 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
@@ -43,7 +45,9 @@ class TaskDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'] as TaskActionsController;
+    final previousPage = args['previousPage'] as String?;
 
     final platformController = Get.find<PlatformController>();
 
@@ -53,31 +57,42 @@ class TaskDescription extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('description'),
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
           onLeadingPressed: () =>
               controller.leaveDescriptionView(controller.descriptionController.value.text),
+          previousPageTitle: previousPage,
           actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
+            PlatformIconButton(
+                icon: Icon(PlatformIcons(context).checkMark),
                 onPressed: () =>
                     controller.confirmDescription(controller.descriptionController.value.text))
           ],
         ),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
-          child: TextField(
-            controller: controller.descriptionController.value as TextEditingController,
+          child: PlatformTextField(
+            makeCupertinoDecorationNull: true,
+            controller: controller.descriptionController.value,
             autofocus: true,
             maxLines: null,
-            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
-            decoration: InputDecoration.collapsed(
-                hintText: tr('taskDescription'), hintStyle: TextStyleHelper.subtitle1()),
+            style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
+            hintText: tr('taskDescription'),
+            cupertino: (_, __) => CupertinoTextFieldData(
+              placeholderStyle: TextStyleHelper.subtitle1(
+                color: Theme.of(context).colors().onSurface.withOpacity(0.4),
+              ),
+            ),
+            material: (_, __) => MaterialTextFieldData(
+              decoration: InputDecoration.collapsed(
+                hintText: tr('taskDescription'),
+                hintStyle: TextStyleHelper.subtitle1(
+                  color: Theme.of(context).colors().onSurface.withOpacity(0.4),
+                ),
+              ),
+            ),
           ),
         ),
       ),

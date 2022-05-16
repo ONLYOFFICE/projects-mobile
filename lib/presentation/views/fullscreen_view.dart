@@ -31,6 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 
 class ModalScreenView extends StatelessWidget {
   final Widget contentView;
@@ -45,14 +46,41 @@ class ModalScreenView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 80),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: SizedBox(
-              width: 480,
-              height: 608,
-              child: contentView,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 540, maxHeight: 620),
+            child: contentView,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ModalScreenViewSkeleton extends StatelessWidget {
+  final ModalNavigationData modalNavigationData;
+
+  const ModalScreenViewSkeleton({
+    Key? key,
+    required this.modalNavigationData,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 540, maxHeight: 620),
+            child: Navigator(
+              key: ModalNavigationData.key,
+              initialRoute: modalNavigationData.initialPage,
+              onGenerateInitialRoutes: ModalNavigationData.onGenerateInitialRoutes,
+              // (_, initialRouteName) => [ModalNavigationData.onGenerateRoute(RouteSettings(name: modalNavigationData.initialRoute, arguments: null))],
+              onGenerateRoute: ModalNavigationData.onGenerateRoute,
             ),
           ),
         ),

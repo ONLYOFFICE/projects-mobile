@@ -364,6 +364,48 @@ class CoreApi {
     }
   }
 
+  Future<dynamic> putFormDataRequest(
+    String url, {
+    Map<String, String>? body,
+  }) async {
+    try {
+      debugPrint(url);
+
+      final headers = await getHeaders();
+      headers.removeWhere((key, value) => !key.contains('Auth'));
+
+      final request = HttpClientHelper.put(
+        Uri.parse(url),
+        cancelToken: cancellationToken,
+        timeLimit: Duration(seconds: timeout),
+        headers: headers,
+        body: body,
+      );
+      final response = await request;
+
+      if (response == null) return CustomError(message: '');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        String? error;
+        if (response.headers['content-type'] != null &&
+            response.headers['content-type']!.contains('json')) {
+          error = json.decode(response.body)['error']['message'] as String?;
+        }
+
+        return CustomError(message: error ?? response.reasonPhrase!);
+      }
+    } on TimeoutException catch (_) {
+      return CustomError(message: '');
+      // ignore: avoid_catching_errors
+    } on OperationCanceledError catch (_) {
+      return CustomError(message: '');
+    } catch (e) {
+      return CustomError(message: '');
+    }
+  }
+
   Future<dynamic> deleteRequest(String url) async {
     try {
       debugPrint(url);

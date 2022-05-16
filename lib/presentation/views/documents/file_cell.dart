@@ -31,121 +31,148 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
+import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
+import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
 import 'package:projects/internal/extentions.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
 class FileCell extends StatelessWidget {
   final FileCellController cellController;
-  final DocumentsController documentsController;
+  final BaseDocumentsController documentsController;
 
   const FileCell({Key? key, required this.documentsController, required this.cellController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
-      onTap: () async {
-        await cellController.openFile(cellController.file);
-      },
-      child: SizedBox(
-        height: 72,
-        child: Row(
-          children: [
-            SizedBox(
-              width: 72,
-              child: Center(
-                child: Obx(() => cellController.fileIcon.value),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      height: 72,
+      child: Column(
+        children: [
+          Expanded(
+            child: InkWell(
+              onTap: () => cellController.openFile(parentId: documentsController.parentId),
+              child: Row(
                 children: [
-                  Flexible(
-                    child: Text(cellController.file.title!.replaceAll(' ', '\u00A0'),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyleHelper.projectTitle),
+                  SizedBox(
+                    width: 72,
+                    child: Center(
+                      child: Obx(() => cellController.fileIcon.value),
+                    ),
                   ),
-                  Text(
-                      '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',
-                      style: TextStyleHelper.caption(
-                          color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          child: Text(cellController.file.title!.replaceAll(' ', '\u00A0'),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyleHelper.subtitle1()),
+                        ),
+                        Text(
+                            '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',
+                            style: TextStyleHelper.caption(
+                                color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  PlatformPopupMenuButton(
+                    padding: EdgeInsets.zero,
+                    onSelected: (dynamic value) =>
+                        _onFilePopupMenuSelected(value, documentsController, cellController),
+                    icon: Icon(PlatformIcons(context).ellipsis,
+                        color: Theme.of(context).colors().onSurface.withOpacity(0.5)),
+                    itemBuilder: (context) {
+                      return [
+                        PlatformPopupMenuItem(
+                          value: 'open',
+                          child: Text(tr('open')),
+                        ),
+                        PlatformPopupMenuItem(
+                          value: 'copyLink',
+                          child: Text(tr('copyLink')),
+                        ),
+                        PlatformPopupMenuItem(
+                          value: 'download',
+                          child: Text(cellController.progress.value > 0
+                              ? tr('cancelDownload')
+                              : tr('download')),
+                        ),
+                        if (Security.files.canEdit(cellController.file) &&
+                            documentsController is! DiscussionsDocumentsController)
+                          PlatformPopupMenuItem(
+                            value: 'copy',
+                            child: Text(tr('copy')),
+                          ),
+                        if (Security.files.canDelete(cellController.file) &&
+                            documentsController is! DiscussionsDocumentsController)
+                          PlatformPopupMenuItem(
+                            value: 'move',
+                            child: Text(tr('move')),
+                          ),
+                        if (Security.files.canEdit(cellController.file) &&
+                            documentsController is! DiscussionsDocumentsController)
+                          PlatformPopupMenuItem(
+                            value: 'rename',
+                            child: Text(tr('rename')),
+                          ),
+                        if (Security.files.canDelete(cellController.file))
+                          PlatformPopupMenuItem(
+                            value: 'delete',
+                            isDestructiveAction: true,
+                            textStyle: TextStyleHelper.subtitle1(
+                                color: Theme.of(context).colors().colorError),
+                            child: Text(tr('delete')),
+                          ),
+                      ];
+                    },
+                  ),
+                  const SizedBox(width: 8),
                 ],
               ),
             ),
-            SizedBox(
-              width: 60,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 10),
-                child: PopupMenuButton(
-                  onSelected: (dynamic value) => {
-                    _onFilePopupMenuSelected(value, context, documentsController, cellController)
-                  },
-                  icon: Icon(Icons.more_vert, color: Get.theme.colors().onSurface.withOpacity(0.5)),
-                  itemBuilder: (context) {
-                    return [
-                      PopupMenuItem(
-                        value: 'open',
-                        child: Text(tr('open')),
-                      ),
-                      PopupMenuItem(
-                        value: 'copyLink',
-                        child: Text(tr('copyLink')),
-                      ),
-                      PopupMenuItem(
-                        value: 'download',
-                        child: Text(tr('download')),
-                      ),
-                      if (Security.files.canEdit(cellController.file))
-                        PopupMenuItem(
-                          value: 'copy',
-                          child: Text(tr('copy')),
-                        ),
-                      if (Security.files.canDelete(cellController.file))
-                        PopupMenuItem(
-                          value: 'move',
-                          child: Text(tr('move')),
-                        ),
-                      if (Security.files.canEdit(cellController.file))
-                        PopupMenuItem(
-                          value: 'rename',
-                          child: Text(tr('rename')),
-                        ),
-                      if (Security.files.canDelete(cellController.file))
-                        PopupMenuItem(
-                          value: 'delete',
-                          child: Text(
-                            tr('delete'),
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                          ),
-                        ),
-                    ];
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+          Obx(() {
+            if (cellController.fileAction.value == FileAction.OnlyDownload &&
+                cellController.progress.value > 0)
+              return Obx(() {
+                return LinearProgressIndicator(
+                  value: cellController.progress.value,
+                  color: Theme.of(context).colors().primary,
+                  backgroundColor: Theme.of(context).colors().backgroundSecond,
+                );
+              });
+            else
+              return const SizedBox();
+          }),
+        ],
       ),
     );
   }
 }
 
-Future<void> _onFilePopupMenuSelected(value, BuildContext context,
-    DocumentsController documentsController, FileCellController cellController) async {
+Future<void> _onFilePopupMenuSelected(
+    value, BaseDocumentsController documentsController, FileCellController cellController) async {
   switch (value) {
     case 'copyLink':
       final portalDomain = documentsController.portalInfoController.portalUri;
@@ -156,92 +183,105 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
 
         if (link.isURL) {
           await Clipboard.setData(ClipboardData(text: link));
-          MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
         } else
-          MessagesHandler.showSnackBar(context: context, text: tr('error'));
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
       }
       break;
     case 'open':
-      await cellController.openFile(cellController.file);
+      cellController.openFile(parentId: documentsController.parentId);
       break;
     case 'download':
-      await cellController.downloadFile(cellController.file.viewUrl!);
+      cellController.progress.value > 0
+          ? await cellController.cancelDownloadFile()
+          : await cellController.downloadFile();
       break;
     case 'copy':
-      await Get.find<NavigationController>()
-          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': 'copyFile',
-        'target': cellController.file.id,
-        'initialFolderId': documentsController.currentFolder,
-        'refreshCalback': documentsController.refreshContent
-      });
+      await Get.find<NavigationController>().toScreen(
+        DocumentsMoveOrCopyView(),
+        preventDuplicates: false,
+        arguments: {
+          'mode': MoveOrCopyMode.CopyDocument,
+          'target': cellController.file.id,
+          'initialFolderId': cellController.file.folderId,
+        },
+        transition: Transition.rightToLeft,
+        page: '/DocumentsMoveOrCopyView',
+      );
       break;
     case 'move':
-      await Get.find<NavigationController>()
-          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
-        'mode': 'moveFile',
-        'target': cellController.file.id,
-        'initialFolderId': documentsController.currentFolder,
-        'refreshCalback': documentsController.refreshContent
-      });
-
+      await Get.find<NavigationController>().toScreen(
+        DocumentsMoveOrCopyView(),
+        preventDuplicates: false,
+        arguments: {
+          'mode': MoveOrCopyMode.MoveDocument,
+          'target': cellController.file.id,
+          'initialFolderId': cellController.file.folderId,
+        },
+        transition: Transition.rightToLeft,
+        page: '/DocumentsMoveOrCopyView',
+      );
       break;
     case 'rename':
-      _renameFile(documentsController, cellController, context);
+      _renameFile(cellController);
       break;
     case 'delete':
-      final success = await cellController.deleteFile(cellController.file);
+      final error = await cellController.deleteFile();
 
-      if (success) {
-        MessagesHandler.showSnackBar(context: context, text: tr('fileDeleted'));
-      }
+      if (error == null) {
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileDeleted'));
+
+        locator<EventHub>().fire('needToRefreshDocuments');
+      } else
+        MessagesHandler.showSnackBar(context: Get.context!, text: error);
       break;
     default:
   }
 }
 
-void _renameFile(
-  DocumentsController docController,
-  FileCellController cellController,
-  BuildContext context,
-) {
+void _renameFile(FileCellController cellController) {
   final inputController = TextEditingController();
   inputController.text = cellController.file.title!.replaceAll(cellController.file.fileExst!, '');
 
   final isErrorInputText = ValueNotifier<bool>(false);
 
-  Get.dialog(
+  Future onSubmitted() async {
+    inputController.text = inputController.text.trim();
+    inputController.selection = TextSelection.fromPosition(
+      TextPosition(offset: inputController.text.length),
+    );
+
+    if (inputController.text.isEmpty) {
+      isErrorInputText.value = true;
+    } else {
+      if (inputController.text != cellController.file.title) {
+        final success = await cellController.renameFile(inputController.text);
+        if (success) {
+          Get.back();
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileRenamed'));
+
+          locator<EventHub>().fire('needToRefreshDocuments');
+        } else
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+      }
+    }
+  }
+
+  Get.find<NavigationController>().showPlatformDialog(
     StyledAlertDialog(
       titleText: tr('renameFile'),
       content: ValueListenableBuilder<bool>(
         valueListenable: isErrorInputText,
-        builder: (_, __, ___) {
-          return _NewFileTextFieldWidget(
-            inputController: inputController,
-            docController: docController,
-            isErrorInputText: isErrorInputText,
-            cellController: cellController,
-          );
-        },
+        builder: (_, __, ___) => _NewFileTextFieldWidget(
+          inputController: inputController,
+          isErrorInputText: isErrorInputText,
+          cellController: cellController,
+          onSubmited: onSubmitted,
+        ),
       ),
       acceptText: tr('confirm'),
       cancelText: tr('cancel'),
-      onAcceptTap: () async {
-        inputController.text = inputController.text.trim();
-        if (inputController.text.isEmpty) {
-          isErrorInputText.value = true;
-        } else {
-          if (inputController.text != cellController.file.title) {
-            final success =
-                await cellController.renameFile(cellController.file, inputController.text);
-            if (success) {
-              MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
-              Get.back();
-            }
-          } else
-            Get.back();
-        }
-      },
+      onAcceptTap: onSubmitted,
       onCancelTap: Get.back,
     ),
   );
@@ -251,51 +291,53 @@ class _NewFileTextFieldWidget extends StatelessWidget {
   const _NewFileTextFieldWidget({
     Key? key,
     required this.inputController,
-    required this.docController,
     required this.isErrorInputText,
     required this.cellController,
+    required this.onSubmited,
   }) : super(key: key);
 
   final TextEditingController inputController;
-  final DocumentsController docController;
   final ValueNotifier<bool> isErrorInputText;
   final FileCellController cellController;
+  final Function onSubmited;
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return PlatformTextField(
       autofocus: true,
+      style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface),
       textInputAction: TextInputAction.done,
       controller: inputController,
-      decoration: InputDecoration.collapsed(
-        hintText: tr('enterFileName'),
-        hintStyle: TextStyleHelper.body2(
+      makeCupertinoDecorationNull: false,
+      hintText: tr('enterFileName'),
+      cupertino: (_, __) => CupertinoTextFieldData(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colors().background,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        placeholderStyle: TextStyleHelper.body2(
           color: isErrorInputText.value
-              ? Get.theme.colors().colorError
-              : Get.theme.colors().onSurface.withOpacity(0.5),
+              ? Theme.of(context).colors().colorError
+              : Theme.of(context).colors().onSurface.withOpacity(0.5),
         ),
       ),
-      onChanged: (_) {
-        if (isErrorInputText.value) {
+      material: (_, __) => MaterialTextFieldData(
+        decoration: InputDecoration.collapsed(
+          hintText: tr('enterFileName'),
+          fillColor: Theme.of(context).colors().background,
+          hintStyle: TextStyleHelper.body2(
+            color: isErrorInputText.value
+                ? Theme.of(context).colors().colorError
+                : Theme.of(context).colors().onSurface.withOpacity(0.5),
+          ),
+        ),
+      ),
+      onChanged: (value) {
+        if (isErrorInputText.value && value.isNotEmpty) {
           isErrorInputText.value = false;
         }
       },
-      onSubmitted: (_) async {
-        inputController.text = inputController.text.trim();
-        if (inputController.text.isEmpty) {
-          isErrorInputText.value = true;
-        } else {
-          if (inputController.text != cellController.file.title) {
-            final success =
-                await cellController.renameFile(cellController.file, inputController.text);
-            if (success) {
-              MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
-              Get.back();
-            }
-          } else
-            Get.back();
-        }
-      },
+      onSubmitted: (_) => onSubmited(),
     );
   }
 }
