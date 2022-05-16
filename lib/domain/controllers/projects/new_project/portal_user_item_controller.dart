@@ -33,6 +33,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
@@ -56,16 +57,15 @@ class PortalUserItemController extends GetxController {
   final isSelected = false.obs;
   final selectionMode = UserSelectionMode.None.obs;
 
-  final avatarData = Uint8List.fromList([]).obs;
-
-  // ignore: unnecessary_cast
-  Rx<Widget> avatar = (AppIcon(
-    width: 40,
-    height: 40,
-    icon: SvgIcons.avatar,
-    color: Theme.of(Get.context!).colors().onSurface,
-  ) as Widget)
-      .obs;
+  Uint8List? avatarData;
+  final avatar = Rx<Widget>(
+    AppIcon(
+      width: 40,
+      height: 40,
+      icon: SvgIcons.avatar,
+      color: Theme.of(Get.context!).colors().onSurface,
+    ),
+  );
 
   String? get displayName => portalUser.displayName;
   String? get id => portalUser.id;
@@ -88,8 +88,10 @@ class PortalUserItemController extends GetxController {
       final avatarBytes = await _downloadService.downloadImage(avatarUrl);
       if (avatarBytes == null) return;
 
-      avatarData.value = avatarBytes;
-      avatar.value = Image.memory(avatarData.value);
+      if (const ListEquality().equals(avatarBytes, avatarData)) return;
+      avatarData = avatarBytes;
+
+      avatar.value = Image.memory(avatarData!);
 
       unawaited(_getProfileAvatarUrl(portalUser));
     } catch (e) {

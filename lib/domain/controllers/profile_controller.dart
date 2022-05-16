@@ -31,7 +31,9 @@
  */
 
 import 'dart:async';
+import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,6 +50,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ProfileController extends GetxController {
+  // TODO extends PortalUserItemController
   final _downloadService = locator<DownloadService>();
   final _photoService = locator<UserPhotoService>();
 
@@ -64,6 +67,7 @@ class ProfileController extends GetxController {
   final isOwner = false.obs;
   final isAdmin = false.obs;
 
+  Uint8List? avatarBytes;
   final avatar = Rx<Widget>(
     AppIcon(
       width: 120,
@@ -119,8 +123,11 @@ class ProfileController extends GetxController {
           photoUrl?.max ?? user.value.avatar ?? user.value.avatarMedium ?? user.value.avatarSmall!);
       if (avatarBytes == null) return;
 
+      if (const ListEquality().equals(avatarBytes, this.avatarBytes)) return;
+      this.avatarBytes = avatarBytes;
+
       avatar.value = Image.memory(
-        avatarBytes,
+        this.avatarBytes!,
         width: 120,
         height: 120,
         fit: BoxFit.cover,
