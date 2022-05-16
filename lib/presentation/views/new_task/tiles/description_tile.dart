@@ -30,19 +30,21 @@
  *
  */
 
-import 'dart:ui' as _ui;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
+import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 class DescriptionTile extends StatefulWidget {
   final TaskActionsController? controller;
@@ -103,14 +105,16 @@ class _DescriptionTileState extends State<DescriptionTile> with TickerProviderSt
             ? Theme.of(context).colors().onBackground
             : Theme.of(context).colors().onBackground.withOpacity(0.4);
         final text = widget.controller!.descriptionText.value;
-        final textSize = _textSize(text, TextStyleHelper.subtitle1());
+        final textSize = TextUtils.getTextSize(text, TextStyleHelper.subtitle1());
 
         return InkWell(
           onTap: () => Get.find<NavigationController>().toScreen(
             const TaskDescription(),
             arguments: {
               'controller': widget.controller,
-              'previousPage': widget.controller?.title.value
+              'previousPage': widget.controller is NewTaskController
+                  ? NewTaskView.pageName
+                  : TaskEditingView.pageName
             },
             transition: Transition.rightToLeft,
             page: '/TaskDescription',
@@ -174,13 +178,6 @@ class _DescriptionTileState extends State<DescriptionTile> with TickerProviderSt
       },
     );
   }
-}
-
-Size _textSize(String text, TextStyle style) {
-  final textPainter = TextPainter(
-      text: TextSpan(text: text, style: style), maxLines: 1, textDirection: _ui.TextDirection.ltr)
-    ..layout(minWidth: 0, maxWidth: double.infinity);
-  return textPainter.size;
 }
 
 bool _needToExpand(double size, String text) {

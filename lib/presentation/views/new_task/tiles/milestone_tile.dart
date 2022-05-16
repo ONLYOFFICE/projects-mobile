@@ -35,10 +35,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
+import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 class MilestoneTile extends StatelessWidget {
   final TaskActionsController controller;
@@ -63,7 +66,11 @@ class MilestoneTile extends StatelessWidget {
           caption: '${tr('milestone')}:',
           onTap: () => Get.find<NavigationController>().toScreen(
             const SelectMilestoneView(),
-            arguments: {'controller': controller, 'previousPage': controller.title.value},
+            arguments: {
+              'controller': controller,
+              'previousPage':
+                  controller is NewTaskController ? NewTaskView.pageName : TaskEditingView.pageName
+            },
             transition: Transition.rightToLeft,
             page: '/SelectMilestoneView',
           ),

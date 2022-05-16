@@ -30,17 +30,18 @@
  *
  */
 
-import 'dart:ui' as _ui;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/description_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 
@@ -105,12 +106,17 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
             ? Theme.of(context).colors().onBackground.withOpacity(0.75)
             : Theme.of(context).colors().onBackground.withOpacity(0.4);
         final text = widget.controller.descriptionText.value as String;
-        final textSize = _textSize(text, TextStyleHelper.subtitle1());
+        final textSize = TextUtils.getTextSize(text, TextStyleHelper.subtitle1());
 
         return InkWell(
           onTap: () => Get.find<NavigationController>().toScreen(
             const NewProjectDescription(),
-            arguments: {'controller': widget.controller, 'previousPage': NewProject.pageName},
+            arguments: {
+              'controller': widget.controller,
+              'previousPage': widget.controller is NewProjectController
+                  ? NewProject.pageName
+                  : EditProjectView.pageName,
+            },
             transition: Transition.rightToLeft,
             page: '/NewProjectDescription',
           ),
@@ -183,13 +189,6 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
       },
     );
   }
-}
-
-Size _textSize(String text, TextStyle style) {
-  final textPainter = TextPainter(
-      text: TextSpan(text: text, style: style), maxLines: 1, textDirection: _ui.TextDirection.ltr)
-    ..layout(minWidth: 0, maxWidth: double.infinity);
-  return textPainter.size;
 }
 
 bool _needToExpand(double size, String text) {

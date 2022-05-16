@@ -102,7 +102,7 @@ class SelectProjectView extends StatelessWidget {
         titleText: tr('selectProject'),
         centerTitle: GetPlatform.isIOS,
         bottomHeight: 44,
-        previousPageTitle: previousPage,
+        previousPageTitle: previousPage ?? tr('back').toLowerCase().capitalizeFirst,
         bottom: SearchField(
           hintText: tr('searchProjects'),
           controller: searchController.textController,

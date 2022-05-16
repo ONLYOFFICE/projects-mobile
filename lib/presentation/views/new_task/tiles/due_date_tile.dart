@@ -36,10 +36,13 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
+import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 class DueDateTile extends StatelessWidget {
   final TaskActionsController controller;
@@ -74,7 +77,8 @@ class DueDateTile extends StatelessWidget {
               'controller': controller,
               'startDate': false,
               'initialDate': controller.dueDate,
-              'previousPage': controller.title.value,
+              'previousPage':
+                  controller is NewTaskController ? NewTaskView.pageName : TaskEditingView.pageName,
             },
             transition: Transition.rightToLeft,
             page: '/SelectDateView',

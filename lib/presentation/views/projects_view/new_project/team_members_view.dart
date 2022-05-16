@@ -41,6 +41,7 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -79,7 +80,7 @@ class TeamMembersSelectionView extends StatelessWidget {
           controller: controller,
           title: tr('addTeamMembers'),
         ),
-        titleWidth: getWidthText(tr('addTeamMembers'),
+        titleWidth: TextUtils.getTextWidth(tr('addTeamMembers'),
             TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
         previousPageTitle: previousPage,
         bottom: TeamMembersSearchBar(

@@ -36,12 +36,15 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/new_subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
 import 'package:projects/presentation/shared/project_team_responsible.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 class ResponsibleTile extends StatelessWidget {
   final TaskActionsController controller;
@@ -84,7 +87,11 @@ class ResponsibleTile extends StatelessWidget {
           icon: SvgIcons.person,
           onTap: () => Get.find<NavigationController>().toScreen(
             const ProjectTeamResponsibleSelectionView(),
-            arguments: {'controller': controller, 'previousPage': controller.title.value},
+            arguments: {
+              'controller': controller,
+              'previousPage':
+                  controller is NewTaskController ? NewTaskView.pageName : TaskEditingView.pageName
+            },
             transition: Transition.rightToLeft,
             page: '/ProjectTeamResponsibleSelectionView',
           ),

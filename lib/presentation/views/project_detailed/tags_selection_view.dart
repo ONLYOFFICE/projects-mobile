@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/platform_icons_ext.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -90,7 +91,7 @@ class TagsSelectionView extends StatelessWidget {
           tr('tags'),
           style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
         ),
-        titleWidth: getWidthText(
+        titleWidth: TextUtils.getTextWidth(
             tr('tags'), TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
         previousPageTitle: previousPage,
         actions: [

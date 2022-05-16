@@ -59,6 +59,7 @@ class NewDiscussionTextScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
+          previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
           backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('text'),
           backButtonIcon: platformController.isMobile

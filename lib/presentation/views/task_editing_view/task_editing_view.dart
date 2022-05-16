@@ -55,6 +55,8 @@ class TaskEditingView extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  static String get pageName => tr('editTask');
+
   @override
   Widget build(BuildContext context) {
     final task = Get.arguments['task'] as PortalTask;

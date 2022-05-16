@@ -43,7 +43,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
-import 'package:projects/presentation/shared/widgets/select_item_screens/common/select_item_template.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 
@@ -70,11 +70,6 @@ class SelectProjectScreen extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final previousPage = args?['previousPage'] as String?;
 
-    final titleWidth = getWidthText(
-      tr('selectProject'),
-      TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
-    );
-
     return Scaffold(
       backgroundColor: _platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
@@ -82,15 +77,22 @@ class SelectProjectScreen extends StatelessWidget {
         showBackButton: true,
         onLeadingPressed: navigationController.back,
         centerTitle: !GetPlatform.isAndroid,
-        titleWidth: titleWidth,
+        titleText: tr('selectProject'),
         previousPageTitle: previousPage,
-        title: AppBarTitleWithSearch(
-          appBarText: tr('selectProject'),
-          searchController: searchController,
+        bottom: SearchField(
+          controller: searchController.textController,
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          autofocus: true,
+          alwaysShowSuffixIcon: true,
+          hintText: tr('enterQuery'),
+          onSubmitted: searchController.search,
+          onChanged: searchController.search,
+          onClearPressed: () {
+            if (searchController.switchToSearchView.value) searchController.clearSearch();
+            searchController.switchToSearchView.value = !searchController.switchToSearchView.value;
+            searchController.search(null);
+          },
         ),
-        actions: [
-          AppBarSearchItem(searchController: searchController),
-        ],
       ),
       body: Obx(
         () {

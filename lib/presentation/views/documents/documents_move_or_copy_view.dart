@@ -132,7 +132,7 @@ class DocumentsMoveSearchView extends StatelessWidget {
       appBar: StyledAppBar(
         title: SearchField(
           controller: controller.searchInputController,
-          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+          margin: const EdgeInsets.only(right: 16, top: 4),
           autofocus: true,
           hintText: tr('enterQuery'),
           onSubmitted: controller.newSearch,

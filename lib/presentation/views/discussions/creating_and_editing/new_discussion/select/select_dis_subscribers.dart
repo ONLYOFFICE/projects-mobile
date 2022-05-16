@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -84,6 +85,11 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                 ],
               ),
             ),
+            titleWidth: TextUtils.getTextWidth(
+              tr('selectSubscribers'),
+              TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+            ),
+            previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
             onLeadingPressed: controller.confirmSubscribersSelection,
             bottom: DiscussionSubscribersSearchBar(
               controller: controller,

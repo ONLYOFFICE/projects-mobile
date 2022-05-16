@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base/base_search_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -73,7 +74,7 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final previousPage = args['previousPage'] as String?;
 
-    final titleWidth = getWidthText(
+    final titleWidth = TextUtils.getTextWidth(
       appBarText,
       TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
     );
@@ -82,14 +83,24 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
       backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
-        title: AppBarTitleWithSearch(
-          appBarText: appBarText,
-          searchController: searchController,
-        ),
+        titleText: appBarText,
         titleWidth: titleWidth,
         previousPageTitle: previousPage,
         centerTitle: !GetPlatform.isAndroid,
-        actions: [AppBarSearchItem(searchController: searchController)],
+        bottom: SearchField(
+          controller: searchController.textController,
+          margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          autofocus: true,
+          alwaysShowSuffixIcon: true,
+          hintText: tr('enterQuery'),
+          onSubmitted: searchController.search,
+          onChanged: searchController.search,
+          onClearPressed: () {
+            if (searchController.switchToSearchView.value) searchController.clearSearch();
+            searchController.switchToSearchView.value = !searchController.switchToSearchView.value;
+            searchController.search(null);
+          },
+        ),
       ),
       body: Obx(
         () {
@@ -126,7 +137,7 @@ mixin SelectItemMixin on StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final previousPage = args['previousPage'] as String?;
 
-    final titleWidth = getWidthText(
+    final titleWidth = TextUtils.getTextWidth(
       appBarText,
       TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
     );

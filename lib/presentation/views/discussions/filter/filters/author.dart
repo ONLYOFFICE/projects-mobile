@@ -57,6 +57,9 @@ class _Author extends StatelessWidget {
               final newUser = await Get.find<NavigationController>().toScreen(
                 const SelectUserScreen(),
                 page: '/SelectUserScreen',
+                arguments: {
+                  'previousPage': tr('filter'),
+                },
                 // navigatorKey: int.parse(state.widget.key.toString()),
               );
               await filterController!.changeAuthor('other', newUser);

@@ -94,7 +94,7 @@ class _SearchFieldState extends State<SearchField> {
             onChanged: widget.onChanged,
             autofocus: widget.autofocus,
             prefixInsets: const EdgeInsetsDirectional.fromSTEB(6, 1, 0, 4),
-            padding: const EdgeInsetsDirectional.fromSTEB(3.8, 6, 5, 8),
+            padding: const EdgeInsetsDirectional.fromSTEB(3.8, 6, 4, 8),
             suffixMode: widget.alwaysShowSuffixIcon
                 ? OverlayVisibilityMode.always
                 : OverlayVisibilityMode.editing,

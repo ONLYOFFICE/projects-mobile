@@ -57,6 +57,7 @@ class NewProjectDescription extends StatelessWidget {
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('description'),
         centerTitle: !GetPlatform.isAndroid,
+        previousPageTitle: previousPage,
         leading: PlatformWidget(
           cupertino: (_, __) => CupertinoButton(
             padding: const EdgeInsets.only(left: 16),

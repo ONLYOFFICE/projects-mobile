@@ -39,13 +39,18 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+
+// iOS default navbar back button
+const double _kNavBarBackButtonTapWidth = 50;
 
 class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double titleHeight;
   final double elevation;
   final double bottomHeight;
+
   double get getBottomHeight => bottom == null ? 0 : bottomHeight;
   final bool showBackButton;
   final bool? centerTitle;
@@ -89,11 +94,11 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    var leadingWidthCalculated = 56.0;
+    var leadingWidthCalculated = _kNavBarBackButtonTapWidth;
 
     var titleWidthCalculated = titleWidth;
     if (title == null && titleText != null && titleWidthCalculated == null) {
-      titleWidthCalculated = getWidthText(
+      titleWidthCalculated = TextUtils.getTextWidth(
         titleText!,
         TextStyleHelper.headline6(),
       );
@@ -108,11 +113,15 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
           : 56.0;
     } else if (leadingWidth != null) {
       leadingWidthCalculated = leadingWidth!;
-    } else {
+    } else if (title == null) {
       leadingWidthCalculated = widthWindow / 2;
+    } else {
+      leadingWidthCalculated = _kNavBarBackButtonTapWidth;
     }
 
     return AppBar(
+      // TODO: fix bottom padding in modal screen (iPad)
+      // primary: ModalNavigationData.key?.currentState?.mounted != true,
       centerTitle: centerTitle ?? Platform.isIOS,
       titleSpacing: Platform.isIOS ? 4 : null,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
@@ -280,17 +289,31 @@ class CupertinoStyledBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoButton(
-      padding: const EdgeInsets.fromLTRB(16, 16, 0, 14),
-      onPressed: onPressed,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const BackButtonIcon(),
-          Expanded(child: _BackButtonText(text: previousScreenName)),
-        ],
+    return SizedBox(
+      height: 36,
+      width: double.infinity,
+      child: CupertinoButton(
+        onPressed: onPressed,
+        padding: const EdgeInsets.only(left: 0, top: 5, right: 0, bottom: 0),
+        child: DefaultTextStyle(
+          style: CupertinoTheme.of(context).textTheme.navActionTextStyle,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: _kNavBarBackButtonTapWidth),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(padding: EdgeInsetsDirectional.only(start: 4)),
+                const _BackChevron(),
+                if (previousScreenName != null) ...[
+                  const Padding(padding: EdgeInsetsDirectional.only(start: 6)),
+                  Expanded(child: _BackButtonText(text: previousScreenName!)),
+                ],
+                if (previousScreenName == null) const Spacer(),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -299,41 +322,14 @@ class CupertinoStyledBackButton extends StatelessWidget {
 class _BackButtonText extends StatelessWidget {
   const _BackButtonText({Key? key, required this.text}) : super(key: key);
 
-  final String? text;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (ctx, constrains) {
         final defaultBackText = localizations.tr('back').toLowerCase().capitalizeFirst!;
-        final textStyle = TextStyleHelper.button();
-
-        if (text == null) {
-          final span = TextSpan(
-            text: defaultBackText,
-            style: textStyle,
-          );
-
-          final tp = TextPainter(
-            maxLines: 1,
-            textAlign: TextAlign.left,
-            text: span,
-            textDirection: TextDirection.ltr,
-          );
-
-          tp.layout(maxWidth: constrains.maxWidth);
-
-          final exceeded = tp.didExceedMaxLines;
-
-          if (!exceeded) {
-            return Text(
-              defaultBackText,
-              style: textStyle,
-            );
-          } else {
-            return SizedBox.shrink();
-          }
-        }
+        final textStyle = DefaultTextStyle.of(context).style;
 
         var span = TextSpan(
           text: text,
@@ -353,8 +349,9 @@ class _BackButtonText extends StatelessWidget {
 
         if (!exceeded) {
           return Text(
-            text!,
+            text,
             style: textStyle,
+            textAlign: TextAlign.start,
           );
         }
 
@@ -365,7 +362,7 @@ class _BackButtonText extends StatelessWidget {
 
         tp = TextPainter(
           maxLines: 1,
-          textAlign: TextAlign.left,
+          textAlign: TextAlign.start,
           text: span,
           textDirection: TextDirection.ltr,
         );
@@ -379,26 +376,49 @@ class _BackButtonText extends StatelessWidget {
             : Text(
                 defaultBackText,
                 style: textStyle,
+                textAlign: TextAlign.start,
               );
       },
     );
   }
 }
 
-double getWidthText(String text, TextStyle style) {
-  final span = TextSpan(
-    text: text,
-    style: style,
-  );
+class _BackChevron extends StatelessWidget {
+  const _BackChevron({Key? key}) : super(key: key);
 
-  final tp = TextPainter(
-    maxLines: 1,
-    textAlign: TextAlign.left,
-    text: span,
-    textDirection: TextDirection.ltr,
-  );
+  @override
+  Widget build(BuildContext context) {
+    final textDirection = Directionality.of(context);
+    final textStyle = DefaultTextStyle.of(context).style;
 
-  tp.layout();
+    Widget iconWidget = Padding(
+      padding: const EdgeInsetsDirectional.only(start: 6, end: 2),
+      child: Text.rich(
+        TextSpan(
+          text: String.fromCharCode(CupertinoIcons.back.codePoint),
+          style: TextStyle(
+            inherit: false,
+            color: textStyle.color,
+            fontSize: 30,
+            fontFamily: CupertinoIcons.back.fontFamily,
+            package: CupertinoIcons.back.fontPackage,
+          ),
+        ),
+      ),
+    );
+    switch (textDirection) {
+      case TextDirection.rtl:
+        iconWidget = Transform(
+          transform: Matrix4.identity()..scale(-1.0, 1, 1),
+          alignment: Alignment.center,
+          transformHitTests: false,
+          child: iconWidget,
+        );
+        break;
+      case TextDirection.ltr:
+        break;
+    }
 
-  return tp.width;
+    return iconWidget;
+  }
 }

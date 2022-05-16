@@ -58,6 +58,9 @@ class _Project extends StatelessWidget {
                   SelectProjectScreen(),
                   transition: Transition.rightToLeft,
                   page: '/SelectProjectScreen',
+                  arguments: {
+                    'previousPage': tr('filter'),
+                  },
                 );
                 await filterController!.changeProject('other', selectedProject);
               },
@@ -73,6 +76,9 @@ class _Project extends StatelessWidget {
                   const SelectTagScreen(),
                   transition: Transition.rightToLeft,
                   page: '/SelectTagScreen',
+                  arguments: {
+                    'previousPage': tr('filter'),
+                  },
                 );
                 await filterController!.changeProject('withTag', selectedTag);
               },

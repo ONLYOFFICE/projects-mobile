@@ -35,7 +35,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
@@ -68,16 +67,16 @@ class GroupMembersSelectionView extends StatelessWidget {
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('addMembersOf'),
+        previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
         centerTitle: GetPlatform.isIOS,
-        leadingWidth: GetPlatform.isIOS ? 100 : null,
-        leading: PlatformIconButton(
-          icon: const BackButtonIcon(),
-          onPressed: Get.find<NavigationController>().back,
-          cupertino: (_, __) => CupertinoIconButtonData(
-            padding: const EdgeInsets.only(left: 16),
-            alignment: Alignment.centerLeft,
-          ),
-        ),
+        // leading: PlatformIconButton(
+        //   icon: const BackButtonIcon(),
+        //   onPressed: Get.find<NavigationController>().back,
+        //   cupertino: (_, __) => CupertinoIconButtonData(
+        //     padding: const EdgeInsets.only(left: 16),
+        //     alignment: Alignment.centerLeft,
+        //   ),
+        // ),
         actions: [
           PlatformWidget(
             material: (platformContext, __) => IconButton(
