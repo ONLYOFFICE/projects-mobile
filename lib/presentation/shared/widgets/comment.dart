@@ -191,7 +191,7 @@ class _CommentAuthor extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20),
             child: CustomNetworkImage(
-              image: comment.userAvatarPath,
+              image: comment.userAvatarPath ?? '',
               defaultImage: const DefaultAvatar(),
               fit: BoxFit.cover,
             ),

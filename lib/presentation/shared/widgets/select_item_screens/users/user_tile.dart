@@ -60,7 +60,7 @@ class _UserTile extends StatelessWidget {
               child: CustomNetworkImage(
                 height: 40,
                 width: 40,
-                image: user.avatar ?? user.avatarMedium ?? user.avatarSmall,
+                image: user.avatar ?? user.avatarMedium ?? user.avatarSmall ?? '',
                 fit: BoxFit.contain,
                 defaultImage: const DefaultAvatar(),
               ),

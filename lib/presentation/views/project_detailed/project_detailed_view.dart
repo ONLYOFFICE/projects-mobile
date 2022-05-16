@@ -102,10 +102,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
   @override
   void initState() {
-    if (Get.arguments['projectController'] != null) {
+    if (Get.arguments['projectController'] != null)
       projectController = Get.arguments['projectController'] as ProjectDetailsController;
-      previousPage = Get.arguments['previousPage'] as String?;
-    } else {
+    else {
       final projectDetails = Get.arguments['projectDetailed'] as ProjectDetailed;
 
       projectController = Get.put<ProjectDetailsController>(
@@ -114,6 +113,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       );
       projectController.fillProjectInfo(projectDetails);
     }
+
+    previousPage = Get.arguments['previousPage'] as String?;
 
     projectController.setup();
 

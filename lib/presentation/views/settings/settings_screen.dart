@@ -130,7 +130,7 @@ class SettingsScreen extends StatelessWidget {
                         Get.find<NavigationController>().showPlatformDialog(
                           StyledAlertDialog(
                             title: Text(tr('clearCacheQuestion')),
-                            // content: Text(tr('clearCacheQuestionDescription')),
+                            content: Text(tr('clearCacheQuestionDescription')),
                             cancelText: tr('cancel').toLowerCase().capitalizeFirst,
                             acceptText: tr('clearCache'),
                             onCancelTap: Get.back,

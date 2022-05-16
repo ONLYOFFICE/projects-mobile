@@ -244,9 +244,9 @@ class TabletLayout extends StatelessWidget {
                     child: PlatformIconButton(
                       padding: EdgeInsets.zero,
                       icon: ClipOval(
-                        child: Obx(() {
-                          return controller.selfUserItem.value.avatar.value;
-                        }),
+                        child: Obx(
+                          () => Get.find<ProfileController>(tag: 'SelfProfileScreen').avatar.value,
+                        ),
                       ),
                       onPressed: () => controller.toScreen(
                         const SelfProfileScreen(),

@@ -341,10 +341,13 @@ class TaskItemController extends GetxController {
         projectId: task.value.projectOwner!.id!,
       );
       if (project != null) {
-        await Get.find<NavigationController>().to(
+        unawaited(Get.find<NavigationController>().to(
           ProjectDetailedView(),
-          arguments: {'projectDetailed': project},
-        );
+          arguments: {
+            'projectDetailed': project,
+            'previousPage': task.value.title,
+          },
+        ));
       }
     }));
   }
