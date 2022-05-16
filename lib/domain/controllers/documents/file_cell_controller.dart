@@ -201,7 +201,14 @@ class FileCellController extends GetxController {
 
     if (result == null || result.isEmpty) return tr('error');
 
-    return await _api.waitFinishOperation(result[0].id!);
+    final loading = LoadingWithoutProgress();
+    loading.showLoading(true);
+
+    final res = await _api.waitFinishOperation(result[0].id!);
+
+    loading.showLoading(false);
+
+    return res;
   }
 
   Future<bool> renameFile(String newName) async {

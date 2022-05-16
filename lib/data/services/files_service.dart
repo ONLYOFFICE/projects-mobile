@@ -106,24 +106,6 @@ class FilesService {
     }
   }
 
-  Future<dynamic> deleteFolder({required String folderId}) async {
-    final result = await _api.deleteFolder(
-      folderId: folderId,
-    );
-    final success = result.response != null;
-
-    if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.folder
-      });
-      return result.response;
-    } else {
-      await Get.find<ErrorDialog>().show(result.error!.message);
-      return null;
-    }
-  }
-
   Future<PortalFile?> renameFile({required String fileId, required String newTitle}) async {
     final files = await _api.renameFile(
       fileId: fileId,
@@ -139,6 +121,23 @@ class FilesService {
       return files.response;
     } else {
       await Get.find<ErrorDialog>().show(files.error!.message);
+      return null;
+    }
+  }
+
+  Future<List<Operation>?> deleteFolder({required String folderId}) async {
+    final result = await _api.deleteFolder(folderId: folderId);
+
+    final success = result.error == null;
+
+    if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.folder
+      });
+      return result.response;
+    } else {
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }

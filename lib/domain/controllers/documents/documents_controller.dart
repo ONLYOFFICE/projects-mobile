@@ -47,6 +47,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/loading_hud.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:synchronized/synchronized.dart';
 
@@ -236,14 +237,21 @@ class DocumentsController extends BaseDocumentsController {
     return result != null;
   }
 
-  Future<bool> deleteFolder(Folder element) async {
+  Future<String?> deleteFolder(Folder element) async {
     final result = await _api.deleteFolder(
       folderId: element.id.toString(),
     );
 
-    locator<EventHub>().fire('needToRefreshDocuments');
+    if (result == null || result.isEmpty) return tr('error');
 
-    return result != null;
+    final loading = LoadingWithoutProgress();
+    loading.showLoading(true);
+
+    final res = await _api.waitFinishOperation(result[0].id!);
+
+    loading.showLoading(false);
+
+    return res;
   }
 
   @override
