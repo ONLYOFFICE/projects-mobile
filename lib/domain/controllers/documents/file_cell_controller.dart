@@ -87,9 +87,9 @@ class FileCellController extends GetxController {
     loadingWithProgress = LoadingWithProgress(
         title: tr('downloading'),
         progress: progress,
-        onCancelTap: () {
-          Get.back();
-          cancelDownloadFile();
+        onCancelTap: () async {
+          loadingWithProgress.showLoading(false);
+          await cancelDownloadFile();
         });
 
     _setupFileIcon();
@@ -253,9 +253,17 @@ class FileCellController extends GetxController {
     return (await Share.shareFilesWithResult(['$savedDir/${res!.filename!}'])).status;
   }
 
-  Future<void> cancelDownloadFile() async {
-    if (downloadTaskId != null) await FlutterDownloader.cancel(taskId: downloadTaskId!);
+  Future<bool> cancelDownloadFile() async {
+    var tryes = 0;
+    while (downloadTaskId == null && tryes < 5) {
+      await Future.delayed(const Duration(seconds: 1));
+      tryes++;
+    }
+
+    await FlutterDownloader.cancel(taskId: downloadTaskId!);
     progress.value = 0;
+
+    return true;
   }
 
   Future<void> downloadFile() async {
