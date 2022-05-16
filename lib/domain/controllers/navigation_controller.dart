@@ -135,8 +135,11 @@ class NavigationController extends GetxController {
         arguments: arguments);
   }
 
-  Future<T?> showPlatformDialog<T>(Widget widget,
-      {Object? arguments, bool? barrierDismissible}) async {
+  Future<T?> showPlatformDialog<T>(
+    Widget widget, {
+    Object? arguments,
+    bool? barrierDismissible,
+  }) async {
     final _route = DialogRoute(
       builder: (_) => widget,
       settings: RouteSettings(arguments: arguments),
@@ -144,7 +147,7 @@ class NavigationController extends GetxController {
       barrierDismissible: barrierDismissible ?? false,
     );
     final result = await Navigator.of(Get.context!).push(_route);
-    return result as T;
+    return result as T?;
   }
 
   Future to(
