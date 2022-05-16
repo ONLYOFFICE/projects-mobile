@@ -155,24 +155,14 @@ class NavigationController extends GetxController {
 
   Future<T?> showPlatformDialog<T>(Widget widget,
       {Object? arguments, bool? barrierDismissible}) async {
-    if (GetPlatform.isIOS)
-      return await showCupertinoDialog(
-        context: Get.context!,
-        builder: (context) {
-          return widget;
-        },
-        routeSettings: RouteSettings(arguments: arguments),
-        barrierDismissible: barrierDismissible ?? false,
-      );
-    else
-      return await showDialog(
-        context: Get.context!,
-        builder: (context) {
-          return widget;
-        },
-        routeSettings: RouteSettings(arguments: arguments),
-        barrierDismissible: barrierDismissible ?? false,
-      );
+    final _route = DialogRoute(
+      builder: (_) => widget,
+      settings: RouteSettings(arguments: arguments),
+      context: Get.context!,
+      barrierDismissible: barrierDismissible ?? false,
+    );
+    final result = await Navigator.of(Get.context!).push(_route);
+    return result as T;
   }
 
   Future to(
