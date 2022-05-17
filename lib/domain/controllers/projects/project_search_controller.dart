@@ -47,7 +47,7 @@ class ProjectSearchController extends BaseSearchController {
   final _api = locator<ProjectService>();
 
   late String _selfId;
-  final bool onlyMyProjects;
+  final bool onlyMyProjects; // TODO not used
 
   final _paginationController = PaginationController<ProjectDetailed>();
 

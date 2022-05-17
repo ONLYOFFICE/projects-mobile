@@ -82,9 +82,9 @@ class SelectProjectView extends StatelessWidget {
 
     final searchController = Get.put(
       ProjectSearchController(
-          sortController: projectsController.sortController,
-          filterController: projectsController.filterController,
-          onlyMyProjects: true),
+        sortController: projectsController.sortController,
+        filterController: projectsController.filterController,
+      ),
     );
     searchController.textController.addListener(() {
       if (searchController.textController.text.isNotEmpty)
