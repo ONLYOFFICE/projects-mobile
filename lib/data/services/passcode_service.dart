@@ -48,6 +48,8 @@ class PasscodeService {
 
   Future<void> deletePasscode() async => await _storage.delete('passcode');
 
+  Future<void> deleteBiometric() async => await _storage.delete('isBiometricEnable');
+
   Future<BiometricType?> getBiometricType() async {
     return await _biometricService.availableBiometrics;
   }

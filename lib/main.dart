@@ -40,8 +40,8 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/data/services/remote_config_service.dart';
-import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/internal/dev_http_overrides.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/pages_setup.dart';
@@ -107,30 +107,18 @@ Future<String> _getInitPage() async {
   }
 
   final passcode = await locator<PasscodeService>().isPasscodeEnable;
-  final _isLoggedIn = await isAuthorized();
+  final hasAccount = await _hasAccount();
 
-  if (passcode && _isLoggedIn) return '/PasscodeScreen';
+  if (passcode && hasAccount) return '/PasscodeScreen';
 
   return '/MainView';
 }
 
-Future<bool> isAuthorized() async {
-  final _secureStorage = locator<SecureStorage>();
-  final expirationDate = await _secureStorage.getString('expires');
-  final token = await _secureStorage.getString('token');
-  final portalName = await _secureStorage.getString('portalName');
-
-  if (expirationDate == null ||
-      expirationDate.isEmpty ||
-      token == null ||
-      token.isEmpty ||
-      portalName == null ||
-      portalName.isEmpty) return false;
-
-  final expiration = DateTime.parse(expirationDate);
-  if (expiration.isBefore(DateTime.now())) return false;
-
-  return true;
+Future<bool> _hasAccount() async {
+  final accountController =
+      Get.isRegistered<AccountManager>() ? Get.find<AccountManager>() : Get.put(AccountManager());
+  await accountController.setup();
+  return accountController.accounts.isNotEmpty;
 }
 
 class App extends StatelessWidget {

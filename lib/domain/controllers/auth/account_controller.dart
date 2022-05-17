@@ -30,6 +30,7 @@
  *
  */
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -37,6 +38,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/account_data.dart';
+import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
@@ -178,7 +180,10 @@ class AccountManager extends GetxController {
       if (deleted!) {
         accounts.value = await fetchAccounts();
 
-        if (accounts.isEmpty) await Get.to(() => PortalInputView());
+        if (accounts.isEmpty) {
+          _resetPasscodeSettings();
+          await Get.to(PortalInputView.new);
+        }
 
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('accountDeleted'));
       }
@@ -195,7 +200,10 @@ class AccountManager extends GetxController {
       if (deleted!) {
         accounts.value = await fetchAccounts();
 
-        if (accounts.isEmpty) await Get.to(() => PortalInputView());
+        if (accounts.isEmpty) {
+          _resetPasscodeSettings();
+          await Get.to(PortalInputView.new);
+        }
 
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('accountDeleted'));
       }
@@ -203,6 +211,12 @@ class AccountManager extends GetxController {
       debugPrint(e.toString());
       debugPrint(s.toString());
     }
+  }
+
+  void _resetPasscodeSettings() {
+    final passcodeService = locator<PasscodeService>();
+    passcodeService.deletePasscode();
+    passcodeService.deleteBiometric();
   }
 
   Future<void> clearToken() async {
