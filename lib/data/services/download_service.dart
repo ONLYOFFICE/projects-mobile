@@ -36,6 +36,7 @@ import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -214,6 +215,15 @@ class DocumentsDownloadService {
     }
 
     return true;
+  }
+
+  Future<void> removeFile(String taskId) async {
+    await FlutterDownloader.remove(taskId: taskId, shouldDeleteContent: true); // dont work
+  }
+
+  Future<DownloadTask?> getTaskContent(String taskId) async {
+    return (await FlutterDownloader.loadTasks())
+        ?.lastWhereOrNull((element) => element.taskId == taskId);
   }
 
   static void downloadCallback(String id, DownloadTaskStatus status, int progress) {

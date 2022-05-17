@@ -220,7 +220,6 @@ class FileCellController extends GetxController {
     return result != null;
   }
 
-  // TODO @garanin change flutter_downloader to dio
   Future<void> _downloadFileCallback(String id, DownloadTaskStatus status, int progress) async {
     if (downloadTaskId != null && id == downloadTaskId) {
       if (status == DownloadTaskStatus.running) {
@@ -238,26 +237,36 @@ class FileCellController extends GetxController {
     }
   }
 
-  Future<ResultType> _openAlreadyDownloadedFile() async {
-    final res = (await FlutterDownloader.loadTasks())
-        ?.lastWhere((element) => element.taskId == downloadTaskId);
+  Future<ResultType?> _openAlreadyDownloadedFile() async {
+    final res = await downloadService.getTaskContent(downloadTaskId!);
+    if (res == null) return null;
 
     final savedDir = fileAction.value == FileAction.OnlyDownload && Platform.isAndroid
         ? downloadService.downloadPath!
         : downloadService.tempPath!;
 
-    return (await OpenFile.open('$savedDir/${res!.filename!}')).type;
+    return (await OpenFile.open('$savedDir/${res.filename!}')).type;
   }
 
-  Future<ShareResultStatus> _showSaveFileForIos() async {
-    final res = (await FlutterDownloader.loadTasks())
-        ?.lastWhere((element) => element.taskId == downloadTaskId);
+  Future<ShareResultStatus?> _shareFileForIos({bool deleteAfter = true}) async {
+    if (downloadTaskId == null) return null;
+
+    final res = await downloadService.getTaskContent(downloadTaskId!);
+    if (res == null) return null;
 
     final savedDir = fileAction.value == FileAction.OnlyDownload && Platform.isAndroid
         ? downloadService.downloadPath!
         : downloadService.tempPath!;
 
-    return (await Share.shareFilesWithResult(['$savedDir/${res!.filename!}'])).status;
+    final _file = File('$savedDir/${res.filename!}');
+    // ignore: avoid_slow_async_io
+    if (!(await _file.exists())) return null;
+
+    final result = (await Share.shareFilesWithResult(['$savedDir/${res.filename!}'])).status;
+
+    if (deleteAfter && result == ShareResultStatus.success) await _file.delete();
+
+    return result;
   }
 
   Future<bool> cancelDownloadFile() async {
@@ -275,6 +284,9 @@ class FileCellController extends GetxController {
 
   Future<void> downloadFile() async {
     if (progress.value > 0) return;
+
+    if (Platform.isIOS && (await _shareFileForIos()) != null) return;
+
     await downloadProgressListener?.cancel();
 
     fileAction.value = FileAction.OnlyDownload;
@@ -290,7 +302,7 @@ class FileCellController extends GetxController {
     downloadProgressListener = progress.listen((value) async {
       if (value == 1) {
         progress.value = 0;
-        if (Platform.isIOS) await _showSaveFileForIos();
+        if (Platform.isIOS) await _shareFileForIos();
       }
     });
 
