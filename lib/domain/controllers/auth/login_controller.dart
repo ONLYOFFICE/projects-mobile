@@ -83,8 +83,7 @@ class LoginController extends GetxController {
   String? _tfaKey;
   String? get tfaKey => _tfaKey;
 
-  Uri portalURI = Uri();
-  String get portalAdress => portalURI.authority;
+  String get portalAdress => _portalAdressController.text.removeAllWhitespace;
 
   final cookieManager = WebviewCookieManager();
 
@@ -279,16 +278,23 @@ class LoginController extends GetxController {
       return;
     }
 
-    final portalString = setupPortalUri();
-
-    if (!portalURI.hasAuthority || portalString.isEmpty) {
+    if (portalAdress.isEmpty) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
     } else {
       loaded.value = false;
 
-      locator.get<CoreApi>().setPortalName(portalString);
+      _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
+      if (_portalAdressController.text[_portalAdressController.text.length - 1] == '.')
+        _portalAdressController.text =
+            _portalAdressController.text.substring(0, _portalAdressController.text.length - 1);
+
+      _portalAdressController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _portalAdressController.text.length),
+      );
+
+      locator.get<CoreApi>().setPortalName(portalAdress);
 
       final _capabilities = await _portalService.portalCapabilities();
 
@@ -300,29 +306,6 @@ class LoginController extends GetxController {
 
       loaded.value = true;
     }
-  }
-
-  String setupPortalUri() {
-    _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
-    _portalAdressController.selection = TextSelection.fromPosition(
-      TextPosition(offset: _portalAdressController.text.length),
-    );
-
-    var portalString = _portalAdressController.text;
-
-    if (portalString.isNotEmpty) {
-      if (portalString[portalString.length - 1] == '.')
-        portalString = portalString.substring(0, portalString.length - 1);
-
-      if (portalString.isURL) {
-        if (!portalString.contains('http')) portalString = 'https://$portalString';
-
-        portalURI = Uri.parse(portalString);
-      } else
-        return '';
-    }
-
-    return portalString;
   }
 
   Future<bool> sendRegistrationType() async {

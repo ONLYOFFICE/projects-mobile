@@ -131,7 +131,6 @@ class AccountTileController extends GetxController {
 
       loginController.portalAdressController.text = accountData!.portal!;
       loginController.emailController.text = accountData!.login!;
-      loginController.setupPortalUri();
       locator.get<CoreApi>().setPortalName('${accountData!.scheme}${accountData!.portal}');
 
       await Get.to(() => LoginView());
