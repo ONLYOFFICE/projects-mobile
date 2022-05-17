@@ -301,9 +301,6 @@ class MobileLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final navigationController = Get.find<NavigationController>();
 
-    final heightBottomNavigationBar =
-        navigationController.onMoreView.value ? 300 : 56 + MediaQuery.of(context).padding.bottom;
-
     return Obx(
       () => Scaffold(
         body: Stack(
@@ -323,7 +320,9 @@ class MobileLayout extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: SizedBox(
-          height: heightBottomNavigationBar.toDouble(),
+          height: navigationController.onMoreView.value
+              ? 300
+              : 56 + MediaQuery.of(context).padding.bottom,
           child: Column(
             children: [
               if (navigationController.onMoreView.value) const Expanded(child: MoreView()),
