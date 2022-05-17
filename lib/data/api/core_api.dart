@@ -255,15 +255,16 @@ class CoreApi {
   Future<String> getUploadImagesUrl() async =>
       '${await getPortalURI()}/fckuploader.ashx?newEditor=true&esid=projects_comments&CKEditor=commentEditorcommentsObj&CKEditorFuncNum=75&langCode=ru';
 
-  Future<dynamic> getRequest(String url) async {
+  Future<dynamic> getRequest(String url, {Duration? timelimit, int? retries}) async {
     try {
       debugPrint(url);
       final headers = await getHeaders();
       final request = HttpClientHelper.get(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeLimit: Duration(seconds: timeout),
+        timeLimit: timelimit ?? Duration(seconds: timeout),
         headers: headers,
+        retries: retries ?? 3,
       );
       final response = await request;
 

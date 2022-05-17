@@ -49,7 +49,9 @@ class PortalApi {
 
     final result = ApiDTO<Capabilities>();
     try {
-      final response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator
+          .get<CoreApi>()
+          .getRequest(url, timelimit: const Duration(seconds: 5), retries: 1);
 
       if (response is http.Response) {
         result.response =
