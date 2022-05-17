@@ -242,7 +242,7 @@ class FileCellController extends GetxController {
     final res = (await FlutterDownloader.loadTasks())
         ?.lastWhere((element) => element.taskId == downloadTaskId);
 
-    final savedDir = fileAction.value == FileAction.OnlyDownload
+    final savedDir = fileAction.value == FileAction.OnlyDownload && Platform.isAndroid
         ? downloadService.downloadPath!
         : downloadService.tempPath!;
 
@@ -253,7 +253,7 @@ class FileCellController extends GetxController {
     final res = (await FlutterDownloader.loadTasks())
         ?.lastWhere((element) => element.taskId == downloadTaskId);
 
-    final savedDir = fileAction.value == FileAction.OnlyDownload
+    final savedDir = fileAction.value == FileAction.OnlyDownload && Platform.isAndroid
         ? downloadService.downloadPath!
         : downloadService.tempPath!;
 
