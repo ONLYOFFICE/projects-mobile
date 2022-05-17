@@ -50,8 +50,8 @@ import 'package:readmore/readmore.dart';
 part 'task.dart';
 
 class TaskOverviewScreen extends StatelessWidget {
-  final TaskItemController? taskController;
-  final TabController? tabController;
+  final TaskItemController taskController;
+  final TabController tabController;
 
   const TaskOverviewScreen({
     Key? key,
@@ -63,13 +63,13 @@ class TaskOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (taskController!.loaded.value || taskController!.firstReload.value) {
+        if (taskController.loaded.value || taskController.firstReload.value) {
           final scrollController = ScrollController();
-          final task = taskController!.task.value;
+          final task = taskController.task.value;
           return StyledSmartRefresher(
             scrollController: scrollController,
-            controller: taskController!.refreshController,
-            onRefresh: () => taskController!.reloadTask(showLoading: true),
+            controller: taskController.refreshController,
+            onRefresh: () => taskController.reloadTask(showLoading: true),
             child: ListView(
               controller: scrollController,
               children: [
@@ -109,7 +109,7 @@ class TaskOverviewScreen extends StatelessWidget {
                   subtitleStyle: TextStyleHelper.subtitle1(
                     color: Theme.of(context).colors().links,
                   ),
-                  onTap: taskController!.toProjectOverview,
+                  onTap: taskController.toProjectOverview,
                 ),
                 if (task.milestone != null) const SizedBox(height: 20),
                 if (task.milestone != null)

@@ -38,7 +38,6 @@ class _AppBarMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final task = controller.task.value;
     return PlatformPopupMenuButton(
       padding: EdgeInsets.zero,
       icon: PlatformIconButton(
@@ -55,7 +54,7 @@ class _AppBarMenu extends StatelessWidget {
       onSelected: (dynamic value) => _onSelected(value, controller),
       itemBuilder: (context) {
         return [
-          if (controller.canEdit && task.responsibles!.isEmpty)
+          if (controller.canEdit && controller.task.value.responsibles!.isEmpty)
             PlatformPopupMenuItem(
               value: 'accept',
               child: Text(tr('acceptTask')),
@@ -71,14 +70,16 @@ class _AppBarMenu extends StatelessWidget {
             ),
           PlatformPopupMenuItem(
             value: 'followTask',
-            child: Text((task.isSubscribed ?? false) ? tr('unfollowTask') : tr('followTask')),
+            child: Text((controller.task.value.isSubscribed ?? false)
+                ? tr('unfollowTask')
+                : tr('followTask')),
           ),
           if (controller.canEdit)
             PlatformPopupMenuItem(
               value: 'copyTask',
               child: Text(tr('copyTask')),
             ),
-          if (task.canDelete!)
+          if (controller.task.value.canDelete!)
             PlatformPopupMenuItem(
               textStyle: Theme.of(context)
                   .popupMenuTheme
