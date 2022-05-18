@@ -95,6 +95,28 @@ class FileCellController extends GetxController {
     _setupFileIcon();
   }
 
+  static const allowEditInDocuments = [
+    '.docx',
+    '.xlsx',
+    '.pptx',
+    '.csv',
+    '.txt',
+    '.odt',
+    '.ods',
+    '.odp',
+    '.doc',
+    '.xls',
+    '.ppt',
+    '.rtf',
+    '.mht',
+    '.html',
+    '.htm',
+    '.epub',
+    '.fb2',
+    '.docxf',
+    '.oform'
+  ];
+
   void _setupFileIcon() {
     var iconString = '';
 
@@ -364,7 +386,7 @@ class FileCellController extends GetxController {
           file.fileType == FileType.Archive ||
           file.fileType == FileType.Unknown) return await _viewFile();
 
-      if (file.fileExst != '.pdf' && file.fileExst != '.fb2' && file.fileExst != '.epub')
+      if (allowEditInDocuments.contains(file.fileExst))
         await _openFileInDocumentsApp(parentId: parentId);
       else
         await _viewFile();
