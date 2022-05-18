@@ -230,8 +230,9 @@ class CupertinoAppBar extends StatelessWidget {
                 actions: actions),
           )
         : CupertinoSliverNavigationBar(
-            backgroundColor: Theme.of(context).colors().background,
+            backgroundColor: Theme.of(context).colors().backgroundColor,
             padding: EdgeInsetsDirectional.zero,
+            border: null,
             largeTitle: title,
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -257,8 +258,9 @@ class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return CupertinoNavigationBar(
       padding: EdgeInsetsDirectional.zero,
+      border: null,
       transitionBetweenRoutes: false,
-      backgroundColor: Theme.of(context).colors().background,
+      backgroundColor: Theme.of(context).colors().backgroundColor,
       middle: title,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
