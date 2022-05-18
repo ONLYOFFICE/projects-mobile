@@ -44,6 +44,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_cupertino_alert_dialog.dart';
 import 'package:projects/presentation/views/settings/setting_tile.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -290,7 +291,7 @@ class SettingsScreen extends StatelessWidget {
                           } else {
                             showCupertinoDialog<void>(
                               context: context,
-                              builder: (BuildContext context) => CupertinoAlertDialog(
+                              builder: (BuildContext context) => StyledCupertinoAlertDialog(
                                 title: Text(tr('clearCacheQuestion')),
                                 content: Text(tr('clearCacheQuestionDescription')),
                                 actions: <CupertinoDialogAction>[
