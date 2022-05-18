@@ -222,16 +222,20 @@ class FileCellController extends GetxController {
 
   Future<void> _downloadFileCallback(String id, DownloadTaskStatus status, int progress) async {
     if (downloadTaskId != null && id == downloadTaskId) {
-      if (status == DownloadTaskStatus.running) {
-        if (this.progress.value != progress / 100 && (Platform.isAndroid || progress / 100 != 1))
-          this.progress.value = progress / 100;
+      if (status == DownloadTaskStatus.running &&
+          progress != 0 &&
+          this.progress.value != progress / 100 &&
+          (Platform.isAndroid || progress / 100 != 1)) {
+        this.progress.value = progress / 100;
       }
       if (status == DownloadTaskStatus.complete) {
         if (this.progress.value != 1) this.progress.value = 1;
+
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
       }
       if (status == DownloadTaskStatus.failed && Platform.isIOS) {
         this.progress.value = 0;
+
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       }
     }
@@ -248,7 +252,10 @@ class FileCellController extends GetxController {
     return (await OpenFile.open('$savedDir/${res.filename!}')).type;
   }
 
-  Future<ShareResultStatus?> _shareFileForIos({bool deleteAfter = true}) async {
+  Future<ShareResultStatus?> _shareFileForIos(
+    BuildContext context, {
+    bool deleteAfter = true,
+  }) async {
     if (downloadTaskId == null) return null;
 
     final res = await downloadService.getTaskContent(downloadTaskId!);
@@ -262,7 +269,12 @@ class FileCellController extends GetxController {
     // ignore: avoid_slow_async_io
     if (!(await _file.exists())) return null;
 
-    final result = (await Share.shareFilesWithResult(['$savedDir/${res.filename!}'])).status;
+    final box = context.findRenderObject() as RenderBox;
+    final result = (await Share.shareFilesWithResult(
+      ['$savedDir/${res.filename!}'],
+      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+    ))
+        .status;
 
     if (deleteAfter && result == ShareResultStatus.success) await _file.delete();
 
@@ -282,10 +294,10 @@ class FileCellController extends GetxController {
     return true;
   }
 
-  Future<void> downloadFile() async {
+  Future<void> downloadFile(BuildContext context) async {
     if (progress.value > 0) return;
 
-    if (Platform.isIOS && (await _shareFileForIos()) != null) return;
+    if (Platform.isIOS && (await _shareFileForIos(context)) != null) return;
 
     await downloadProgressListener?.cancel();
 
@@ -302,7 +314,7 @@ class FileCellController extends GetxController {
     downloadProgressListener = progress.listen((value) async {
       if (value == 1) {
         progress.value = 0;
-        if (Platform.isIOS) await _shareFileForIos();
+        if (Platform.isIOS) await _shareFileForIos(context);
       }
     });
 
