@@ -67,9 +67,7 @@ class DiscussionsContent extends StatelessWidget {
     return Obx(() {
       if (!controller.loaded.value) return const ListLoadingSkeleton();
 
-      final scrollController = ScrollController();
       return PaginationListView(
-          scrollController: scrollController,
           paginationController: controller.paginationController,
           child: () {
             if (controller.loaded.value &&
@@ -92,7 +90,6 @@ class DiscussionsContent extends StatelessWidget {
               );
             if (controller.loaded.value && controller.itemList.isNotEmpty)
               return ListView.separated(
-                controller: scrollController,
                 itemCount: controller.itemList.length,
                 separatorBuilder: (_, i) => !platformController.isMobile
                     ? const StyledDivider(leftPadding: 72)
