@@ -252,7 +252,7 @@ class LoginController extends GetxController {
 
   Future<bool> _login(String token, String expires) async {
     await saveToken(token, expires);
-    if (await Get.find<UserController>().getUserId() == null) {
+    if (!(await _authService.checkAuthorization())) {
       unawaited(clearToken());
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
       return false;

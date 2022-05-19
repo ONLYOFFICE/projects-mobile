@@ -136,7 +136,8 @@ class AuthApi {
         final dynamic responseJson = json.decode(response.body);
         result.response = PortalUser.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = CustomError(message: response!.reasonPhrase!);
+        result.error =
+            CustomError(message: response!.reasonPhrase!, statusCode: response.statusCode);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

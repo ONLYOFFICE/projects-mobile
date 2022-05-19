@@ -46,6 +46,7 @@ import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -111,9 +112,16 @@ class AccountTileController extends GetxController {
       userTitle.value = accountData!.portal!;
 
       if (accountData!.token!.isNotEmpty) {
-        final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
+        final responce = await locator<AuthService>().checkAccountAuthorization(accountData!);
 
-        if (!isAuthValid) await Get.find<AccountManager>().clearTokenForAccount(accountData!);
+        if (responce.error != null) {
+          await Get.find<AccountManager>().clearTokenForAccount(accountData!);
+
+          if (responce.error?.statusCode == 404) {
+            await Get.find<ErrorDialog>().show(responce.error!.message);
+            return;
+          }
+        }
       }
     }
 
@@ -121,9 +129,14 @@ class AccountTileController extends GetxController {
   }
 
   Future<void> loginToSavedAccount() async {
-    final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
-    if (!isAuthValid) {
+    final responce = await locator<AuthService>().checkAccountAuthorization(accountData!);
+    if (responce.error != null) {
       await Get.find<AccountManager>().clearTokenForAccount(accountData!);
+
+      if (responce.error?.statusCode == 404) {
+        await Get.find<ErrorDialog>().show(responce.error!.message);
+        return;
+      }
     }
 
     if (accountData?.token == '') {

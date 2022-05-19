@@ -41,6 +41,7 @@ import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
 import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
@@ -53,7 +54,10 @@ class AuthService {
     final result = authResponse.response != null;
 
     if (!result) {
-      await Get.find<ErrorDialog>().show(authResponse.error?.message ?? '');
+      if (authResponse.error?.statusCode == 404)
+        await Get.find<LoginController>().logout();
+      else
+        await Get.find<ErrorDialog>().show(authResponse.error?.message ?? '');
     }
     return authResponse;
   }
@@ -62,7 +66,8 @@ class AuthService {
     final authResponse = await _api.getUserInfo();
 
     if (authResponse.response == null) {
-      if (authResponse.error!.message.toLowerCase().contains('unauthorized')) {
+      if (authResponse.error!.message.toLowerCase().contains('unauthorized') ||
+          authResponse.error?.statusCode == 404) {
         return false;
       } else {
         await Get.find<ErrorDialog>().show(authResponse.error!.message);
@@ -71,15 +76,8 @@ class AuthService {
     return true;
   }
 
-  Future<bool> checkAccountAuthorization(AccountData accoutnData) async {
-    final authResponse = await _api.getAccountInfo(accoutnData);
-
-    if (authResponse.response == null) {
-      if (authResponse.error!.message.toLowerCase().contains('unauthorized')) {
-        return false;
-      } else {}
-    }
-    return true;
+  Future<ApiDTO<PortalUser>> checkAccountAuthorization(AccountData accoutnData) async {
+    return await _api.getAccountInfo(accoutnData);
   }
 
   Future<ApiDTO<AuthToken>> login({

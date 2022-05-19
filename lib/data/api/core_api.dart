@@ -268,7 +268,7 @@ class CoreApi {
       );
       final response = await request;
 
-      if (response == null) return CustomError(message: '');
+      if (response == null) return CustomError(message: '', statusCode: response?.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
@@ -279,7 +279,8 @@ class CoreApi {
           error = json.decode(response.body)['error']['message'] as String?;
         }
 
-        return CustomError(message: error ?? response.reasonPhrase!);
+        return CustomError(
+            message: error ?? response.reasonPhrase!, statusCode: response.statusCode);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -305,7 +306,7 @@ class CoreApi {
 
       final response = await request;
 
-      if (response == null) return CustomError(message: '');
+      if (response == null) return CustomError(message: '', statusCode: response?.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
@@ -316,7 +317,8 @@ class CoreApi {
           error = json.decode(response.body)['error']['message'] as String?;
         }
 
-        return CustomError(message: error ?? response.reasonPhrase!);
+        return CustomError(
+            message: error ?? response.reasonPhrase!, statusCode: response.statusCode);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -342,7 +344,7 @@ class CoreApi {
       );
       final response = await request;
 
-      if (response == null) return CustomError(message: '');
+      if (response == null) return CustomError(message: '', statusCode: response?.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
@@ -353,7 +355,8 @@ class CoreApi {
           error = json.decode(response.body)['error']['message'] as String?;
         }
 
-        return CustomError(message: error ?? response.reasonPhrase!);
+        return CustomError(
+            message: error ?? response.reasonPhrase!, statusCode: response.statusCode);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -384,7 +387,7 @@ class CoreApi {
       );
       final response = await request;
 
-      if (response == null) return CustomError(message: '');
+      if (response == null) return CustomError(message: '', statusCode: response?.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
@@ -395,7 +398,8 @@ class CoreApi {
           error = json.decode(response.body)['error']['message'] as String?;
         }
 
-        return CustomError(message: error ?? response.reasonPhrase!);
+        return CustomError(
+            message: error ?? response.reasonPhrase!, statusCode: response.statusCode);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -419,7 +423,7 @@ class CoreApi {
       );
       final response = await request;
 
-      if (response == null) return CustomError(message: '');
+      if (response == null) return CustomError(message: '', statusCode: response?.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
@@ -430,7 +434,8 @@ class CoreApi {
           error = json.decode(response.body)['error']['message'] as String?;
         }
 
-        return CustomError(message: error ?? response.reasonPhrase!);
+        return CustomError(
+            message: error ?? response.reasonPhrase!, statusCode: response.statusCode);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
