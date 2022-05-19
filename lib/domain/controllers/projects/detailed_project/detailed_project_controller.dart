@@ -200,8 +200,12 @@ class ProjectDetailsController extends BaseProjectEditorController {
   }
 
   @override
-  Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
-      .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed.value!);
+  Future<bool> updateStatus({int? newStatusId}) async {
+    await refreshData(hidden: true);
+
+    return await Get.find<ProjectStatusesController>()
+        .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed.value!);
+  }
 
   @override
   Future<void> confirmTeamMembers() async {
