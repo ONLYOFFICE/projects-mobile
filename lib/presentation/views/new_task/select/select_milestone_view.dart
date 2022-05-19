@@ -79,7 +79,7 @@ class SelectMilestoneView extends StatelessWidget {
           onClearPressed: _milestoneController.clearSearchAndReloadMilestones,
         ),
       ),
-      body: Column(
+      body: Stack(
         children: [
           Obx(
             () {

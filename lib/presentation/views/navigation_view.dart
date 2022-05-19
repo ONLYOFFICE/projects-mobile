@@ -144,7 +144,7 @@ class TabletLayout extends StatelessWidget {
             bottom: false,
             child: Container(
               color: Theme.of(context).colors().primarySurface,
-              width: 80,
+              width: 64,
               child: Column(
                 children: [
                   Obx(
@@ -239,8 +239,8 @@ class TabletLayout extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 60,
-                    width: 60,
+                    height: 40,
+                    width: 40,
                     child: PlatformIconButton(
                       padding: EdgeInsets.zero,
                       icon: ClipOval(

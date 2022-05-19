@@ -31,7 +31,6 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -58,23 +57,8 @@ class NewProjectDescription extends StatelessWidget {
         titleText: tr('description'),
         centerTitle: !GetPlatform.isAndroid,
         previousPageTitle: previousPage,
-        leading: PlatformWidget(
-          cupertino: (_, __) => CupertinoButton(
-            padding: const EdgeInsets.only(left: 16),
-            alignment: Alignment.centerLeft,
-            onPressed: () =>
-                controller.leaveDescriptionView(controller.descriptionController.value.text),
-            child: Text(
-              tr('close').toLowerCase().capitalizeFirst!,
-              style: TextStyleHelper.button(),
-            ),
-          ),
-          material: (_, __) => IconButton(
-            onPressed: () =>
-                controller.leaveDescriptionView(controller.descriptionController.value.text),
-            icon: const Icon(Icons.close),
-          ),
-        ),
+        onLeadingPressed: () =>
+            controller.leaveDescriptionView(controller.descriptionController.value.text),
         actions: [
           PlatformIconButton(
               icon: Icon(PlatformIcons(context).checkMark),
