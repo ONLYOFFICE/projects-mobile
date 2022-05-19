@@ -48,7 +48,7 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
-import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
+import 'package:projects/presentation/shared/widgets/users_list.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 
 class ManageDiscussionSubscribersScreen extends StatelessWidget {
@@ -96,17 +96,17 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
             controller: controller,
           ),
         ),
-        body: Obx(
-          () {
-            if (usersDataSource.loaded.value == true &&
-                usersDataSource.usersList.isNotEmpty &&
-                usersDataSource.isSearchResult.value == false) {
-              return StyledSmartRefresher(
-                enablePullDown: false,
-                controller: usersDataSource.refreshController,
-                onLoading: usersDataSource.onLoading,
-                enablePullUp: usersDataSource.pullUpEnabled,
-                child: CustomScrollView(
+        body: StyledSmartRefresher(
+          enablePullDown: false,
+          controller: usersDataSource.refreshController,
+          onLoading: usersDataSource.onLoading,
+          enablePullUp: usersDataSource.pullUpEnabled,
+          child: Obx(
+            () {
+              if (usersDataSource.loaded.value == true &&
+                  usersDataSource.usersList.isNotEmpty &&
+                  usersDataSource.isSearchResult.value == false) {
+                return CustomScrollView(
                   slivers: <Widget>[
                     if (controller.subscribers.isNotEmpty)
                       _UsersCategoryText(text: tr('subscribed')),
@@ -118,22 +118,22 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
                     _UsersCategoryText(text: tr('allUsers')),
                     _AllUsers(controller: controller),
                   ],
-                ),
-              );
-            }
-            if (usersDataSource.nothingFound.value == true) {
-              return const NothingFound();
-            }
-            if (usersDataSource.loaded.value == true &&
-                usersDataSource.usersList.isNotEmpty &&
-                usersDataSource.isSearchResult.value == true) {
-              return UsersSearchResult(
-                usersDataSource: usersDataSource,
-                onTapFunction: (user) => controller.addSubscriber(user, fromUsersDataSource: true),
-              );
-            }
-            return const ListLoadingSkeleton();
-          },
+                );
+              }
+              if (usersDataSource.nothingFound.value == true) {
+                return const NothingFound();
+              }
+              if (usersDataSource.loaded.value == true &&
+                  usersDataSource.usersList.isNotEmpty &&
+                  usersDataSource.isSearchResult.value == true) {
+                return UsersSimpleList(
+                    onTapFunction: (user) =>
+                        controller.addSubscriber(user, fromUsersDataSource: true),
+                    users: usersDataSource.usersList);
+              }
+              return const ListLoadingSkeleton();
+            },
+          ),
         ),
       ),
     );

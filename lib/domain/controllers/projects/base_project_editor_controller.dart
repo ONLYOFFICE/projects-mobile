@@ -188,7 +188,8 @@ abstract class BaseProjectEditorController extends GetxController {
         notificationEnabled.value = false;
         isFolowed.value = false;
       }
-      if (user.portalUser.id != selfUserItem.id) notificationEnabled.value = true;
+
+      notificationEnabled.value = user.portalUser.id != selfUserItem.id;
 
       selectedTeamMembers
           .removeWhere((element) => selectedProjectManager.value!.id == element.portalUser.id);
