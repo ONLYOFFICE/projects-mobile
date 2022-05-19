@@ -54,7 +54,7 @@ class NewProject extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  static String get pageName => tr('project');
+  static String get pageName => tr('newProject');
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class NewProject extends StatelessWidget {
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
-          titleText: tr('project'),
+          titleText: tr('newProject'),
           leadingWidth: GetPlatform.isIOS ? 100 : null,
           centerTitle: GetPlatform.isIOS,
           actions: [

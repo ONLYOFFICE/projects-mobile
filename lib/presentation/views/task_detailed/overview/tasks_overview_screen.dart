@@ -74,9 +74,22 @@ class TaskOverviewScreen extends StatelessWidget {
               controller: scrollController,
               children: [
                 _Task(taskController: taskController),
+                InfoTile(
+                  icon: AppIcon(
+                      icon: SvgIcons.project,
+                      color: Theme.of(context).colors().onBackground.withOpacity(0.75)),
+                  caption: '${tr('project')}:',
+                  captionStyle: TextStyleHelper.caption(
+                      color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
+                  subtitle: task.projectOwner!.title,
+                  subtitleStyle: TextStyleHelper.subtitle1(
+                    color: Theme.of(context).colors().links,
+                  ),
+                  onTap: taskController.toProjectOverview,
+                ),
                 if (task.description != null && task.description!.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 21),
+                    padding: const EdgeInsets.only(top: 21),
                     child: InfoTile(
                       caption: '${tr('description')}:',
                       captionStyle: TextStyleHelper.caption(
@@ -98,19 +111,6 @@ class TaskOverviewScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                InfoTile(
-                  icon: AppIcon(
-                      icon: SvgIcons.project,
-                      color: Theme.of(context).colors().onBackground.withOpacity(0.75)),
-                  caption: '${tr('project')}:',
-                  captionStyle: TextStyleHelper.caption(
-                      color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
-                  subtitle: task.projectOwner!.title,
-                  subtitleStyle: TextStyleHelper.subtitle1(
-                    color: Theme.of(context).colors().links,
-                  ),
-                  onTap: taskController.toProjectOverview,
-                ),
                 if (task.milestone != null) const SizedBox(height: 20),
                 if (task.milestone != null)
                   InfoTile(

@@ -47,7 +47,7 @@ class NewMilestoneDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
     final newMilestoneController = args['newMilestoneController'] as NewMilestoneController;
-
+    final previousPage = args['previousPage'] as String?;
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
@@ -55,10 +55,13 @@ class NewMilestoneDescription extends StatelessWidget {
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('description'),
-        leading: PlatformIconButton(
-            icon: const BackButtonIcon(),
-            onPressed: () => newMilestoneController
-                .leaveDescriptionView(newMilestoneController.descriptionController.value.text)),
+        onLeadingPressed: () => newMilestoneController
+            .leaveDescriptionView(newMilestoneController.descriptionController.value.text),
+        previousPageTitle: previousPage,
+        // leading: PlatformIconButton(
+        //     icon: const BackButtonIcon(),
+        //     onPressed: () => newMilestoneController
+        //         .leaveDescriptionView(newMilestoneController.descriptionController.value.text)),
         actions: [
           PlatformIconButton(
               icon: Icon(PlatformIcons(context).checkMark),

@@ -38,6 +38,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -72,7 +73,13 @@ class EditProjectView extends StatelessWidget {
           backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('editProject'),
           centerTitle: !GetPlatform.isAndroid,
-          leadingWidth: GetPlatform.isIOS ? 100 : null,
+          leadingWidth: GetPlatform.isIOS
+              ? TextUtils.getTextWidth(
+                    tr('cancel').toLowerCase().capitalizeFirst!,
+                    TextStyleHelper.button(),
+                  ) +
+                  16
+              : null,
           leading: PlatformWidget(
             cupertino: (_, __) => CupertinoButton(
               padding: const EdgeInsets.only(left: 16),
