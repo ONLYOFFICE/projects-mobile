@@ -162,15 +162,15 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     fillProjectInfo(_projectDetailed.value!);
 
-    projectTasksController!.setup(_projectDetailed.value!);
-    projectMilestonesController!.setup(projectDetailed: _projectDetailed.value);
-    projectDiscussionsController!.setup(_projectDetailed.value!);
-    unawaited(projectDocumentsController!.setupFolder(
+    projectTasksController?.setup(_projectDetailed.value!);
+    projectMilestonesController?.setup(projectDetailed: _projectDetailed.value);
+    projectDiscussionsController?.setup(_projectDetailed.value!);
+    unawaited(projectDocumentsController?.setupFolder(
       folderName: _projectDetailed.value!.title!,
       folderId: _projectDetailed.value!.projectFolder,
     ));
-    projectTeamDataSource!.setup(projectDetailed: _projectDetailed.value);
-    unawaited(projectTeamDataSource!.getTeam());
+    projectTeamDataSource?.setup(projectDetailed: _projectDetailed.value);
+    unawaited(projectTeamDataSource?.getTeam());
 
     loaded.value = true;
   }
