@@ -36,8 +36,6 @@
 	</dict>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
-	<key>UIFileSharingEnabled</key>
-	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires access to the camera, so that you can take photo and upload it in the app.</string>
 	<key>NSFaceIDUsageDescription</key>
