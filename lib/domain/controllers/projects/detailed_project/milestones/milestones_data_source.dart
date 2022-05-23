@@ -32,18 +32,22 @@
 
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
+import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/milestones_search_screen.dart';
 
@@ -111,13 +115,14 @@ class MilestonesDataSource extends BaseController {
     loaded.value = false;
 
     unawaited(updateDetails());
-    _paginationController.startIndex = 0;
     await _getMilestones(needToClear: true);
 
     loaded.value = true;
   }
 
   Future<bool> _getMilestones({bool needToClear = false}) async {
+    if (needToClear) _paginationController.clear();
+
     final result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
@@ -128,13 +133,12 @@ class MilestonesDataSource extends BaseController {
       deadlineFilter: _filterController.deadlineFilter,
       query: searchQuery,
     );
-    if (result == null) return Future.value(false);
+    if (result == null) return false;
 
     _paginationController.total.value = result.length;
-    if (needToClear) _paginationController.data.clear();
     _paginationController.data.addAll(result);
 
-    return Future.value(true);
+    return true;
   }
 
   void setup({ProjectDetailed? projectDetailed, int? projectId}) {
@@ -169,9 +173,20 @@ class MilestonesDataSource extends BaseController {
   }
 
   Future<void> updateDetails() async {
+    // TODO move to 'needToRefreshDetails' with id event
+
     final response = await locator<ProjectService>()
         .getProjectById(projectId: _projectDetailed?.id ?? _projectId!);
-    if (response == null) return;
+
+    if (response == null) {
+      if (!(await locator<AuthService>().checkAuthorization())) {
+        await Get.find<ErrorDialog>().show(tr('selfUserNotFound'), awaited: true);
+
+        await Get.find<LoginController>().logout();
+      }
+
+      return;
+    }
 
     _projectDetailed = response;
     fabIsVisible.value = _canCreate();

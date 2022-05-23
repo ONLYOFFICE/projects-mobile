@@ -30,6 +30,7 @@
  *
  */
 
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -45,11 +46,13 @@ class ErrorDialog extends GetxController {
 
   bool dialogIsShown = false;
 
-  Future<void> show(String message) async {
+  Future<void> show(String message, {bool awaited = false}) async {
     if (message.isNotEmpty) addToQueue(message);
 
-    // ignore: unawaited_futures
-    processQueue();
+    if (awaited)
+      await processQueue();
+    else
+      unawaited(processQueue());
   }
 
   void hide() {

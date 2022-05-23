@@ -112,14 +112,13 @@ class AuthApi {
     return result;
   }
 
-  Future<ApiDTO<PortalUser>> getAccountInfo(AccountData accoutnData) async {
+  Future<ApiDTO<PortalUser>> getAccountInfo(AccountData accountData) async {
     final coreApi = locator.get<CoreApi>();
-    var url = await coreApi.selfInfoUrl();
 
-    url = '${accoutnData.scheme}${accoutnData.portal}/api/${coreApi.version}/people/@self';
+    final url = '${accountData.scheme}${accountData.portal}/api/${coreApi.version}/people/@self';
 
     final headers = await locator.get<CoreApi>().getHeaders();
-    headers['Authorization'] = accoutnData.token!;
+    headers['Authorization'] = accountData.token!;
 
     final request = HttpClientHelper.get(
       Uri.parse(url),

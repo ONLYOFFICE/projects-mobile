@@ -32,18 +32,22 @@
 
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/discussions/base_discussions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
@@ -131,7 +135,6 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
     loaded.value = false;
 
     unawaited(updateDetails());
-    _paginationController.startIndex = 0;
     if (preset != null) await _filterController.setupPreset(preset);
 
     await _getDiscussions(needToClear: true);
@@ -140,6 +143,8 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
   }
 
   Future<bool> _getDiscussions({bool needToClear = false}) async {
+    if (needToClear) _paginationController.clear();
+
     final result = await _api.getDiscussionsByParams(
       startIndex: _paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
@@ -151,13 +156,12 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
       otherFilter: _filterController.otherFilter,
       projectId: projectId.toString(),
     );
-    if (result == null) return Future.value(false);
+    if (result?.response == null) return false;
 
-    _paginationController.total.value = result.total;
-    if (needToClear) _paginationController.data.clear();
-    _paginationController.data.addAll(result.response ?? <Discussion>[]);
+    _paginationController.total.value = result!.total;
+    _paginationController.data.addAll(result.response!);
 
-    return Future.value(true);
+    return true;
   }
 
   @override
@@ -182,10 +186,20 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
       });
 
   Future<void> updateDetails() async {
-    // TODO change to needToRefreshProjects updateID ...
+    // TODO move to 'needToRefreshDetails' with id event
+
     final response =
         await locator<ProjectService>().getProjectById(projectId: _projectDetailed.id!);
-    if (response == null) return;
+
+    if (response == null) {
+      if (!(await locator<AuthService>().checkAuthorization())) {
+        await Get.find<ErrorDialog>().show(tr('selfUserNotFound'), awaited: true);
+
+        await Get.find<LoginController>().logout();
+      }
+
+      return;
+    }
 
     _projectDetailed = response;
     fabIsVisible.value = _canCreate();

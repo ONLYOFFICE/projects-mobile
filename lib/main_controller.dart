@@ -201,6 +201,7 @@ class MainController extends GetxController {
   }
 
   Future<void> clearLoginData() async {
+    // TODO move to LoginController
     final storage = locator<Storage>();
 
     await _secureStorage.delete('expires');

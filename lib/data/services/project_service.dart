@@ -274,7 +274,6 @@ class ProjectService {
     if (success) {
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }

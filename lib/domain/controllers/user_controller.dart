@@ -32,8 +32,11 @@
 
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/dialogs.dart';
 import 'package:synchronized/synchronized.dart';
 
 import 'package:get/get.dart';
@@ -62,12 +65,27 @@ class UserController extends GetxController {
 
     _userInfoTimeoutTimer = Timer(const Duration(seconds: _timeoutDuration), () {});
 
-    final response = await _userInfoLock.synchronized(() async {
-      final response = await locator<AuthService>().getSelfInfo();
-      if (response.response == null) return false;
-      user.value = response.response;
-      return true;
-    });
+    final response = await _userInfoLock.synchronized(
+      () async {
+        final response = await locator<AuthService>().getSelfInfo();
+
+        if (response.error == null) {
+          user.value = response.response;
+
+          return true;
+        } else {
+          if (response.error?.statusCode == 404) {
+            await Get.find<ErrorDialog>().show(tr('selfUserNotFound'), awaited: true);
+
+            await Get.find<LoginController>().logout();
+          } else
+            await Get.find<ErrorDialog>().show(response.error?.message ?? '');
+
+          return false;
+        }
+      },
+    );
+
     return response;
   }
 

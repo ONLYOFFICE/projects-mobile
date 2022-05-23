@@ -41,7 +41,6 @@ import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
 import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
-import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
@@ -49,17 +48,7 @@ class AuthService {
   final AuthApi _api = locator<AuthApi>();
 
   Future<ApiDTO<PortalUser>> getSelfInfo() async {
-    final authResponse = await _api.getUserInfo();
-
-    final result = authResponse.response != null;
-
-    if (!result) {
-      if (authResponse.error?.statusCode == 404)
-        await Get.find<LoginController>().logout();
-      else
-        await Get.find<ErrorDialog>().show(authResponse.error?.message ?? '');
-    }
-    return authResponse;
+    return await _api.getUserInfo();
   }
 
   Future<bool> checkAuthorization() async {
@@ -93,7 +82,7 @@ class AuthService {
     }
 
     if (authResponse.response == null) {
-      await Get.find<ErrorDialog>().show(authResponse.error!.message);
+      await Get.find<ErrorDialog>().show(tr('authenticationFailed'));
     }
     return authResponse;
   }
