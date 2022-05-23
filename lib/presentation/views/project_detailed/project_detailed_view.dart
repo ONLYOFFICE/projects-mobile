@@ -400,17 +400,18 @@ Future<void> _onSelected(
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           final result = await controller.deleteProject();
-          if (result != null) {
+          if (result) {
             Get.back();
             Get.back();
-            MessagesHandler.showSnackBar(
-              context: context,
-              text: tr('projectDeleted'),
-            );
+
+            MessagesHandler.showSnackBar(context: context, text: tr('projectDeleted'));
+
             locator<EventHub>().fire('needToRefreshProjects', {'all': true});
-          } else {
+            locator<EventHub>().fire('needToRefreshTasks', {'all': true});
+            locator<EventHub>().fire('needToRefreshDiscussions', {'all': true});
+            locator<EventHub>().fire('needToRefreshDocuments', {'all': true});
+          } else
             MessagesHandler.showSnackBar(context: context, text: tr('error'));
-          }
         },
       ));
       break;

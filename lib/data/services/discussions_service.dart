@@ -74,7 +74,6 @@ class DiscussionsService {
     if (success) {
       return discussions;
     } else {
-      await Get.find<ErrorDialog>().show(discussions.error!.message);
       return null;
     }
   }

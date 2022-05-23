@@ -192,7 +192,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future<void> copyLink() async {}
 
-  Future deleteProject() async {
+  Future<bool> deleteProject() async {
     final responce = await _projectService.deleteProject(projectId: _projectDetailed.value!.id!);
     if (responce) await _refreshProjectsSubscription?.cancel();
 

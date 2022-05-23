@@ -82,7 +82,6 @@ class FilesService {
     if (success) {
       return files.response;
     } else {
-      await Get.find<ErrorDialog>().show(files.error!.message);
       return null;
     }
   }
