@@ -110,7 +110,6 @@ class ErrorDialog extends GetxController {
 
 Map _blockingErrors = {
   'unauthorized': 'unauthorized',
-  // 'bad gateway': 'Bad Gateway',
   'forbidden': 'Forbidden',
   'payment required': 'Payment required',
   'paymentrequired': 'Payment required',
@@ -123,4 +122,6 @@ Map _blockingErrors = {
 Map<String, String> _customErrors = {
   'User authentication failed': tr('authenticationFailed'),
   'No address associated with hostname': tr('noAdress'),
+  'unauthorized': tr('unauthorized'),
+  'forbidden': tr('forbidden'),
 };

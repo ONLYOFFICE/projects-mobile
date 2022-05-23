@@ -487,6 +487,8 @@
 	"duplicateConfirmation": "保留两个",
 	"skipConfirmation": "跳过",
 	"loading": "正在加载",
-	"disablePasscode": "停用密码"
+	"disablePasscode": "停用密码",
+	"forbidden":"禁止访问",
+	"unauthorized": "需要用户验证"
 
 }

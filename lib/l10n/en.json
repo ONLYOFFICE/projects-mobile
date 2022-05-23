@@ -498,5 +498,7 @@
 	"downloading": "Downloading",
 	"faceID": "Open with Face ID",
 	"subtaskDeleted": "Subtask deleted",
-	"newProject": "New project"
+	"newProject": "New project",
+	"forbidden":"Access is Forbidden",
+	"unauthorized": "User authentication required"
 }

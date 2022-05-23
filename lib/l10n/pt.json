@@ -498,5 +498,7 @@
 	"downloading": "Transferindo",
 	"faceID": "Abrir com identificação facial",
 	"subtaskDeleted": "Subtarefa excluída",
-	"newProject": "Novo projeto"
+	"newProject": "Novo projeto",
+	"forbidden":"O acesso é proibido",
+	"unauthorized": "Autenticação do usuário necessária"
 }
