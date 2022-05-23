@@ -58,7 +58,9 @@ class ProjectManagerSelectionView extends StatelessWidget {
     final previousPage = args['previousPage'] as String?;
 
     controller.selectionMode = UserSelectionMode.Single;
+    controller.selfUserItem.selectionMode.value = UserSelectionMode.Single;
     usersDataSource.selectionMode = UserSelectionMode.Single;
+
     controller.setupUsersSelection();
 
     return Scaffold(

@@ -67,6 +67,7 @@ class TeamMembersSelectionView extends StatelessWidget {
     usersDataSource.selectedProjectManager = controller.selectedProjectManager.value;
     controller.selectionMode = UserSelectionMode.Multiple;
     usersDataSource.selectionMode = UserSelectionMode.Multiple;
+    controller.selfUserItem.selectionMode.value = UserSelectionMode.Multiple;
 
     controller.setupUsersSelection();
 
