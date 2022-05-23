@@ -143,8 +143,17 @@ class SelectProjectView extends StatelessWidget {
               separatorBuilder: (BuildContext context, int index) {
                 return const StyledDivider(leftPadding: 16, rightPadding: 16);
               },
-              itemBuilder: (c, i) => _ProjectCell(
-                  item: projectsController.paginationController.data[i], controller: controller),
+              itemBuilder: (c, i) {
+                // TODO: need to refactoring. (Fix bug 57239 - do not show closed project)
+                if (projectsController.paginationController.data[i].status == 0) {
+                  return _ProjectCell(
+                      item: projectsController.paginationController.data[i],
+                      controller: controller);
+                }
+                {
+                  return const SizedBox.shrink();
+                }
+              },
             ),
           );
         }
