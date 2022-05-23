@@ -303,17 +303,18 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<PortalUser>> deleteProject({required int projectId}) async {
+  Future<ApiDTO<ProjectDetailed>> deleteProject({required int projectId}) async {
     final url = await locator.get<CoreApi>().projectByIDUrl(projectId);
 
-    final result = ApiDTO<PortalUser>();
+    final result = ApiDTO<ProjectDetailed>();
 
     try {
       final response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = PortalUser.fromJson(responseJson['response'] as Map<String, dynamic>);
+        result.response =
+            ProjectDetailed.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
