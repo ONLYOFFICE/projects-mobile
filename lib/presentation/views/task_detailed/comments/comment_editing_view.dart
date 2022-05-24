@@ -67,7 +67,7 @@ class CommentEditingView extends StatelessWidget {
           titleText: tr('commentEditing'),
           leadingWidth: GetPlatform.isIOS
               ? TextUtils.getTextWidth(
-                    tr('cancel').toLowerCase().capitalizeFirst!,
+                    tr('closeLowerCase'),
                     TextStyleHelper.button(),
                   ) +
                   16

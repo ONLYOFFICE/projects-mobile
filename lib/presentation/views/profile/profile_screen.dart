@@ -41,6 +41,7 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -83,6 +84,9 @@ class SelfProfileScreen extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           showBackButton: showBackButton,
+          leadingWidth: showBackButton && GetPlatform.isIOS
+              ? TextUtils.getTextWidth(tr('closeLowerCase'), TextStyleHelper.button()) + 16
+              : null,
           leading: showBackButton
               ? PlatformWidget(
                   cupertino: (_, __) => CupertinoButton(
@@ -90,7 +94,7 @@ class SelfProfileScreen extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     onPressed: Get.back,
                     child: Text(
-                      tr('close').toLowerCase().capitalizeFirst!,
+                      tr('closeLowerCase'),
                       style: TextStyleHelper.button(),
                     ),
                   ),

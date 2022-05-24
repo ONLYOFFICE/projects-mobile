@@ -75,7 +75,7 @@ class EditProjectView extends StatelessWidget {
           centerTitle: !GetPlatform.isAndroid,
           leadingWidth: GetPlatform.isIOS
               ? TextUtils.getTextWidth(
-                    tr('cancel').toLowerCase().capitalizeFirst!,
+                    tr('closeLowerCase'),
                     TextStyleHelper.button(),
                   ) +
                   16

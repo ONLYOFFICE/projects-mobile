@@ -76,7 +76,7 @@ class SettingsScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).colors().surface,
       titleText: tr('settings'),
       leadingWidth: GetPlatform.isIOS
-          ? TextUtils.getTextWidth(tr('closeLowerCase'), TextStyleHelper.button())
+          ? TextUtils.getTextWidth(tr('closeLowerCase'), TextStyleHelper.button()) + 16
           : null,
       leading: PlatformWidget(
         cupertino: (_, __) => CupertinoButton(
