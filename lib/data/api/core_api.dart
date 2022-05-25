@@ -461,9 +461,10 @@ class CoreApi {
     if (_token == null || _token!.isEmpty) {
       _token = await _secureStorage.getString('token') ?? '';
     }
-
     return _token;
   }
+
+  set token(String token) => _token = token;
 
   Future<void> savePortalName() async {
     await _secureStorage.putString('portalName', _portalName);

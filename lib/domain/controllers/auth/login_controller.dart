@@ -45,6 +45,7 @@ import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -56,7 +57,6 @@ import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-import 'package:projects/domain/controllers/auth/account_controller.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
@@ -252,6 +252,7 @@ class LoginController extends GetxController {
 
   Future<bool> _login(String token, String expires) async {
     await saveToken(token, expires);
+    locator.get<CoreApi>().token = token;
     if (!(await _authService.checkAuthorization())) {
       unawaited(clearToken());
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
