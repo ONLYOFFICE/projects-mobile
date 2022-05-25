@@ -109,7 +109,7 @@ class NewMilestoneView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 onPressed: newMilestoneController.discard,
                 child: Text(
-                  tr('cancel').toLowerCase().capitalizeFirst!,
+                  tr('closeLowerCase').toLowerCase().capitalizeFirst!,
                   style: TextStyleHelper.button(),
                 ),
               ),

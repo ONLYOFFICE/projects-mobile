@@ -59,7 +59,7 @@ class AccountManagerView extends StatelessWidget {
       // backgroundColor: Theme.of(context).colors().backgroundSecond,
       body: Center(
         child: Container(
-          constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
+          constraints: BoxConstraints(maxWidth: 480, maxHeight: MediaQuery.of(context).size.height),
           child: OrientationBuilder(builder: (context, orientation) {
             return Column(
               mainAxisSize: MainAxisSize.max,
