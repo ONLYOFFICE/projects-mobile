@@ -77,7 +77,7 @@ class ErrorDialog extends GetxController {
         },
         child: SingleButtonDialog(
           titleText: tr('error'),
-          contentText: _customErrors[error] ?? error,
+          contentText: _customErrors[error.toLowerCase()] ?? error,
           acceptText: tr('ok'),
           onAcceptTap: () async => {
             Get.back(),
@@ -123,8 +123,8 @@ Map _blockingErrors = {
 };
 
 Map<String, String> _customErrors = {
-  'User authentication failed': tr('authenticationFailed'),
-  'No address associated with hostname': tr('noAdress'),
+  'user authentication failed': tr('authenticationFailed'),
+  'no address associated with hostname': tr('noAdress'),
   'unauthorized': tr('unauthorized'),
   'forbidden': tr('forbidden'),
 };
