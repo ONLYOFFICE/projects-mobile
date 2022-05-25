@@ -122,4 +122,10 @@ class DeviceInfoService {
         return '${_androidDeviceInfo?.manufacturer} ${_androidDeviceInfo?.model} ${_androidDeviceInfo?.version.incremental}';
     }
   }
+
+  Future<int?> get androidSdkVersion async {
+    await init(); // TODO move init to constructor
+
+    return Platform.isAndroid ? _androidDeviceInfo?.version.sdkInt : null;
+  }
 }

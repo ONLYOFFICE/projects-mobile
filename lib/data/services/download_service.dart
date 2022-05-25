@@ -31,7 +31,7 @@
  */
 
 import 'dart:async';
-import 'dart:io' show Directory, File;
+import 'dart:io' show Directory, File, Platform;
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
@@ -47,6 +47,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projects/data/api/download_api.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/data/services/device_info_service.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -150,12 +151,15 @@ class DocumentsDownloadService {
     if (finalUrl.contains(Get.find<PortalInfoController>().portalName!))
       headers = Get.find<PortalInfoController>().getAuthHeader;
 
+    final androidSdkVersion = await locator<DeviceInfoService>().androidSdkVersion;
+
     return await FlutterDownloader.enqueue(
       url: finalUrl,
       fileName: fileName,
       headers: headers,
       savedDir: temp ? tempPath! : downloadPath!,
       showNotification: !temp,
+      saveInPublicStorage: Platform.isAndroid && (androidSdkVersion ?? 29) > 28,
     );
   }
 
