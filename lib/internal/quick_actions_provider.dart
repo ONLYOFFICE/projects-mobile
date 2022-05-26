@@ -41,11 +41,11 @@ import 'package:quick_actions/quick_actions.dart';
 class QuickActionsProvider {
   void setupQuickAction() {
     const quickActions = QuickActions();
-    quickActions.initialize((shortcutType) {
+    quickActions.initialize((shortcutType) async {
       switch (shortcutType) {
         case 'newProject':
-          Future.delayed(const Duration(milliseconds: 500), () {
-            Get.find<NavigationController>().toScreen(
+          Future.delayed(const Duration(milliseconds: 1500), () async {
+            await Get.find<NavigationController>().toScreen(
               const NewProject(),
               transition: Transition.cupertinoDialog,
               fullscreenDialog: true,
@@ -55,8 +55,8 @@ class QuickActionsProvider {
           break;
 
         case 'newTask':
-          Future.delayed(const Duration(milliseconds: 500), () {
-            Get.find<NavigationController>().toScreen(
+          Future.delayed(const Duration(milliseconds: 1500), () async {
+            await Get.find<NavigationController>().toScreen(
               const NewTaskView(),
               arguments: {'projectDetailed': null},
               page: '/NewTaskView',
@@ -64,8 +64,8 @@ class QuickActionsProvider {
           });
           break;
         case 'newDiscussion':
-          Future.delayed(const Duration(milliseconds: 500), () {
-            Get.find<NavigationController>().toScreen(
+          Future.delayed(const Duration(milliseconds: 1500), () async {
+            await Get.find<NavigationController>().toScreen(
               const NewDiscussionScreen(),
               transition: Transition.cupertinoDialog,
               fullscreenDialog: true,
@@ -82,9 +82,9 @@ class QuickActionsProvider {
     final newDiscussion = tr('newDiscussion');
 
     quickActions.setShortcutItems(<ShortcutItem>[
-      ShortcutItem(type: 'newProject', localizedTitle: newProject),
-      ShortcutItem(type: 'newTask', localizedTitle: newTask),
-      ShortcutItem(type: 'newDiscussion', localizedTitle: newDiscussion),
+      ShortcutItem(type: 'newProject', localizedTitle: newProject, icon: 'icon_project'),
+      ShortcutItem(type: 'newTask', localizedTitle: newTask, icon: 'icon_task'),
+      ShortcutItem(type: 'newDiscussion', localizedTitle: newDiscussion, icon: 'icon_discussion'),
     ]);
   }
 }
