@@ -75,7 +75,7 @@ class DiscussionEditingScreen extends StatelessWidget {
           titleText: tr('editDiscussion'),
           leadingWidth: GetPlatform.isIOS
               ? TextUtils.getTextWidth(
-                    tr('closeLowerCase'),
+                    tr('cancel').toLowerCase().capitalizeFirst!,
                     TextStyleHelper.button(),
                   ) +
                   16

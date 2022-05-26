@@ -40,6 +40,7 @@ import 'package:projects/domain/controllers/tasks/subtasks/new_subtask_controlle
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_editing_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/platform_icons_ext.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -80,7 +81,13 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: forEditing ? tr('editSubtask') : tr('addSubtask'),
-          leadingWidth: GetPlatform.isIOS ? 100 : null,
+          leadingWidth: GetPlatform.isIOS
+              ? TextUtils.getTextWidth(
+                    tr('cancel').toLowerCase().capitalizeFirst!,
+                    TextStyleHelper.button(),
+                  ) +
+                  16
+              : null,
           centerTitle: !GetPlatform.isAndroid,
           actions: [
             PlatformWidget(
