@@ -60,6 +60,7 @@ class AuthService {
         return false;
       } else {
         await Get.find<ErrorDialog>().show(authResponse.error!.message);
+        return false;
       }
     }
     return true;
