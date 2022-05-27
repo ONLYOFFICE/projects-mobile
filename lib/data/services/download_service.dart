@@ -159,7 +159,7 @@ class DocumentsDownloadService {
       headers: headers,
       savedDir: temp ? tempPath! : downloadPath!,
       showNotification: !temp,
-      saveInPublicStorage: Platform.isAndroid && (androidSdkVersion ?? 29) > 28,
+      saveInPublicStorage: !temp && Platform.isAndroid && (androidSdkVersion ?? 29) > 28,
     );
   }
 
