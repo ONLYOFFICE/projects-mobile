@@ -97,7 +97,9 @@ class AuthApi {
 
     final result = ApiDTO<PortalUser>();
     try {
-      final dynamic response = await locator.get<CoreApi>().getRequest(url);
+      final dynamic response = await locator
+          .get<CoreApi>()
+          .getRequest(url, timelimit: const Duration(seconds: 5), retries: 2);
 
       if (response is http.Response) {
         final dynamic responseJson = json.decode(response.body);
@@ -123,8 +125,9 @@ class AuthApi {
     final request = HttpClientHelper.get(
       Uri.parse(url),
       cancelToken: locator.get<CoreApi>().cancellationToken,
-      timeLimit: Duration(seconds: locator.get<CoreApi>().timeout),
+      timeLimit: const Duration(seconds: 5),
       headers: headers,
+      retries: 2,
     );
 
     final result = ApiDTO<PortalUser>();

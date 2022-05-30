@@ -52,7 +52,7 @@ class AuthService {
   }
 
   Future<bool> checkAuthorization() async {
-    final authResponse = await _api.getUserInfo();
+    final authResponse = await getSelfInfo();
 
     if (authResponse.response == null) {
       if (authResponse.error!.message.toLowerCase().contains('unauthorized') ||
