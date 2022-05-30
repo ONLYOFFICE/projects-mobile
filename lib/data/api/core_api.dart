@@ -292,14 +292,15 @@ class CoreApi {
     }
   }
 
-  Future<dynamic> postRequest(String url, Map? body) async {
+  Future<dynamic> postRequest(String url, Map? body, {Duration? timelimit, int? retries}) async {
     try {
       debugPrint(url);
       final headers = await getHeaders();
       final request = HttpClientHelper.post(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeLimit: Duration(seconds: timeout),
+        timeLimit: timelimit ?? Duration(seconds: timeout),
+        retries: retries ?? 3,
         headers: headers,
         body: jsonEncode(body),
       );

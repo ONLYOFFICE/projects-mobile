@@ -51,7 +51,9 @@ class AuthApi {
 
     final result = ApiDTO<AuthToken>();
     try {
-      final response = await locator.get<CoreApi>().postRequest(url, body);
+      final response = await locator
+          .get<CoreApi>()
+          .postRequest(url, body, timelimit: const Duration(seconds: 5), retries: 2);
 
       if (response is http.Response) {
         result.response =
