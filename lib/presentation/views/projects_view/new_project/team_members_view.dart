@@ -49,8 +49,8 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
-import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 import 'package:projects/presentation/shared/widgets/users_list.dart';
+import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 
 class TeamMembersSelectionView extends StatelessWidget {
   const TeamMembersSelectionView({
@@ -208,10 +208,16 @@ class TeamMembersSearchBar extends StatelessWidget {
                 page: '/GroupMembersSelectionView',
               );
             },
-            icon: AppIcon(
-              icon: SvgIcons.preferences,
-              color: Theme.of(context).colors().primary,
-            ),
+            icon: Obx(() {
+              return (controller as BaseProjectEditorController).isActiveGroupsFilter.value
+                  ? AppIcon(
+                      icon: Theme.of(context).brightness == Brightness.dark
+                          ? SvgIcons.preferences_active_dark_theme
+                          : SvgIcons.preferences_active,
+                      color: null,
+                    )
+                  : AppIcon(icon: SvgIcons.preferences, color: Theme.of(context).colors().primary);
+            }),
           ),
         ],
       ),

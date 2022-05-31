@@ -232,6 +232,8 @@ abstract class BaseProjectEditorController extends GetxController {
     if (selfUserItem.portalUser.id == user.portalUser.id) {
       selfUserItem.isSelected.value = user.isSelected.value;
     }
+    isActiveGroupsFilter.value = false;
+    selectedGroups.clear();
   }
 
   void editTeamMember() {
@@ -295,12 +297,15 @@ abstract class BaseProjectEditorController extends GetxController {
   }
 
   var selectedGroups = <PortalGroupItemController>[];
+  var isActiveGroupsFilter = false.obs;
+
   void selectGroupMembers(PortalGroupItemController group) {
     if (group.isSelected.value == true) {
       selectedGroups.add(group);
     } else {
       selectedGroups.removeWhere((element) => group.portalGroup!.id == element.portalGroup!.id);
     }
+    isActiveGroupsFilter.value = selectedGroups.isNotEmpty;
   }
 
   void confirmTeamMembers() {

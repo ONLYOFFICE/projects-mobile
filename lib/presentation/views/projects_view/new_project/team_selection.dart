@@ -36,6 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -69,14 +70,6 @@ class GroupMembersSelectionView extends StatelessWidget {
         titleText: tr('addMembersOf'),
         previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
         centerTitle: GetPlatform.isIOS,
-        // leading: PlatformIconButton(
-        //   icon: const BackButtonIcon(),
-        //   onPressed: Get.find<NavigationController>().back,
-        //   cupertino: (_, __) => CupertinoIconButtonData(
-        //     padding: const EdgeInsets.only(left: 16),
-        //     alignment: Alignment.centerLeft,
-        //   ),
-        // ),
         actions: [
           PlatformWidget(
             material: (platformContext, __) => IconButton(
@@ -100,6 +93,7 @@ class GroupMembersSelectionView extends StatelessWidget {
           if (groupsDataSource.loaded.value == true && groupsDataSource.groupsList.isNotEmpty) {
             return GroupsOverview(
               groupsDataSource: groupsDataSource,
+              selectedGroups: (controller as BaseProjectEditorController).selectedGroups,
               onTapFunction: controller.selectGroupMembers as Function(PortalGroupItemController),
             );
           } else if (groupsDataSource.loaded.value == true) {
@@ -117,12 +111,22 @@ class GroupsOverview extends StatelessWidget {
     Key? key,
     required this.groupsDataSource,
     required this.onTapFunction,
+    this.selectedGroups,
   }) : super(key: key);
   final Function(PortalGroupItemController)? onTapFunction;
   final GroupsDataSource groupsDataSource;
+  final List<PortalGroupItemController>? selectedGroups;
 
   @override
   Widget build(BuildContext context) {
+    groupsDataSource.groupsList.map((element) {
+      final titleGroup = element.displayName;
+      final selectedGroup =
+          selectedGroups?.firstWhereOrNull((element) => element.displayName == titleGroup);
+      if (selectedGroup != null) {
+        element.isSelected.value = selectedGroup.isSelected.value;
+      }
+    }).toList();
     return StyledSmartRefresher(
       enablePullDown: false,
       enablePullUp: false,
