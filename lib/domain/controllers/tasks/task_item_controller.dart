@@ -117,6 +117,8 @@ class TaskItemController extends GetxController {
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
 
+    setupTeam();
+
     documentsController.entityType = 'task';
     documentsController.setupFolder(folderId: task.value.id, folderName: task.value.title!);
 
@@ -136,6 +138,8 @@ class TaskItemController extends GetxController {
 
   void setup(PortalTask portalTask) {
     task.value = portalTask;
+
+    setupTeam();
   }
 
   @override
@@ -250,6 +254,12 @@ class TaskItemController extends GetxController {
       locator<EventHub>().fire('needToRefreshTasks', {'task': t});
     }
 
+    await setupTeam();
+
+    if (showLoading) loaded.value = true;
+  }
+
+  Future setupTeam() async {
     final team = Get.find<ProjectTeamController>()..setup(projectId: task.value.projectOwner!.id);
 
     await team.getTeam();
@@ -260,8 +270,6 @@ class TaskItemController extends GetxController {
     for (final user in responsibles) {
       task.value.responsibles!.add(user.portalUser);
     }
-
-    if (showLoading) loaded.value = true;
   }
 
   void openStatuses(BuildContext context) {

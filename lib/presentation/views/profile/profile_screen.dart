@@ -254,13 +254,13 @@ class ProfileScreen extends StatelessWidget {
                         bottom: 0,
                         right: 15,
                         child: AppIcon(icon: SvgIcons.userBlocked, width: 32, height: 32)),
-                  if ((portalUser.isAdmin! || portalUser.isOwner!) &&
+                  if ((portalUser.isAdmin == true || portalUser.isOwner == true) &&
                       portalUser.status != UserStatus.Terminated)
                     const Positioned(
                         bottom: 0,
                         right: 15,
                         child: AppIcon(icon: SvgIcons.userAdmin, width: 32, height: 32)),
-                  if (portalUser.isVisitor! && portalUser.status != UserStatus.Terminated)
+                  if (portalUser.isVisitor == true && portalUser.status != UserStatus.Terminated)
                     const Positioned(
                         bottom: 0,
                         right: 15,
