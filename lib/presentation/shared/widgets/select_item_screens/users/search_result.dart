@@ -43,16 +43,21 @@ class _SearchResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => PaginationListView(
-        paginationController: searchController.paginationController,
-        child: ListView.builder(
-          itemCount: searchController.paginationController.data.length,
-          itemBuilder: (BuildContext context, int index) {
-            final user = searchController.paginationController.data[index] as PortalUser;
-            return _UserTile(user: user);
-          },
-        ),
-      ),
+      () {
+        final scrollController = ScrollController();
+        return PaginationListView(
+          scrollController: scrollController,
+          paginationController: searchController.paginationController,
+          child: ListView.builder(
+            controller: scrollController,
+            itemCount: searchController.paginationController.data.length,
+            itemBuilder: (BuildContext context, int index) {
+              final user = searchController.paginationController.data[index] as PortalUser;
+              return _UserTile(user: user);
+            },
+          ),
+        );
+      },
     );
   }
 }

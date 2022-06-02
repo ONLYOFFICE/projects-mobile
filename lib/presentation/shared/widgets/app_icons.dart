@@ -38,11 +38,13 @@ class SvgIcons {
   SvgIcons._();
 
   static const String app_logo = 'lib/assets/images/app_logo.svg';
-  static const String title = 'lib/assets/images/icons/title.svg';
+  static const String app_title = 'lib/assets/images/app_title.svg';
 
   static const String tab_bar_dashboard = 'lib/assets/images/icons/tab_bar/dashboard.svg';
   static const String tab_bar_tasks = 'lib/assets/images/icons/tab_bar/tasks.svg';
   static const String tab_bar_projects = 'lib/assets/images/icons/tab_bar/projects.svg';
+  static const String tab_bar_discussions = 'lib/assets/images/icons/tab_bar/discussions.svg';
+  static const String tab_bar_documents = 'lib/assets/images/icons/tab_bar/documents.svg';
   static const String tab_bar_more = 'lib/assets/images/icons/tab_bar/more.svg';
 
   static const String add_button = 'lib/assets/images/icons/add_button.svg';
@@ -59,11 +61,13 @@ class SvgIcons {
   static const String documents = 'lib/assets/images/icons/documents.svg';
   static const String down_arrow = 'lib/assets/images/icons/down_arrow.svg';
   static const String finger_print = 'lib/assets/images/icons/finger_print.svg';
+  static const String faceID = 'lib/assets/images/icons/faceID.svg';
   static const String high_priority = 'lib/assets/images/icons/high_priority.svg';
   static const String lock = 'lib/assets/images/icons/lock.svg';
   static const String logout = 'lib/assets/images/icons/logout.svg';
   static const String message = 'lib/assets/images/icons/message.svg';
   static const String password_recovery = 'lib/assets/images/icons/password_recovery.svg';
+  static const String ios_sort = 'lib/assets/images/icons/ios_sortbutton_icon.svg';
   static const String preferences = 'lib/assets/images/icons/preferences.svg';
   static const String preferences_active = 'lib/assets/images/icons/preferences_active.svg';
   static const String preferences_active_dark_theme =
@@ -122,7 +126,9 @@ class SvgIcons {
   static const String doc = 'lib/assets/images/icons/folders/doc.svg';
   static const String image = 'lib/assets/images/icons/folders/image.svg';
   static const String table = 'lib/assets/images/icons/folders/table.svg';
+
   static const String presentation = 'lib/assets/images/icons/folders/presentation.svg';
+
   static const String archived_status = 'lib/assets/images/icons/discussion_statuses/archived.svg';
   static const String open_status = 'lib/assets/images/icons/discussion_statuses/open.svg';
 
@@ -226,7 +232,7 @@ class AppIcon extends StatelessWidget {
   String? get iconToDisplay {
     if (!hasDarkVersion) return icon;
 
-    if (Get.theme.brightness == Brightness.dark)
+    if (Theme.of(Get.context!).brightness == Brightness.dark)
       return darkThemeIcon ?? icon!.replaceFirst('.', '_dark.');
     return icon;
   }

@@ -32,15 +32,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class FiltersButton extends StatelessWidget {
   const FiltersButton({
     Key? key,
-    this.controler,
+    this.controller,
   }) : super(key: key);
-  final controler;
+  final controller;
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +49,13 @@ class FiltersButton extends StatelessWidget {
         () => AppIcon(
           width: 24,
           height: 24,
-          icon: controler.filterController.hasFilters == false
+          icon: controller.filterController.hasFilters == false
               ? SvgIcons.preferences
-              : Get.theme.brightness == Brightness.dark
+              : Theme.of(context).brightness == Brightness.dark
                   ? SvgIcons.preferences_active_dark_theme
                   : SvgIcons.preferences_active,
-          color: controler.filterController.hasFilters == false
-              ? Get.theme.colors().primary
+          color: controller.filterController.hasFilters == false
+              ? Theme.of(context).colors().primary
               : null,
         ),
       ),

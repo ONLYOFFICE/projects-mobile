@@ -36,10 +36,8 @@ import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/internal/locator.dart';
 
 class ThemeService {
-  final Storage? storage = locator<Storage>();
-
-  ThemeMode savedThemeMode() {
-    final themeMode = storage!.getValue('themeMode');
+  static Future<ThemeMode> savedThemeMode() async {
+    final themeMode = await locator<Storage>().getString('themeMode');
 
     switch (themeMode) {
       case 'darkTheme':

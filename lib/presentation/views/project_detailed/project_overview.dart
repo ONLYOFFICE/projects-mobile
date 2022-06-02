@@ -32,15 +32,19 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
+import 'package:projects/presentation/shared/platform_icons_ext.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 
 class ProjectOverview extends StatelessWidget {
@@ -58,83 +62,106 @@ class ProjectOverview extends StatelessWidget {
     return Obx(
       () {
         if (projectController.loaded.value == true) {
-          return ListView(
-            children: [
-              const SizedBox(height: 20),
-              Obx(
-                () => InfoTile(
-                  caption: tr('project').toUpperCase(),
-                  icon: const AppIcon(icon: SvgIcons.project, color: Color(0xff707070)),
-                  subtitle: projectController.projectTitleText.value,
-                  subtitleStyle: TextStyleHelper.headline7(
-                    color: Get.theme.colors().onBackground,
+          return StyledSmartRefresher(
+            controller: RefreshController(),
+            onRefresh: projectController.refreshData,
+            child: ListView(
+              children: [
+                const SizedBox(height: 26),
+                Obx(
+                  () => InfoTile(
+                    caption: tr('project'),
+                    captionStyle: TextStyleHelper.overline(
+                        color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
+                    icon: const AppIcon(icon: SvgIcons.project, color: Color(0xff707070)),
+                    subtitle: projectController.projectTitleText.value,
+                    subtitleStyle: TextStyleHelper.headline7(
+                      color: Theme.of(context).colors().onBackground,
+                    ),
+                    privateIconVisible: projectController.isPrivate.value,
                   ),
-                  privateIconVisible: projectController.isPrivate.value,
                 ),
-              ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.only(left: 72),
-                child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: ProjectStatusButton(projectController: projectController)),
-              ),
-              const SizedBox(height: 20),
-              if (projectController.descriptionText.isNotEmpty)
+                const SizedBox(height: 15),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: InfoTile(
-                    caption: tr('description'),
-                    icon: const AppIcon(icon: SvgIcons.description, color: Color(0xff707070)),
-                    subtitleWidget: ReadMoreText(
-                      projectController.descriptionText.value,
-                      trimLines: 3,
-                      colorClickableText: Colors.pink,
-                      style: TextStyleHelper.body1,
-                      trimMode: TrimMode.Line,
-                      delimiter: ' ',
-                      trimCollapsedText: tr('showMore'),
-                      trimExpandedText: tr('showLess'),
-                      moreStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
-                      lessStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
+                  padding: const EdgeInsets.only(left: 72),
+                  child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: ProjectStatusButton(projectController: projectController)),
+                ),
+                const SizedBox(height: 25),
+                if (projectController.descriptionText.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: InfoTile(
+                      caption: tr('description'),
+                      captionStyle: TextStyleHelper.caption(
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
+                      icon: const AppIcon(icon: SvgIcons.description, color: Color(0xff707070)),
+                      subtitleWidget: ReadMoreText(
+                        projectController.descriptionText.value,
+                        trimLines: 3,
+                        colorClickableText: Colors.pink,
+                        style: TextStyleHelper.body1(),
+                        trimMode: TrimMode.Line,
+                        delimiter: '\n',
+                        trimCollapsedText: tr('showMore'),
+                        trimExpandedText: tr('showLess'),
+                        moreStyle: TextStyleHelper.body2(color: Theme.of(context).colors().links),
+                        lessStyle: TextStyleHelper.body2(color: Theme.of(context).colors().links),
+                      ),
+                    ),
+                  ),
+                Obx(() => InfoTile(
+                      icon: const AppIcon(icon: SvgIcons.user, color: Color(0xff707070)),
+                      caption: tr('projectManager'),
+                      captionStyle: TextStyleHelper.caption(
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
+                      subtitle: projectController.managerText.value,
+                      subtitleStyle:
+                          TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
+                    )),
+                const SizedBox(height: 20),
+                Obx(
+                  () => InkWell(
+                    onTap: () {
+                      tabController!.animateTo(5);
+                    },
+                    child: InfoTileWithButton(
+                      icon: const AppIcon(icon: SvgIcons.users, color: Color(0xff707070)),
+                      onTapFunction: () {
+                        tabController!.animateTo(5);
+                      },
+                      caption: tr('team'),
+                      captionStyle: TextStyleHelper.caption(
+                          color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
+                      iconData: PlatformIcons(context).rightChevron,
+                      subtitle: plural(
+                          'members', projectController.projectTeamDataSource!.usersList.length),
+                      subtitleStyle:
+                          TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
                     ),
                   ),
                 ),
-              Obx(() => InfoTile(
-                    icon: const AppIcon(icon: SvgIcons.user, color: Color(0xff707070)),
-                    caption: tr('projectManager'),
-                    subtitle: projectController.managerText.value,
-                    subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
-                  )),
-              const SizedBox(height: 20),
-              Obx(
-                () => InkWell(
-                  onTap: () {
-                    tabController!.animateTo(5);
-                  },
-                  child: InfoTileWithButton(
-                    icon: const AppIcon(icon: SvgIcons.users, color: Color(0xff707070)),
-                    onTapFunction: () {
-                      tabController!.animateTo(5);
-                    },
-                    caption: tr('team'),
-                    iconData: Icons.navigate_next,
-                    subtitle: plural('members', projectController.teamMembersCount.value),
-                    subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Obx(() => InfoTile(
-                  icon: const AppIcon(icon: SvgIcons.calendar, color: Color(0xff707070)),
-                  caption: tr('creationDate'),
-                  subtitle: projectController.creationDateText.value)),
-              const SizedBox(height: 20),
-              Obx(() => InfoTile(
-                  icon: const AppIcon(icon: SvgIcons.tag, color: Color(0xff707070)),
-                  caption: tr('tags'),
-                  subtitle: projectController.tagsText.value)),
-            ],
+                const SizedBox(height: 20),
+                Obx(() => InfoTile(
+                    icon: const AppIcon(icon: SvgIcons.calendar, color: Color(0xff707070)),
+                    caption: tr('creationDate'),
+                    captionStyle: TextStyleHelper.caption(
+                        color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
+                    subtitle: projectController.creationDateText.value)),
+                const SizedBox(height: 20),
+                Obx(() {
+                  if (projectController.tagsText.value.isNotEmpty)
+                    return InfoTile(
+                        icon: const AppIcon(icon: SvgIcons.tag, color: Color(0xff707070)),
+                        caption: tr('tags'),
+                        captionStyle: TextStyleHelper.caption(
+                            color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
+                        subtitle: projectController.tagsText.value);
+                  return const SizedBox();
+                })
+              ],
+            ),
           );
         } else {
           return const ListLoadingSkeleton();
@@ -151,39 +178,34 @@ class ProjectStatusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: omit_local_variable_types
-    final bool canEdit = projectController.projectData!.canEdit!;
-    return OutlinedButton(
-      onPressed: canEdit
-          ? () => {
-                showStatuses(context: context, itemController: projectController),
-              }
-          : null,
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-          if (canEdit)
-            return const Color(0xff81C4FF).withOpacity(0.2);
-          else
-            return Get.theme.colors().bgDescription;
-        }),
-        side: MaterialStateProperty.resolveWith((_) {
-          return const BorderSide(color: Colors.transparent, width: 0);
-        }),
-      ),
+    final canEdit = projectController.projectData!.canEdit!;
+    return PlatformTextButton(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      onPressed:
+          canEdit ? () => showStatuses(context: context, itemController: projectController) : null,
+      material: (_, __) => MaterialTextButtonData(
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
+        return canEdit
+            ? const Color(0xff81C4FF).withOpacity(0.2)
+            : Theme.of(context).colors().bgDescription;
+      }), side: MaterialStateProperty.resolveWith((_) {
+        return const BorderSide(color: Colors.transparent, width: 0);
+      }))),
+      cupertino: (_, __) => CupertinoTextButtonData(
+          color: canEdit
+              ? const Color(0xff81C4FF).withOpacity(0.2)
+              : Theme.of(context).colors().bgDescription),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
-              child: Obx(
-                () => Text(
-                  projectController.statusText.value,
-                  style: TextStyleHelper.subtitle2(
-                    color: canEdit
-                        ? Get.theme.colors().primary
-                        : Get.theme.colors().onBackground.withOpacity(0.75),
-                  ),
+            child: Obx(
+              () => Text(
+                projectController.statusText.value,
+                style: TextStyleHelper.subtitle2(
+                  color: canEdit
+                      ? Theme.of(context).colors().primary
+                      : Theme.of(context).colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
@@ -193,8 +215,8 @@ class ProjectStatusButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Icon(
-                Icons.keyboard_arrow_down_rounded,
-                color: Get.theme.colors().primary,
+                PlatformIcons(context).downChevron,
+                color: Theme.of(context).colors().primary,
                 size: 19,
               ),
             )

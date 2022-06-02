@@ -31,11 +31,15 @@
  */
 
 class CustomError {
+  int? statusCode;
   String message;
 
-  CustomError({required this.message});
+  CustomError({this.statusCode, required this.message});
 
   factory CustomError.fromJson(Map<String, dynamic> json) {
-    return CustomError(message: json['message'] as String);
+    return CustomError(
+      statusCode: json['statusCode'] as int?,
+      message: json['message'] as String,
+    );
   }
 }

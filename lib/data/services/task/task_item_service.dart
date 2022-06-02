@@ -46,8 +46,7 @@ class TaskItemService {
 
   Rx<PortalTask> portalTask = PortalTask().obs;
 
-  Future<PortalTask?> copyTask(
-      {required int copyFrom, required NewTaskDTO newTask}) async {
+  Future<PortalTask?> copyTask({required int copyFrom, required NewTaskDTO newTask}) async {
     final task = await _api.copyTask(copyFrom: copyFrom, task: newTask);
     final success = task.response != null;
 
@@ -73,19 +72,15 @@ class TaskItemService {
 
   // TODO: Future <??>
   Future updateTaskStatus(
-      {required int taskId,
-      required int newStatusId,
-      required int newStatusType}) async {
+      {required int taskId, required int newStatusId, required int newStatusType}) async {
     final task = await _api.updateTaskStatus(
         taskId: taskId, newStatusId: newStatusId, newStatusType: newStatusType);
 
     final success = task.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
@@ -95,8 +90,7 @@ class TaskItemService {
     }
   }
 
-  Future<String> getTaskLink(
-      {required int taskId, required int projectId}) async {
+  Future<String> getTaskLink({required int taskId, required int projectId}) async {
     return _api.getTaskLink(taskId: taskId, projectId: projectId);
   }
 
@@ -106,10 +100,8 @@ class TaskItemService {
     final success = task.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
@@ -125,10 +117,8 @@ class TaskItemService {
     final success = task.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;

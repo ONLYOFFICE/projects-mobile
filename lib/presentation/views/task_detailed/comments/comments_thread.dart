@@ -30,15 +30,13 @@
  *
  */
 
-import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/presentation/shared/widgets/comment.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 
 class CommentsThread extends StatelessWidget {
-  final PortalComment comment;
-  final int? discussionId;
-  final int? taskId;
   const CommentsThread({
     Key? key,
     required this.comment,
@@ -47,30 +45,51 @@ class CommentsThread extends StatelessWidget {
   })  : assert(discussionId == null || taskId == null),
         super(key: key);
 
+  final PortalComment comment;
+  final int? discussionId;
+  final int? taskId;
+
+  static const padding = <int, EdgeInsets>{
+    0: EdgeInsets.fromLTRB(16, 0, 16, 8),
+    1: EdgeInsets.fromLTRB(32, 0, 16, 8),
+    2: EdgeInsets.fromLTRB(48, 0, 16, 8)
+  };
+
   @override
   Widget build(BuildContext context) {
-    final padding = <int, EdgeInsetsGeometry>{
-      0: const EdgeInsets.fromLTRB(12, 0, 16, 0),
-      1: const EdgeInsets.fromLTRB(20, 29, 16, 0),
-      2: const EdgeInsets.fromLTRB(44, 29, 16, 0)
-    };
+    final visited = sortComments(comment);
+    final items = buildItems(visited);
 
-    // ignore: omit_local_variable_types
-    final List<_SortedComment> visited = sortComments(comment);
+    return ListBody(children: items);
+  }
 
-    return Column(
-      children: [
-        for (var i = 0; i < visited.length; i++)
-          Padding(
-            padding: visited[i].comment.show ? padding[visited[i].paddingLevel]! : EdgeInsets.zero,
-            child: Comment(
-              comment: visited[i].comment,
-              taskId: taskId,
-              discussionId: discussionId,
+  List<Widget> buildItems(List<_SortedComment> visited) {
+    final list = <Widget>[];
+    for (final item in visited) {
+      if (item.comment.show == false) continue;
+
+      list.add(
+        ListBody(
+          children: [
+            if (item.paddingLevel > 0)
+              StyledDivider(
+                leftPadding: padding[item.paddingLevel]!.left,
+                rightPadding: 16,
+              ),
+            Padding(
+              padding: item.comment.show ? padding[item.paddingLevel]! : EdgeInsets.zero,
+              child: Comment(
+                comment: item.comment,
+                taskId: taskId,
+                discussionId: discussionId,
+              ),
             ),
-          ),
-      ],
-    );
+          ],
+        ),
+      );
+    }
+
+    return list;
   }
 }
 
@@ -101,8 +120,8 @@ List<_SortedComment> sortComments(PortalComment initComment) {
 }
 
 class _SortedComment {
-  int paddingLevel;
   PortalComment comment;
+  int paddingLevel;
 
   _SortedComment(
     this.comment,

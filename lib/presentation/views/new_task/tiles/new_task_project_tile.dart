@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/tasks/abstract_task_actions_controll
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 
 class NewTaskProjectTile extends StatelessWidget {
@@ -51,21 +52,23 @@ class NewTaskProjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        final _isNotEmpty = controller.selectedProjectTitle?.value.isNotEmpty as bool;
+        final _isNotEmpty = controller.selectedProjectTitle.value.isNotEmpty;
 
         return NewItemTile(
-          text:
-              _isNotEmpty ? controller.selectedProjectTitle?.value as String : tr('selectProject'),
+          text: _isNotEmpty ? controller.selectedProjectTitle.value : tr('selectProject'),
           icon: SvgIcons.project,
-          textColor: controller.needToSelectProject == true ? Get.theme.colors().colorError : null,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          textColor:
+              controller.needToSelectProject.value ? Theme.of(context).colors().colorError : null,
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground,
           isSelected: _isNotEmpty,
           caption: _isNotEmpty ? '${tr('project')}:' : null,
-          onTap: () =>
-              Get.find<NavigationController>().toScreen(const SelectProjectView(), arguments: {
-            'controller': controller,
-          }),
+          onTap: () => Get.find<NavigationController>().toScreen(
+            const SelectProjectView(),
+            arguments: {'controller': controller, 'previousPage': NewTaskView.pageName},
+            transition: Transition.rightToLeft,
+            page: '/SelectProjectView',
+          ),
         );
       },
     );

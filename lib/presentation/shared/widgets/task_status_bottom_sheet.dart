@@ -37,33 +37,40 @@ import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
-void showsStatusesBS(
-    {required BuildContext context, TaskItemController? taskItemController}) async {
+void showsStatusesBS({
+  required BuildContext context,
+  required TaskItemController taskItemController,
+}) {
   final _statusesController = Get.find<TaskStatusesController>();
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
     initHeight: _getInitialSize(statusCount: _statusesController.statuses.length),
-    // maxHeight: 0.7,
     decoration: BoxDecoration(
-        color: Get.theme.colors().surface,
+        color: Theme.of(context).colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 18.5),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(tr('selectStatus'),
-                style: TextStyleHelper.h6(color: Get.theme.colors().onSurface)),
-          ),
-          const SizedBox(height: 18.5),
-        ],
+      return Container(
+        decoration: BoxDecoration(
+            color: Theme.of(context as BuildContext).colors().surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(tr('selectStatus'),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
+            ),
+          ],
+        ),
       );
     },
     builder: (context, bottomSheetOffset) {
@@ -73,7 +80,9 @@ void showsStatusesBS(
             () => DecoratedBox(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(width: 1, color: Get.theme.colors().outline.withOpacity(0.5)),
+                  top: BorderSide(
+                      width: 1,
+                      color: Theme.of(context as BuildContext).colors().outline.withOpacity(0.5)),
                 ),
               ),
               child: Column(
@@ -82,16 +91,16 @@ void showsStatusesBS(
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        await taskItemController!.tryChangingStatus(
+                        await taskItemController.tryChangingStatus(
                             id: taskItemController.task.value.id!,
                             newStatusId: _statusesController.statuses[i].id!,
                             newStatusType: _statusesController.statuses[i].statusType!);
                         Get.back();
                       },
                       child: StatusTile(
-                          title: _statusesController.statuses[i].title,
+                          title: _statusesController.statuses[i].title!,
                           icon: StatusIcon(
-                            canEditTask: taskItemController!.task.value.canEdit,
+                            canEditTask: taskItemController.task.value.canEdit!,
                             status: _statusesController.statuses[i],
                           ),
                           selected: _statusesController.statuses[i].title ==
@@ -108,51 +117,36 @@ void showsStatusesBS(
   );
 }
 
-Future<void> showsStatusesPM(
-    {required BuildContext context, required TaskItemController taskItemController}) async {
+void showsStatusesPM({
+  required BuildContext context,
+  required TaskItemController taskItemController,
+}) {
   final _statusesController = Get.find<TaskStatusesController>();
-  final items = <PopupMenuEntry<dynamic>>[
-    for (var i = 0; i < _statusesController.statuses.length; i++)
-      PopupMenuItem(
-        height: 36,
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-        onTap: () async {
-          await taskItemController.tryChangingStatus(
-              id: taskItemController.task.value.id!,
-              newStatusId: _statusesController.statuses[i].id!,
-              newStatusType: _statusesController.statuses[i].statusType!);
-          Get.back();
-        },
-        child: StatusTileTablet(
-            title: _statusesController.statuses[i].title!,
-            icon: StatusIcon(
-              canEditTask: taskItemController.task.value.canEdit,
-              status: _statusesController.statuses[i],
+
+  showButtonMenu(
+      context: context,
+      itemBuilder: (_) {
+        return [
+          for (var i = 0; i < _statusesController.statuses.length; i++)
+            PlatformPopupMenuItem(
+              onTap: () async {
+                await taskItemController.tryChangingStatus(
+                    id: taskItemController.task.value.id!,
+                    newStatusId: _statusesController.statuses[i].id!,
+                    newStatusType: _statusesController.statuses[i].statusType!);
+                Get.back();
+              },
+              trailingIcon: StatusIcon(
+                canEditTask: taskItemController.task.value.canEdit!,
+                status: _statusesController.statuses[i],
+              ),
+              child: StatusTileTablet(
+                  title: _statusesController.statuses[i].title!,
+                  selected: _statusesController.statuses[i].title ==
+                      taskItemController.status.value.title),
             ),
-            selected:
-                _statusesController.statuses[i].title == taskItemController.status.value.title),
-      ),
-  ];
-
-// calculate the menu position, ofsset dy: 50
-  const offset = Offset(0, 50);
-  final button = context.findRenderObject() as RenderBox;
-  final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
-  final position = RelativeRect.fromRect(
-    Rect.fromPoints(
-      button.localToGlobal(
-        offset,
-        ancestor: overlay,
-      ),
-      button.localToGlobal(
-        button.size.bottomRight(Offset.zero) + offset,
-        ancestor: overlay,
-      ),
-    ),
-    Offset.zero & overlay.size,
-  );
-
-  await showMenu(context: context, position: position, items: items);
+        ];
+      });
 }
 
 double _getInitialSize({required int statusCount}) {

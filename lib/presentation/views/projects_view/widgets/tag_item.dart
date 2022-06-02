@@ -31,14 +31,16 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/tag_item_DTO.dart';
+import 'package:projects/presentation/shared/platform_icons_ext.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class TagItem extends StatelessWidget {
-  final TagItemDTO? tagItemDTO;
-  final Function onTapFunction;
+  final TagItemDTO tagItemDTO;
+  final void Function() onTapFunction;
 
   const TagItem({
     Key? key,
@@ -49,27 +51,28 @@ class TagItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTapFunction as void Function()?,
+      onTap: onTapFunction,
       child: SizedBox(
-        height: 48,
+        height: 65,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                tagItemDTO!.tag!.title!.replaceAll(' ', '\u00A0'),
+                tagItemDTO.tag!.title!.replaceAll(' ', '\u00A0'),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyleHelper.subtitle1(),
               ),
             ),
             Obx(() {
-              if (tagItemDTO!.isSelected!.value == true) {
-                return Icon(Icons.check_box, color: Get.theme.colors().primary);
+              if (tagItemDTO.isSelected!.value == true) {
+                return Icon(PlatformIcons(context).checked,
+                    color: Theme.of(context).colors().primary);
               } else {
                 return Icon(
-                  Icons.check_box_outline_blank_outlined,
-                  color: Get.theme.colors().inactiveGrey,
+                  PlatformIcons(context).unchecked,
+                  color: Theme.of(context).colors().inactiveGrey,
                 );
               }
             }),

@@ -32,14 +32,19 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:event_hub/event_hub.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:projects/data/enums/file_type.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/loading_hud.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:projects/data/services/analytics_service.dart';
@@ -50,33 +55,69 @@ import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:open_file/open_file.dart';
+import 'package:synchronized/synchronized.dart';
+
+enum FileAction { OnlyDownload, DownloadAndOpen }
 
 class FileCellController extends GetxController {
-  final FilesService _api = locator<FilesService>();
+  final _api = locator<FilesService>();
+  final downloadService = locator<DocumentsDownloadService>();
 
-  PortalInfoController portalInfoController = Get.find<PortalInfoController>();
+  final portalInfoController = Get.find<PortalInfoController>();
 
-  RxBool loaded = false.obs;
+  final _openFileLock = Lock();
 
-  TextEditingController searchInputController = TextEditingController();
+  late final LoadingWithProgress loadingWithProgress;
 
-  var file = PortalFile();
-  var fileIcon = AppIcon(
+  String? downloadTaskId;
+  final progress = Rx<double>(0);
+  final fileAction = Rx<FileAction>(FileAction.OnlyDownload);
+  StreamSubscription? downloadProgressListener;
+
+  late final PortalFile file;
+  final fileIcon = AppIcon(
           width: 20,
           height: 20,
           icon: SvgIcons.documents,
-          color: Get.theme.colors().onSurface.withOpacity(0.6))
+          color: Theme.of(Get.context as BuildContext).colors().onSurface.withOpacity(0.6))
       .obs;
 
-  void onFilePopupMenuSelected(value, PortalFile element) {}
+  FileCellController({required this.file}) {
+    loadingWithProgress = LoadingWithProgress(
+        title: tr('downloading'),
+        progress: progress,
+        onCancelTap: () async {
+          loadingWithProgress.showLoading(false);
+          await cancelDownloadFile();
+        });
 
-  FileCellController({required PortalFile portalFile}) {
-    file = portalFile;
-
-    setupFileIcon();
+    _setupFileIcon();
   }
 
-  void setupFileIcon() {
+  static const allowEditInDocuments = [
+    '.docx',
+    '.xlsx',
+    '.pptx',
+    '.csv',
+    '.txt',
+    '.odt',
+    '.ods',
+    '.odp',
+    '.doc',
+    '.xls',
+    '.ppt',
+    '.rtf',
+    '.mht',
+    '.html',
+    '.htm',
+    '.epub',
+    '.fb2',
+    '.docxf',
+    '.oform'
+  ];
+
+  void _setupFileIcon() {
     var iconString = '';
 
     final fileExtention = file.fileExst?.replaceAll('.', '');
@@ -177,42 +218,194 @@ class FileCellController extends GetxController {
     fileIcon.value = AppIcon(width: 20, height: 20, icon: iconString);
   }
 
-  Future<bool> deleteFile(PortalFile element) async {
-    final result = await _api.deleteFile(
-      fileId: element.id.toString(),
-    );
+  Future<String?> deleteFile() async {
+    final result = await _api.deleteFile(fileId: file.id.toString());
 
-    locator<EventHub>().fire('needToRefreshDocuments');
+    if (result == null || result.isEmpty) return tr('error');
 
-    return result != null;
+    final loading = LoadingWithoutProgress();
+    loading.showLoading(true);
+
+    final res = await _api.waitFinishOperation(result[0].id!);
+
+    loading.showLoading(false);
+
+    return res;
   }
 
-  Future<bool> renameFile(PortalFile element, String newName) async {
+  Future<bool> renameFile(String newName) async {
     final result = await _api.renameFile(
-      fileId: element.id.toString(),
+      fileId: file.id.toString(),
       newTitle: newName,
     );
-    locator<EventHub>().fire('needToRefreshDocuments');
+
     return result != null;
   }
 
-  Future<void> downloadFile(String viewUrl) async {
-    final _downloadService = locator<DownloadService>();
-    await _downloadService.downloadDocument(viewUrl);
+  Future<void> _downloadFileCallback(String id, DownloadTaskStatus status, int progress) async {
+    if (downloadTaskId != null && id == downloadTaskId) {
+      if (status == DownloadTaskStatus.running &&
+          progress != 0 &&
+          this.progress.value != progress / 100 &&
+          (Platform.isAndroid || progress / 100 != 1)) {
+        this.progress.value = progress / 100;
+      }
+      if (status == DownloadTaskStatus.complete) {
+        if (this.progress.value != 1) this.progress.value = 1;
+
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
+      }
+      if (status == DownloadTaskStatus.failed && Platform.isIOS) {
+        this.progress.value = 0;
+
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
+      }
+    }
   }
 
-  Future openFile(PortalFile selectedFile) async {
-    final userController = Get.find<UserController>();
+  Future<ResultType?> _openAlreadyDownloadedFile() async {
+    final res = await downloadService.getTaskContent(downloadTaskId!);
+    if (res == null) return null;
 
+    final savedDir = fileAction.value == FileAction.OnlyDownload && Platform.isAndroid
+        ? downloadService.downloadPath!
+        : downloadService.tempPath!;
+
+    return (await OpenFile.open('$savedDir/${res.filename!}')).type;
+  }
+
+  Future<ShareResultStatus?> _shareFileForIos(
+    BuildContext context, {
+    bool deleteAfter = true,
+  }) async {
+    if (downloadTaskId == null) return null;
+
+    final res = await downloadService.getTaskContent(downloadTaskId!);
+    if (res == null) return null;
+
+    final savedDir = fileAction.value == FileAction.OnlyDownload && Platform.isAndroid
+        ? downloadService.downloadPath!
+        : downloadService.tempPath!;
+
+    final _file = File('$savedDir/${res.filename!}');
+    // ignore: avoid_slow_async_io
+    if (!(await _file.exists())) return null;
+
+    final box = context.findRenderObject() as RenderBox;
+    final result = (await Share.shareFilesWithResult(
+      ['$savedDir/${res.filename!}'],
+      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+    ))
+        .status;
+
+    if (deleteAfter && result == ShareResultStatus.success) await _file.delete();
+
+    return result;
+  }
+
+  Future<bool> cancelDownloadFile() async {
+    var tryes = 0;
+    while (downloadTaskId == null && tryes < 5) {
+      await Future.delayed(const Duration(seconds: 1));
+      tryes++;
+    }
+
+    await FlutterDownloader.cancel(taskId: downloadTaskId!);
+    progress.value = 0;
+
+    return true;
+  }
+
+  Future<void> downloadFile(BuildContext context) async {
+    if (progress.value > 0) return;
+
+    if (Platform.isIOS && (await _shareFileForIos(context)) != null) return;
+
+    await downloadProgressListener?.cancel();
+
+    fileAction.value = FileAction.OnlyDownload;
+    progress.value = 0.01;
+
+    downloadTaskId = await downloadService.downloadDocument(file, temp: Platform.isIOS);
+    if (downloadTaskId == null) {
+      progress.value = 0;
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
+      return;
+    }
+
+    downloadProgressListener = progress.listen((value) async {
+      if (value == 1) {
+        progress.value = 0;
+        if (Platform.isIOS) await _shareFileForIos(context);
+      }
+    });
+
+    downloadService.registerCallback(taskId: downloadTaskId!, callback: _downloadFileCallback);
+  }
+
+  Future<void> _viewFile() async {
+    if (progress.value > 0) return;
+    await downloadProgressListener?.cancel();
+
+    if (downloadTaskId != null && ((await _openAlreadyDownloadedFile()) == ResultType.done)) return;
+
+    loadingWithProgress.showLoading(true);
+    fileAction.value = FileAction.DownloadAndOpen;
+
+    downloadTaskId = await downloadService.downloadDocument(file, temp: true);
+    if (downloadTaskId == null) {
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
+      loadingWithProgress.showLoading(false);
+      return;
+    }
+
+    downloadProgressListener = progress.listen((value) async {
+      if (value == 0) {
+        loadingWithProgress.showLoading(false);
+        return;
+      }
+
+      if (value == 1) {
+        progress.value = 0;
+        if ((await _openAlreadyDownloadedFile()) != ResultType.done)
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('openFileError'));
+      } else
+        loadingWithProgress.showLoading(true);
+    });
+
+    downloadService.registerCallback(taskId: downloadTaskId!, callback: _downloadFileCallback);
+  }
+
+  void openFile({int? parentId}) {
+    if (_openFileLock.locked) return;
+
+    _openFileLock.synchronized(() async {
+      if (file.fileType == FileType.Audio ||
+          file.fileType == FileType.Video ||
+          file.fileType == FileType.Image ||
+          file.fileType == FileType.Archive ||
+          file.fileType == FileType.Unknown) return await _viewFile();
+
+      if (allowEditInDocuments.contains(file.fileExst))
+        await _openFileInDocumentsApp(parentId: parentId);
+      else
+        await _viewFile();
+    });
+  }
+
+  Future _openFileInDocumentsApp({int? parentId}) async {
+    final userController = Get.find<UserController>();
     await userController.getUserInfo();
+
     final body = <String, dynamic>{
-      'portal': '${portalInfoController.portalName}',
-      'email': '${userController.user!.email}',
-      'file': <String, int?>{'id': selectedFile.id},
+      'portal': portalInfoController.portalName,
+      'email': userController.user.value!.email,
+      'originalUrl': file.viewUrl,
+      'file': <String, int?>{'id': file.id},
       'folder': {
-        'id': selectedFile.folderId,
-        'parentId': null,
-        'rootFolderType': selectedFile.rootFolderType
+        'id': file.folderId,
+        'parentId': parentId,
+        'rootFolderType': file.rootFolderType,
       }
     };
 
@@ -221,18 +414,24 @@ class FileCellController extends GetxController {
     final encodedBody = stringToBase64.encode(bodyString);
     final urlString = '${Const.Urls.openDocument}$encodedBody';
 
-    if (await canLaunch(urlString)) {
-      await launch(urlString);
+    var canOpen = false;
+    if (GetPlatform.isAndroid) {
+      canOpen = await canLaunch(urlString);
+      if (canOpen) await launch(urlString);
+    } else {
+      canOpen = await launch(urlString);
+    }
+
+    if (canOpen) {
       await AnalyticsService.shared.logEvent(AnalyticsService.Events.openEditor, {
         AnalyticsService.Params.Key.portal: portalInfoController.portalName,
-        AnalyticsService.Params.Key.extension: extension(selectedFile.title!)
+        AnalyticsService.Params.Key.extension: extension(file.title!)
       });
-    } else {
+    } else
       await LaunchReview.launch(
         androidAppId: Const.Identificators.documentsAndroidAppBundle,
         iOSAppId: Const.Identificators.documentsAppStore,
         writeReview: false,
       );
-    }
   }
 }

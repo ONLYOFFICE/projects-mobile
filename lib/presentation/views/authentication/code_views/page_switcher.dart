@@ -55,8 +55,7 @@ class _PageSwitcher extends StatelessWidget {
     return value;
   }
 
-  final _buttonsStyle =
-      TextStyleHelper.button(color: Get.theme.colors().primary);
+  final _buttonsStyle = TextStyleHelper.button(color: Theme.of(Get.context!).colors().primary);
   final _duration = const Duration(milliseconds: 250);
   final _curve = Curves.easeIn;
 
@@ -67,20 +66,18 @@ class _PageSwitcher extends StatelessWidget {
       child: Container(
         height: 56,
         width: double.infinity,
-        decoration: BoxDecoration(
-            color: Get.theme.colors().backgroundColor,
-            boxShadow: [
-              BoxShadow(
-                blurRadius: 3,
-                offset: const Offset(0, 0.85),
-                color: Get.theme.colors().onSurface.withOpacity(0.19),
-              ),
-              BoxShadow(
-                blurRadius: 1,
-                offset: const Offset(0, 0.25),
-                color: Get.theme.colors().onSurface.withOpacity(0.039),
-              ),
-            ]),
+        decoration: BoxDecoration(color: Theme.of(context).colors().backgroundColor, boxShadow: [
+          BoxShadow(
+            blurRadius: 3,
+            offset: const Offset(0, 0.85),
+            color: Theme.of(context).colors().onSurface.withOpacity(0.19),
+          ),
+          BoxShadow(
+            blurRadius: 1,
+            offset: const Offset(0, 0.25),
+            color: Theme.of(context).colors().onSurface.withOpacity(0.039),
+          ),
+        ]),
         child: ValueListenableBuilder<double>(
           valueListenable: page,
           builder: (_, double value, __) {
@@ -90,11 +87,10 @@ class _PageSwitcher extends StatelessWidget {
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 100),
                   opacity: _backButtonOpacity!,
-                  child: TextButton(
+                  child: PlatformTextButton(
                     onPressed: () async {
                       if (value >= 1) {
-                        return pageController.previousPage(
-                            duration: _duration, curve: _curve);
+                        return pageController.previousPage(duration: _duration, curve: _curve);
                       }
                     },
                     child: Text(tr('back'), style: _buttonsStyle),
@@ -104,11 +100,10 @@ class _PageSwitcher extends StatelessWidget {
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 100),
                   opacity: _nextButtonOpacity,
-                  child: TextButton(
+                  child: PlatformTextButton(
                     onPressed: () async {
                       if (value <= 2) {
-                        await pageController.nextPage(
-                            duration: _duration, curve: _curve);
+                        await pageController.nextPage(duration: _duration, curve: _curve);
                       }
                     },
                     child: Text(tr('next'), style: _buttonsStyle),

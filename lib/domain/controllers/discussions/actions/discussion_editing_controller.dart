@@ -30,51 +30,57 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:darq/darq.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
-class DiscussionEditingController extends GetxController implements DiscussionActionsController {
+class DiscussionEditingController extends DiscussionActionsController {
   int id;
   int projectId;
 
-  @override
-  RxString selectedProjectTitle;
-
-  @override
-  RxString title = RxString('');
   String _previusTitle = '';
-
-  @override
-  RxString text = RxString('');
   String _previusText = '';
-
-  @override
-  RxList<PortalUserItemController> subscribers = <PortalUserItemController>[].obs;
-
-  @override
-  RxList<PortalUserItemController> otherUsers = <PortalUserItemController>[].obs;
 
   List<PortalUser> initialSubscribers = <PortalUser>[];
   List<PortalUserItemController> _previusSelectedSubscribers = <PortalUserItemController>[];
+
+  final _api = locator<DiscussionItemService>();
+
+  final _userService = locator<UserService>();
+  final _usersDataSource = Get.find<UsersDataSource>();
+  final selectedGroups = <PortalGroupItemController>[];
+
+  final _titleController = TextEditingController();
+  final _userSearchController = TextEditingController();
+  final _titleFocus = FocusNode();
+
+  @override
+  TextEditingController get titleController => _titleController;
+  @override
+  TextEditingController get userSearchController => _userSearchController;
+  @override
+  FocusNode get titleFocus => _titleFocus;
 
   @override
   void onInit() {
@@ -88,47 +94,22 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
     _previusSelectedSubscribers = List.from(subscribers);
     _previusText = text.value;
     _previusTitle = title.value;
+
     super.onInit();
   }
 
-  final DiscussionItemService _api = locator<DiscussionItemService>();
-
-  final UserService _userService = locator<UserService>();
-  final _usersDataSource = Get.find<UsersDataSource>();
-  final selectedGroups = <PortalGroupItemController>[];
-
-  @override
-  HtmlEditorController textController = HtmlEditorController();
-
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _userSearchController = TextEditingController();
-  final FocusNode _titleFocus = FocusNode();
-
-  @override
-  TextEditingController get titleController => _titleController;
-  @override
-  TextEditingController get userSearchController => _userSearchController;
-  @override
-  FocusNode get titleFocus => _titleFocus;
-
-  @override
-  RxBool selectProjectError = false.obs;
-  @override
-  RxBool setTitleError = false.obs;
-  @override
-  RxBool setTextError = false.obs;
-
-  @override
-  RxBool titleIsEmpty = true.obs;
-
   DiscussionEditingController({
     this.id = -1,
-    required this.title,
-    required this.text,
+    required String title,
+    required String text,
     this.projectId = -1,
-    required this.selectedProjectTitle,
+    required String selectedProjectTitle,
     required this.initialSubscribers,
   }) {
+    this.title.value = title;
+    this.text.value = text;
+    this.selectedProjectTitle.value = selectedProjectTitle;
+
     _usersDataSource.selectionMode = UserSelectionMode.Multiple;
 
     titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
@@ -138,38 +119,14 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
   void changeTitle(String newText) => title.value = newText;
 
   @override
-  void changeProjectSelection() {}
-
-  @override
-  void confirmText() async {
-    text.value = await textController.getText();
-    Get.back();
-  }
-
-  @override
-  void leaveTextView() async {
-    if (await textController.getText() == text.value) {
-      Get.back();
-    } else {
-      await Get.dialog(StyledAlertDialog(
-        titleText: tr('discardChanges'),
-        contentText: tr('lostOnLeaveWarning'),
-        acceptText: tr('delete').toUpperCase(),
-        onAcceptTap: () {
-          Get.back();
-          Get.back();
-        },
-        onCancelTap: Get.back,
-      ));
-    }
-  }
+  void changeProjectSelection(ProjectDetailed? _details) {}
 
   @override
   void confirmSubscribersSelection() {
     // ignore: invalid_use_of_protected_member
     _previusSelectedSubscribers = List.from(subscribers);
     clearUserSearch();
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   @override
@@ -177,12 +134,13 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
     // ignore: invalid_use_of_protected_member
     if (listEquals(_previusSelectedSubscribers, subscribers.value)) {
       clearUserSearch();
-      Get.back();
+      Get.find<NavigationController>().back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           for (final item in _previusSelectedSubscribers) {
             if (!item.isSelected.value) item.isSelected.value = true;
@@ -190,7 +148,7 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
           subscribers.value = List.from(_previusSelectedSubscribers);
           clearUserSearch();
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -207,7 +165,8 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
     _usersDataSource.usersList
         .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
 
-    otherUsers = RxList(_usersDataSource.usersList
+    otherUsers.clear();
+    otherUsers.addAll(_usersDataSource.usersList
         .where((element) => !subscribers.any((it) => it.id == element.id))
         .toList());
 
@@ -266,7 +225,9 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
 
   @override
   void selectGroupMembers(PortalGroupItemController group) {
-    if (group.isSelected.value == true) {
+    if (selectedGroups.any((element) => element.displayName == group.displayName)) return;
+
+    if (group.isSelected.value) {
       selectedGroups.add(group);
     } else {
       selectedGroups.removeWhere((element) => group.portalGroup!.id == element.portalGroup!.id);
@@ -282,8 +243,9 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
       if (groupMembers != null) {
         if (groupMembers.response!.isNotEmpty) {
           for (final element in groupMembers.response!) {
-            final user = PortalUserItemController(portalUser: element);
-            user.isSelected.value = true;
+            final user = PortalUserItemController(
+                portalUser: element, isSelected: true, selectionMode: UserSelectionMode.Multiple);
+
             subscribers.add(user);
           }
         }
@@ -294,7 +256,7 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
     await _getSelectedSubscribers();
     await _usersDataSource.updateUsers();
 
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   @override
@@ -328,32 +290,34 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
       );
 
       if (editedDiss != null) {
-        final discussionsController = Get.find<DiscussionsController>();
-        final discussionController = Get.find<DiscussionItemController>();
         clearUserSearch();
-        // ignore: unawaited_futures
-        discussionController.onRefresh();
-        Get.back();
-        // ignore: unawaited_futures
-        discussionsController.loadDiscussions();
+
+        final discussionController = Get.find<DiscussionItemController>(tag: id.toString());
+        unawaited(discussionController.onRefresh());
+
+        final discussionsController = Get.find<DiscussionsController>(tag: 'DiscussionsView');
+        unawaited(discussionsController.loadDiscussions());
+
+        Get.find<NavigationController>().back();
       }
     }
   }
 
   void discardDiscussion() {
     if (title.value != _previusTitle || text.value != _previusText) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardDiscussion'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
     } else {
-      Get.back();
+      Get.find<NavigationController>().back();
     }
   }
 

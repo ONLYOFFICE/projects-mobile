@@ -43,26 +43,24 @@ import 'package:url_launcher/url_launcher.dart';
 class PrivacyAndTermsFooter extends StatelessWidget {
   PrivacyAndTermsFooter({
     Key? key,
-  }) : super(key: key);
+  })  : needCheckbox = false,
+        super(key: key);
 
   PrivacyAndTermsFooter.withCheckbox({
     Key? key,
-  }) : super(key: key) {
-    checkBoxValue = controller.checkBoxValue;
-  }
+  })  : needCheckbox = true,
+        super(key: key);
 
-  RxBool? checkBoxValue;
+  final bool needCheckbox;
   final controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
-    final needAgreement = controller.needAgreement && checkBoxValue != null;
+    final needAgreement = controller.needAgreement && needCheckbox;
 
-    RemoteConfigService.fetchAndActivate();
     final fullText = tr('privacyAndTermsFooter.total');
     final textPrivacyPolicy = tr('privacyAndTermsFooter.privacyPolicyWithLink');
     final textTermsOfService = tr('privacyAndTermsFooter.termsOfServiceWithLink');
-
 
     final beforeText = needAgreement
         ? tr('privacyAndTermsAgreement.beforeText')
@@ -73,7 +71,6 @@ class PrivacyAndTermsFooter extends StatelessWidget {
             fullText.indexOf(textTermsOfService));
     final afterText =
         fullText.substring(fullText.indexOf(textTermsOfService) + textTermsOfService.length);
-
 
     final textSpanPrivacyPolicy = TextSpan(
       style: TextStyle(
@@ -102,17 +99,16 @@ class PrivacyAndTermsFooter extends StatelessWidget {
         },
     );
     return Container(
-      margin: const EdgeInsets.only(top: 16, bottom: 36),
+      margin: needCheckbox ? const EdgeInsets.only(top: 16, bottom: 36) : null,
       child: Row(
         children: [
           if (needAgreement)
             Obx(
               () => Checkbox(
-                activeColor: Get.theme.colors().primary,
-                value: checkBoxValue!.value,
+                activeColor: Theme.of(context).colors().primary,
+                value: controller.checkBoxValue.value,
                 onChanged: (bool? value) {
-                  checkBoxValue!.value = value ?? false;
-
+                  controller.checkBoxValue.value = value ?? false;
                 },
               ),
             ),
@@ -123,7 +119,7 @@ class PrivacyAndTermsFooter extends StatelessWidget {
                 textAlign: needAgreement ? TextAlign.left : TextAlign.center,
                 text: TextSpan(
                   style: TextStyleHelper.body2(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6),
+                    color: Theme.of(context).colors().onSurface.withOpacity(0.6),
                   ),
                   children: [
                     TextSpan(text: beforeText),

@@ -44,7 +44,7 @@ class _Creator extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('me'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.creator['me'] as bool,
               onTap: () => filterController.changeCreator('me')),
           FilterElement(
@@ -54,8 +54,12 @@ class _Creator extends StatelessWidget {
             isSelected: filterController.creator['other'].isNotEmpty as bool,
             cancelButtonEnabled: filterController.creator['other'].isNotEmpty as bool,
             onTap: () async {
-              final newUser =
-                  await Get.find<NavigationController>().toScreen(const SelectUserScreen());
+              final newUser = await Get.find<NavigationController>().toScreen(
+                const SelectUserScreen(),
+                transition: Transition.rightToLeft,
+                page: '/SelectUserScreen',
+                arguments: {'previousPage': TasksFilterScreen.pageName},
+              );
               filterController.changeCreator('other', newUser);
             },
             onCancelTap: () => filterController.changeCreator('other', null),

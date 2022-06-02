@@ -41,13 +41,15 @@ import 'package:projects/internal/locator.dart';
 class UsersController extends BaseController {
   final UserService _api = locator<UserService>();
 
-  late PaginationController paginationController;
+  final _paginationController = Get.put(PaginationController<PortalUser>(), tag: 'UsersController');
+  @override
+  PaginationController<PortalUser> get paginationController => _paginationController;
+  @override
+  RxList<PortalUser> get itemList => _paginationController.data;
 
   @override
   void onInit() {
     screenName = tr('users');
-    paginationController =
-        Get.put(PaginationController(), tag: 'UsersController');
 
     paginationController.loadDelegate = () async => await _getUsers();
     paginationController.refreshDelegate = () async => await refreshData();
@@ -55,11 +57,6 @@ class UsersController extends BaseController {
 
     super.onInit();
   }
-
-  @override
-  RxList itemList = [].obs;
-
-  RxBool loaded = false.obs;
 
   Future<void> refreshData() async {
     loaded.value = false;

@@ -1,0 +1,17 @@
+/* Bundle name */
+"CFBundleName" = "Projetos";
+
+/* (No Commment) */
+"CFBundleDisplayName" = "Projetos";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "Este aplicativo requer acesso à câmera, para que você possa tirar fotos e carregá-la no aplicativo.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "Este aplicativo requer permissão de identificação facial para autenticar usando o reconhecimento facial.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "Este aplicativo requer acesso à biblioteca de fotos, para que você possa carregar suas fotos no aplicativo.";
+
+/* Privacy - Photo Library Usage Description */
+"NSPhotoLibraryUsageDescription" = "Este aplicativo requer acesso à biblioteca de fotos, para que você possa carregar suas fotos no aplicativo.";

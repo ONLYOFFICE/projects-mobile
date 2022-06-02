@@ -30,10 +30,10 @@
  *
  */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
@@ -45,12 +45,14 @@ import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/settings_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
-import 'package:restart_app/restart_app.dart';
+import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
+import 'package:projects/presentation/views/settings/settings_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
@@ -58,14 +60,17 @@ class SettingsController extends GetxController {
   final PackageInfoService _packageInfoService = locator<PackageInfoService>();
   final DeviceInfoService _deviceInfoService = locator<DeviceInfoService>();
   final Storage _storage = locator<Storage>();
+  final platformController = Get.find<PlatformController>();
+  final navigationController = Get.find<NavigationController>();
 
   String? appVersion;
   String? buildNumber;
 
-  RxBool loaded = false.obs;
-  RxString currentTheme = ''.obs;
-  late RxBool isPasscodeEnable;
-  RxBool shareAnalytics = true.obs;
+  final loaded = false.obs;
+  final currentTheme = ''.obs;
+  final cacheSize = ''.obs;
+  final isPasscodeEnable = false.obs;
+  final shareAnalytics = true.obs;
 
   String get versionAndBuildNumber => '$appVersion ($buildNumber)';
 
@@ -76,76 +81,61 @@ class SettingsController extends GetxController {
     // ignore: unawaited_futures
     RemoteConfigService.fetchAndActivate();
     final isPassEnable = await _service.isPasscodeEnable;
-    isPasscodeEnable = isPassEnable.obs;
+    isPasscodeEnable.value = isPassEnable;
 
     appVersion = await _packageInfoService.version;
     buildNumber = await _packageInfoService.buildNumber;
 
-    var themeMode = await _storage.read('themeMode');
+    var themeMode = await _storage.getString('themeMode');
     if (themeMode == null) {
       themeMode = 'sameAsSystem';
-      await _storage.write(themeMode as String, themeMode);
+      await _storage.saveString('themeMode', themeMode);
     }
 
-    final analytics = await _storage.read('shareAnalytics');
+    final analytics = await _storage.getBool('shareAnalytics');
 
     if (analytics == null) {
-      await _storage.write('shareAnalytics', true);
+      await _storage.saveBool('shareAnalytics', true);
       shareAnalytics.value = true;
     } else {
-      shareAnalytics.value = analytics as bool;
+      shareAnalytics.value = analytics;
     }
 
-    currentTheme.value = themeMode as String;
+    currentTheme.value = themeMode;
+
+    unawaited(setupCacheDirectorySize());
+
     loaded.value = true;
 
     super.onInit();
   }
 
-  void leave() => Get.back(); //offNamed('NavigationView');
+  void leave() => Get.find<NavigationController>().back();
 
   Future setTheme(String themeMode) async {
+    if (themeMode == currentTheme.value) return;
+
+    switch (themeMode) {
+      case 'darkTheme':
+        Get.changeThemeMode(ThemeMode.dark);
+        break;
+      case 'lightTheme':
+        Get.changeThemeMode(ThemeMode.light);
+        break;
+      case 'sameAsSystem':
+        Get.changeThemeMode(ThemeMode.system);
+        break;
+      default:
+        Get.changeThemeMode(ThemeMode.system);
+    }
+
     currentTheme.value = themeMode;
-    await _storage.write('themeMode', themeMode);
-
-    await Get.dialog(StyledAlertDialog(
-      titleText: tr('reloadDialogTitle'),
-      acceptText: tr('reload').toUpperCase(),
-      cancelText: tr('notNow').toUpperCase(),
-      onAcceptTap: () async {
-        switch (themeMode) {
-          case 'darkTheme':
-            Get.changeThemeMode(ThemeMode.dark);
-            break;
-          case 'lightTheme':
-            Get.changeThemeMode(ThemeMode.light);
-            break;
-          case 'sameAsSystem':
-            Get.isPlatformDarkMode
-                ? Get.changeThemeMode(ThemeMode.dark)
-                : Get.changeThemeMode(ThemeMode.light);
-            break;
-          default:
-            Get.changeThemeMode(ThemeMode.system);
-        }
-
-        if (kDebugMode) {
-          // this method, unfortunately, restarts the application,
-          // saving the initial route. This leads to the fact that, for example,
-          // after removing the passcode and restarting the application,
-          // we will still get to the passcode entry page.
-          Get.rootController.restartApp();
-        } else {
-          await Restart.restartApp();
-        }
-      },
-      onCancelTap: Get.back,
-    ));
+    await _storage.saveString('themeMode', themeMode);
   }
 
   Future<void> changeAnalyticsSharingEnability(bool value) async {
     try {
-      await _storage.write('shareAnalytics', value);
+      await _storage.saveBool('shareAnalytics', value);
       shareAnalytics.value = value;
     } catch (_) {
       await Get.find<ErrorDialog>().show(tr('error'));
@@ -153,30 +143,92 @@ class SettingsController extends GetxController {
   }
 
   Future<void> onClearCachePressed() async {
-    final appDir = (await getTemporaryDirectory()).path;
-    await DefaultCacheManager().emptyCache();
-    await Directory(appDir).delete(recursive: true);
+    final cm = DefaultCacheManager();
+    cm.store.emptyMemoryCache();
+    await cm.store.emptyCache();
+
+    final cacheDir = await getTemporaryDirectory();
+    if (cacheDir.existsSync()) {
+      await Directory(cacheDir.path).list().forEach((e) => e.delete(recursive: true));
+    }
+
+    await setupCacheDirectorySize();
+  }
+
+  Future<void> setupCacheDirectorySize() async {
+    final cacheDir = (await getTemporaryDirectory()).path;
+
+    var totalSize = 0;
+    final cache = Directory(cacheDir);
+    try {
+      if (cache.existsSync()) {
+        cache.listSync(recursive: true, followLinks: false).forEach((FileSystemEntity entity) {
+          if (entity is File) {
+            totalSize += entity.lengthSync();
+          }
+        });
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+
+    if (totalSize < 1024 * 100) {
+      cacheSize.value = '${(totalSize / 1024).toStringAsFixed(2)} Kb';
+    } else {
+      cacheSize.value = '${(totalSize / 1024 / 1024).toStringAsFixed(2)} Mb';
+    }
   }
 
   Future<void> onHelpPressed() async {
-    await launch(Const.Urls.help);
+    GetPlatform.isAndroid ? await launch(Const.Urls.help) : await launch(Const.Urls.helpIOS);
   }
 
   Future<void> onSupportPressed() async {
     final device = await _deviceInfoService.deviceInfo;
     final os = await _deviceInfoService.osReleaseVersion;
 
+    String? encodeQueryParameters(Map<String, String> params) {
+      return params.entries
+          .map((e) => '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
+          .join('&');
+    }
+
     var body = '';
     body += '\n\n\n\n\n';
     body += '____________________';
     body += '\nApp version: $versionAndBuildNumber';
     body += '\nDevice model: $device';
-    body += '\nAndroid version: $os';
+    switch (_deviceInfoService.deviceType) {
+      case DeviceType.ios:
+        body += '\niOS version: $os';
+        break;
+      case DeviceType.android:
+        body += '\nAndroid version: $os';
+        break;
+    }
 
-    // TODO change to ONLYOFFICE Projects IOS Feedback on ios
-    final url = '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
+    String subject;
+    switch (_deviceInfoService.deviceType) {
+      case DeviceType.ios:
+        subject = 'ONLYOFFICE Projects iOS Feedback';
+        break;
+      case DeviceType.android:
+        subject = 'ONLYOFFICE Projects Android Feedback';
+        break;
+    }
 
-    await _service.openEmailApp(url, Get.context!);
+    final emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: Const.Urls.supportMail,
+      query: encodeQueryParameters(
+        <String, String>{
+          'subject': subject,
+          'body': body,
+        },
+      ),
+    );
+
+    await _service.openEmailApp(emailLaunchUri.toString(), Get.context!);
   }
 
   Future<void> onRateAppPressed() async {
@@ -195,6 +247,24 @@ class SettingsController extends GetxController {
         RemoteConfigService.getString(RemoteConfigService.Keys.linkPrivacyPolicy),
       );
 
-  Future<void> onAnalyticsPressed() async =>
-      Get.find<NavigationController>().toScreen(const AnalyticsScreen());
+  void onAnalyticsPressed() => navigationController.toScreen(
+        const AnalyticsScreen(),
+        page: '/AnalyticsScreen',
+        arguments: {'previousPage': SettingsScreen.pageName},
+      );
+
+  void onPasscodePressed() => navigationController.toScreen(
+        const PasscodeSettingsScreen(),
+        page: '/PasscodeSettingsScreen',
+        arguments: {'previousPage': SettingsScreen.pageName},
+      );
+
+  void onThemePressed() => navigationController.toScreen(
+        const ColorThemeSelectionScreen(),
+        page: '/ColorThemeSelectionScreen',
+        arguments: {'previousPage': SettingsScreen.pageName},
+      );
+
+  void back({bool closeTabletModalScreen = false}) =>
+      Get.find<NavigationController>().back(closeTabletModalScreen: closeTabletModalScreen);
 }

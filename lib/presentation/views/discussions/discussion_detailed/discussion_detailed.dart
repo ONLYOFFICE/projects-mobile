@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
+import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
@@ -42,7 +43,7 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_overview.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_subscribers_view.dart';
 import 'package:projects/presentation/views/discussions/widgets/app_bar_menu_button.dart';
-import 'package:projects/presentation/views/documents/entity_documents_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 
 class DiscussionDetailed extends StatefulWidget {
   DiscussionDetailed({Key? key}) : super(key: key);
@@ -53,69 +54,83 @@ class DiscussionDetailed extends StatefulWidget {
 
 class _DiscussionDetailedState extends State<DiscussionDetailed>
     with SingleTickerProviderStateMixin {
-  TabController? _tabController;
+  late TabController _tabController;
   int _activeIndex = 0;
+
   late DiscussionItemController controller;
+  //= Get.put(DiscussionItemController(Get.arguments['discussion'] as Discussion));
+  final documentsController = Get.find<DiscussionsDocumentsController>();
 
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 4);
+
     controller = Get.arguments['controller'] as DiscussionItemController;
-    controller.getDiscussionDetailed();
+
+    controller
+        .getDiscussionDetailed()
+        .then((value) => documentsController.setup(controller.discussion.value));
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        setState(() {
+          _activeIndex = _tabController.index;
+        });
+      }
+    });
+
     super.initState();
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     super.dispose();
-    _tabController!.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _tabController!.addListener(() {
-      if (_tabController!.indexIsChanging) {
-        setState(() {
-          _activeIndex = _tabController!.index;
-        });
-      }
-    });
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
-          actions: [AppBarMenuButton(controller: controller)],
+          actions: [
+            AppBarMenuButton(controller: controller),
+          ],
           bottom: SizedBox(
             height: 40,
             child: TabBar(
                 isScrollable: true,
                 controller: _tabController,
-                indicatorColor: Get.theme.colors().primary,
-                labelColor: Get.theme.colors().onSurface,
-                unselectedLabelColor: Get.theme.colors().onSurface.withOpacity(0.6),
+                indicatorColor: Theme.of(context).colors().primary,
+                labelColor: Theme.of(context).colors().onSurface,
+                unselectedLabelColor: Theme.of(context).colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   CustomTab(
                       title: tr('comments'),
-                      currentTab: _activeIndex == 1,
-                      count: controller.discussion.value.commentsCount),
+                      currentTab: _activeIndex == 0,
+                      count: controller.discussion.value.commentsCount ?? 0),
                   CustomTab(
                       title: tr('subscribers'),
-                      currentTab: _activeIndex == 2,
-                      count: controller.discussion.value.subscribers?.length),
+                      currentTab: _activeIndex == 1,
+                      count: controller.discussion.value.subscribers?.length ?? 0),
                   CustomTab(
                       title: tr('documents'),
-                      currentTab: _activeIndex == 3,
-                      count: controller.discussion.value.files?.length),
+                      currentTab: _activeIndex == 2,
+                      count: documentsController.filesCount.value),
                   Tab(text: tr('overview')),
                 ]),
           ),
         ),
-        body: TabBarView(controller: _tabController, children: [
-          DiscussionCommentsView(controller: controller),
-          DiscussionSubscribersView(controller: controller),
-          DiscussionsDocumentsView(files: controller.discussion.value.files),
-          DiscussionOverview(controller: controller),
-        ]),
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            DiscussionCommentsView(controller: controller),
+            DiscussionSubscribersView(controller: controller),
+            ProjectDocumentsScreen(controller: documentsController),
+            DiscussionOverview(controller: controller),
+          ],
+        ),
       ),
     );
   }

@@ -31,36 +31,30 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectTeamView extends StatelessWidget {
-  final ProjectDetailed? projectDetailed;
-
-  final fabAction;
+  final ProjectTeamController projectTeamDataSource;
+  final Function() fabAction;
 
   const ProjectTeamView({
     Key? key,
-    required this.projectDetailed,
+    required this.projectTeamDataSource,
     required this.fabAction,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final projectTeamDataSource = Get.find<ProjectTeamController>()
-      ..setup(projectDetailed: projectDetailed)
-      ..getTeam();
-
     return Stack(
       children: [
         _Content(projectTeamDataSource: projectTeamDataSource),
@@ -72,10 +66,10 @@ class ProjectTeamView extends StatelessWidget {
               () => Visibility(
                 visible: projectTeamDataSource.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: fabAction as Function(),
+                  onPressed: fabAction,
                   child: AppIcon(
                     icon: SvgIcons.fab_user,
-                    color: Get.theme.colors().onPrimarySurface,
+                    color: Theme.of(context).colors().onPrimarySurface,
                   ),
                 ),
               ),
@@ -99,33 +93,30 @@ class _Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       if (projectTeamDataSource.loaded.value == true) {
-        return SmartRefresher(
-            enablePullDown: false,
+        return StyledSmartRefresher(
+            enablePullDown: true,
             enablePullUp: projectTeamDataSource.pullUpEnabled,
             controller: projectTeamDataSource.refreshController,
             onLoading: projectTeamDataSource.onLoading,
-            child: ListView(
-              children: <Widget>[
-                Column(
-                  children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) {
-                        final userController = projectTeamDataSource.usersList[i];
-                        return PortalUserItem(
-                            userController: userController,
-                            onTapFunction: (value) => {
-                                  Get.find<NavigationController>().toScreen(const ProfileScreen(),
-                                      arguments: {'controller': userController})
-                                });
-                      },
-                      itemExtent: 65,
-                      itemCount: projectTeamDataSource.usersList.length,
-                    )
-                  ],
-                ),
-              ],
+            onRefresh: projectTeamDataSource.getTeam,
+            child: ListView.builder(
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (c, i) => PortalUserItem(
+                  userController: projectTeamDataSource.usersList[i],
+                  onTapFunction: (value) => {
+                        Get.find<NavigationController>().toScreen(
+                          const ProfileScreen(),
+                          transition: Transition.rightToLeft,
+                          arguments: {
+                            'controller': PortalUserItemController(
+                                portalUser: projectTeamDataSource.usersList[i].portalUser)
+                          },
+                          page: '/ProfileScreen',
+                        )
+                      }),
+              itemExtent: 65,
+              itemCount: projectTeamDataSource.usersList.length,
             ));
       }
       return const ListLoadingSkeleton();

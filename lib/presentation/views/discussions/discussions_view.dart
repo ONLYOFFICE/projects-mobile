@@ -32,77 +32,26 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/discussion.dart';
-import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
-import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/shared/widgets/nothing_found.dart';
-import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-import 'package:projects/presentation/views/discussions/discussion_tile.dart';
-import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
-import 'package:projects/presentation/views/discussions/widgets/discussions_header.dart';
+import 'package:projects/presentation/views/discussions/discussions_shared.dart';
 
 class PortalDiscussionsView extends StatelessWidget {
   const PortalDiscussionsView({Key? key}) : super(key: key);
+
+  static String get pageName => tr('discussions');
+
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<DiscussionsController>();
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
-    });
-
-    final scrollController = ScrollController();
-    final elevation = ValueNotifier<double>(0);
-
-    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    final controller = Get.find<DiscussionsController>(tag: 'DiscussionsView');
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 101),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, double value, __) => StyledAppBar(
-            titleHeight: 101,
-            bottomHeight: 0,
-            showBackButton: false,
-            titleText: tr('discussions'),
-            elevation: value,
-            actions: [
-              IconButton(
-                icon: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.search,
-                  color: Get.theme.colors().primary,
-                ),
-                onPressed: controller.showSearch,
-                // onPressed: () => controller.showSearch(),
-              ),
-              IconButton(
-                  icon: FiltersButton(controler: controller),
-                  onPressed: () async => Get.find<NavigationController>().toScreen(
-                      const DiscussionsFilterScreen(),
-                      preventDuplicates: false,
-                      arguments: {'filterController': controller.filterController})),
-              const SizedBox(width: 3),
-            ],
-            bottom: DiscussionsHeader(
-              controller: controller,
-            ),
-          ),
-        ),
-      ),
       floatingActionButton: Obx(
         () => Visibility(
           visible: controller.fabIsVisible.value,
@@ -110,78 +59,31 @@ class PortalDiscussionsView extends StatelessWidget {
             onPressed: controller.toNewDiscussionScreen,
             child: AppIcon(
               icon: SvgIcons.add_discussion,
-              color: Get.theme.colors().onPrimarySurface,
+              color: Theme.of(context).colors().onPrimarySurface,
             ),
           ),
         ),
       ),
-      body: DiscussionsList(controller: controller, scrollController: scrollController),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => [
+          MainAppBar(
+            materialTitle: Text(
+              tr('discussions'),
+              style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+            ),
+            cupertinoTitle: Text(
+              tr('discussions'),
+              style: TextStyle(color: Theme.of(context).colors().onSurface),
+            ),
+            actions: [
+              SearchButton(controller: controller),
+              DiscussionsFilterButton(controller: controller),
+              DiscussionsMoreButtonWidget(controller: controller),
+            ],
+          ),
+        ],
+        body: DiscussionsContent(controller: controller),
+      ),
     );
-  }
-}
-
-class DiscussionsList extends StatelessWidget {
-  final controller;
-  final ScrollController scrollController;
-  const DiscussionsList({
-    Key? key,
-    required this.controller,
-    required this.scrollController,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    // a temporary solution for the discussion page in projects
-    // where there are no filters yet
-    var hasFilters = false;
-    try {
-      hasFilters = controller?.filterController?.hasFilters?.value as bool;
-    } catch (_) {}
-
-    return Obx(() {
-      if (!(controller.loaded.value as bool)) {
-        return const ListLoadingSkeleton();
-      }
-      return PaginationListView(
-          paginationController: controller.paginationController as PaginationController,
-          child: () {
-            if (controller.loaded.value as bool &&
-                controller.paginationController.data.isEmpty as bool &&
-                hasFilters)
-              return Center(
-                child: EmptyScreen(
-                  icon: SvgIcons.not_found,
-                  text: tr('noDiscussionsMatching'),
-                ),
-              );
-            if (controller.loaded.value as bool &&
-                controller.paginationController.data.isEmpty as bool)
-              return Center(
-                child: EmptyScreen(
-                  icon: SvgIcons.comments_not_created,
-                  text: tr('noDiscussionsCreated'),
-                ),
-              );
-            if (controller.loaded.value as bool &&
-                controller.paginationController.data.isNotEmpty as bool)
-              return ListView.separated(
-                itemCount: controller.paginationController.data.length as int,
-                padding: const EdgeInsets.only(bottom: 65),
-                controller: scrollController,
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(height: 12);
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  final discussion = controller.paginationController.data[index] as Discussion;
-                  final discussionItemController = Get.find<DiscussionItemController>();
-                  discussionItemController.setup(discussion);
-                  return DiscussionTile(
-                    controller: discussionItemController,
-                    onTap: () => controller.toDetailed(discussionItemController),
-                  );
-                },
-              );
-          }() as Widget);
-    });
   }
 }

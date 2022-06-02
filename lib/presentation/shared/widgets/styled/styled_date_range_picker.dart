@@ -36,27 +36,29 @@ import 'package:get/route_manager.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class StyledDateRangePickerDialog extends StatelessWidget {
-  const StyledDateRangePickerDialog({required this.initialDateRange, Key? key}) : super(key: key);
-  final DateTimeRange initialDateRange;
+  const StyledDateRangePickerDialog({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final initialDateRange = arguments['initialDateRange'] as DateTimeRange;
+
     return Theme(
       data: ThemeData(
         colorScheme: Get.isDarkMode
             ? ColorScheme.dark(
                 onSurface: darkColors.onSurface,
-                onPrimary: darkColors.onBackground,
-                primary: darkColors.primary,
-                surface: darkColors.systemBlue,
+                onPrimary: lightColors.onPrimary,
+                primary: lightColors.primarySurface,
+                surface: lightColors.primarySurface,
               )
             : ColorScheme.light(
-                onPrimary: lightColors.onBackground,
-                primary: darkColors.primary.withOpacity(0.3),
+                onPrimary: lightColors.onPrimary,
+                primary: lightColors.primarySurface,
                 surface: darkColors.systemBlue,
                 onSurface: darkColors.surface,
               ),
-        primaryColor: Get.theme.colors().surface,
+        primaryColor: Theme.of(context).colors().surface,
       ),
       child: DateRangePickerDialog(
         currentDate: DateTime.now(),

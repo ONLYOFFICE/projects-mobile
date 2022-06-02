@@ -32,13 +32,12 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/domain/controllers/images_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class CustomNetworkImage extends StatelessWidget {
-  final String? image;
+  final String image;
   final BoxFit? fit;
   final double? height;
   final double? width;
@@ -58,25 +57,25 @@ class CustomNetworkImage extends StatelessWidget {
     return FutureBuilder(
       future: locator<ImagesController>().getHeaders(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4));
-        }
-        if (image != null && image!.isNotEmpty) {
+        if (snapshot.connectionState == ConnectionState.done && image.isNotEmpty) {
           return CachedNetworkImage(
-            imageUrl: locator<ImagesController>().getImagePath(image!),
+            imageUrl: locator<ImagesController>().getImagePath(image),
             httpHeaders: snapshot.data as Map<String, String>?,
             fit: fit,
             height: height,
             width: width,
             placeholder: (_, __) =>
                 defaultImage ??
-                CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4)),
+                CircleAvatar(
+                    backgroundColor: Theme.of(context).colors().bgDescription.withOpacity(0.4)),
             errorWidget: (_, __, ___) =>
                 defaultImage ??
-                CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4)),
+                CircleAvatar(
+                    backgroundColor: Theme.of(context).colors().bgDescription.withOpacity(0.4)),
           );
         } else {
-          return CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4));
+          return CircleAvatar(
+              backgroundColor: Theme.of(context).colors().bgDescription.withOpacity(0.4));
         }
       },
     );

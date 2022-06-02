@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
@@ -58,7 +59,7 @@ class ReplyCommentView extends StatelessWidget {
     if (Get.arguments['taskId'] != null) {
       controller = Get.put(
         NewTaskCommentController(
-          idFrom: Get.arguments['taskId'] as int?,
+          idFrom: Get.arguments['taskId'] as int,
           parentId: comment.commentId,
         ),
       );
@@ -66,7 +67,7 @@ class ReplyCommentView extends StatelessWidget {
     if (Get.arguments['discussionId'] != null) {
       controller = Get.put(
         NewDiscussionCommentController(
-          idFrom: Get.arguments['discussionId'] as int?,
+          idFrom: Get.arguments['discussionId'] as int,
           parentId: comment.commentId,
         ),
       );
@@ -78,17 +79,15 @@ class ReplyCommentView extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-          backgroundColor:
-              platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('newComment'),
           onLeadingPressed: controller.leavePage,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.done_rounded),
-              onPressed: () => controller.addReplyComment(context),
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).checkMark),
+              onPressed: controller.addReplyComment,
             )
           ],
         ),
@@ -106,7 +105,7 @@ class ReplyCommentView extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: CustomNetworkImage(
-                        image: comment.userAvatarPath,
+                        image: comment.userAvatarPath ?? '',
                         defaultImage: const DefaultAvatar(),
                         fit: BoxFit.cover,
                       ),
@@ -120,7 +119,7 @@ class ReplyCommentView extends StatelessWidget {
                         if (comment.userFullName != null)
                           Text(comment.userFullName!,
                               style: TextStyleHelper.subtitle1(
-                                  color: Get.theme.colors().onSurface)),
+                                  color: Theme.of(context).colors().onSurface)),
                         Text(
                           parseHtml(comment.commentBody),
                           maxLines: 1,

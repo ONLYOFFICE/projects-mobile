@@ -31,7 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -52,19 +52,26 @@ class WideButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: deprecated_member_use
-    return FlatButton(
-      onPressed: onPressed,
-      disabledColor: Get.theme.colors().surface,
-      minWidth: double.infinity,
-      color: color ?? Get.theme.colors().primary,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      padding: padding,
-      child: Text(
-        text,
-        style: TextStyleHelper.button(
-            color: textColor ?? Get.theme.colors().onNavBar),
-      ),
-    );
+    return SizedBox(
+        width: double.infinity,
+        child: PlatformTextButton(
+          onPressed: onPressed,
+          padding: padding,
+          child: Text(
+            text,
+            style: TextStyleHelper.button(color: textColor ?? Theme.of(context).colors().onNavBar),
+          ),
+          material: (context, platform) => MaterialTextButtonData(
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all(color ?? Theme.of(context).colors().primary),
+                shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)))),
+          ),
+          cupertino: (context, platform) => CupertinoTextButtonData(
+              color: color ?? Theme.of(context).colors().primary,
+              disabledColor: Theme.of(context).colors().surface,
+              borderRadius: BorderRadius.circular(6)),
+        ));
   }
 }

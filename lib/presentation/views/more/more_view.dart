@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -46,18 +45,12 @@ class MoreView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final portalUser = Get.isRegistered<ProfileController>()
-        ? Get.find<ProfileController>()
-        : Get.put(ProfileController(), permanent: true);
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      portalUser.setup();
-    });
+    final portalUser = Get.find<ProfileController>(tag: 'SelfProfileScreen');
 
     return Container(
       height: 312,
       decoration: BoxDecoration(
-        color: Get.theme.colors().primarySurface,
+        color: Theme.of(context).colors().primarySurface,
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(16),
         ),
@@ -71,7 +64,7 @@ class MoreView extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(12, 16, 10, 15),
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(color: Get.theme.colors().outline, width: 0.5),
+                    bottom: BorderSide(color: Theme.of(context).colors().outline, width: 0.5),
                   ),
                 ),
                 child: Row(
@@ -85,7 +78,7 @@ class MoreView extends StatelessWidget {
                         children: <Widget>[
                           CircleAvatar(
                             radius: 40,
-                            backgroundColor: Get.theme.colors().bgDescription,
+                            backgroundColor: Theme.of(context).colors().bgDescription,
                             child: ClipOval(
                               child: Obx(() {
                                 return portalUser.avatar.value;
@@ -122,7 +115,8 @@ class MoreView extends StatelessWidget {
                               portalUser.username.value,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onNavBar),
+                              style: TextStyleHelper.subtitle1(
+                                  color: Theme.of(context).colors().onNavBar),
                             );
                           }),
                           Obx(() {
@@ -131,7 +125,7 @@ class MoreView extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyleHelper.body2(
-                                  color: Get.theme.colors().onNavBar.withOpacity(0.6)),
+                                  color: Theme.of(context).colors().onNavBar.withOpacity(0.6)),
                             );
                           }),
                         ],
@@ -178,7 +172,8 @@ class _MoreTile extends StatelessWidget {
               width: 56,
               child: AppIcon(icon: iconPath),
             ),
-            Text(text, style: TextStyleHelper.subtitle1(color: Get.theme.colors().onNavBar)),
+            Text(text,
+                style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onNavBar)),
           ],
         ),
       ),

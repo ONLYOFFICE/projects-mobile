@@ -44,7 +44,7 @@ class _Project extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('myProjects'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.project['my'] as bool,
               onTap: () => filterController.changeProject('my')),
           FilterElement(
@@ -54,8 +54,12 @@ class _Project extends StatelessWidget {
               isSelected: filterController.project['other'].isNotEmpty as bool,
               cancelButtonEnabled: filterController.project['other'].isNotEmpty as bool?,
               onTap: () async {
-                final selectedProject =
-                    await Get.find<NavigationController>().toScreen(SelectProjectScreen());
+                final selectedProject = await Get.find<NavigationController>().toScreen(
+                  SelectProjectScreen(),
+                  transition: Transition.rightToLeft,
+                  page: '/SelectProjectScreen',
+                  arguments: {'previousPage': TasksFilterScreen.pageName},
+                );
                 filterController.changeProject('other', selectedProject);
               },
               onCancelTap: () => filterController.changeProject('other', null)),
@@ -66,14 +70,18 @@ class _Project extends StatelessWidget {
               isSelected: filterController.project['withTag'].isNotEmpty as bool,
               cancelButtonEnabled: filterController.project['withTag'].isNotEmpty as bool?,
               onTap: () async {
-                final selectedTag =
-                    await Get.find<NavigationController>().toScreen(const SelectTagScreen());
+                final selectedTag = await Get.find<NavigationController>().toScreen(
+                  const SelectTagScreen(),
+                  transition: Transition.rightToLeft,
+                  page: '/SelectTagScreen',
+                  arguments: {'previousPage': TasksFilterScreen.pageName},
+                );
                 filterController.changeProject('withTag', selectedTag);
               },
               onCancelTap: () => filterController.changeProject('withTag', null)),
           FilterElement(
               title: tr('withoutTag'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.project['withoutTag'] as bool,
               onTap: () => filterController.changeProject('withoutTag')),
         ],

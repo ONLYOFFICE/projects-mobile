@@ -29,29 +29,26 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/account_tile_controller.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/authentication/account_manager/account_tile.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
-
-import 'package:easy_localization/easy_localization.dart';
-import 'package:projects/data/enums/viewstate.dart';
-import 'package:projects/domain/controllers/auth/login_controller.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class AccountManagerView extends StatelessWidget {
   AccountManagerView({Key? key}) : super(key: key);
 
   final loginController = Get.find<LoginController>();
 
-  final accountController = Get.isRegistered<AccountManagerController>()
-      ? Get.find<AccountManagerController>()
-      : Get.put(AccountManagerController());
+  final accountController =
+      Get.isRegistered<AccountManager>() ? Get.find<AccountManager>() : Get.put(AccountManager());
 
   @override
   Widget build(BuildContext context) {
@@ -59,45 +56,52 @@ class AccountManagerView extends StatelessWidget {
 
     return Scaffold(
       //TODO fix background colors for tablet
-      // backgroundColor: Get.theme.colors().backgroundSecond,
-      body: Obx(
-        () => loginController.state.value == ViewState.Busy
-            ? SizedBox(height: Get.height, child: const Center(child: CircularProgressIndicator()))
-            : Center(
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      SizedBox(height: Get.height * 0.1),
-                      const AppIcon(icon: SvgIcons.app_logo),
-                      SizedBox(height: Get.height * 0.01),
-                      Text(tr('appName'),
-                          textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
-                      SizedBox(height: Get.height * 0.06),
-                      Expanded(
-                        child: Obx(
-                          () => ListView.separated(
-                            physics: const ScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (c, i) {
-                              if (i == accountController.accounts.length) {
-                                return const _NewAccountButton();
-                              } else
-                                return AccountTile(
-                                  userController: AccountTileController(
-                                      accountData: accountController.accounts[i]),
-                                );
-                            },
-                            separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
-                            itemCount: accountController.accounts.length + 1,
-                          ),
-                        ),
-                      ),
-                    ],
+      // backgroundColor: Theme.of(context).colors().backgroundSecond,
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 480, maxHeight: MediaQuery.of(context).size.height),
+          child: OrientationBuilder(builder: (context, orientation) {
+            return Column(
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                if (orientation == Orientation.portrait)
+                  const Spacer(flex: 1)
+                else
+                  const SizedBox(height: 20),
+                const AppIcon(icon: SvgIcons.app_logo),
+                SizedBox(height: Get.height * 0.01),
+                AppIcon(
+                  icon: SvgIcons.app_title,
+                  color: Theme.of(context).colors().onSurface,
+                ),
+                if (orientation == Orientation.portrait)
+                  SizedBox(height: Get.height * 0.06)
+                else
+                  const SizedBox(height: 20),
+                Expanded(
+                  flex: 3,
+                  child: Obx(
+                    () => ListView.separated(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (c, i) {
+                        if (i == accountController.accounts.length) {
+                          return const _NewAccountButton();
+                        } else
+                          return AccountTile(
+                            userController:
+                                AccountTileController(accountData: accountController.accounts[i]),
+                          );
+                      },
+                      separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
+                      itemCount: accountController.accounts.length + 1,
+                    ),
                   ),
                 ),
-              ),
+              ],
+            );
+          }),
+        ),
       ),
     );
   }
@@ -111,7 +115,7 @@ class _NewAccountButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => PortalInputView()),
+      onTap: () => Get.to(() => PortalInputView(), fullscreenDialog: true),
       child: SizedBox(
         height: 64,
         child: Row(
@@ -121,7 +125,7 @@ class _NewAccountButton extends StatelessWidget {
               width: 72,
               child: Icon(
                 Icons.add,
-                color: Get.theme.colors().primary,
+                color: Theme.of(context).colors().primary,
               ),
             ),
             Expanded(
@@ -136,7 +140,8 @@ class _NewAccountButton extends StatelessWidget {
                         Text(
                           tr('addNewAccount'),
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
+                          style:
+                              TextStyleHelper.subtitle1(color: Theme.of(context).colors().primary),
                         ),
                       ],
                     ),

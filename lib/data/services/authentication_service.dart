@@ -48,38 +48,26 @@ class AuthService {
   final AuthApi _api = locator<AuthApi>();
 
   Future<ApiDTO<PortalUser>> getSelfInfo() async {
-    final authResponse = await _api.getUserInfo();
-
-    final result = authResponse.response != null;
-
-    if (!result) {
-      await Get.find<ErrorDialog>().show(authResponse.error?.message ?? '');
-    }
-    return authResponse;
+    return await _api.getUserInfo();
   }
 
   Future<bool> checkAuthorization() async {
-    final authResponse = await _api.getUserInfo();
+    final authResponse = await getSelfInfo();
 
     if (authResponse.response == null) {
-      if (authResponse.error!.message.toLowerCase().contains('unauthorized')) {
+      if (authResponse.error!.message.toLowerCase().contains('unauthorized') ||
+          authResponse.error?.statusCode == 404) {
         return false;
       } else {
         await Get.find<ErrorDialog>().show(authResponse.error!.message);
+        return false;
       }
     }
     return true;
   }
 
-  Future<bool> checkAccountAuthorization(AccountData accoutnData) async {
-    final authResponse = await _api.getAccountInfo(accoutnData);
-
-    if (authResponse.response == null) {
-      if (authResponse.error!.message.toLowerCase().contains('unauthorized')) {
-        return false;
-      } else {}
-    }
-    return true;
+  Future<ApiDTO<PortalUser>> checkAccountAuthorization(AccountData accoutnData) async {
+    return await _api.getAccountInfo(accoutnData);
   }
 
   Future<ApiDTO<AuthToken>> login({
@@ -88,13 +76,14 @@ class AuthService {
   }) async {
     var authResponse = await _api.loginByUsername(email: email, pass: pass);
 
-    if (authResponse.error is CustomError && authResponse.error?.message == 'Redirect') {
+    if (authResponse.error is CustomError &&
+        authResponse.error?.message.contains('authentication failed') == false) {
       locator.get<CoreApi>().redirectPortal();
       authResponse = await _api.loginByUsername(email: email, pass: pass);
     }
 
     if (authResponse.response == null) {
-      await Get.find<ErrorDialog>().show(authResponse.error!.message);
+      await Get.find<ErrorDialog>().show(tr('authenticationFailed'));
     }
     return authResponse;
   }

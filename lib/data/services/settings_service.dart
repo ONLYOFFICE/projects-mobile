@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
@@ -46,9 +45,7 @@ class SettingsService {
   Future<bool> get isPasscodeEnable async => _passcodeService.isPasscodeEnable;
 
   Future<void> openEmailApp(String url, BuildContext context) async {
-    try {
-      await launch(url);
-    } catch (e) {
+    if (!await launch(url)) {
       await showDialog(
         context: context,
         builder: (context) {
@@ -56,9 +53,8 @@ class SettingsService {
             titleText: tr('failedToSendFeedback'),
             cancelText: tr('close'),
             acceptText: tr('goToForum'),
-            acceptColor: Get.theme.colors().primary,
-            onAcceptTap: () async =>
-                launch(Const.Urls.forumSupport),
+            acceptColor: Theme.of(context).colors().primary,
+            onAcceptTap: () async => launch(Const.Urls.forumSupport),
           );
         },
       );

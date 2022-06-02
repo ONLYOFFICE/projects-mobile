@@ -32,6 +32,13 @@
 
 import 'package:get/get.dart';
 import 'package:projects/main_view.dart';
+import 'package:projects/presentation/shared/project_team_responsible.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/select_group_screen.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/select_milestone_screen.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/select_project_screen.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/select_tag_screen.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_date_range_picker.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/select_country_screen.dart';
@@ -41,34 +48,37 @@ import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:projects/presentation/views/authentication/passcode/passcode_screen.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen2.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_screen.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/select/select_dis_subscribers.dart';
-import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 import 'package:projects/presentation/views/discussions/discussions_search_view.dart';
 import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
+import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
-import 'package:projects/presentation/views/new_task/task_description.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
-import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
-
+import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
+import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
+import 'package:projects/presentation/views/new_task/task_description.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/filter/milestone_filter_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
+import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/description_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
-import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
-import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
-import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
+import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
 import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
@@ -79,17 +89,20 @@ import 'package:projects/presentation/views/task_detailed/comments/reply_comment
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
+import 'package:projects/presentation/views/task_detailed/task_team.dart';
+import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 List<GetPage> getxPages() => [
       GetPage(name: '/MainView', page: () => const MainView()),
-      GetPage(name: '/LoginView', page: () => const LoginView()),
-      GetPage(name: '/CodeView', page: () => CodeView()),
+      GetPage(name: '/LoginView', page: LoginView.new),
+      GetPage(name: '/CodeView', page: CodeView.new),
       GetPage(name: '/AnalyticsScreen', page: () => const AnalyticsScreen()),
-      GetPage(name: '/DiscussionDetailed', page: () => DiscussionDetailed()),
+      GetPage(name: '/DiscussionDetailed', page: DiscussionDetailed.new),
       GetPage(name: '/DiscussionsFilterScreen', page: () => const DiscussionsFilterScreen()),
       GetPage(name: '/DiscussionsSearchScreen', page: () => const DiscussionsSearchScreen()),
+      GetPage(name: '/NewDiscussionTextScreen', page: () => const NewDiscussionTextScreen()),
       GetPage(name: '/GetCodeViews', page: () => const GetCodeViews()),
       GetPage(name: '/ColorThemeSelectionScreen', page: () => const ColorThemeSelectionScreen()),
       GetPage(name: '/CommentEditingView', page: () => const CommentEditingView()),
@@ -98,8 +111,16 @@ List<GetPage> getxPages() => [
       GetPage(name: '/TaskDetailedView', page: () => const TaskDetailedView()),
       GetPage(name: '/TasksFilterScreen', page: () => const TasksFilterScreen()),
       GetPage(name: '/NewTaskView', page: () => const NewTaskView()),
+      GetPage(name: '/SelectUserScreen', page: () => const SelectUserScreen()),
+      GetPage(name: '/SelectMilestoneScreen', page: () => const SelectMilestoneScreen()),
+      GetPage(name: '/SelectProjectScreen', page: () => SelectProjectScreen()),
+      GetPage(name: '/EditProjectView', page: () => const EditProjectView()),
+      GetPage(name: '/SelectTagScreen', page: () => const SelectTagScreen()),
+      GetPage(name: '/SelectGroupScreen', page: () => const SelectGroupScreen()),
       GetPage(name: '/NewCommentView', page: () => const NewCommentView()),
-      GetPage(name: '/NewSubtaskView', page: () => const CreatingAndEditingSubtaskView()),
+      GetPage(
+          name: '/CreatingAndEditingSubtaskView',
+          page: () => const CreatingAndEditingSubtaskView()),
       GetPage(name: '/TaskDescription', page: () => const TaskDescription()),
       GetPage(
           name: '/SelectDiscussionSubscribers', page: () => const SelectDiscussionSubscribers()),
@@ -107,29 +128,33 @@ List<GetPage> getxPages() => [
       GetPage(name: '/SelectMilestoneView', page: () => const SelectMilestoneView()),
       GetPage(name: '/SelectProjectView', page: () => const SelectProjectView()),
       GetPage(name: '/SubtaskDetailedView', page: () => const SubtaskDetailedView()),
-      GetPage(name: '/ProjectSearchView', page: () => ProjectSearchView()),
+      GetPage(name: '/ProjectSearchView', page: ProjectSearchView.new),
       GetPage(name: '/ProjectsFilterScreen', page: () => const ProjectsFilterScreen()),
+      GetPage(
+          name: '/ProjectTeamResponsibleSelectionView',
+          page: () => const ProjectTeamResponsibleSelectionView()),
       GetPage(name: '/MilestoneFilterScreen', page: () => const MilestoneFilterScreen()),
       GetPage(name: '/DocumentsFilterScreen', page: () => const DocumentsFilterScreen()),
+      GetPage(name: '/DocumentsMoveOrCopyView', page: () => DocumentsMoveOrCopyView()),
       GetPage(name: '/NewProject', page: () => const NewProject()),
       GetPage(name: '/NewProjectDescription', page: () => const NewProjectDescription()),
-      GetPage(
-          name: '/ProjectManagerSelectionView', page: () => const ProjectManagerSelectionView()),
+      GetPage(name: '/ProjectManagerSelectionView', page: ProjectManagerSelectionView.new),
       GetPage(name: '/ReplyCommentView', page: () => const ReplyCommentView()),
-      GetPage(name: '/ProjectDetailedView', page: () => ProjectDetailedView()),
+      GetPage(name: '/ProjectDetailedView', page: ProjectDetailedView.new),
       GetPage(name: '/TeamMembersSelectionView', page: () => const TeamMembersSelectionView()),
-      GetPage(name: '/ProjectDetailedView', page: () => ProjectDetailedView()),
       GetPage(name: '/GroupMembersSelectionView', page: () => const GroupMembersSelectionView()),
       GetPage(name: '/NewDiscussionScreen', page: () => const NewDiscussionScreen()),
       GetPage(name: '/DiscussionEditingScreen', page: () => const DiscussionEditingScreen()),
+      GetPage(name: '/TagsSelectionView', page: () => const TagsSelectionView()),
       GetPage(
         name: '/ManageDiscussionSubscribersScreen',
         page: () => const ManageDiscussionSubscribersScreen(),
       ),
       GetPage(name: '/NewMilestoneView', page: () => const NewMilestoneView()),
+      GetPage(name: '/DocumentsMoveSearchView', page: DocumentsMoveSearchView.new),
       GetPage(name: '/NewMilestoneDescription', page: () => const NewMilestoneDescription()),
       GetPage(name: '/PasscodeSettingsScreen', page: () => const PasscodeSettingsScreen()),
-      GetPage(name: '/PasscodeScreen', page: () => PasscodeScreen()),
+      GetPage(name: '/PasscodeScreen', page: PasscodeScreen.new),
       GetPage(name: '/PasswordRecoveryScreen', page: () => const PasswordRecoveryScreen1()),
       GetPage(name: '/PasswordRecoveryScreen2', page: () => const PasswordRecoveryScreen2()),
       GetPage(name: '/SelectCountryScreen', page: () => const SelectCountryScreen()),
@@ -138,4 +163,9 @@ List<GetPage> getxPages() => [
       GetPage(name: '/TFASmsScreen', page: () => const TFASmsScreen()),
       GetPage(name: '/UsersFromGroups', page: () => const UsersFromGroups()),
       GetPage(name: '/ProfileScreen', page: () => const ProfileScreen()),
+      GetPage(name: '/SelfProfileScreen', page: () => const SelfProfileScreen()),
+      GetPage(
+          name: '/StyledDateRangePickerDialog', page: () => const StyledDateRangePickerDialog()),
+      GetPage(name: '/TaskTeamView', page: () => const TaskTeamView()),
+      GetPage(name: '/TaskEditingView', page: () => const TaskEditingView()),
     ];

@@ -10,7 +10,7 @@ SECRETS=(
 
 if [ -z "$GIT_IOS_PROJECTS_PASSPHRASE" ]
 then
-    echo "ERROR: Decrypt passphrase is not set"
+    echo "ERROR: Decrypt passphrase is not set" >&2
     exit 1
 fi
 

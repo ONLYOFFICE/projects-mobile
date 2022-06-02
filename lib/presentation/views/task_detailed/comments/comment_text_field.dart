@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
@@ -43,17 +44,26 @@ class CommentTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => TextField(
+      () => PlatformTextField(
+        makeCupertinoDecorationNull: true,
         maxLines: null,
         autofocus: true,
         controller: controller.textController as TextEditingController?,
         scrollPadding: const EdgeInsets.all(10),
-        decoration: InputDecoration.collapsed(
-          hintText: tr('replyText'),
-          hintStyle: TextStyle(
-              color: controller.setTitleError == true
-                  ? Get.theme.colors().colorError
-                  : null),
+        hintText: tr('replyText'),
+        cupertino: (_, __) => CupertinoTextFieldData(
+          placeholderStyle: TextStyle(
+              color:
+                  controller.setTitleError == true ? Theme.of(context).colors().colorError : null),
+        ),
+        material: (_, __) => MaterialTextFieldData(
+          decoration: InputDecoration.collapsed(
+            hintText: tr('replyText'),
+            hintStyle: TextStyle(
+                color: controller.setTitleError == true
+                    ? Theme.of(context).colors().colorError
+                    : null),
+          ),
         ),
       ),
     );

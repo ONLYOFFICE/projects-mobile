@@ -32,37 +32,64 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
 abstract class TaskActionsController extends GetxController {
-  RxString title = ''.obs;
-  RxString? descriptionText;
-  RxString? selectedMilestoneTitle;
-  RxString? selectedProjectTitle;
-  RxList? responsibles;
-  RxString? startDateText;
-  RxString? dueDateText;
+  final title = ''.obs;
+  final descriptionText = ''.obs;
+  final selectedMilestoneTitle = ''.obs;
+  final selectedProjectTitle = ''.obs;
+  final responsibles = [].obs;
+  final startDateText = ''.obs;
+  final dueDateText = ''.obs;
+  late ProjectTeamController teamController;
+  int? newMilestoneId;
+
+  Rx<TextEditingController> descriptionController = TextEditingController().obs;
 
   DateTime? get dueDate;
 
   DateTime? get startDate;
 
-  RxBool? highPriority;
-  late RxBool titleIsEmpty;
+  int? get selectedProjectId;
+
+  final highPriority = false.obs;
+  final titleIsEmpty = false.obs;
 
   TextEditingController? _titleController;
+
   TextEditingController? get titleController => _titleController;
+
   FocusNode? get titleFocus => FocusNode();
 
-  RxBool? setTitleError;
-  var needToSelectProject;
+  final setTitleError = false.obs;
+  final needToSelectProject = false.obs;
 
-  void changeMilestoneSelection();
+  void changeMilestoneSelection({int? id, String? title});
+
   void leaveDescriptionView(String typedText);
 
+  void confirmResponsiblesSelection();
+
+  void leaveResponsiblesSelectionView();
+
   void confirmDescription(String typedText);
+
   void changeTitle(String newText);
+
   void changeStartDate(DateTime? newDate);
+
   void changeDueDate(DateTime? newDate);
+
   void changePriority(bool value);
+
   void checkDate(DateTime startDate, DateTime dueDate);
+
+  void changeProjectSelection(ProjectDetailed? _details);
+
+  void setupResponsibleSelection();
+
+  void addResponsible(PortalUserItemController user);
 }

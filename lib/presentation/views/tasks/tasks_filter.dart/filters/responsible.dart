@@ -44,7 +44,7 @@ class _Responsible extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('me'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.responsible['me'] as bool,
               onTap: () => filterController.changeResponsible('me')),
           FilterElement(
@@ -54,8 +54,12 @@ class _Responsible extends StatelessWidget {
               isSelected: filterController.responsible['other'].isNotEmpty as bool,
               cancelButtonEnabled: filterController.responsible['other'].isNotEmpty as bool?,
               onTap: () async {
-                final newUser =
-                    await Get.find<NavigationController>().toScreen(const SelectUserScreen());
+                final newUser = await Get.find<NavigationController>().toScreen(
+                  const SelectUserScreen(),
+                  transition: Transition.rightToLeft,
+                  page: '/SelectUserScreen',
+                  arguments: {'previousPage': TasksFilterScreen.pageName},
+                );
                 filterController.changeResponsible('other', newUser);
               },
               onCancelTap: () => filterController.changeResponsible('other', null)),
@@ -66,14 +70,18 @@ class _Responsible extends StatelessWidget {
               isSelected: filterController.responsible['groups'].isNotEmpty as bool,
               cancelButtonEnabled: filterController.responsible['groups'].isNotEmpty as bool?,
               onTap: () async {
-                final newGroup =
-                    await Get.find<NavigationController>().toScreen(const SelectGroupScreen());
+                final newGroup = await Get.find<NavigationController>().toScreen(
+                  const SelectGroupScreen(),
+                  transition: Transition.rightToLeft,
+                  page: '/SelectGroupScreen',
+                  arguments: {'previousPage': TasksFilterScreen.pageName},
+                );
                 filterController.changeResponsible('groups', newGroup);
               },
               onCancelTap: () => filterController.changeResponsible('groups', null)),
           FilterElement(
               title: tr('noResponsible'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.responsible['no'] as bool,
               onTap: () => filterController.changeResponsible('no'))
         ],

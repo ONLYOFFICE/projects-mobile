@@ -30,9 +30,12 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:projects/data/services/passcode_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -43,33 +46,42 @@ import 'package:projects/presentation/views/settings/passcode/new/new_passcode_s
 
 class PasscodeSettingsController extends GetxController {
   final PasscodeService _service = locator<PasscodeService>();
+
   String _passcode = '';
   String _passcodeCheck = '';
 
-  RxBool loaded = false.obs;
-  RxBool passcodeCheckFailed = false.obs;
-  late RxBool isPasscodeEnable;
-  late RxBool isFingerprintEnable;
-  late RxBool isFingerprintAvailable;
+  final loaded = false.obs;
+  final passcodeCheckFailed = false.obs;
+  final isPasscodeEnable = false.obs;
+  final isBiometricEnable = false.obs;
+  final isBiometricAvailable = false.obs;
 
+  late final BiometricType? biometricType;
+  late final String biometricTypeDescription;
   RxInt enteredPasscodeLen = 0.obs;
   RxInt passcodeCheckLen = 0.obs;
 
   @override
   Future<void> onInit() async {
     loaded.value = false;
-    final isPassEnable = await _service.isPasscodeEnable;
-    final isFinEnable = await _service.isFingerprintEnable;
-    final isFinAvailable = await _service.isFingerprintAvailable;
-    isPasscodeEnable = isPassEnable.obs;
-    if (isFinAvailable) {
-      isFingerprintEnable = isFinEnable.obs;
-      isFingerprintAvailable = true.obs;
+
+    isPasscodeEnable.value = await _service.isPasscodeEnable;
+
+    biometricType = await _service.getBiometricType();
+    biometricTypeDescription =
+        biometricType == BiometricType.face ? tr('faceID') : tr('fingerprint');
+
+    if (await _service.isBiometricAvailable) {
+      isBiometricEnable.value = await _service.isBiometricEnable;
+      isBiometricAvailable.value = true;
     } else {
-      isFingerprintEnable = false.obs;
-      isFingerprintAvailable = false.obs;
+      isBiometricEnable.value = false;
+      isBiometricAvailable.value = false;
+      await _service.setBiometricStatus(false);
     }
+
     loaded.value = true;
+
     super.onInit();
   }
 
@@ -79,7 +91,7 @@ class PasscodeSettingsController extends GetxController {
       enteredPasscodeLen.value++;
     }
     if (_passcode.length == 4) {
-      Get.to(() => NewPasscodeScreen2());
+      Get.to(NewPasscodeScreen2.new);
     }
   }
 
@@ -129,9 +141,10 @@ class PasscodeSettingsController extends GetxController {
 
   Future<void> _disablePasscode() async {
     await _service.deletePasscode();
-    if (isFingerprintEnable.value == true) {
-      await _service.setFingerprintStatus(false);
-      isFingerprintEnable.value = false;
+    isPasscodeEnable.value = false;
+    if (isBiometricEnable.value == true) {
+      await _service.setBiometricStatus(false);
+      isBiometricEnable.value = false;
     }
     leave();
   }
@@ -153,7 +166,7 @@ class PasscodeSettingsController extends GetxController {
   void leavePasscodeSettingsScreen() {
     clear();
     Get.find<SettingsController>().onInit();
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   void leave() {
@@ -171,31 +184,25 @@ class PasscodeSettingsController extends GetxController {
 
   void tryEnablingPasscode() async {
     isPasscodeEnable.value = true;
-    await Get.to(() => NewPasscodeScreen1(), preventDuplicates: false);
+    await Get.to(NewPasscodeScreen1.new, preventDuplicates: false);
   }
 
   void tryDisablingPasscode() async {
-    isPasscodeEnable.value = false;
     await Get.to(
-      () => EnterCurrentPasscodeScreen(
-        onPass: _disablePasscode,
-        onBack: () {
-          isPasscodeEnable.value = true;
-          Get.back();
-        },
-      ),
+      () => EnterCurrentPasscodeScreen(onPass: _disablePasscode, onBack: Get.back),
       preventDuplicates: false,
     );
   }
 
   Future<void> tryChangingPasscode() async {
     await Get.to(
-        () => EnterCurrentPasscodeScreen(onPass: () => Get.to(() => EditPasscodeScreen1())),
-        preventDuplicates: false);
+      () => EnterCurrentPasscodeScreen(onPass: () => Get.to(EditPasscodeScreen1.new)),
+      preventDuplicates: false,
+    );
   }
 
-  void onPasscodeTilePressed(value) {
-    if (value == true) {
+  void onPasscodeTilePressed(bool value) {
+    if (value) {
       tryEnablingPasscode();
     } else {
       tryDisablingPasscode();
@@ -203,12 +210,12 @@ class PasscodeSettingsController extends GetxController {
   }
 
   void tryTogglingFingerprintStatus(bool value) {
-    isFingerprintEnable.value = value;
+    isBiometricEnable.value = value;
     Get.to(
       () => EnterCurrentPasscodeScreen(
         onPass: () => _toggleFingerprintStatus(value),
         onBack: () {
-          isFingerprintEnable.value = !value;
+          isBiometricEnable.value = !value;
           Get.back();
         },
       ),
@@ -217,9 +224,9 @@ class PasscodeSettingsController extends GetxController {
   }
 
   void _toggleFingerprintStatus(bool value) {
-    if (isFingerprintAvailable.value == true) {
-      isFingerprintEnable.value = value;
-      _service.setFingerprintStatus(value);
+    if (isBiometricAvailable.value == true) {
+      isBiometricEnable.value = value;
+      _service.setBiometricStatus(value);
     }
     Get.back();
   }
@@ -228,5 +235,12 @@ class PasscodeSettingsController extends GetxController {
     clear();
     Get.back();
     Get.back();
+  }
+
+  @override
+  void onClose() {
+    clear();
+    //Get.find<SettingsController>().onInit(); это тут действительно нужно?
+    super.onClose();
   }
 }

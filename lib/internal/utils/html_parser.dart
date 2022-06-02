@@ -36,8 +36,7 @@ String parseHtml(String? htmlString) {
   if (htmlString == null) return '';
 
   final document = parse(htmlString);
-  final parsedString =
-      parse(document.body?.text ?? '').documentElement?.text ?? '';
+  final parsedString = parse(document.body?.text ?? '').documentElement?.text ?? '';
 
   return parsedString;
 }

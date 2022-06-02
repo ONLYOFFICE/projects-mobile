@@ -30,13 +30,15 @@
  *
  */
 
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ErrorDialog extends GetxController {
@@ -44,11 +46,13 @@ class ErrorDialog extends GetxController {
 
   bool dialogIsShown = false;
 
-  Future<void> show(String message) async {
+  Future<void> show(String message, {bool awaited = false}) async {
     if (message.isNotEmpty) addToQueue(message);
 
-    // ignore: unawaited_futures
-    processQueue();
+    if (awaited)
+      await processQueue();
+    else
+      unawaited(processQueue());
   }
 
   void hide() {
@@ -66,21 +70,21 @@ class ErrorDialog extends GetxController {
 
     final error = queue.first;
 
-    await Get.dialog(
+    await Get.find<NavigationController>().showPlatformDialog(
       WillPopScope(
         onWillPop: () {
           return Future.value(false);
         },
         child: SingleButtonDialog(
           titleText: tr('error'),
-          contentText: _customErrors[error] ?? error,
+          contentText: _customErrors[error.toLowerCase()] ?? error,
           acceptText: tr('ok'),
           onAcceptTap: () async => {
             Get.back(),
             dialogIsShown = false,
             if (_blockingErrors[error.toLowerCase()] != null)
               {
-                await Get.put(AccountManagerController()).clearToken(),
+                await Get.put(AccountManager()).clearToken(),
                 Get.find<LoginController>().logout(),
                 dialogIsShown = false,
                 queue.clear(),
@@ -109,9 +113,9 @@ class ErrorDialog extends GetxController {
 
 Map _blockingErrors = {
   'unauthorized': 'unauthorized',
-  'bad gateway': 'Bad Gateway',
   'forbidden': 'Forbidden',
   'payment required': 'Payment required',
+  'paymentrequired': 'Payment required',
   'the paid period is over': 'The paid period is over',
   'access to the projects module is forbidden': 'Access to the Projects module is Forbidden',
   'contact the portal administrator for access to the projects module.':
@@ -119,6 +123,8 @@ Map _blockingErrors = {
 };
 
 Map<String, String> _customErrors = {
-  'User authentication failed': tr('authenticationFailed'),
-  'No address associated with hostname': tr('noAdress'),
+  'user authentication failed': tr('authenticationFailed'),
+  'no address associated with hostname': tr('noAdress'),
+  'unauthorized': tr('unauthorized'),
+  'forbidden': tr('forbidden'),
 };

@@ -54,14 +54,17 @@ class DiscussionTextTile extends StatelessWidget {
       () => NewItemTile(
         text: controller.text.value.isNotEmpty ? parseHtml(controller.text.value) : tr('text'),
         textColor: controller.setTextError.value == true && controller.text.value.isEmpty
-            ? Get.theme.colors().colorError
+            ? Theme.of(context).colors().colorError
             : null,
         isSelected: controller.text.value.isNotEmpty,
         icon: SvgIcons.description,
-        selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
+        selectedIconColor: Theme.of(context).colors().onSurface.withOpacity(0.8),
         onTap: () => Get.find<NavigationController>().toScreen(
-            NewDiscussionTextScreen(controller: controller),
-            arguments: {'controller': controller}),
+          const NewDiscussionTextScreen(),
+          arguments: {'controller': controller},
+          transition: Transition.rightToLeft,
+          page: '/NewDiscussionTextScreen',
+        ),
       ),
     );
   }

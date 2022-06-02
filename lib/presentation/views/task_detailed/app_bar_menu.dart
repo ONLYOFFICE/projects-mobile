@@ -33,45 +33,59 @@
 part of 'task_detailed_view.dart';
 
 class _AppBarMenu extends StatelessWidget {
-  final TaskItemController? controller;
+  final TaskItemController controller;
   const _AppBarMenu({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final task = controller!.task.value;
-    return PopupMenuButton(
-      icon: const Icon(Icons.more_vert, size: 26),
-      offset: const Offset(0, 25),
-      onSelected: (dynamic value) => _onSelected(value, controller!),
+    return PlatformPopupMenuButton(
+      padding: EdgeInsets.zero,
+      icon: PlatformIconButton(
+        padding: EdgeInsets.zero,
+        cupertinoIcon: Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Theme.of(context).colors().primary,
+        ),
+        materialIcon: Icon(
+          Icons.more_vert,
+          color: Theme.of(context).colors().primary,
+        ),
+      ),
+      onSelected: (dynamic value) => _onSelected(value, controller),
       itemBuilder: (context) {
         return [
-          if (controller!.canEdit && task.responsibles!.isEmpty)
-            PopupMenuItem(
+          if (controller.canEdit && controller.task.value.responsibles!.isEmpty)
+            PlatformPopupMenuItem(
               value: 'accept',
               child: Text(tr('acceptTask')),
             ),
-          PopupMenuItem(
+          PlatformPopupMenuItem(
             value: 'copyLink',
             child: Text(tr('copyLink')),
           ),
-          if (controller!.canEdit)
-            PopupMenuItem(
+          if (controller.canEdit)
+            PlatformPopupMenuItem(
               value: 'editTask',
               child: Text(tr('editTask')),
             ),
-          PopupMenuItem(
+          PlatformPopupMenuItem(
             value: 'followTask',
-            child: Text((task.isSubscribed ?? false) ? tr('unfollowTask') : tr('followTask')),
+            child: Text((controller.task.value.isSubscribed ?? false)
+                ? tr('unfollowTask')
+                : tr('followTask')),
           ),
-          if (controller!.canEdit)
-            PopupMenuItem(
+          if (controller.canEdit)
+            PlatformPopupMenuItem(
               value: 'copyTask',
               child: Text(tr('copyTask')),
             ),
-          if (task.canDelete!)
-            PopupMenuItem(
-              textStyle: Get.theme.popupMenuTheme.textStyle
-                  ?.copyWith(color: Get.theme.colors().colorError),
+          if (controller.task.value.canDelete!)
+            PlatformPopupMenuItem(
+              textStyle: Theme.of(context)
+                  .popupMenuTheme
+                  .textStyle
+                  ?.copyWith(color: Theme.of(context).colors().colorError),
+              isDestructiveAction: true,
               value: 'deleteTask',
               child: Text(tr('deleteTaskButton')),
             )
@@ -93,7 +107,15 @@ void _onSelected(value, TaskItemController controller) async {
       break;
 
     case 'editTask':
-      await Get.find<NavigationController>().to(TaskEditingView(task: controller.task.value));
+      unawaited(
+        Get.find<NavigationController>().toScreen(
+          const TaskEditingView(),
+          transition: Transition.cupertinoDialog,
+          fullscreenDialog: true,
+          arguments: {'task': controller.task.value},
+          page: '/TaskEditingView',
+        ),
+      );
       break;
 
     case 'followTask':
@@ -106,24 +128,23 @@ void _onSelected(value, TaskItemController controller) async {
       break;
 
     case 'deleteTask':
-      await Get.dialog(StyledAlertDialog(
+      await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('deleteTaskTitle'),
         contentText: tr('deleteTaskAlert'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           final result = await controller.deleteTask(taskId: task.id!);
           if (result) {
-            locator<EventHub>().fire('needToRefreshProjects', ['all']);
-            locator<EventHub>().fire('needToRefreshTasks');
+            locator<EventHub>().fire('needToRefreshTasks', {'all': true});
 
             Get.back();
             Get.back();
 
             MessagesHandler.showSnackBar(context: Get.context!, text: tr('taskDeleted'));
-          } else {
-            print('ERROR');
-          }
+          } else
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
         },
       ));
       break;

@@ -31,49 +31,80 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-
-import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
-import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
-
+import 'package:projects/presentation/shared/widgets/styled/styled_cupertino_alert_dialog.dart';
 import 'package:projects/presentation/views/settings/setting_tile.dart';
+import 'package:settings_ui/settings_ui.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
+  static String get pageName => tr('settings');
+
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final previousPage = args?['previousPage'] as String?;
+
     final controller = Get.put(SettingsController());
     final platformController = Get.find<PlatformController>();
 
-    return WillPopScope(
-      onWillPop: () async {
-        controller.leave();
-        return true;
-      },
-      child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-          titleText: tr('settings'),
-          onLeadingPressed: controller.leave,
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
+    controller.setupCacheDirectorySize();
+
+    final mobileAppBar = StyledAppBar(
+      // backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
+      titleText: tr('settings'),
+      onLeadingPressed: controller.leave,
+      previousPageTitle: previousPage,
+      // backButtonIcon:
+      //     platformController.isMobile ? const BackButtonIcon() : Icon(PlatformIcons(context).clear),
+    );
+
+    final tabletAppBar = StyledAppBar(
+      backgroundColor: Theme.of(context).colors().surface,
+      titleText: tr('settings'),
+      leadingWidth: GetPlatform.isIOS
+          ? TextUtils.getTextWidth(tr('closeLowerCase'), TextStyleHelper.button()) + 16
+          : null,
+      leading: PlatformWidget(
+        cupertino: (_, __) => CupertinoButton(
+          padding: const EdgeInsets.only(left: 16),
+          alignment: Alignment.centerLeft,
+          onPressed: controller.leave,
+          child: Text(
+            tr('closeLowerCase'),
+            style: TextStyleHelper.button(),
+          ),
         ),
-        body: Obx(
-          () {
-            if (controller.loaded.value == true) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
+        material: (_, __) => IconButton(
+          onPressed: controller.leave,
+          icon: const Icon(Icons.close),
+        ),
+      ),
+    );
+
+    return Scaffold(
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
+      appBar: platformController.isMobile ? mobileAppBar : tabletAppBar,
+      body: Obx(
+        () {
+          if (controller.loaded.value == true) {
+            if (GetPlatform.isAndroid) {
+              return ListView.custom(
+                childrenDelegate: SliverChildListDelegate(
+                  [
                     const SizedBox(height: 10),
                     SettingTile(
                       text: tr('passcodeLock'),
@@ -82,18 +113,41 @@ class SettingsScreen extends StatelessWidget {
                           : tr('disabled'),
                       enableIconOpacity: true,
                       icon: SvgIcons.passcode,
-                      onTap: () => Get.find<NavigationController>().toScreen(
-                        const PasscodeSettingsScreen(),
-                      ),
+                      onTap: controller.onPasscodePressed,
                     ),
                     SettingTile(
                       text: tr('colorTheme'),
                       loverText: tr(controller.currentTheme.value),
                       enableIconOpacity: true,
                       icon: SvgIcons.color_scheme,
+                      onTap: controller.onThemePressed,
+                    ),
+                    SettingTile(
+                      text: tr('clearCache'),
+                      enableIconOpacity: true,
+                      icon: SvgIcons.clean,
                       enableUnderline: true,
-                      onTap: () => Get.find<NavigationController>().toScreen(
-                        const ColorThemeSelectionScreen(),
+                      onTap: () {
+                        Get.find<NavigationController>().showPlatformDialog(
+                          StyledAlertDialog(
+                            title: Text(tr('clearCacheQuestion')),
+                            content: Text(tr('clearCacheQuestionDescription')),
+                            cancelText: tr('cancel').toLowerCase().capitalizeFirst,
+                            acceptText: tr('clearCache'),
+                            onCancelTap: Get.back,
+                            onAcceptTap: () {
+                              controller.onClearCachePressed();
+                              Get.back();
+                            },
+                          ),
+                        );
+                      },
+                      suffix: Obx(
+                        () => Text(
+                          controller.cacheSize.value,
+                          style: TextStyleHelper.body2(
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
+                        ),
                       ),
                     ),
                     SettingTile(
@@ -135,13 +189,222 @@ class SettingsScreen extends StatelessWidget {
                       suffixText: controller.versionAndBuildNumber,
                     ),
                   ],
+                  addAutomaticKeepAlives: false,
                 ),
               );
             } else {
-              return Container();
+              return SettingsList(
+                darkTheme: const SettingsThemeData().copyWith(
+                  settingsListBackground: platformController.isMobile
+                      ? Theme.of(context).colors().backgroundSecond
+                      : Theme.of(context).colors().surface,
+                  settingsSectionBackground:
+                      platformController.isMobile ? null : Theme.of(context).colors().bgDescription,
+                ),
+                applicationType: ApplicationType.cupertino,
+                sections: [
+                  SettingsSection(
+                    tiles: [
+                      SettingsTile.navigation(
+                        onPressed: (_) => controller.onPasscodePressed(),
+                        title: Text(
+                          tr('passcodeLock'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
+                        ),
+                        trailing: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              controller.isPasscodeEnable.value == true
+                                  ? tr('enabled')
+                                  : tr('disabled'),
+                              style: TextStyleHelper.body2(
+                                color: Theme.of(context).colors().onBackground.withOpacity(0.75),
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.3),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    tiles: [
+                      SettingsTile.navigation(
+                        onPressed: (_) => controller.onThemePressed(),
+                        title: Text(
+                          tr('colorTheme'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
+                        ),
+                        trailing: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              tr(controller.currentTheme.value),
+                              style: TextStyleHelper.body2(
+                                color: Theme.of(context).colors().onBackground.withOpacity(0.75),
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.3),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    tiles: [
+                      SettingsTile(
+                        onPressed: (context) {
+                          if (platformController.isMobile) {
+                            showCupertinoModalPopup(
+                              context: context,
+                              builder: (BuildContext context) => CupertinoActionSheet(
+                                title: Text(tr('clearCacheQuestion')),
+                                message: Text(tr('clearCacheQuestionDescription')),
+                                actions: <CupertinoActionSheetAction>[
+                                  CupertinoActionSheetAction(
+                                    onPressed: () {
+                                      controller.onClearCachePressed();
+                                      Get.back();
+                                    },
+                                    isDestructiveAction: true,
+                                    child: Text(tr('clearCache')),
+                                  ),
+                                ],
+                                cancelButton: CupertinoActionSheetAction(
+                                  isDefaultAction: true,
+                                  onPressed: Get.back,
+                                  child: Text(tr('cancel').toLowerCase().capitalizeFirst!),
+                                ),
+                              ),
+                            );
+                          } else {
+                            showCupertinoDialog<void>(
+                              context: context,
+                              builder: (BuildContext context) => StyledCupertinoAlertDialog(
+                                title: Text(tr('clearCacheQuestion')),
+                                content: Text(tr('clearCacheQuestionDescription')),
+                                actions: <CupertinoDialogAction>[
+                                  CupertinoDialogAction(
+                                    onPressed: Get.back,
+                                    child: Text(tr('cancel').toLowerCase().capitalizeFirst!),
+                                  ),
+                                  CupertinoDialogAction(
+                                    isDestructiveAction: true,
+                                    onPressed: () {
+                                      controller.onClearCachePressed();
+                                      Get.back();
+                                    },
+                                    child: Text(tr('clearCache')),
+                                  )
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                        title: Text(
+                          tr('clearCache'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
+                        ),
+                        trailing: Obx(
+                          () => Text(
+                            controller.cacheSize.value,
+                            style: TextStyleHelper.body1(color: CupertinoColors.activeBlue),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SettingsSection(
+                    tiles: [
+                      SettingsTile(
+                        onPressed: (_) => controller.onHelpPressed(),
+                        title: Text(
+                          tr('help'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        onPressed: (_) => controller.onSupportPressed(),
+                        title: Text(
+                          tr('support'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        onPressed: (_) => controller.onRateAppPressed(),
+                        title: Text(
+                          tr('rateApp'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        onPressed: (_) => controller.onPrivacyPolicyPressed(),
+                        title: Text(
+                          tr('privacyAndTermsFooter.privacyPolicyWithLink'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        onPressed: (_) => controller.onTermsOfServicePressed(),
+                        title: Text(
+                          tr('privacyAndTermsFooter.termsOfServiceWithLink'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile.navigation(
+                        onPressed: (_) => controller.onAnalyticsPressed(),
+                        title: Text(
+                          tr('analytics'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
+                        ),
+                      ),
+                      SettingsTile(
+                        title: Text(
+                          tr('version'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground),
+                        ),
+                        trailing: Text(
+                          controller.versionAndBuildNumber,
+                          style: TextStyleHelper.body2(
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              );
             }
-          },
-        ),
+          } else {
+            return Container();
+          }
+        },
       ),
     );
   }

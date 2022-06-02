@@ -75,20 +75,15 @@ class NewTaskDTO {
 
   factory NewTaskDTO.fromJson(Map<String, dynamic> json) => NewTaskDTO(
         description: json['description'] as String?,
-        deadline: json['deadline'] != null
-            ? DateTime.parse(json['deadline'] as String)
-            : null,
+        deadline: json['deadline'] != null ? DateTime.parse(json['deadline'] as String) : null,
         id: json['id'] as int?,
         priority: json['priority'] as String?,
         title: json['title'] as String?,
         milestoneid: json['milestoneid'] as int?,
         projectId: json['projectid'] as int,
-        responsibles: List<String>.from(
-            (json['responsibles'] as List<String>).map((x) => x)),
+        responsibles: List<String>.from((json['responsibles'] as List<String>).map((x) => x)),
         notify: json['notify'] as bool?,
-        startDate: json['startDate'] != null
-            ? DateTime.parse(json['startDate'] as String)
-            : null,
+        startDate: json['startDate'] != null ? DateTime.parse(json['startDate'] as String) : null,
         copyFiles: json['copyFiles'] as bool?,
         copySubtasks: json['copySubtasks'] as bool?,
         removeOld: json['removeOld'] as bool?,
@@ -102,9 +97,8 @@ class NewTaskDTO {
         'title': title,
         'milestoneid': milestoneid,
         'projectid': projectId,
-        'responsibles': responsibles != null
-            ? List<dynamic>.from(responsibles!.map((x) => x))
-            : null,
+        'responsibles':
+            responsibles != null ? List<dynamic>.from(responsibles!.map((x) => x)) : null,
         'notify': notify,
         'startDate': startDate != null ? startDate!.toIso8601String() : null,
         'copyFiles': copyFiles,

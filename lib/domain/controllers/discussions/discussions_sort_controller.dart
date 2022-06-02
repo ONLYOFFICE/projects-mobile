@@ -31,10 +31,19 @@
  */
 
 import 'package:projects/domain/controllers/base/base_sort_controller.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DiscussionsSortController extends BaseSortController {
   DiscussionsSortController() {
     currentSortfilter = 'create_on';
     currentSortTitle.value = getFilterLabel(currentSortfilter);
+  }
+
+  List<SortTile> getSortTile() {
+    return [
+      SortTile(sortParameter: 'create_on', sortController: this),
+      SortTile(sortParameter: 'title', sortController: this),
+      SortTile(sortParameter: 'comments', sortController: this),
+    ];
   }
 }

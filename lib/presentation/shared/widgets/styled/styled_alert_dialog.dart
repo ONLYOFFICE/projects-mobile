@@ -32,9 +32,11 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_platform_alert_dialog.dart';
 
 class StyledAlertDialog extends StatelessWidget {
   final Widget? title;
@@ -46,6 +48,8 @@ class StyledAlertDialog extends StatelessWidget {
   final Color? acceptColor;
   final Function()? onCancelTap;
   final Function()? onAcceptTap;
+  final List<PlatformDialogAction>? actions;
+
   const StyledAlertDialog({
     Key? key,
     this.cancelText,
@@ -56,38 +60,75 @@ class StyledAlertDialog extends StatelessWidget {
     this.titleText,
     this.contentText,
     this.onAcceptTap,
-    // Default: pop window
     this.onCancelTap,
-  })  : assert(titleText != null || title != null,
-            content != null || contentText != null),
+    this.actions,
+  })  : assert(titleText != null || title != null || content != null || contentText != null),
+        assert(!(actions != null && (onCancelTap != null || onAcceptTap != null))),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      titlePadding: const EdgeInsets.only(left: 24, right: 24, top: 20),
-      contentPadding: contentText != null || content != null
-          ? const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
-          : const EdgeInsets.symmetric(horizontal: 24),
-      insetPadding: EdgeInsets.zero,
-      actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-      title: title ?? Text(titleText!),
-      content: content ?? (contentText != null ? Text(contentText!) : null),
-      actions: [
-        TextButton(
-          onPressed: onCancelTap ?? Get.back,
-          child:
-              Text(cancelText ?? tr('cancel'), style: TextStyleHelper.button()),
+    final defaultCancelText =
+        GetPlatform.isIOS ? tr('cancel').toLowerCase().capitalizeFirst! : tr('cancel');
+    final defaultAcceptText =
+        GetPlatform.isIOS ? tr('accept').toLowerCase().capitalizeFirst! : tr('accept');
+
+    final platformCancelText =
+        GetPlatform.isIOS ? cancelText?.toLowerCase().capitalizeFirst : cancelText;
+    final platformAcceptText =
+        GetPlatform.isIOS ? acceptText?.toLowerCase().capitalizeFirst : acceptText;
+
+    final _title = title ??
+        (titleText != null
+            ? Text(
+                titleText!,
+                style: TextStyleHelper.headline7(color: Theme.of(context).colors().onSurface),
+              )
+            : null);
+    final _content = content ??
+        (contentText != null
+            ? Text(
+                contentText!,
+                style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface),
+              )
+            : null);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: StyledPlatformAlertDialog(
+        title: _title,
+        content: _content != null
+            ? Container(
+                padding: GetPlatform.isIOS
+                    ? const EdgeInsets.only(top: 8)
+                    : const EdgeInsets.symmetric(vertical: 8),
+                child: _content,
+              )
+            : null,
+        actions: actions ??
+            [
+              PlatformDialogAction(
+                onPressed: onCancelTap ?? Get.back,
+                child: Text(
+                  platformCancelText ?? defaultCancelText,
+                  style: TextStyleHelper.button(color: Theme.of(context).colors().primary),
+                  softWrap: false,
+                ),
+              ),
+              PlatformDialogAction(
+                onPressed: onAcceptTap,
+                child: Text(platformAcceptText ?? defaultAcceptText,
+                    style: TextStyleHelper.button(
+                        color: acceptColor ?? Theme.of(context).colors().primary),
+                    softWrap: false),
+              ),
+            ],
+        material: (_, __) => MaterialAlertDialogData(
+          contentPadding: const EdgeInsets.only(left: 24, right: 24),
+          insetPadding: EdgeInsets.zero,
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
         ),
-        TextButton(
-          onPressed: onAcceptTap,
-          child: Text(
-            acceptText ?? tr('accept'),
-            style: TextStyleHelper.button(
-                color: acceptColor ?? Get.theme.colors().colorError),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }
@@ -111,36 +152,58 @@ class SingleButtonDialog extends StatelessWidget {
     this.titleText,
     this.contentText,
     this.onAcceptTap,
-  })  : assert(titleText != null || title != null,
-            content != null || contentText != null),
+  })  : assert(titleText != null || title != null, content != null || contentText != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      titlePadding: const EdgeInsets.only(left: 24, right: 24, top: 20),
-      contentPadding: contentText != null || content != null
-          ? const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
-          : const EdgeInsets.symmetric(horizontal: 24),
-      insetPadding: EdgeInsets.zero,
-      actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-      title: title ?? Text(titleText!),
-      // ignore: prefer_if_null_operators
-      content: content != null
-          ? content
-          : contentText != null
-              ? Text(contentText!)
-              : null,
-      actions: [
-        TextButton(
-          onPressed: onAcceptTap,
-          child: Text(
-            acceptText ?? tr('accept'),
-            style: TextStyleHelper.button(
-                color: acceptColor ?? Get.theme.colors().colorError),
+    final defaultAcceptText =
+        GetPlatform.isIOS ? tr('accept').toLowerCase().capitalizeFirst! : tr('accept');
+
+    final platformAcceptText =
+        GetPlatform.isIOS ? acceptText?.toLowerCase().capitalizeFirst : acceptText;
+
+    final _title = title ??
+        Text(
+          titleText!,
+          style: TextStyleHelper.headline7(color: Theme.of(context).colors().onSurface),
+        );
+    final _content = content ??
+        (contentText != null
+            ? Text(
+                contentText!,
+                style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface),
+              )
+            : null);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: PlatformAlertDialog(
+        title: _title,
+        content: _content != null
+            ? Container(
+                padding: GetPlatform.isIOS
+                    ? const EdgeInsets.only(top: 8, bottom: 0)
+                    : const EdgeInsets.symmetric(vertical: 8),
+                child: _content,
+              )
+            : null,
+        actions: [
+          PlatformDialogAction(
+            onPressed: onAcceptTap ?? Get.back,
+            child: Text(
+              platformAcceptText ?? defaultAcceptText,
+              style:
+                  TextStyleHelper.button(color: acceptColor ?? Theme.of(context).colors().primary),
+            ),
           ),
+        ],
+        material: (_, __) => MaterialAlertDialogData(
+          contentPadding: const EdgeInsets.only(left: 24, right: 24),
+          insetPadding: EdgeInsets.zero,
+          actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
         ),
-      ],
+      ),
     );
   }
 }

@@ -36,16 +36,20 @@ import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/project_status.dart';
 
 class MilestoneCellController extends GetxController {
-  Rx<Milestone?> milestone = Milestone().obs;
+  final milestone = Milestone().obs;
   var status = Status().obs;
 
-  String get statusImage => ProjectStatus.toImageString(milestone.value!.status);
+  String get statusImage => ProjectStatus.toImageString(milestone.value.status);
 
-  String get statusName => ProjectStatus.toName(milestone.value!.status);
+  String get statusName => ProjectStatus.toName(milestone.value.status);
 
-  MilestoneCellController(Milestone? milestone) {
+  MilestoneCellController(Milestone milestone) {
     this.milestone.value = milestone;
     initMilestoneStatus(milestone);
+  }
+
+  void setup(Milestone milestone) {
+    this.milestone.value = milestone;
   }
 
   void initMilestoneStatus(Milestone? task) {

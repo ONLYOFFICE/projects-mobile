@@ -31,9 +31,9 @@
  */
 
 import 'dart:typed_data';
+
 import 'package:http/http.dart' as http;
 import 'package:http_client_helper/http_client_helper.dart';
-
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/error.dart';
@@ -76,9 +76,12 @@ class DownloadApi {
       );
       final response = await request;
 
-      if (response is http.Response) {
+      if (response is http.Response && response.statusCode == 200) {
         result.response = response.bodyBytes;
-      } else {}
+      } else {
+        result.error =
+            CustomError(message: response?.reasonPhrase ?? 'status code: ${response?.statusCode}');
+      }
     } catch (e) {
       result.error = CustomError(message: e.toString());
     }

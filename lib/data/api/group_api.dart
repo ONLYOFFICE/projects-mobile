@@ -86,7 +86,7 @@ class GroupApi {
         {
           result.response = (responseJson['response'] as List)
               .cast<Map<String, dynamic>>()
-              .map((i) => PortalGroup.fromJson(i))
+              .map(PortalGroup.fromJson)
               .toList();
         }
       } else {

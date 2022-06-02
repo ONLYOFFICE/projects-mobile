@@ -31,7 +31,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -64,7 +63,7 @@ class NewItemTile extends StatelessWidget {
     this.onTap,
     this.selectedIconColor,
     this.suffix,
-    this.suffixPadding = const EdgeInsets.symmetric(horizontal: 25),
+    this.suffixPadding = const EdgeInsets.only(right: 6),
     this.textOverflow = TextOverflow.ellipsis,
     this.textColor,
     this.textStyle,
@@ -90,18 +89,15 @@ class NewItemTile extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        vertical:
-                            caption != null && caption!.isNotEmpty ? 10 : 18),
+                        vertical: caption != null && caption!.isNotEmpty ? 10 : 18),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (caption != null && caption!.isNotEmpty)
                           Text(caption!,
                               style: TextStyleHelper.caption(
-                                  color: Get.theme
-                                      .colors()
-                                      .onBackground
-                                      .withOpacity(0.75))),
+                                  color:
+                                      Theme.of(context).colors().onBackground.withOpacity(0.75))),
                         Text(text!,
                             maxLines: maxLines,
                             overflow: textOverflow,
@@ -111,8 +107,8 @@ class NewItemTile extends StatelessWidget {
                                     color: textColor != null
                                         ? textColor
                                         : isSelected!
-                                            ? Get.theme.colors().onBackground
-                                            : Get.theme
+                                            ? Theme.of(context).colors().onBackground
+                                            : Theme.of(context)
                                                 .colors()
                                                 .onSurface
                                                 .withOpacity(0.4))),
@@ -122,8 +118,9 @@ class NewItemTile extends StatelessWidget {
                 ),
                 if (suffix != null)
                   Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(padding: suffixPadding, child: suffix)),
+                    alignment: Alignment.centerRight,
+                    child: Padding(padding: suffixPadding, child: suffix),
+                  ),
               ],
             ),
             if (enableBorder) const StyledDivider(leftPadding: 72.5),
@@ -158,9 +155,8 @@ class _Icon extends StatelessWidget {
               color: selectedIconColor != null
                   ? isSelected!
                       ? selectedIconColor
-                      : iconColor ??
-                          Get.theme.colors().onSurface.withOpacity(0.4)
-                  : iconColor ?? Get.theme.colors().onSurface.withOpacity(0.4),
+                      : iconColor ?? Theme.of(context).colors().onSurface.withOpacity(0.4)
+                  : iconColor ?? Theme.of(context).colors().onSurface.withOpacity(0.4),
             )
           : null,
     );

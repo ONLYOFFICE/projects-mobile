@@ -32,13 +32,15 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -46,7 +48,8 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:projects/presentation/shared/widgets/users_list.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 
 class TeamMembersSelectionView extends StatelessWidget {
@@ -56,60 +59,74 @@ class TeamMembersSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
-    final usersDataSource = Get.find<UsersDataSource>();
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'] as BaseProjectEditorController;
+    final previousPage = args['previousPage'] as String?;
+    final usersDataSource = Get.find<UsersDataSource>()..loaded.value = false;
 
-    usersDataSource.selectedProjectManager = controller.selectedProjectManager.value as PortalUser?;
+    usersDataSource.selectedProjectManager = controller.selectedProjectManager.value;
     controller.selectionMode = UserSelectionMode.Multiple;
     usersDataSource.selectionMode = UserSelectionMode.Multiple;
+    controller.selfUserItem.selectionMode.value = UserSelectionMode.Multiple;
 
     controller.setupUsersSelection();
 
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         title: TeamMembersSelectionHeader(
           controller: controller,
           title: tr('addTeamMembers'),
         ),
-        actions: [
-          _DoneButton(controller: controller),
-        ],
+        titleWidth: TextUtils.getTextWidth(tr('addTeamMembers'),
+            TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
+        previousPageTitle: previousPage,
         bottom: TeamMembersSearchBar(
           usersDataSource: usersDataSource,
           controller: controller,
         ),
+        onLeadingPressed:
+            controller is ProjectDetailsController ? controller.confirmTeamMembers : null,
       ),
-      body: Obx(
-        () {
-          if (usersDataSource.loaded.value == true &&
-              usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.value == false) {
-            return UsersDefault(
-              selfUserItem: controller.selfUserItem as PortalUserItemController?,
-              usersDataSource: usersDataSource,
-              onTapFunction: (v) => controller.selectTeamMember(v),
-            );
-          }
-          if (usersDataSource.nothingFound.value == true) {
-            return Column(children: const [NothingFound()]);
-          }
-          if (usersDataSource.loaded.value == true &&
-              usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.value == true) {
-            return UsersSearchResult(
-              usersDataSource: usersDataSource,
-              onTapFunction: controller.selectTeamMember as Function(PortalUserItemController),
-            );
-          }
-          return const ListLoadingSkeleton();
-        },
+      body: StyledSmartRefresher(
+        enablePullDown: false,
+        enablePullUp: usersDataSource.pullUpEnabled,
+        controller: usersDataSource.refreshController,
+        onLoading: usersDataSource.onLoading,
+        child: Obx(
+          () {
+            if (usersDataSource.loaded.value == true &&
+                usersDataSource.usersList.isNotEmpty &&
+                usersDataSource.isSearchResult.value == false) {
+              return UsersStyledList(
+                selfUserItem: controller.selfUserItem,
+                onTapFunction: controller.selectTeamMember,
+                users: usersDataSource.usersWithoutVisitors
+                    .where(
+                        (element) => element.portalUser.id != controller.selfUserItem.portalUser.id)
+                    .toList(),
+              );
+            }
+            if (usersDataSource.nothingFound.value == true) {
+              return const NothingFound();
+            }
+            if (usersDataSource.loaded.value == true &&
+                usersDataSource.usersList.isNotEmpty &&
+                usersDataSource.isSearchResult.value == true) {
+              return UsersSimpleList(
+                onTapFunction: controller.selectTeamMember,
+                users: usersDataSource.usersWithoutVisitors
+                    .where(
+                        (element) => element.portalUser.id != controller.selfUserItem.portalUser.id)
+                    .toList(),
+              );
+            }
+            return const ListLoadingSkeleton();
+          },
+        ),
       ),
     );
   }
@@ -129,78 +146,24 @@ class TeamMembersSelectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 60,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Obx(
-            () {
-              if (controller.selectedTeamMembers.isNotEmpty as bool) {
-                return Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          plural('person', controller.selectedTeamMembers.length as int),
-                          style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              } else
-                return Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                  ),
-                );
-            },
-          ),
-          // const SizedBox(width: 4),
-        ],
-      ),
-    );
-  }
-}
-
-class _DoneButton extends StatelessWidget {
-  const _DoneButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Obx(
-          () {
-            if (controller.selectedTeamMembers.isNotEmpty as bool) {
-              return IconButton(
-                onPressed: () {
-                  controller.confirmTeamMembers();
-                },
-                icon: const Icon(Icons.check),
-                padding: EdgeInsets.zero,
-              );
-            }
-            return const SizedBox.shrink();
-          },
+      child: Obx(
+        () => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              title,
+              style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+              overflow: TextOverflow.fade,
+            ),
+            if (controller.selectedTeamMembers.isNotEmpty as bool)
+              Text(
+                plural('person', controller.selectedTeamMembers.length as int),
+                style: TextStyleHelper.caption(color: Theme.of(context).colors().onSurface),
+              ),
+          ],
         ),
-        const SizedBox(width: 4),
-      ],
+      ),
     );
   }
 }
@@ -219,7 +182,7 @@ class TeamMembersSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 32,
-      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 4),
+      margin: const EdgeInsets.only(left: 16, right: 4, bottom: 8, top: 4),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -228,26 +191,33 @@ class TeamMembersSearchBar extends StatelessWidget {
               hintText: tr('usersSearch'),
               margin: EdgeInsets.zero,
               textInputAction: TextInputAction.search,
-              showClearIcon: true,
               onClearPressed: usersDataSource.clearSearch,
               onChanged: usersDataSource.searchUsers,
               onSubmitted: usersDataSource.searchUsers,
             ),
           ),
-          const SizedBox(width: 16),
-          SizedBox(
-            height: 24,
-            width: 24,
-            child: InkWell(
-              onTap: () {
-                Get.find<NavigationController>().toScreen(const GroupMembersSelectionView(),
-                    arguments: {'controller': controller});
-              },
-              child: AppIcon(
-                icon: SvgIcons.preferences,
-                color: Get.theme.colors().primary,
-              ),
-            ),
+          const SizedBox(width: 8),
+          PlatformIconButton(
+            padding: EdgeInsets.zero,
+            onPressed: () {
+              Get.find<NavigationController>().toScreen(
+                const GroupMembersSelectionView(),
+                arguments: {'controller': controller},
+                transition: Transition.rightToLeft,
+                fullscreenDialog: true,
+                page: '/GroupMembersSelectionView',
+              );
+            },
+            icon: Obx(() {
+              return (controller as BaseProjectEditorController).isActiveGroupsFilter.value
+                  ? AppIcon(
+                      icon: Theme.of(context).brightness == Brightness.dark
+                          ? SvgIcons.preferences_active_dark_theme
+                          : SvgIcons.preferences_active,
+                      color: null,
+                    )
+                  : AppIcon(icon: SvgIcons.preferences, color: Theme.of(context).colors().primary);
+            }),
           ),
         ],
       ),

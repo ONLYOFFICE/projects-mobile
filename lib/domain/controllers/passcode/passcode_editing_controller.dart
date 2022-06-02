@@ -43,8 +43,8 @@ class PasscodeEditingController extends GetxController {
   String _passcodeCheck = '';
 
   var passcodeCheckFailed = false.obs;
-  RxInt enteredPasscodeLen = 0.obs;
-  RxInt passcodeCheckLen = 0.obs;
+  final enteredPasscodeLen = 0.obs;
+  final passcodeCheckLen = 0.obs;
 
   void addNumberToPasscode(int number) {
     if (_passcode.length < 4) {

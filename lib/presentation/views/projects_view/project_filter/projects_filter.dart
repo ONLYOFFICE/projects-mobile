@@ -31,58 +31,75 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
-
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
-import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
 import 'package:projects/presentation/shared/widgets/filters/filter_element_widget.dart';
+import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
+import 'package:projects/presentation/shared/widgets/reset_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_tag_screen.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
-part 'filters/status.dart';
 part 'filters/other.dart';
-part 'filters/team_member.dart';
 part 'filters/project_manager.dart';
+part 'filters/status.dart';
+part 'filters/team_member.dart';
 
 class ProjectsFilterScreen extends StatelessWidget {
   const ProjectsFilterScreen({Key? key}) : super(key: key);
 
+  static String get pageName => tr('filter');
+
   @override
   Widget build(BuildContext context) {
-    final filterController =
-        Get.arguments['filterController'] as ProjectsFilterController;
-    final platformController = Get.find<PlatformController>();
+    final filterController = Get.arguments['filterController'] as ProjectsFilterController;
+
+    void onLeadingPressed() {
+      filterController.restoreFilters();
+      Get.back();
+    }
+
+    final backgroundColor =
+        Get.find<PlatformController>().isMobile ? null : Theme.of(context).colors().surface;
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('filter'),
-        showBackButton: true,
-        onLeadingPressed: () {
-          filterController.restoreFilters();
-          Get.back();
-        },
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
-        actions: [
-          TextButton(
-              onPressed: () async => filterController.resetFilters(),
-              child: Text(tr('reset'),
-                  style: TextStyleHelper.button(
-                      color: Get.theme.colors().systemBlue))),
-          SizedBox(width: platformController.isMobile ? 8 : 12),
-        ],
+        centerTitle: GetPlatform.isIOS,
+        backgroundColor: backgroundColor,
+        leadingWidth: GetPlatform.isIOS
+            ? TextUtils.getTextWidth(
+                  tr('closeLowerCase'),
+                  TextStyleHelper.button(),
+                ) +
+                16
+            : null,
+        leading: PlatformWidget(
+          cupertino: (_, __) => CupertinoButton(
+            padding: const EdgeInsets.only(left: 16),
+            alignment: Alignment.centerLeft,
+            onPressed: onLeadingPressed,
+            child: Text(
+              tr('closeLowerCase'),
+              style: TextStyleHelper.button(),
+            ),
+          ),
+          material: (_, __) => IconButton(
+            onPressed: onLeadingPressed,
+            icon: const Icon(Icons.close),
+          ),
+        ),
+        actions: [ResetFiltersButton(filterController: filterController)],
       ),
       body: Stack(
         children: [

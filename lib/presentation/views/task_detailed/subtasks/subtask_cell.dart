@@ -32,18 +32,22 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
 
 class SubtaskCell extends StatelessWidget {
   final Subtask subtask;
-  final PortalTask? parentTask;
+  final PortalTask parentTask;
   const SubtaskCell({
     Key? key,
     required this.subtask,
@@ -57,78 +61,74 @@ class SubtaskCell extends StatelessWidget {
       tag: subtask.hashCode.toString(),
     );
 
-    return ConstrainedBox(
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 4),
       constraints: const BoxConstraints(minHeight: 56),
       child: InkWell(
-        onTap: () => Get.find<NavigationController>()
-            .to(const SubtaskDetailedView(), arguments: {'controller': subtaskController}),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(height: 6),
-            Obx(
-              () => Row(
-                children: [
-                  SubtaskCheckBox(subtaskController: subtaskController),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(subtask.title!,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: subtaskController.subtask.value!.status == SubtaskStatus.CLOSED
-                                ? TextStyleHelper.subtitle1(color: const Color(0xff9C9C9C))
-                                    .copyWith(decoration: TextDecoration.lineThrough)
-                                : TextStyleHelper.subtitle1()),
-                        Text(
-                            subtaskController.subtask.value!.responsible?.displayName ??
-                                tr('nobody'),
-                            style: TextStyleHelper.caption(
-                                color:
-                                    subtaskController.subtask.value!.status == SubtaskStatus.CLOSED
-                                        ? const Color(0xffc2c2c2)
-                                        : Get.theme.colors().onBackground.withOpacity(0.6))),
-                      ],
+        onTap: () => Get.find<NavigationController>().to(const SubtaskDetailedView(), arguments: {
+          'controller': subtaskController,
+          'previousPage': SubtasksView.pageName,
+        }),
+        child: Obx(
+          () => Row(
+            children: [
+              SubtaskCheckBox(subtaskController: subtaskController),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      subtask.title!.trim(),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: subtaskController.subtask.value!.status == SubtaskStatus.CLOSED
+                          ? TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.4),
+                            ).copyWith(decoration: TextDecoration.lineThrough)
+                          : TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.87),
+                            ),
                     ),
-                  ),
-                  if (subtaskController.subtask.value!.canEdit! ||
-                      subtaskController.canCreateSubtask)
-                    SizedBox(
-                      width: 52,
-                      child: PopupMenuButton(
-                        onSelected: (dynamic value) =>
-                            _onSelected(context, value, subtaskController),
-                        itemBuilder: (context) {
-                          return [
-                            if (subtaskController.canEdit &&
-                                subtaskController.subtask.value!.responsible == null)
-                              PopupMenuItem(
-                                  value: 'acceptSubtask',
-                                  child: Text(tr('acceptSubtask'),
-                                      style: TextStyleHelper.subtitle1())),
-                            if (subtaskController.canCreateSubtask &&
-                                subtaskController.subtask.value!.status == SubtaskStatus.OPEN)
-                              PopupMenuItem(
-                                  value: 'copySubtask',
-                                  child:
-                                      Text(tr('copySubtask'), style: TextStyleHelper.subtitle1())),
-                            if (subtask.canEdit!)
-                              PopupMenuItem(
-                                  value: 'delete',
-                                  child: Text(tr('delete'),
-                                      style: TextStyleHelper.subtitle1(
-                                          color: Get.theme.colors().colorError))),
-                          ];
-                        },
+                    Text(
+                      subtaskController.subtask.value!.responsible?.displayName ?? tr('nobody'),
+                      style: TextStyleHelper.caption(
+                        color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                       ),
                     ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            const SizedBox(height: 6),
-            const Divider(indent: 72, thickness: 1, height: 1)
-          ],
+              if (subtaskController.subtask.value!.canEdit! || subtaskController.canCreateSubtask)
+                PlatformPopupMenuButton(
+                  onSelected: (dynamic value) => _onSelected(context, value, subtaskController),
+                  icon: Icon(PlatformIcons(context).ellipsis,
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.5)),
+                  itemBuilder: (context) {
+                    return [
+                      if (subtaskController.canEdit &&
+                          subtaskController.subtask.value!.responsible == null)
+                        PlatformPopupMenuItem(
+                            value: 'acceptSubtask',
+                            child: Text(tr('acceptSubtask'), style: TextStyleHelper.subtitle1())),
+                      if (subtaskController.canCreateSubtask &&
+                          subtaskController.subtask.value!.status == SubtaskStatus.OPEN)
+                        PlatformPopupMenuItem(
+                            value: 'copySubtask',
+                            child: Text(tr('copySubtask'), style: TextStyleHelper.subtitle1())),
+                      if (subtask.canEdit!)
+                        PlatformPopupMenuItem(
+                          value: 'delete',
+                          isDestructiveAction: true,
+                          textStyle: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).colors().colorError),
+                          child: Text(tr('delete')),
+                        )
+                    ];
+                  },
+                ),
+              const SizedBox(width: 16)
+            ],
+          ),
         ),
       ),
     );

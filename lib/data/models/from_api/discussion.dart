@@ -85,17 +85,17 @@ class Discussion {
         canReadFiles: json['canReadFiles'] as bool?,
         subscribers: json['subscribers'] != null
             ? ((json['subscribers'] as List).cast<Map<String, dynamic>>())
-                .map((e) => PortalUser.fromJson(e))
+                .map(PortalUser.fromJson)
                 .toList()
             : null,
         files: json['files'] != null
             ? ((json['files'] as List).cast<Map<String, dynamic>>())
-                .map((e) => PortalFile.fromJson(e))
+                .map(PortalFile.fromJson)
                 .toList()
             : null,
         comments: json['comments'] != null
             ? ((json['comments'] as List).cast<Map<String, dynamic>>())
-                .map((e) => PortalComment.fromJson(e))
+                .map(PortalComment.fromJson)
                 .toList()
             : null,
         project: json['project'] != null
@@ -106,8 +106,7 @@ class Discussion {
         title: json['title'] as String?,
         description: json['description'],
         projectOwner: json['projectOwner'] != null
-            ? ProjectOwner.fromJson(
-                json['projectOwner'] as Map<String, dynamic>)
+            ? ProjectOwner.fromJson(json['projectOwner'] as Map<String, dynamic>)
             : null,
         commentsCount: json['commentsCount'] as int?,
         text: json['text'] as String?,
@@ -115,15 +114,11 @@ class Discussion {
         updatedBy: json['updatedBy'] != null
             ? PortalUser.fromJson(json['updatedBy'] as Map<String, dynamic>)
             : null,
-        created: json['created'] != null
-            ? DateTime.parse(json['created'] as String)
-            : null,
+        created: json['created'] != null ? DateTime.parse(json['created'] as String) : null,
         createdBy: json['createdBy'] != null
             ? PortalUser.fromJson(json['createdBy'] as Map<String, dynamic>)
             : null,
-        updated: json['updated'] != null
-            ? DateTime.parse(json['updated'] as String)
-            : null,
+        updated: json['updated'] != null ? DateTime.parse(json['updated'] as String) : null,
       );
 
   Map<String, dynamic> toJson() => {

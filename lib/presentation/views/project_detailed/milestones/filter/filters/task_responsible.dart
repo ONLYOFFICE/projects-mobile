@@ -44,7 +44,7 @@ class _TaskResponsible extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('myTasks'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.taskResponsible?['me'] as bool,
               onTap: () => filterController.changeTasksResponsible('me')),
           FilterElement(
@@ -54,8 +54,11 @@ class _TaskResponsible extends StatelessWidget {
             isSelected: filterController.taskResponsible?['other'].isNotEmpty as bool,
             cancelButtonEnabled: filterController.taskResponsible!['other'].isNotEmpty as bool?,
             onTap: () async {
-              final newUser =
-                  await Get.find<NavigationController>().toScreen(const SelectUserScreen());
+              final newUser = await Get.find<NavigationController>().toScreen(
+                  const SelectUserScreen(),
+                  transition: Transition.rightToLeft,
+                  page: '/SelectUserScreen',
+                  arguments: {'previousPage': MilestoneFilterScreen.pageName});
               await filterController.changeTasksResponsible('other', newUser);
             },
             onCancelTap: () => filterController.changeTasksResponsible('other', null),

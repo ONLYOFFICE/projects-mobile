@@ -41,25 +41,25 @@ import 'package:projects/internal/locator.dart';
 class GroupsController extends BaseController {
   final GroupService _api = locator<GroupService>();
 
-  @override
-  RxList itemList = [].obs; // TODO always empty
+  final _paginationController =
+      Get.put(PaginationController<PortalGroup>(), tag: 'GroupsController');
 
-  late PaginationController<PortalGroup> paginationController;
+  @override
+  PaginationController<PortalGroup> get paginationController => _paginationController;
+  @override
+  RxList<PortalGroup> get itemList => _paginationController.data;
 
   @override
   void onInit() {
     screenName = tr('groups');
-    paginationController = Get.put(PaginationController<PortalGroup>(), tag: 'GroupsController');
 
-    paginationController.loadDelegate = () async => await _getGroups();
-    paginationController.refreshDelegate = () async => await refreshData();
-    paginationController.pullDownEnabled = true;
+    _paginationController.loadDelegate = () async => await _getGroups();
+    _paginationController.refreshDelegate = () async => await refreshData();
+    _paginationController.pullDownEnabled = true;
     super.onInit();
   }
 
   RxList<PortalGroup> groups = <PortalGroup>[].obs;
-
-  RxBool loaded = false.obs;
 
   Future<void> getAllGroups() async {
     loaded.value = false;
@@ -73,7 +73,7 @@ class GroupsController extends BaseController {
   Future<void> getGroups({bool needToClear = false}) async {
     loaded.value = false;
 
-    paginationController.startIndex = 0;
+    _paginationController.startIndex = 0;
     await _getGroups();
 
     loaded.value = true;
@@ -81,13 +81,13 @@ class GroupsController extends BaseController {
 
   Future<void> _getGroups({bool needToClear = false}) async {
     final result = await _api.getGroupsByExtendedFilter(
-      startIndex: paginationController.startIndex,
+      startIndex: _paginationController.startIndex,
     );
 
     if (result != null) {
-      paginationController.total.value = result.total;
-      if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response ?? <PortalGroup>[]);
+      _paginationController.total.value = result.total;
+      if (needToClear) _paginationController.data.clear();
+      _paginationController.data.addAll(result.response ?? <PortalGroup>[]);
     }
   }
 

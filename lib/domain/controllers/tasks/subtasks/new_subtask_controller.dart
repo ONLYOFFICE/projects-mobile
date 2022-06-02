@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
@@ -47,6 +46,7 @@ import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_contro
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 
@@ -55,6 +55,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
 
   final SubtasksService _api = locator<SubtasksService>();
 
+  @override
   late ProjectTeamController teamController;
 
   final _titleController = TextEditingController();
@@ -64,7 +65,8 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
   TextEditingController get titleController => _titleController;
   @override
   FocusNode get titleFocus => _titleFocus;
-  RxList responsibles = [].obs;
+  @override
+  final responsibles = [].obs;
   @override
   RxInt? status = 1.obs;
   @override
@@ -80,6 +82,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
     setupResponsibleSelection(projectId);
   }
 
+  @override
   void setupResponsibleSelection([int? projectId]) async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(projectId: projectId, withoutVisitors: true, withoutBlocked: true);
@@ -106,13 +109,13 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
 
   @override
   void addResponsible(PortalUserItemController user) {
-    // ignore: avoid_function_literals_in_foreach_calls
-    teamController.usersList.forEach((element) {
+    for (final element in teamController.usersList) {
       if (element.portalUser.id != user.id) element.isSelected.value = false;
-    });
+    }
     responsibles.clear();
     if (user.isSelected.value == true) {
       responsibles.add(user);
+      Get.find<NavigationController>().back();
     } else {
       responsibles.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
@@ -120,25 +123,24 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
 
   @override
   void confirmResponsiblesSelection() {
-    // ignore: invalid_use_of_protected_member
-    _previusSelectedResponsible = List.of(responsibles.value);
-    Get.back();
+    _previusSelectedResponsible = List.of(responsibles);
+    Get.find<NavigationController>().back();
   }
 
   @override
   void leaveResponsiblesSelectionView() {
-    // ignore: invalid_use_of_protected_member
-    if (listEquals(_previusSelectedResponsible, responsibles.value)) {
+    if (listEquals(_previusSelectedResponsible, responsibles)) {
       Get.back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
-          responsibles.value = [_previusSelectedResponsible];
+          responsibles.value = List.of(_previusSelectedResponsible);
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -146,18 +148,22 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
   }
 
   @override
-  void deleteResponsible() => responsibles.clear();
+  void deleteResponsible() {
+    responsibles.clear();
+    _previusSelectedResponsible.clear();
+  }
 
   @override
   void leavePage() {
     if (responsibles.isNotEmpty || _titleController.text.isNotEmpty) {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -179,7 +185,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
       if (newSubtask != null) {
         final taskController = Get.find<TaskItemController>(tag: taskId.toString());
 
-        Get.back();
+        Get.find<NavigationController>().back();
         locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
 
         MessagesHandler.showSnackBar(
@@ -195,5 +201,10 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
             });
       }
     }
+  }
+
+  @override
+  set responsibles(RxList _responsibles) {
+    // TODO: implement responsibles
   }
 }

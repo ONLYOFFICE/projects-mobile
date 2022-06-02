@@ -32,12 +32,13 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 
 class TeamMembersTile extends StatelessWidget {
@@ -58,23 +59,28 @@ class TeamMembersTile extends StatelessWidget {
           caption: _isNotEmpty ? '${tr('team')}:' : null,
           text: _isNotEmpty ? controller.teamMembersTitle as String : tr('addTeamMembers'),
           icon: SvgIcons.users,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
-              ? InkWell(
-                  onTap: controller.editTeamMember as Function(),
-                  child: Icon(
+              ? PlatformIconButton(
+                  padding: EdgeInsets.zero,
+                  onPressed: controller.editTeamMember as Function(),
+                  icon: Icon(
                     controller.selectedTeamMembers.length as int >= 2
-                        ? Icons.navigate_next
-                        : Icons.close,
+                        ? PlatformIcons(context).rightChevron
+                        : PlatformIcons(context).clear,
                     size: 24,
-                    color: Get.theme.colors().onBackground,
+                    color: Theme.of(context).colors().onBackground.withOpacity(0.6),
                   ),
                 )
               : null,
-          onTap: () => Get.find<NavigationController>()
-              .toScreen(const TeamMembersSelectionView(), arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>().toScreen(
+            const TeamMembersSelectionView(),
+            arguments: {'controller': controller, 'previousPage': NewProject.pageName},
+            transition: Transition.rightToLeft,
+            page: '/TeamMembersSelectionView',
+          ),
         );
       },
     );

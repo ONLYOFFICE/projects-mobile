@@ -44,20 +44,21 @@ class SelectDateView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
-    final startDate = Get.arguments['startDate'] as bool;
-    final initialDate = Get.arguments['initialDate'] as DateTime?;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'];
+    final startDate = args['startDate'] as bool;
+    final initialDate = args['initialDate'] as DateTime?;
+    final previousPage = args['previousPage'] as String?;
 
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
-          titleText: startDate ? tr('selectStartDate') : tr('selectDueDate')),
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
+        titleText: startDate ? tr('selectStartDate') : tr('selectDueDate'),
+        previousPageTitle: previousPage,
+      ),
       body: CalendarDatePicker(
           initialDate: initialDate ?? DateTime.now(),
           currentDate: DateTime.now(),

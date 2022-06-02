@@ -34,6 +34,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/2fa_sms_controller.dart';
 import 'package:projects/internal/utils/adaptive_size.dart';
@@ -63,27 +64,24 @@ class TFASmsScreen extends StatelessWidget {
             return SingleChildScrollView(
               child: Center(
                 child: Container(
-                  color: Get.theme.backgroundColor,
+                  //color: Theme.of(context).backgroundColor,
                   constraints: const BoxConstraints(maxWidth: 480),
                   child: Column(
                     children: [
                       SizedBox(height: h(24.71)),
                       AppIcon(
                         icon: SvgIcons.password_recovery,
-                        color: Get.theme.colors().onBackground,
+                        color: Theme.of(context).colors().onBackground,
                       ),
                       SizedBox(height: h(11.54)),
                       Text(tr('tfaSMSTitle'),
                           style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().onSurface)),
+                              color: Theme.of(context).colors().onSurface)),
                       SizedBox(height: h(12.54)),
                       Text(tr('tfaSMSCaption'),
                           textAlign: TextAlign.center,
                           style: TextStyleHelper.body2(
-                              color: Get.theme
-                                  .colors()
-                                  .onSurface
-                                  .withOpacity(0.6))),
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6))),
                       SizedBox(height: h(6.54)),
                       const _CountrySelection(),
                       SizedBox(height: h(24)),
@@ -101,7 +99,7 @@ class TFASmsScreen extends StatelessWidget {
               ),
             );
           }
-          return const Center(child: CircularProgressIndicator());
+          return Center(child: PlatformCircularProgressIndicator());
         },
       ),
     );
@@ -122,15 +120,12 @@ class _CountrySelection extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 2),
-            child: TextButton(
-              onPressed: () =>
-                  Get.to<SelectCountryScreen>(const SelectCountryScreen()),
+            child: PlatformTextButton(
+              onPressed: () => Get.to<SelectCountryScreen>(const SelectCountryScreen()),
               child: Obx(
                 () => Text(
-                  controller.deviceCountry.value?.countryName ??
-                      tr('chooseCountry'),
-                  style: TextStyleHelper.subtitle1(
-                      color: Get.theme.colors().primary),
+                  controller.deviceCountry.value?.countryName ?? tr('chooseCountry'),
+                  style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().primary),
                 ),
               ),
             ),
@@ -142,20 +137,28 @@ class _CountrySelection extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 1,
-                  child: TextField(
+                  child: PlatformTextField(
+                    makeCupertinoDecorationNull: true,
                     controller: controller.phoneCodeController,
                     onChanged: (value) {},
-                    autofocus:
-                        controller.deviceCountry.value?.phoneCode == null,
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.only(
-                          bottom: 12, top: 16, left: 12, right: 5),
-                      prefixIconConstraints:
-                          const BoxConstraints(minWidth: 10, minHeight: 0),
-                      prefixIcon: Text(
+                    autofocus: controller.deviceCountry.value?.phoneCode == null,
+                    cupertino: (_, __) => CupertinoTextFieldData(
+                      padding: const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
+                      prefix: Text(
                         '+',
                         style: TextStyleHelper.subtitle1(),
+                      ),
+                    ),
+                    material: (_, __) => MaterialTextFieldData(
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding:
+                            const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
+                        prefixIconConstraints: const BoxConstraints(minWidth: 10, minHeight: 0),
+                        prefixIcon: Text(
+                          '+',
+                          style: TextStyleHelper.subtitle1(),
+                        ),
                       ),
                     ),
                   ),
@@ -163,15 +166,19 @@ class _CountrySelection extends StatelessWidget {
                 const SizedBox(width: 16),
                 Flexible(
                   flex: 4,
-                  child: TextField(
-                    autofocus:
-                        controller.deviceCountry.value?.phoneCode != null,
+                  child: PlatformTextField(
+                    makeCupertinoDecorationNull: true,
+                    autofocus: controller.deviceCountry.value?.phoneCode != null,
                     controller: controller.phoneNumberController,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: controller.numberHint,
-                      contentPadding: const EdgeInsets.only(
-                          bottom: 12, top: 16, left: 12, right: 5),
+                    hintText: controller.numberHint,
+                    cupertino: (_, __) => CupertinoTextFieldData(
+                      padding: const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
+                    ),
+                    material: (_, __) => MaterialTextFieldData(
+                      decoration: const InputDecoration(
+                        contentPadding: EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
+                      ),
                     ),
                   ),
                 )

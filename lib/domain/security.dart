@@ -47,15 +47,13 @@ class _Documents {
   }
 
   bool canEdit(folder) {
-    if (_userController.user!.isVisitor!) return false;
+    if (_userController.user.value!.isVisitor!) return false;
 
-    if (folder.access == EntityAccess.read.index ||
-        folder.access == EntityAccess.restrict.index) {
+    if (folder.access == EntityAccess.read.index || folder.access == EntityAccess.restrict.index) {
       return false;
     }
 
-    if (folder.access == EntityAccess.none.index ||
-        folder.access == EntityAccess.readWrite.index) {
+    if (folder.access == EntityAccess.none.index || folder.access == EntityAccess.readWrite.index) {
       return true;
     }
 
@@ -63,7 +61,7 @@ class _Documents {
   }
 
   bool canDelete(folder) {
-    if (_userController.user!.isVisitor!) return false;
+    if (_userController.user.value!.isVisitor!) return false;
 
     if (folder.access == EntityAccess.restrict.index) return false;
 
@@ -71,8 +69,8 @@ class _Documents {
 
     return folder.access == EntityAccess.none.index ||
         (folder.rootFolderType == FolderType.cloudCommon.index &&
-            _userController.user!.isAdmin!) ||
-        (!isRoot(folder) && _userController.user!.id == folder.createdBy?.id);
+            _userController.user.value!.isAdmin!) ||
+        (!isRoot(folder) && _userController.user.value!.id == folder.createdBy?.id);
   }
 }
 
@@ -80,15 +78,13 @@ class _Files {
   final _userController = Get.find<UserController>();
 
   bool canEdit(file) {
-    if (_userController.user!.isVisitor!) return false;
+    if (_userController.user.value!.isVisitor!) return false;
 
-    if (file.access == EntityAccess.read.index ||
-        file.access == EntityAccess.restrict.index) {
+    if (file.access == EntityAccess.read.index || file.access == EntityAccess.restrict.index) {
       return false;
     }
 
-    if (file.access == EntityAccess.none.index ||
-        file.access == EntityAccess.readWrite.index) {
+    if (file.access == EntityAccess.none.index || file.access == EntityAccess.readWrite.index) {
       return true;
     }
 
@@ -96,13 +92,13 @@ class _Files {
   }
 
   bool canDelete(file) {
-    if (_userController.user!.isVisitor!) return false;
+    if (_userController.user.value!.isVisitor!) return false;
 
     if (file.access == EntityAccess.restrict.index) return false;
 
     return file.access == EntityAccess.none.index ||
         (file.rootFolderType == FolderType.cloudCommon.index &&
-            _userController.user!.isAdmin!) ||
-        (_userController.user!.id == file.createdBy?.id);
+            _userController.user.value!.isAdmin!) ||
+        (_userController.user.value!.id == file.createdBy?.id);
   }
 }

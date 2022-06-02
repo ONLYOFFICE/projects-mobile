@@ -31,13 +31,16 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 
 class AppBarMenuButton extends StatelessWidget {
-  final DiscussionItemController? controller;
+  final DiscussionItemController controller;
   const AppBarMenuButton({
     Key? key,
     required this.controller,
@@ -45,31 +48,51 @@ class AppBarMenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      icon: const Icon(Icons.more_vert, size: 26),
-      offset: const Offset(0, 25),
-      // onSelected: (value) => _onSelected(value, controller),
-      onSelected: (String value) => _onSelected(context, controller, value),
+    return PlatformPopupMenuButton(
+      icon: PlatformIconButton(
+        padding: EdgeInsets.zero,
+        cupertinoIcon: Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Theme.of(context).colors().primary,
+        ),
+        materialIcon: Icon(
+          Icons.more_vert,
+          color: Theme.of(context).colors().primary,
+        ),
+        cupertino: (_, __) => CupertinoIconButtonData(minSize: 38),
+      ),
+      onSelected: (value) => _onSelected(controller, value as String),
       itemBuilder: (context) {
         return [
-          if (controller!.discussion.value.canEdit!)
-            PopupMenuItem(value: 'Edit', child: Text(tr('editDiscussion'))),
+          if (controller.discussion.value.canEdit!)
+            PlatformPopupMenuItem(
+              value: 'Edit',
+              child: Text(
+                tr('editDiscussion'),
+                maxLines: 1,
+              ),
+            ),
           // TODO realize
           // const PopupMenuItem(
           //     value: 'Create task', child: Text('Create task on discussion')),
-          PopupMenuItem(
+          PlatformPopupMenuItem(
             value: 'Subscribe',
             child: Text(
-              controller!.isSubscribed ? tr('unsubscribeFromComments') : tr('subscribeToComments'),
+              controller.isSubscribed ? tr('unsubscribeFromComments') : tr('subscribeToComments'),
+              maxLines: 1,
             ),
           ),
-          if (controller!.discussion.value.canEdit!)
-            PopupMenuItem(
+          if (controller.discussion.value.canEdit!)
+            PlatformPopupMenuItem(
               value: 'Delete',
-              textStyle: Get.theme.popupMenuTheme.textStyle
-                  ?.copyWith(color: Get.theme.colors().colorError),
+              isDestructiveAction: true,
+              textStyle: Theme.of(context)
+                  .popupMenuTheme
+                  .textStyle
+                  ?.copyWith(color: Theme.of(context).colors().colorError),
               child: Text(
                 tr('deleteDiscussion'),
+                maxLines: 1,
               ),
             ),
         ];
@@ -78,16 +101,16 @@ class AppBarMenuButton extends StatelessWidget {
   }
 }
 
-void _onSelected(BuildContext context, DiscussionItemController? controller, String value) async {
+void _onSelected(DiscussionItemController controller, String value) async {
   switch (value) {
     case 'Edit':
-      await controller!.toDiscussionEditingScreen();
+      await controller.toDiscussionEditingScreen();
       break;
     case 'Subscribe':
-      await controller!.subscribeToMessageAction();
+      await controller.subscribeToMessageAction();
       break;
     case 'Delete':
-      await controller!.deleteMessage(context);
+      await controller.deleteMessage();
       break;
     default:
   }

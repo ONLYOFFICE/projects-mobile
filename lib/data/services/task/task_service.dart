@@ -53,10 +53,8 @@ class TaskService {
     final success = task.error == null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
@@ -124,42 +122,6 @@ class TaskService {
     if (success) {
       return projects;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error!.message);
-      return null;
-    }
-  }
-
-  Future<PageDTO<List<PortalTask>>?> searchTasks({
-    int? startIndex,
-    String? query,
-    // String sortBy,
-    // String sortOrder,
-    // String responsibleFilter,
-    // String creatorFilter,
-    // String projectFilter,
-    // String milestoneFilter,
-    // String projectId,
-    // String deadlineFilter,
-  }) async {
-    final projects = await _api.getTasksByParams(
-      startIndex: startIndex,
-      query: query,
-      // sortBy: sortBy,
-      // sortOrder: sortOrder,
-      // responsibleFilter: responsibleFilter,
-      // creatorFilter: creatorFilter,
-      // projectFilter: projectFilter,
-      // milestoneFilter: milestoneFilter,
-      // deadlineFilter: deadlineFilter,
-      // projectId: projectId,
-    );
-
-    final success = projects.error == null;
-
-    if (success) {
-      return projects;
-    } else {
-      await Get.find<ErrorDialog>().show(projects.error!.message);
       return null;
     }
   }
@@ -170,10 +132,8 @@ class TaskService {
     final success = task.error == null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;

@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/2fa_sms_controller.dart';
 import 'package:projects/internal/utils/adaptive_size.dart';
@@ -68,48 +69,53 @@ class EnterSMSCodeScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: Center(
             child: Container(
-              color: Get.theme.backgroundColor,
+              //color: Theme.of(context).backgroundColor,
               constraints: const BoxConstraints(maxWidth: 480),
               child: Column(
                 children: [
                   SizedBox(height: h(24.71)),
                   AppIcon(
                     icon: SvgIcons.password_recovery,
-                    color: Get.theme.colors().onBackground,
+                    color: Theme.of(context).colors().onBackground,
                   ),
                   SizedBox(height: h(20.74)),
                   Text(tr('enterSendedCode'),
-                      style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface)),
+                      style:
+                          TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface)),
                   Text(controller.phoneNoise!,
-                      style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface)
+                      style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface)
                           .copyWith(fontWeight: FontWeight.w500)),
                   SizedBox(height: h(100)),
-                  Obx(
-                    () => TextField(
+                  Obx(() {
+                    final codeError = controller.needToShowError.value;
+                    return PlatformTextField(
+                      makeCupertinoDecorationNull: true,
                       controller: codeController,
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
                       style: TextStyleHelper.subtitle1(),
                       obscureText: true,
                       obscuringCharacter: '*',
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: controller.needToShowError.value == true
-                                ? Get.theme.colors().colorError
-                                : Get.theme.colors().onSurface.withOpacity(0.3),
+                      material: (_, __) => MaterialTextFieldData(
+                        decoration: InputDecoration(
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: codeError
+                                  ? Theme.of(context).colors().colorError
+                                  : Theme.of(context).colors().onSurface.withOpacity(0.3),
+                            ),
                           ),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: controller.needToShowError.value
-                                ? Get.theme.colors().colorError
-                                : Get.theme.colors().onSurface.withOpacity(0.3),
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: codeError
+                                  ? Theme.of(context).colors().colorError
+                                  : Theme.of(context).colors().onSurface.withOpacity(0.3),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
                   Obx(
                     () => SizedBox(
                       height: h(24),
@@ -118,8 +124,8 @@ class EnterSMSCodeScreen extends StatelessWidget {
                               alignment: Alignment.topLeft,
                               child: Text(
                                 tr('incorrectCode'),
-                                style:
-                                    TextStyleHelper.caption(color: Get.theme.colors().colorError),
+                                style: TextStyleHelper.caption(
+                                    color: Theme.of(context).colors().colorError),
                               ),
                             )
                           : null,
@@ -133,7 +139,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
                       controller.onConfirmPressed(codeController.text);
                     },
                   ),
-                  TextButton(
+                  PlatformTextButton(
                     onPressed: controller.resendSms,
                     child: Text(tr('requestNewCode')),
                   )

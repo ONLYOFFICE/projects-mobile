@@ -54,14 +54,14 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
       body: SingleChildScrollView(
         child: Center(
           child: Container(
-            color: Get.theme.backgroundColor,
+            //color: Theme.of(context).backgroundColor,
             constraints: const BoxConstraints(maxWidth: 480),
             child: Column(
               children: [
                 const SizedBox(height: 20.71),
                 AppIcon(
                   icon: SvgIcons.password_recovery,
-                  color: Get.theme.colors().onBackground,
+                  color: Theme.of(context).colors().onBackground,
                 ),
                 const SizedBox(height: 6.71),
                 Text(
@@ -86,6 +86,8 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
                       controller: controller.emailController,
                       autofillHint: AutofillHints.email,
                       hintText: tr('email'),
+                      keyboardType: TextInputType.emailAddress,
+                      onSubmitted: (_) => controller.onConfirmPressed(),
                     ),
                   ),
                 ),

@@ -44,7 +44,7 @@ class _Other extends StatelessWidget {
         options: <Widget>[
           FilterElement(
             title: tr('followed'),
-            titleColor: Get.theme.colors().onSurface,
+            titleColor: Theme.of(context).colors().onSurface,
             isSelected: filterController.other['followed'] as bool,
             onTap: () => filterController.changeOther('followed'),
           ),
@@ -55,15 +55,19 @@ class _Other extends StatelessWidget {
             isSelected: filterController.other['withTag'].isNotEmpty as bool,
             cancelButtonEnabled: filterController.other['withTag'].isNotEmpty as bool?,
             onTap: () async {
-              final selectedTag =
-                  await Get.find<NavigationController>().toScreen(const SelectTagScreen());
+              final selectedTag = await Get.find<NavigationController>().toScreen(
+                const SelectTagScreen(),
+                transition: Transition.rightToLeft,
+                page: '/SelectTagScreen',
+                arguments: {'previousPage': ProjectsFilterScreen.pageName},
+              );
               await filterController.changeOther('withTag', selectedTag);
             },
             onCancelTap: () => filterController.changeOther('withTag', null),
           ),
           FilterElement(
             title: tr('withoutTag'),
-            titleColor: Get.theme.colors().onSurface,
+            titleColor: Theme.of(context).colors().onSurface,
             isSelected: filterController.other['withoutTag'] as bool,
             onTap: () => filterController.changeOther('withoutTag'),
           ),

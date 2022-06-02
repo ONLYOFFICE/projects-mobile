@@ -31,8 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -56,34 +55,49 @@ class FilterElement extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        constraints: const BoxConstraints(minHeight: 32),
-        padding: const EdgeInsets.only(top: 5, bottom: 6, left: 12, right: 12),
-        decoration: BoxDecoration(
-          border: Border.all(color: Get.theme.colors().outline, width: 0.5),
+    return Container(
+      constraints: const BoxConstraints(maxHeight: 32),
+      child: PlatformTextButton(
+        onPressed: onTap,
+        cupertino: (_, __) => CupertinoTextButtonData(
+          padding: const EdgeInsets.only(top: 5, bottom: 6, left: 12, right: 12),
           borderRadius: BorderRadius.circular(16),
-          color: isSelected ? Get.theme.colors().primary : Get.theme.colors().bgDescription,
+          color: isSelected
+              ? Theme.of(context).colors().primary
+              : Theme.of(context).colors().bgDescription,
+        ),
+        material: (_, __) => MaterialTextButtonData(
+          style: ButtonStyle(
+            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                const EdgeInsets.only(top: 5, bottom: 6, left: 12, right: 12)),
+            backgroundColor: MaterialStateProperty.all<Color>(isSelected
+                ? Theme.of(context).colors().primary
+                : Theme.of(context).colors().bgDescription),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: BorderSide(color: Theme.of(context).colors().outline, width: 0.5)),
+            ),
+          ),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Flexible(
               child: Text(title!,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyleHelper.body2(
                       color: isSelected
-                          ? Get.theme.colors().onPrimarySurface
-                          : titleColor ?? Get.theme.colors().primary)),
+                          ? Theme.of(context).colors().onPrimary
+                          : titleColor ?? Theme.of(context).colors().primary)),
             ),
             if (cancelButtonEnabled!)
               Padding(
                   padding: const EdgeInsets.only(left: 9),
                   child: InkWell(
                       onTap: onCancelTap,
-                      child: const Icon(Icons.cancel, color: Colors.white, size: 18))),
+                      child: Icon(PlatformIcons(context).clearThickCircled,
+                          color: Colors.white, size: 18))),
           ],
         ),
       ),

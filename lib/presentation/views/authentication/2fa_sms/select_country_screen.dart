@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/2fa_sms_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -55,8 +56,8 @@ class SelectCountryScreen extends StatelessWidget {
           title: controller.searching.value == true ? const _SarchField() : null,
           actions: [
             if (controller.searching.value == false)
-              IconButton(
-                icon: const Icon(Icons.search),
+              PlatformIconButton(
+                icon: Icon(PlatformIcons(context).search),
                 onPressed: controller.onSearchPressed,
               )
           ],
@@ -88,12 +89,18 @@ class _SarchField extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<TFASmsController>();
 
-    return TextField(
+    return PlatformTextField(
+      makeCupertinoDecorationNull: true,
       autofocus: true,
       style: TextStyleHelper.headline6(),
-      decoration: InputDecoration.collapsed(
-        hintText: tr('search'),
-        hintStyle: TextStyleHelper.headline6().copyWith(height: 1),
+      hintText: tr('search'),
+      cupertino: (_, __) =>
+          CupertinoTextFieldData(placeholderStyle: TextStyleHelper.headline6().copyWith(height: 1)),
+      material: (_, __) => MaterialTextFieldData(
+        decoration: InputDecoration.collapsed(
+          hintText: tr('search'),
+          hintStyle: TextStyleHelper.headline6().copyWith(height: 1),
+        ),
       ),
       onChanged: controller.onSearch,
     );
@@ -128,20 +135,20 @@ class _CountryWithCodeTile extends StatelessWidget {
                   width: 56,
                   child: showFirstLetter
                       ? Text(country.countryName![0],
-                          style: TextStyleHelper.headline5(
-                              color: Get.theme.colors().onBackground.withOpacity(0.6)))
+                          style: TextStyleHelper.headline6(
+                              color: Theme.of(context).colors().onBackground.withOpacity(0.6)))
                       : null,
                 ),
                 Expanded(
                   child: Text(
                     country.countryName!,
-                    style: TextStyleHelper.body2(color: Get.theme.colors().onBackground),
+                    style: TextStyleHelper.body2(color: Theme.of(context).colors().onBackground),
                   ),
                 ),
                 Text(
                   '+ ${country.phoneCode}',
                   style: TextStyleHelper.subtitle2(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
                 ),
               ],
             ),

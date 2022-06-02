@@ -30,19 +30,22 @@
  *
  */
 
+import 'dart:convert';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:projects/data/api/comments_api.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/analytics_service.dart';
-import 'package:projects/data/services/storage/secure_storage.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 
 class CommentsService {
   final CommentsApi _api = locator<CommentsApi>();
-  final SecureStorage _secureStorage = locator<SecureStorage>();
+  final _portalInfo = Get.find<PortalInfoController>();
 
   Future<List<PortalComment>?> getTaskComments({required int taskId}) async {
     final files = await _api.getTaskComments(taskId: taskId);
@@ -89,10 +92,8 @@ class CommentsService {
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal: _portalInfo.portalUri,
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.reply
       });
       return result.response;
@@ -102,8 +103,7 @@ class CommentsService {
     }
   }
 
-  Future<PortalComment?> addTaskComment(
-      {required int taskId, required String content}) async {
+  Future<PortalComment?> addTaskComment({required int taskId, required String content}) async {
     final result = await _api.addTaskComment(taskId: taskId, content: content);
     final success = result.response != null;
 
@@ -117,8 +117,7 @@ class CommentsService {
 
   Future<PortalComment?> addMessageComment(
       {required int messageId, required String content}) async {
-    final result =
-        await _api.addMessageComment(messageId: messageId, content: content);
+    final result = await _api.addMessageComment(messageId: messageId, content: content);
     final success = result.response != null;
 
     if (success) {
@@ -134,10 +133,8 @@ class CommentsService {
     final success = task.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal: _portalInfo.portalUri,
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.reply
       });
       return task.response;
@@ -160,9 +157,7 @@ class CommentsService {
   }
 
   Future<String> getTaskCommentLink(
-      {required int taskId,
-      required int projectId,
-      required String commentId}) async {
+      {required int taskId, required int projectId, required String commentId}) async {
     return _api.getTaskCommentLink(
       taskId: taskId,
       projectId: projectId,
@@ -170,17 +165,13 @@ class CommentsService {
     );
   }
 
-  Future<dynamic> updateComment(
-      {required String commentId, required String content}) async {
-    final result =
-        await _api.updateComment(commentId: commentId, content: content);
+  Future<dynamic> updateComment({required String commentId, required String content}) async {
+    final result = await _api.updateComment(commentId: commentId, content: content);
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: _portalInfo.portalUri,
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.reply
       });
       return result.response;
@@ -190,11 +181,11 @@ class CommentsService {
     }
   }
 
-  Future<String?> uploadImages(image) async {
+  Future<String?> uploadImages(PlatformFile image) async {
     final file = http.MultipartFile.fromBytes(
       'upload',
-      image.bytes as List<int>,
-      filename: image.name as String?,
+      image.bytes!,
+      filename: image.name,
       contentType: MediaType('image', image.extension as String),
     );
 
@@ -202,15 +193,21 @@ class CommentsService {
 
     final success = result.response != null;
     if (success) {
-      result.response = (await _secureStorage.getString('portalName'))! +
-          result.response
-              .toString()
-              .split("'")[1]; // TODO parse json response if portal version > 11
-    } else {
-      await Get.find<ErrorDialog>().show(result.error?.message ?? '');
-      return null;
-    }
+      // TODO if portal version < 12
+      //return _portalInfo.portalUri! +
+      //    result.response
+      ///       .toString()
+      //        .split("'")[1];
 
-    return result.response;
+      final responseJson = json.decode(result.response!);
+
+      final error = responseJson['error'];
+      if (error != null) {
+        return (error as Map)['message'] as String;
+      }
+      final imageUrl = responseJson['url']?.toString();
+      if (imageUrl?.isNotEmpty == true) return _portalInfo.portalUri! + imageUrl!;
+    }
+    return null;
   }
 }

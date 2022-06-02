@@ -63,6 +63,9 @@ mixin PasscodeScreenMixin on StatelessWidget {
       width: MediaQuery.of(context).size.width,
     );
 
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    final useMobileLayout = shortestSide < 600;
+
     return WillPopScope(
       onWillPop: () async {
         if (hasBackButton) onBackPressed();
@@ -70,14 +73,14 @@ mixin PasscodeScreenMixin on StatelessWidget {
       },
       child: Scaffold(
         appBar: hasBackButton ? StyledAppBar(elevation: 0, onLeadingPressed: onBackPressed) : null,
-        body: SingleChildScrollView(
+        body: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: useMobileLayout ? MainAxisAlignment.end : MainAxisAlignment.center,
             children: [
-              SizedBox(height: hasBackButton ? 114.h as double? : 170.h as double?),
               Text(title,
                   textAlign: TextAlign.center,
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground)),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onBackground)),
               SizedBox(
                   height: h(72),
                   child: Obx(() {
@@ -86,12 +89,13 @@ mixin PasscodeScreenMixin on StatelessWidget {
                       if (hasError.isTrue)
                         Text(errorText!,
                             textAlign: TextAlign.center,
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError)),
+                            style: TextStyleHelper.subtitle1(
+                                color: Theme.of(context).colors().colorError)),
                       if (hasError.isFalse && caption != null)
                         Text(caption!,
                             textAlign: TextAlign.center,
                             style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().onBackground.withOpacity(0.6))),
+                                color: Theme.of(context).colors().onBackground.withOpacity(0.6))),
                       const Flexible(flex: 2, child: SizedBox(height: 32)),
                     ]);
                   })),
@@ -126,6 +130,7 @@ mixin PasscodeScreenMixin on StatelessWidget {
                     onZeroPressed: onNumberPressed,
                     onDeletePressed: onDeletePressed,
                   ),
+              if (useMobileLayout) const SizedBox(height: 13),
             ],
           ),
         ),

@@ -30,57 +30,75 @@
  *
  */
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
-import 'package:projects/presentation/shared/widgets/add_comment_button.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DiscussionCommentsView extends StatelessWidget {
-  final DiscussionItemController? controller;
   const DiscussionCommentsView({
     Key? key,
     required this.controller,
   }) : super(key: key);
 
+  final DiscussionItemController controller;
+
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller!.loaded.value == false)
+        if (!controller.loaded.value)
           return const ListLoadingSkeleton();
         else {
           return Stack(
             children: [
-              SmartRefresher(
-                controller: controller!.commentsRefreshController,
-                onRefresh: controller!.onRefresh,
+              StyledSmartRefresher(
+                controller: controller.commentsRefreshController,
+                scrollController: controller.commentsListController,
+                onRefresh: controller.onRefresh,
                 child: ListView.separated(
-                  controller: controller!.commentsListController,
-                  itemCount: controller!.discussion.value.comments!.length,
-                  padding: const EdgeInsets.only(top: 32, bottom: 70),
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: controller!.discussion.value.comments![index].show ? 21 : null,
+                  controller: controller.commentsListController,
+                  itemCount: controller.discussion.value.comments!.length,
+                  separatorBuilder: (_, int index) {
+                    if (controller.discussion.value.comments![index].show == false)
+                      return const SizedBox();
+
+                    return const StyledDivider(
+                      leftPadding: 16,
+                      rightPadding: 16,
                     );
                   },
-                  itemBuilder: (BuildContext context, int index) {
+                  itemBuilder: (_, int index) {
+                    if (controller.discussion.value.comments![index].show == false)
+                      return const SizedBox();
+
                     return CommentsThread(
-                      comment: controller!.discussion.value.comments![index],
-                      discussionId: controller!.discussion.value.id,
+                      comment: controller.discussion.value.comments![index],
+                      discussionId: controller.discussion.value.id,
                     );
                   },
                 ),
               ),
-              if (controller!.discussion.value.canCreateComment == true)
+              if (controller.discussion.value.canCreateComment == true)
                 Align(
-                  alignment: Alignment.bottomCenter,
-                  child: AddCommentButton(
-                    onPressed: controller!.toNewCommentView,
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 16, bottom: 24),
+                    child: StyledFloatingActionButton(
+                      onPressed: controller.toNewCommentView,
+                      child: AppIcon(
+                        icon: SvgIcons.add_fab,
+                        color: Theme.of(context).colors().onPrimarySurface,
+                      ),
+                    ),
                   ),
-                )
+                ),
             ],
           );
         }

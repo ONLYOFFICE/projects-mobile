@@ -30,13 +30,18 @@
  *
  */
 
+import 'dart:async';
+import 'dart:typed_data';
+
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/user_photo_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -45,57 +50,66 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ProfileController extends GetxController {
-  final DownloadService _downloadService = locator<DownloadService>();
-  final UserPhotoService _photoService = locator<UserPhotoService>();
+  // TODO extends PortalUserItemController
+  final _downloadService = locator<DownloadService>();
+  final _photoService = locator<UserPhotoService>();
 
-  var portalInfoController = Get.find<PortalInfoController>();
-  var userController = Get.find<UserController>();
+  final portalInfoController = Get.find<PortalInfoController>();
+  final userController = Get.find<UserController>();
 
-  Rx<PortalUser?> user = PortalUser().obs;
-  RxBool loaded = false.obs;
-  var username = ''.obs;
-  var portalName = ''.obs;
-  var displayName = ''.obs;
-  var email = ''.obs;
-  var status = (-1).obs;
-  RxBool isVisitor = false.obs;
-  RxBool isOwner = false.obs;
-  RxBool isAdmin = false.obs;
+  final user = PortalUser().obs;
+  final username = ''.obs;
+  final portalName = ''.obs;
+  final displayName = ''.obs;
+  final email = ''.obs;
+  final status = (-1).obs;
+  final isVisitor = false.obs;
+  final isOwner = false.obs;
+  final isAdmin = false.obs;
 
-  // ignore: unnecessary_cast
-  Rx<Widget> avatar = (AppIcon(
-    width: 120,
-    height: 120,
-    icon: SvgIcons.avatar,
-    color: Get.theme.colors().onSurface,
-  ) as Widget)
-      .obs;
+  Uint8List? avatarBytes;
+  final avatar = Rx<Widget>(
+    AppIcon(
+      width: 120,
+      height: 120,
+      icon: SvgIcons.avatar,
+      color: Theme.of(Get.context!).colors().onSurface,
+    ),
+  );
 
-  Future<void> setup() async {
-    var response = await userController.getUserInfo();
-    if (response) {
-      user.value = userController.user;
-      username.value = userController.user!.displayName!;
-      status.value = userController.user!.status!;
-      isVisitor.value = userController.user!.isVisitor!;
-      isOwner.value = userController.user!.isOwner!;
-      isAdmin.value = userController.user!.isAdmin!;
-      email.value = userController.user!.email!;
-    }
+  ProfileController() {
+    if (userController.user.value != null)
+      setUserData(userController.user.value!);
+    else
+      unawaited(userController.updateData());
 
-    response = await portalInfoController.setup();
-    if (response) {
+    userController.user.listen((user) {
+      if (user == null) return;
+      setUserData(user);
+    });
+
+    portalInfoController.setup().then((value) {
       portalName.value = portalInfoController.portalName!;
-    }
+    });
+  }
 
-    await loadAvatar();
+  void setUserData(PortalUser _user) {
+    user.value = _user;
+    username.value = _user.displayName!;
+    status.value = _user.status!;
+    isVisitor.value = _user.isVisitor!;
+    isOwner.value = _user.isOwner!;
+    isAdmin.value = _user.isAdmin!;
+    email.value = _user.email!;
+
+    loadAvatar();
   }
 
   void logout(context) async {
-    await Get.dialog(StyledAlertDialog(
+    await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
       titleText: tr('logOutTitle'),
       acceptText: tr('logOut').toUpperCase(),
-      acceptColor: Get.theme.colors().primary,
+      acceptColor: Theme.of(context as BuildContext).colors().colorError,
       onAcceptTap: () async {
         await Get.find<LoginController>().logout();
       },
@@ -103,21 +117,21 @@ class ProfileController extends GetxController {
   }
 
   Future<void> loadAvatar() async {
-    final photoUrl = await _photoService.getUserPhoto(userController.user!.id!);
+    final photoUrl = await _photoService.getUserPhoto(user.value.id!);
     try {
-      final avatarBytes = await _downloadService.downloadImage((photoUrl?.max ??
-          user.value?.avatar ??
-          user.value?.avatarMedium ??
-          user.value?.avatarSmall!)!);
+      final avatarBytes = await _downloadService.downloadImage(
+          photoUrl?.max ?? user.value.avatar ?? user.value.avatarMedium ?? user.value.avatarSmall!);
       if (avatarBytes == null) return;
 
-      // ignore: unnecessary_cast
+      if (const ListEquality().equals(avatarBytes, this.avatarBytes)) return;
+      this.avatarBytes = avatarBytes;
+
       avatar.value = Image.memory(
-        avatarBytes,
+        this.avatarBytes!,
         width: 120,
         height: 120,
         fit: BoxFit.cover,
-      ) as Widget;
+      );
     } catch (e) {
       print(e);
       return;

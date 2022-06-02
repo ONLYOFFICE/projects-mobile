@@ -30,12 +30,13 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
-import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/data/services/project_service.dart';
@@ -50,6 +51,7 @@ import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
@@ -58,14 +60,15 @@ import 'package:projects/presentation/views/project_detailed/project_detailed_vi
 import 'package:projects/presentation/views/task_detailed/comments/new_comment_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
+import 'package:synchronized/synchronized.dart';
 
 class DiscussionItemController extends GetxController {
-  final DiscussionItemService _api = locator<DiscussionItemService>();
+  final _api = locator<DiscussionItemService>();
   final _userPhotoService = locator<UserPhotoService>();
   final portalUri = Get.find<PortalInfoController>().portalUri;
 
   final discussion = Discussion().obs;
-  Rx<String> avatarUrl = ''.obs;
+  final avatarUrl = ''.obs;
   final status = 0.obs;
 
   final loaded = true.obs;
@@ -83,6 +86,9 @@ class DiscussionItemController extends GetxController {
 
   final commentsListController = ScrollController();
 
+  StreamSubscription? _ss;
+  final _toProjectOverviewLock = Lock();
+
   void setup(Discussion discussion) {
     this.discussion.value = discussion;
     status.value = discussion.status!;
@@ -90,6 +96,11 @@ class DiscussionItemController extends GetxController {
     fabIsVisible.value = discussion.canEdit! && discussion.status == 0;
 
     _getUserAvatarUrl();
+
+    _ss?.cancel();
+    _ss = locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
+      if (data['all'] == true) await getDiscussionDetailed();
+    });
   }
 
   @override
@@ -99,7 +110,8 @@ class DiscussionItemController extends GetxController {
   }
 
   void scrollToLastComment() {
-    commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
+    if (commentsListController.hasClients)
+      commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
   }
 
   bool get isSubscribed {
@@ -111,14 +123,6 @@ class DiscussionItemController extends GetxController {
 
   Future<void> onRefresh({bool showLoading = true}) async {
     await getDiscussionDetailed(showLoading: showLoading);
-
-    // update the user data in case of changing user rights on the server side
-    Get.find<UserController>()
-      ..clear()
-      // ignore: unawaited_futures
-      ..getUserInfo()
-      // ignore: unawaited_futures
-      ..getSecurityInfo();
 
     refreshController.refreshCompleted();
     subscribersRefreshController.refreshCompleted();
@@ -133,24 +137,11 @@ class DiscussionItemController extends GetxController {
       try {
         await Get.delete<DiscussionCommentItemController>();
         discussion.value = result;
-        discussion.value.comments = checkImagesSrc(discussion.value.comments);
         status.value = result.status!;
       } catch (_) {}
     }
 
     if (showLoading) loaded.value = true;
-  }
-
-  List<PortalComment> checkImagesSrc(List<PortalComment>? comments) {
-    if (comments == null || comments.isEmpty) return <PortalComment>[];
-
-    for (final item in comments) {
-      if (item.commentBody == null || item.commentBody!.isEmpty) continue;
-
-      item.commentBody = item.commentBody!.replaceAll('src="/storage', 'src="$portalUri/storage');
-      item.commentList = checkImagesSrc(item.commentList);
-    }
-    return comments;
   }
 
   void tryChangingStatus(BuildContext context) async {
@@ -172,8 +163,7 @@ class DiscussionItemController extends GetxController {
       if (result != null) {
         discussion.value.setStatus = result.status;
         status.value = result.status!;
-        // ignore: unawaited_futures
-        getDiscussionDetailed();
+
         Get.back();
       }
     } catch (e) {
@@ -182,9 +172,10 @@ class DiscussionItemController extends GetxController {
   }
 
   Future<void> toDiscussionEditingScreen() async {
-    await Get.find<NavigationController>().to(
+    await Get.find<NavigationController>().toScreen(
       const DiscussionEditingScreen(),
       arguments: {'discussion': discussion.value},
+      page: '/DiscussionEditingScreen',
     );
   }
 
@@ -199,11 +190,12 @@ class DiscussionItemController extends GetxController {
     }
   }
 
-  Future<void> deleteMessage(BuildContext context) async {
-    await Get.dialog(StyledAlertDialog(
+  Future<void> deleteMessage() async {
+    await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
       titleText: tr('deleteDiscussionTitle'),
       contentText: tr('deleteDiscussionAlert'),
       acceptText: tr('delete').toUpperCase(),
+      acceptColor: Theme.of(Get.context!).colors().colorError,
       onCancelTap: () async => Get.back(),
       onAcceptTap: () async {
         try {
@@ -211,11 +203,13 @@ class DiscussionItemController extends GetxController {
           if (result != null) {
             Get.back();
             Get.back();
-            MessagesHandler.showSnackBar(context: context, text: tr('discussionDeleted'));
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('discussionDeleted'));
 
-            locator<EventHub>().fire('needToRefreshDetails', [discussion.value.project!.id]);
-            locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
-          }
+            await _ss?.cancel();
+
+            locator<EventHub>().fire('needToRefreshDiscussions', {'all': true});
+          } else
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
         } catch (e) {
           printError(e);
         }
@@ -231,8 +225,9 @@ class DiscussionItemController extends GetxController {
     Get.find<NavigationController>().toScreen(
       const NewCommentView(),
       arguments: {
-        'controller': Get.put(NewDiscussionCommentController(idFrom: discussion.value.id))
+        'controller': Get.put(NewDiscussionCommentController(idFrom: discussion.value.id)),
       },
+      page: '/NewCommentView',
     );
   }
 
@@ -241,38 +236,42 @@ class DiscussionItemController extends GetxController {
       Get.find<DiscussionEditingController>().dispose();
     } catch (_) {}
 
-    //TODO: refactor parameters
     final controller = Get.put(
       DiscussionEditingController(
         id: discussion.value.id!,
-        title: discussion.value.title!.obs,
-        text: discussion.value.text!.obs,
+        title: discussion.value.title!,
+        text: discussion.value.text!,
         projectId: discussion.value.project!.id!,
-        selectedProjectTitle: discussion.value.project!.title!.obs,
+        selectedProjectTitle: discussion.value.project!.title!,
         initialSubscribers: discussion.value.subscribers!,
       ),
     );
 
-    Get.find<NavigationController>().to(
+    Get.find<NavigationController>().toScreen(
       const ManageDiscussionSubscribersScreen(),
       arguments: {
         'controller': controller,
         'onConfirm': () => controller.confirm(context),
       },
+      page: '/ManageDiscussionSubscribersScreen',
     );
   }
 
   Future<void> toProjectOverview() async {
-    final projectService = locator<ProjectService>();
-    final project = await projectService.getProjectById(
-      projectId: discussion.value.projectOwner!.id!,
-    );
-    if (project != null) {
-      await Get.find<NavigationController>().to(
-        ProjectDetailedView(),
-        arguments: {'projectDetailed': project},
+    if (_toProjectOverviewLock.locked) return;
+
+    unawaited(_toProjectOverviewLock.synchronized(() async {
+      final projectService = locator<ProjectService>();
+      final project = await projectService.getProjectById(
+        projectId: discussion.value.projectOwner!.id!,
       );
-    }
+      if (project != null) {
+        await Get.find<NavigationController>().to(
+          ProjectDetailedView(),
+          arguments: {'projectDetailed': project},
+        );
+      }
+    }));
   }
 
   Future<void> _getUserAvatarUrl() async {
@@ -294,6 +293,9 @@ class DiscussionItemController extends GetxController {
     subscribersRefreshController.dispose();
     commentsRefreshController.dispose();
     commentsListController.dispose();
+
+    _ss?.cancel();
+
     super.onClose();
   }
 }

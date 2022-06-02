@@ -40,6 +40,7 @@ import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -60,8 +61,7 @@ class UsersDataSource extends GetxController {
 
   Timer? _searchDebounce;
 
-  // var withoutSelf_remove = false;
-  PortalUserItemController? selfUserItem;
+  late PortalUserItemController selfUserItem;
 
   RefreshController _refreshController = RefreshController();
   RefreshController get refreshController {
@@ -81,6 +81,15 @@ class UsersDataSource extends GetxController {
 
   RxList<PortalUserItemController> get usersWithoutVisitors =>
       RxList.from(usersList.where((user) => !user.portalUser.isVisitor!));
+
+  UsersDataSource() {
+    final _userController = Get.find<UserController>();
+    _userController.updateData();
+    _userController.user.listen((user) {
+      if (user == null) return;
+      selfUserItem = PortalUserItemController(portalUser: _userController.user.value!);
+    });
+  }
 
   Future<void> onLoading() async {
     _startIndex += 25;
@@ -137,20 +146,22 @@ class UsersDataSource extends GetxController {
       }
 
       if (withoutSelf) {
-        usersList.removeWhere((element) => selfUserItem?.portalUser.id == element.id);
+        usersList.removeWhere((element) => selfUserItem.portalUser.id == element.id);
       }
 
       usersList.removeWhere(
           (element) => selectedProjectManager != null && selectedProjectManager!.id == element.id);
 
-      selfIsVisible.value = !(selectedProjectManager != null &&
-          selectedProjectManager!.id == selfUserItem!.portalUser.id);
+      selfIsVisible.value = !(selectedProjectManager?.id != null &&
+          selectedProjectManager!.id == selfUserItem.portalUser.id);
 
       usersList.removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
 
       if (applyUsersSelection != null) {
         await applyUsersSelection!();
       }
+
+      nothingFound.value = usersList.isEmpty;
     }
   }
 

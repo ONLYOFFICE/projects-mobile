@@ -40,6 +40,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -48,19 +49,20 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller']..setupResponsibleSelection();
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller']..setupResponsibleSelection();
+    final previousPage = args['previousPage'] as String?;
 
     final platformController = Get.find<PlatformController>();
 
     final searchTextEditingController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         titleText: tr('selectResponsible'),
         bottom: SearchField(
-          showClearIcon: true,
           controller: searchTextEditingController,
           hintText: tr('usersSearch'),
           onClearPressed: () {
@@ -70,74 +72,49 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
           onSubmitted: (value) => controller.teamController.searchUsers(value),
           onChanged: (value) => controller.teamController.searchUsers(value),
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 4),
-            child: IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: controller.confirmResponsiblesSelection as Function()),
-          )
-        ],
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: controller.leaveResponsiblesSelectionView as Function(),
-        ),
+        onLeadingPressed: controller.confirmResponsiblesSelection as Function(),
+        previousPageTitle: previousPage,
       ),
       body: Obx(
         () {
           if (controller.teamController.loaded.value == true &&
               controller.teamController.usersList.isNotEmpty as bool &&
               controller.teamController.isSearchResult.value == false) {
-            return SmartRefresher(
+            return StyledSmartRefresher(
               enablePullDown: false,
               enablePullUp: controller.teamController.pullUpEnabled as bool,
               controller: controller.teamController.refreshController as RefreshController,
               onLoading: controller.teamController.onLoading as Function(),
-              child: ListView(
-                children: <Widget>[
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => PortalUserItem(
-                          userController:
-                              controller.teamController.usersList[i] as PortalUserItemController,
-                          onTapFunction: (v) => controller.addResponsible(v)),
-                      itemExtent: 65,
-                      itemCount: controller.teamController.usersList.length as int,
-                    )
-                  ]),
-                ],
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (c, i) => PortalUserItem(
+                    userController:
+                        controller.teamController.usersList[i] as PortalUserItemController,
+                    onTapFunction: controller.addResponsible as Function(PortalUserItemController)),
+                itemExtent: 65,
+                itemCount: controller.teamController.usersList.length as int,
               ),
             );
           }
           if (controller.teamController.nothingFound.value == true) {
-            return Column(children: const [NothingFound()]);
+            return const NothingFound();
           }
           if (controller.teamController.loaded.value == true &&
               controller.teamController.searchResult.isNotEmpty as bool &&
               controller.teamController.isSearchResult.value == true) {
-            return SmartRefresher(
+            return StyledSmartRefresher(
               enablePullDown: false,
               enablePullUp: controller.teamController.pullUpEnabled as bool,
               controller: controller.teamController.refreshController as RefreshController,
               onLoading: controller.teamController.onLoading as Function(),
-              child: ListView(
-                children: <Widget>[
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => PortalUserItem(
-                          userController:
-                              controller.teamController.searchResult[i] as PortalUserItemController,
-                          onTapFunction:
-                              controller.addResponsible as Function(PortalUserItemController)),
-                      itemExtent: 65,
-                      itemCount: controller.teamController.searchResult.length as int,
-                    )
-                  ]),
-                ],
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemBuilder: (c, i) => PortalUserItem(
+                    userController:
+                        controller.teamController.searchResult[i] as PortalUserItemController,
+                    onTapFunction: controller.addResponsible as Function(PortalUserItemController)),
+                itemExtent: 65,
+                itemCount: controller.teamController.searchResult.length as int,
               ),
             );
           }

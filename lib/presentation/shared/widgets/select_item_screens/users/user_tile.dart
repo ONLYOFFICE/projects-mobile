@@ -48,6 +48,7 @@ class _UserTile extends StatelessWidget {
           'id': user.id,
           'displayName': user.displayName,
         },
+        id: Get.find<PlatformController>().isMobile ? null : 1,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.5),
@@ -59,7 +60,7 @@ class _UserTile extends StatelessWidget {
               child: CustomNetworkImage(
                 height: 40,
                 width: 40,
-                image: user.avatar ?? user.avatarMedium ?? user.avatarSmall,
+                image: user.avatar ?? user.avatarMedium ?? user.avatarSmall ?? '',
                 fit: BoxFit.contain,
                 defaultImage: const DefaultAvatar(),
               ),
@@ -72,7 +73,7 @@ class _UserTile extends StatelessWidget {
                 children: [
                   Text(
                     user.displayName!,
-                    style: TextStyleHelper.projectTitle,
+                    style: TextStyleHelper.subtitle1(),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),

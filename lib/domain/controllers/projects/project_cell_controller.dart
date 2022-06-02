@@ -32,12 +32,13 @@
 
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
-import 'package:projects/domain/controllers/projects/project_status_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectCellController extends BaseProjectEditorController {
@@ -50,6 +51,8 @@ class ProjectCellController extends BaseProjectEditorController {
       isPrivate.value = project.isPrivate!;
       status.value = project.status!;
       canEdit.value = project.canEdit!;
+      statusNameString.value = ProjectStatus.toName(_project.status);
+      statusImageString.value = ProjectStatus.toImageString(_project.status);
     });
   }
 
@@ -58,20 +61,34 @@ class ProjectCellController extends BaseProjectEditorController {
   @override
   ProjectDetailed get projectData => _project;
 
-  RxBool canEdit = false.obs;
-  RxInt status = (-1).obs;
+  final canEdit = false.obs;
+  final status = RxInt(ProjectStatusCode.open.index);
 
-  RxString statusImageString = ''.obs;
-
-  String get statusImage => ProjectStatus.toImageString(_project.status);
-
-  String get statusName => ProjectStatus.toName(_project.status);
+  final statusImageString = RxString(ProjectStatus.toImageString(ProjectStatusCode.open.index));
+  final statusNameString = RxString(tr('statusOpen'));
 
   String decodeImageString(String image) {
     return utf8.decode(base64.decode(image));
   }
 
   @override
-  Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
-      .updateStatus(newStatusId: newStatusId, projectData: projectData);
+  Future<bool> updateStatus({int? newStatusId}) async {
+    final projectController = Get.find<ProjectDetailsController>(tag: projectData.id.toString());
+    final resp = await projectController.updateStatus(newStatusId: newStatusId);
+
+    if (resp) {
+      _project.status = newStatusId;
+      status.value = newStatusId!;
+      statusNameString.value = ProjectStatus.toName(_project.status);
+      statusImageString.value = ProjectStatus.toImageString(_project.status);
+    }
+
+    return resp;
+  }
+
+  @override
+  Future<void> showTags() {
+    // TODO: implement showTags
+    throw UnimplementedError();
+  }
 }

@@ -45,12 +45,12 @@ class _SearchSettings extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('inContent'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.searchSettings['in_content'] as bool,
               onTap: () => filterController.changeSearchSettingsFilter('in_content')),
           FilterElement(
               title: tr('excludeSubfolders'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.searchSettings['exclude_subfolders'] as bool,
               onTap: () => filterController.changeSearchSettingsFilter('exclude_subfolders')),
         ],

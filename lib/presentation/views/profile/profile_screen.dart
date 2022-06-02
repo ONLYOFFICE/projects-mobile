@@ -31,8 +31,9 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -40,6 +41,7 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -51,38 +53,80 @@ import 'package:projects/presentation/views/settings/settings_screen.dart';
 class SelfProfileScreen extends StatelessWidget {
   const SelfProfileScreen({Key? key}) : super(key: key);
 
+  static String get pageName => tr('profile');
+
   @override
   Widget build(BuildContext context) {
-    final profileController = Get.find<ProfileController>();
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      profileController.setup();
-    });
+    final profileController = Get.find<ProfileController>(tag: 'SelfProfileScreen');
 
     // arguments may be null or may not contain needed parameters
     // then Get.arguments['param_name'] will return null
-    final showBackButton =
-        Get.arguments == null ? false : Get.arguments['showBackButton'] as bool? ?? false;
-    final showSettingsButton =
-        Get.arguments == null ? true : Get.arguments['showSettingsButton'] as bool? ?? true;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final bool showBackButton;
+    if (args == null) {
+      showBackButton = false;
+    } else {
+      showBackButton = args['showBackButton'] as bool? ?? false;
+    }
+    final bool showSettingsButton;
+    if (args == null) {
+      showSettingsButton = true;
+    } else {
+      showSettingsButton = args['showSettingsButton'] as bool? ?? true;
+    }
 
     final platformController = Get.find<PlatformController>();
 
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           showBackButton: showBackButton,
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
+          leadingWidth: showBackButton && GetPlatform.isIOS
+              ? TextUtils.getTextWidth(tr('closeLowerCase'), TextStyleHelper.button()) + 16
+              : null,
+          leading: showBackButton
+              ? PlatformWidget(
+                  cupertino: (_, __) => CupertinoButton(
+                    padding: const EdgeInsets.only(left: 16),
+                    alignment: Alignment.centerLeft,
+                    onPressed: Get.back,
+                    child: Text(
+                      tr('closeLowerCase'),
+                      style: TextStyleHelper.button(),
+                    ),
+                  ),
+                  material: (_, __) => IconButton(
+                    onPressed: Get.back,
+                    icon: const Icon(Icons.close),
+                  ),
+                )
+              : null,
+          // title: Text(
+          //   tr('profile'),
+          //   style: TextStyle(color: Theme.of(context).colors().onSurface),
+          // ),
           titleText: tr('profile'),
+          centerTitle: !GetPlatform.isAndroid,
           actions: [
             if (showSettingsButton)
-              IconButton(
-                icon: const AppIcon(icon: SvgIcons.settings),
+              PlatformIconButton(
+                cupertino: (_, __) {
+                  return CupertinoIconButtonData(
+                    icon: AppIcon(
+                      icon: SvgIcons.settings,
+                      color: Theme.of(context).colors().primary,
+                    ),
+                    onPressed: () => Get.find<NavigationController>().to(
+                      const SettingsScreen(),
+                      arguments: {'previousPage': pageName},
+                    ),
+                    padding: EdgeInsets.zero,
+                  );
+                },
+                materialIcon: const AppIcon(icon: SvgIcons.settings),
                 onPressed: () => Get.find<NavigationController>().to(const SettingsScreen()),
               )
           ],
@@ -99,7 +143,7 @@ class SelfProfileScreen extends StatelessWidget {
                       opacity: profileController.status.value == UserStatus.Terminated ? 0.4 : 1.0,
                       child: CircleAvatar(
                         radius: 60,
-                        backgroundColor: Get.theme.colors().bgDescription,
+                        backgroundColor: Theme.of(context).colors().bgDescription,
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(60),
                             child: profileController.avatar.value),
@@ -132,7 +176,7 @@ class SelfProfileScreen extends StatelessWidget {
                   () => Text(
                     profileController.username.value,
                     style: TextStyleHelper.headline6(
-                      color: Get.theme.colors().onSurface,
+                      color: Theme.of(context).colors().onSurface,
                     ),
                   ),
                 ),
@@ -154,9 +198,9 @@ class SelfProfileScreen extends StatelessWidget {
               ),
               _ProfileInfoTile(
                 text: tr('logOut'),
-                textColor: Get.theme.colors().colorError,
+                textColor: Theme.of(context).colors().colorError,
                 icon: SvgIcons.logout,
-                iconColor: Get.theme.colors().colorError.withOpacity(0.6),
+                iconColor: Theme.of(context).colors().colorError.withOpacity(0.6),
                 onTap: () async => profileController.logout(context),
               ),
             ],
@@ -172,7 +216,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'] as PortalUserItemController;
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'] as PortalUserItemController;
     final portalUser = controller.portalUser;
     final portalInfoController = Get.find<PortalInfoController>();
     portalInfoController.setup();
@@ -197,11 +242,11 @@ class ProfileScreen extends StatelessWidget {
                     width: 120,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(80),
-                      child: CustomNetworkImage(
-                        image: controller.profileAvatar.value,
-                        defaultImage: const DefaultAvatar(),
-                        fit: BoxFit.contain,
-                      ),
+                      child: Obx(() => CustomNetworkImage(
+                            image: controller.profileAvatar.value,
+                            defaultImage: const DefaultAvatar(),
+                            fit: BoxFit.contain,
+                          )),
                     ),
                   ),
                   if (portalUser.status == UserStatus.Terminated)
@@ -209,13 +254,13 @@ class ProfileScreen extends StatelessWidget {
                         bottom: 0,
                         right: 15,
                         child: AppIcon(icon: SvgIcons.userBlocked, width: 32, height: 32)),
-                  if ((portalUser.isAdmin! || portalUser.isOwner!) &&
+                  if ((portalUser.isAdmin == true || portalUser.isOwner == true) &&
                       portalUser.status != UserStatus.Terminated)
                     const Positioned(
                         bottom: 0,
                         right: 15,
                         child: AppIcon(icon: SvgIcons.userAdmin, width: 32, height: 32)),
-                  if (portalUser.isVisitor! && portalUser.status != UserStatus.Terminated)
+                  if (portalUser.isVisitor == true && portalUser.status != UserStatus.Terminated)
                     const Positioned(
                         bottom: 0,
                         right: 15,
@@ -228,7 +273,7 @@ class ProfileScreen extends StatelessWidget {
                 child: Text(
                   portalUser.displayName!,
                   style: TextStyleHelper.headline6(
-                    color: Get.theme.colors().onSurface,
+                    color: Theme.of(context).colors().onSurface,
                   ),
                 ),
               ),
@@ -295,7 +340,7 @@ class _ProfileInfoTile extends StatelessWidget {
                   child: icon != null
                       ? AppIcon(
                           icon: icon,
-                          color: iconColor ?? Get.theme.colors().onSurface.withOpacity(0.6))
+                          color: iconColor ?? Theme.of(context).colors().onSurface.withOpacity(0.6))
                       : null,
                 ),
                 Expanded(
@@ -308,14 +353,15 @@ class _ProfileInfoTile extends StatelessWidget {
                         if (caption != null && caption!.isNotEmpty)
                           Text(caption!,
                               style: TextStyleHelper.caption(
-                                  color: Get.theme.colors().onBackground.withOpacity(0.75))),
+                                  color:
+                                      Theme.of(context).colors().onBackground.withOpacity(0.75))),
                         Text(text,
                             maxLines: maxLines,
                             overflow: textOverflow,
                             style: textStyle ??
                                 TextStyleHelper.subtitle1(
                                     // ignore: prefer_if_null_operators
-                                    color: textColor ?? Get.theme.colors().onSurface))
+                                    color: textColor ?? Theme.of(context).colors().onSurface))
                       ],
                     ),
                   ),

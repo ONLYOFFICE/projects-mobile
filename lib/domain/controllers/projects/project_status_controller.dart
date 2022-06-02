@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
@@ -47,10 +48,10 @@ class ProjectStatusesController extends GetxController {
 
   String getStatusImageString(int value) => ProjectStatus.toImageString(value);
 
-  Future<bool> updateStatus(
-      {int? newStatusId, required ProjectDetailed projectData}) async {
-    if (projectData.taskCount! > 0 &&
-        newStatusId == ProjectStatusCode.closed.index) {
+  Future<bool> updateStatus({int? newStatusId, required ProjectDetailed projectData}) async {
+    if (newStatusId == projectData.status) return false;
+
+    if (projectData.taskCount! > 0 && newStatusId == ProjectStatusCode.closed.index) {
       MessagesHandler.showSnackBar(
         context: Get.context!,
         text: tr('cannotCloseProject'),
@@ -59,13 +60,15 @@ class ProjectStatusesController extends GetxController {
     }
 
     final t = await locator<ProjectService>().updateProjectStatus(
-        projectId: projectData.id!,
-        newStatus: ProjectStatus.toLiteral(newStatusId));
+        projectId: projectData.id!, newStatus: ProjectStatus.toLiteral(newStatusId));
 
     if (t != null) {
+      locator<EventHub>().fire('needToRefreshProjects', {'projectDetails': t});
+
       return true;
     }
 
+    MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
     return false;
   }
 }

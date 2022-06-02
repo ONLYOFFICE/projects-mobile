@@ -30,12 +30,17 @@
  *
  */
 
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/enums/viewstate.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -45,93 +50,119 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PortalInputView extends StatelessWidget {
-  PortalInputView({Key? key}) : super(key: key);
+  PortalInputView({Key? key}) : super(key: key) {
+    if (Get.isRegistered<AccountManager>()) {
+      Get.find<AccountManager>();
+    } else {
+      Get.put(AccountManager()).setup();
+    }
+
+    controller.setup();
+  }
+
   final controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
     SchedulerBinding.instance!.addPostFrameCallback((_) {
-      controller.setState(ViewState.Idle);
-      controller.setup();
+      controller.checkBoxValue.value = false;
     });
 
     final height = controller.accountManager.accounts.isEmpty ? Get.height : Get.height - 80;
-    return Obx(
-      () => controller.state.value == ViewState.Busy
-          ? Scaffold(
-              body: SizedBox(
-                  height: Get.height, child: const Center(child: CircularProgressIndicator())),
-            )
-          : Scaffold(
-              appBar: controller.accountManager.accounts.isEmpty
-                  ? null
-                  : StyledAppBar(
-                      backButtonIcon: const Icon(Icons.close),
-                      title: Text(
-                        tr('addNewAccount'),
-                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                      ),
-                    ),
-              body: SingleChildScrollView(
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    constraints: BoxConstraints(maxWidth: 480, maxHeight: height),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: <Widget>[
-                        if (controller.accountManager.accounts.isEmpty)
-                          SizedBox(height: height * 0.2)
-                        else
-                          SizedBox(height: height * 0.1),
-                        const AppIcon(icon: SvgIcons.app_logo),
-                        SizedBox(height: height * 0.01),
-                        Text(tr('appName'),
-                            textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
-                        SizedBox(height: height * 0.111),
-                        Obx(
-                          () => AuthTextField(
-                            controller: controller.portalAdressController,
-                            autofillHint: AutofillHints.url,
-                            hintText: tr('portalAdress'),
-                            hasError: controller.portalFieldError.value == true,
-                          ),
-                        ),
-                        SizedBox(height: height * 0.033),
-                        DecoratedBox(
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                                blurRadius: 3,
-                                offset: const Offset(0, 0.85),
-                                color: Get.theme.colors().onBackground.withOpacity(0.19)),
-                            BoxShadow(
-                                blurRadius: 3,
-                                offset: const Offset(0, 0.25),
-                                color: Get.theme.colors().onBackground.withOpacity(0.04)),
-                          ]),
-                          child: WideButton(
-                            text: tr('next'),
-                            textColor: controller.needAgreement && !controller.checkBoxValue.value
-                                ? Get.theme.colors().onBackground.withOpacity(0.5)
-                                : null,
-                            color: controller.needAgreement && !controller.checkBoxValue.value
-                                ? Get.theme.colors().bgDescription
-                                : null,
-                            onPressed: controller.getPortalCapabilities,
-                          ),
-                        ),
-                        if (controller.needAgreement)
-                          PrivacyAndTermsFooter.withCheckbox()
-                        else
-                          const Spacer(),
-                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter()
-                      ],
-                    ),
+
+    return Scaffold(
+      appBar: controller.accountManager.accounts.isEmpty
+          ? null
+          : StyledAppBar(
+              leadingWidth: GetPlatform.isIOS
+                  ? TextUtils.getTextWidth(
+                        tr('cancel').toLowerCase().capitalizeFirst!,
+                        TextStyleHelper.button(),
+                      ) +
+                      16
+                  : null,
+              leading: PlatformWidget(
+                cupertino: (_, __) => CupertinoButton(
+                  padding: const EdgeInsets.only(left: 16),
+                  alignment: Alignment.centerLeft,
+                  onPressed: Get.back,
+                  child: Text(
+                    tr('cancel').toLowerCase().capitalizeFirst!,
+                    style: TextStyleHelper.button(),
                   ),
                 ),
+                material: (_, __) => IconButton(
+                  onPressed: Get.back,
+                  icon: const Icon(Icons.close),
+                ),
+              ),
+              titleWidth: TextUtils.getTextWidth(tr('addNewAccount'),
+                  TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
+              elevation: 1,
+              title: Text(
+                tr('addNewAccount'),
+                style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
+              ),
+              titleHeight: Platform.isIOS ? 50 : 56,
+            ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              constraints: BoxConstraints(
+                maxWidth: 480,
+                maxHeight: height -
+                    MediaQuery.of(context).padding.bottom -
+                    MediaQuery.of(context).padding.top,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  const Spacer(flex: 2),
+                  const AppIcon(icon: SvgIcons.app_logo),
+                  const SizedBox(height: 10),
+                  AppIcon(
+                    icon: SvgIcons.app_title,
+                    color: Theme.of(context).colors().onSurface,
+                  ),
+                  const Spacer(),
+                  Obx(
+                    () => AuthTextField(
+                      controller: controller.portalAdressController,
+                      autofillHint: AutofillHints.url,
+                      hintText: tr('portalAdress'),
+                      hasError: controller.portalFieldError.value,
+                      keyboardType: TextInputType.url,
+                      onSubmitted: (_) => controller.getPortalCapabilities(),
+                    ),
+                  ),
+                  const SizedBox(height: 26),
+                  Obx(() {
+                    final checkboxValue = controller.checkBoxValue.value;
+                    return WideButton(
+                      text: tr('next'),
+                      textColor: controller.needAgreement && !checkboxValue
+                          ? Theme.of(context).colors().onBackground.withOpacity(0.5)
+                          : null,
+                      color: controller.needAgreement && !checkboxValue
+                          ? Theme.of(context).colors().bgDescription
+                          : null,
+                      onPressed: controller.getPortalCapabilities,
+                    );
+                  }),
+                  if (controller.needAgreement)
+                    PrivacyAndTermsFooter.withCheckbox()
+                  else
+                    const Spacer(flex: 3),
+                  if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter(),
+                ],
               ),
             ),
+          ),
+        ),
+      ),
     );
   }
 }

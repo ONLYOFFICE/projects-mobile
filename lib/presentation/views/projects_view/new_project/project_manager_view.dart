@@ -35,180 +35,86 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:projects/presentation/shared/widgets/users_list.dart';
 
 class ProjectManagerSelectionView extends StatelessWidget {
-  const ProjectManagerSelectionView({
-    Key? key,
-  }) : super(key: key);
+  ProjectManagerSelectionView({Key? key}) : super(key: key);
+
+  final usersDataSource = Get.find<UsersDataSource>();
+  final platformController = Get.find<PlatformController>();
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.arguments['controller'];
-
-    final usersDataSource = Get.find<UsersDataSource>();
+    final args = ModalRoute.of(context)!.settings.arguments ?? Get.arguments;
+    final controller = args['controller'] as BaseProjectEditorController;
+    final previousPage = args['previousPage'] as String?;
 
     controller.selectionMode = UserSelectionMode.Single;
+    controller.selfUserItem.selectionMode.value = UserSelectionMode.Single;
     usersDataSource.selectionMode = UserSelectionMode.Single;
+
     controller.setupUsersSelection();
 
-    final platformController = Get.find<PlatformController>();
-
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
         titleText: tr('selectPM'),
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+        previousPageTitle: previousPage,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         bottom: SearchField(
           controller: usersDataSource.searchInputController,
           hintText: tr('usersSearch'),
           textInputAction: TextInputAction.search,
-          showClearIcon: true,
           onClearPressed: usersDataSource.clearSearch,
           onChanged: usersDataSource.searchUsers,
           onSubmitted: usersDataSource.searchUsers,
         ),
       ),
-      body: Obx(
-        () {
-          if (controller.usersLoaded.value as bool &&
-              usersDataSource.usersWithoutVisitors.isNotEmpty &&
-              !usersDataSource.isSearchResult.value) {
-            return UsersDefault(
-              selfUserItem: controller.selfUserItem as PortalUserItemController,
-              usersDataSource: usersDataSource,
-              onTapFunction: (v) => controller.changePMSelection(v),
-              withoutGuests: true,
-            );
-          }
-          if (usersDataSource.nothingFound.value) {
-            return Column(children: const [NothingFound()]);
-          }
-          if (usersDataSource.loaded.value && usersDataSource.isSearchResult.value) {
-            if (usersDataSource.usersWithoutVisitors.isNotEmpty)
-              return UsersSearchResult(
-                usersDataSource: usersDataSource,
-                onTapFunction: (v) => controller.changePMSelection(v),
-                withoutVisitors: true,
+      body: StyledSmartRefresher(
+        enablePullDown: false,
+        enablePullUp: usersDataSource.pullUpEnabled,
+        controller: usersDataSource.refreshController,
+        onLoading: usersDataSource.onLoading,
+        child: Obx(
+          () {
+            if (controller.usersLoaded.value &&
+                usersDataSource.usersWithoutVisitors.isNotEmpty &&
+                !usersDataSource.isSearchResult.value) {
+              return UsersStyledList(
+                selfUserItem: controller.selfUserItem,
+                onTapFunction: controller.changePMSelection,
+                users: usersDataSource.usersWithoutVisitors
+                    .where(
+                        (element) => element.portalUser.id != controller.selfUserItem.portalUser.id)
+                    .toList(),
               );
-            else
-              return Column(children: const [NothingFound()]);
-          }
-          return const ListLoadingSkeleton();
-        },
-      ),
-    );
-  }
-}
-
-class UsersSearchResult extends StatelessWidget {
-  const UsersSearchResult({
-    Key? key,
-    required this.usersDataSource,
-    required this.onTapFunction,
-    this.withoutVisitors = false,
-  }) : super(key: key);
-  final Function? onTapFunction;
-  final UsersDataSource usersDataSource;
-  final bool withoutVisitors;
-
-  @override
-  Widget build(BuildContext context) {
-    final users =
-        withoutVisitors ? usersDataSource.usersWithoutVisitors : usersDataSource.usersList;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Expanded(
-          child: SmartRefresher(
-            enablePullDown: false,
-            enablePullUp: usersDataSource.pullUpEnabled,
-            controller: usersDataSource.refreshController,
-            onLoading: usersDataSource.onLoading,
-            child: ListView.builder(
-              itemBuilder: (c, i) => PortalUserItem(
-                userController: users[i],
-                onTapFunction: onTapFunction,
-              ),
-              itemExtent: 65,
-              itemCount: users.length,
-            ),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class UsersDefault extends StatelessWidget {
-  const UsersDefault({
-    Key? key,
-    required this.selfUserItem,
-    required this.usersDataSource,
-    required this.onTapFunction,
-    this.withoutGuests = false,
-  }) : super(key: key);
-  final Function? onTapFunction;
-  final PortalUserItemController? selfUserItem;
-  final UsersDataSource usersDataSource;
-  final bool withoutGuests;
-
-  @override
-  Widget build(BuildContext context) {
-    final users = withoutGuests ? usersDataSource.usersWithoutVisitors : usersDataSource.usersList;
-    return SmartRefresher(
-      enablePullDown: false,
-      enablePullUp: usersDataSource.pullUpEnabled,
-      controller: usersDataSource.refreshController,
-      onLoading: usersDataSource.onLoading,
-      child: ListView(
-        children: <Widget>[
-          Obx(() {
-            if (usersDataSource.selfIsVisible.value == true)
-              return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                const SizedBox(height: 26),
-                Container(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: Text(tr('me'), style: TextStyleHelper.body2()),
-                ),
-                const SizedBox(height: 26),
-                PortalUserItem(
-                  onTapFunction: onTapFunction,
-                  userController: selfUserItem,
-                ),
-                const SizedBox(height: 26),
-              ]);
-            else
-              return const SizedBox();
-          }),
-          Container(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(tr('users'), style: TextStyleHelper.body2()),
-          ),
-          const SizedBox(height: 26),
-          Column(children: [
-            ListView.builder(
-              physics: const ScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (c, i) =>
-                  PortalUserItem(userController: users[i], onTapFunction: onTapFunction),
-              itemExtent: 65,
-              itemCount: users.length,
-            )
-          ]),
-        ],
+            }
+            if (usersDataSource.nothingFound.value) {
+              return const NothingFound();
+            }
+            if (usersDataSource.loaded.value && usersDataSource.isSearchResult.value) {
+              if (usersDataSource.usersWithoutVisitors.isNotEmpty)
+                return UsersSimpleList(
+                  onTapFunction: controller.changePMSelection,
+                  users: usersDataSource.usersWithoutVisitors
+                      .where((element) =>
+                          element.portalUser.id != controller.selfUserItem.portalUser.id)
+                      .toList(),
+                );
+              else
+                return const NothingFound();
+            }
+            return const ListLoadingSkeleton();
+          },
+        ),
       ),
     );
   }

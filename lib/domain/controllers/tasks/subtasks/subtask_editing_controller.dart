@@ -34,15 +34,16 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/subtasks_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class SubtaskEditingController extends GetxController implements SubtaskActionController {
@@ -52,12 +53,14 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
   final SubtasksService _api = locator<SubtasksService>();
   final _titleController = TextEditingController();
   Subtask? _subtask;
+  @override
   late ProjectTeamController teamController;
 
   @override
   TextEditingController get titleController => _titleController;
   @override
   FocusNode? get titleFocus => null;
+  @override
   RxList responsibles = [].obs;
   @override
   RxInt? status;
@@ -86,6 +89,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
     setupResponsibleSelection(projectId);
   }
 
+  @override
   void setupResponsibleSelection([int? projectId]) async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(projectId: projectId, withoutVisitors: true, withoutBlocked: true);
@@ -119,6 +123,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
     responsibles.clear();
     if (user.isSelected.value == true) {
       responsibles.add(user);
+      Get.find<NavigationController>().back();
     } else {
       responsibles.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
@@ -128,7 +133,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
   void confirmResponsiblesSelection() {
     // ignore: invalid_use_of_protected_member
     _previusSelectedResponsible = List.of(responsibles.value);
-    Get.back();
+    Get.find<NavigationController>().back();
   }
 
   @override
@@ -137,14 +142,15 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
     if (listEquals(_previusSelectedResponsible, responsibles.value)) {
       Get.back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
         onAcceptTap: () {
           responsibles.value = [_previusSelectedResponsible];
           Get.back();
-          Get.back();
+          Get.find<NavigationController>().back();
         },
         onCancelTap: Get.back,
       ));
@@ -163,18 +169,16 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
       responsible = null;
 
     if (responsible != _previousResponsibleId || _titleController.text != _previousTitle) {
-      Get.dialog(Container(
-        margin: const EdgeInsets.symmetric(horizontal: 24),
-        child: StyledAlertDialog(
-          titleText: tr('discardChanges'),
-          contentText: tr('lostOnLeaveWarning'),
-          acceptText: tr('delete').toUpperCase(),
-          onAcceptTap: () {
-            Get.back();
-            Get.back();
-          },
-          onCancelTap: Get.back,
-        ),
+      Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
+        acceptColor: Theme.of(Get.context!).colors().colorError,
+        onAcceptTap: () {
+          Get.back();
+          Get.find<NavigationController>().back();
+        },
+        onCancelTap: Get.back,
       ));
     } else {
       Get.back();
@@ -204,7 +208,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
 
         locator<EventHub>().fire('needToRefreshParentTask', [editedSubtask.taskId]);
 
-        Get.back();
+        Get.find<NavigationController>().back();
       }
     }
   }

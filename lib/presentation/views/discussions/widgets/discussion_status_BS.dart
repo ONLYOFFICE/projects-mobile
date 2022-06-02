@@ -36,6 +36,8 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
@@ -51,31 +53,35 @@ Future<void> showsDiscussionStatusesBS({
     initHeight: initSize,
     maxHeight: initSize + 0.1,
     decoration: BoxDecoration(
-        color: Get.theme.colors().surface,
+        color: Theme.of(context).colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 18.5),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(tr('selectStatus'),
-                style: TextStyleHelper.h6(color: Get.theme.colors().onSurface)),
-          ),
-          const SizedBox(height: 18.5),
-        ],
+      return Container(
+        decoration: BoxDecoration(
+            color: Theme.of(context as BuildContext).colors().surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(tr('selectStatus'),
+                  style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface)),
+            ),
+          ],
+        ),
       );
     },
     builder: (context, bottomSheetOffset) {
       return SliverChildListDelegate(
         [
-          // Obx(
-          //   () =>
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(width: 1, color: Get.theme.colors().outline.withOpacity(0.5)),
+                top: BorderSide(
+                    width: 1,
+                    color: Theme.of(context as BuildContext).colors().outline.withOpacity(0.5)),
               ),
             ),
             child: Obx(
@@ -85,15 +91,31 @@ Future<void> showsDiscussionStatusesBS({
                   InkWell(
                     onTap: () async => controller!.updateMessageStatus(0),
                     child: StatusTile(
-                      title: tr('open'),
+                      title: tr('openDiscussion'),
                       selected: controller!.status.value == 0,
+                      icon: Center(
+                        child: AppIcon(
+                          icon: SvgIcons.open_status,
+                          color: Theme.of(context).colors().primary,
+                          height: 16,
+                          width: 16,
+                        ),
+                      ),
                     ),
                   ),
                   InkWell(
                     onTap: () async => controller.updateMessageStatus(1),
                     child: StatusTile(
-                      title: tr('archived'),
+                      title: tr('archiveDiscussion'),
                       selected: controller.status.value == 1,
+                      icon: Center(
+                        child: AppIcon(
+                          icon: SvgIcons.archived_status,
+                          color: Theme.of(context).colors().primary,
+                          height: 16,
+                          width: 16,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -112,62 +134,47 @@ Future<void> showsDiscussionStatusesPM({
   required BuildContext context,
   required DiscussionItemController controller,
 }) async {
-  final items = <PopupMenuEntry<dynamic>>[
-    PopupMenuItem(
+  final items = [
+    PlatformPopupMenuItem(
       height: 36,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       onTap: () async => controller.updateMessageStatus(0),
-      child: StatusTileTablet(
-        title: tr('open'),
-        selected: controller.status.value == 0,
-        icon: Center(
-          child: AppIcon(
-            icon: SvgIcons.open_status,
-            color: Get.theme.colors().primary,
-            height: 16,
-            width: 16,
-          ),
+      trailingIcon: Center(
+        child: AppIcon(
+          icon: SvgIcons.open_status,
+          color: Theme.of(context).colors().primary,
+          height: 16,
+          width: 16,
         ),
       ),
+      child: StatusTileTablet(
+        title: tr('openDiscussion'),
+        selected: controller.status.value == 0,
+      ),
     ),
-    PopupMenuItem(
+    PlatformPopupMenuItem(
       height: 36,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       onTap: () async => controller.updateMessageStatus(1),
-      child: StatusTileTablet(
-        title: tr('archived'),
-        selected: controller.status.value == 1,
-        icon: Center(
-          child: AppIcon(
-            icon: SvgIcons.archived_status,
-            color: Get.theme.colors().primary,
-            height: 16,
-            width: 16,
-          ),
+      trailingIcon: Center(
+        child: AppIcon(
+          icon: SvgIcons.archived_status,
+          color: Theme.of(context).colors().primary,
+          height: 16,
+          width: 16,
         ),
+      ),
+      child: StatusTileTablet(
+        title: tr('archiveDiscussion'),
+        selected: controller.status.value == 1,
       ),
     ),
   ];
 
-// calculate the menu position, ofsset dy: 50
-  const offset = Offset(0, 50);
-  final button = context.findRenderObject() as RenderBox;
-  final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
-  final position = RelativeRect.fromRect(
-    Rect.fromPoints(
-      button.localToGlobal(
-        offset,
-        ancestor: overlay,
-      ),
-      button.localToGlobal(
-        button.size.bottomRight(Offset.zero) + offset,
-        ancestor: overlay,
-      ),
-    ),
-    Offset.zero & overlay.size,
+  showButtonMenu(
+    context: context,
+    itemBuilder: (_) => items,
   );
-
-  await showMenu(context: context, position: position, items: items);
 }
 
 double _getInititalSize() => 180 / Get.height;

@@ -32,8 +32,8 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
-import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -43,13 +43,12 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 class NewDiscussionTextScreen extends StatelessWidget {
   const NewDiscussionTextScreen({
     Key? key,
-    required this.controller,
   }) : super(key: key);
-
-  final DiscussionActionsController controller;
 
   @override
   Widget build(BuildContext context) {
+    final arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    final controller = arguments['controller'] as DiscussionActionsController;
     final platformController = Get.find<PlatformController>();
 
     return WillPopScope(
@@ -58,22 +57,23 @@ class NewDiscussionTextScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
         appBar: StyledAppBar(
-          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+          previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
+          backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
           titleText: tr('text'),
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
+          backButtonIcon: platformController.isMobile
+              ? const BackButtonIcon()
+              : Icon(PlatformIcons(context).clear),
           onLeadingPressed: controller.leaveTextView,
           actions: [
-            IconButton(icon: const Icon(Icons.check_rounded), onPressed: controller.confirmText)
+            PlatformIconButton(
+                icon: Icon(PlatformIcons(context).checkMark), onPressed: controller.confirmText)
           ],
         ),
         body: HtmlTextEditor(
           initialText: controller.text.value,
-          // ignore: unnecessary_cast
-          textController: controller.textController as HtmlEditorController,
+          textController: controller.textController,
           hintText: tr('discussionText'),
         ),
       ),

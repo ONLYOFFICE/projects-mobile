@@ -30,27 +30,39 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_button.dart';
+import 'package:projects/presentation/shared/widgets/context_menu/platform_context_menu_item.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/views/documents/entity_documents_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 import 'package:projects/presentation/views/task_detailed/comments/task_comments_view.dart';
 import 'package:projects/presentation/views/task_detailed/overview/tasks_overview_screen.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
 import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 part 'app_bar_menu.dart';
+
+class TaskDetailedTabs {
+  static const overview = 0;
+  static const subtasks = 1;
+  static const documents = 2;
+  static const comments = 3;
+}
 
 class TaskDetailedView extends StatefulWidget {
   const TaskDetailedView({Key? key}) : super(key: key);
@@ -60,74 +72,73 @@ class TaskDetailedView extends StatefulWidget {
 }
 
 class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerProviderStateMixin {
-  TabController? _tabController;
-  // ignore: prefer_final_fields
-  var _activeIndex = 0.obs;
-  late TaskItemController taskItemController;
-  final documentsController = Get.find<DocumentsController>();
+  late TabController _tabController;
   final tabsAmount = 4;
+  final _activeIndex = 0.obs;
+
+  late TaskItemController taskItemController;
+
+  late String? previousPage;
 
   @override
   void initState() {
     super.initState();
-    taskItemController = Get.arguments['controller'] as TaskItemController;
-    taskItemController.firstReload.value = true;
+
+    final args = Get.arguments;
+
+    previousPage = args['previousPage'] as String?;
+    taskItemController = args['controller'] as TaskItemController;
 
     // to get full info about task
-    taskItemController.reloadTask().then((value) => taskItemController.setLoaded = true);
+    taskItemController.reloadTask().then((value) {
+      taskItemController.setLoaded = true;
+      taskItemController.firstReload.value = false;
+    });
 
     _tabController = TabController(vsync: this, length: tabsAmount);
 
-    documentsController.entityType = 'task';
-    documentsController.setupFolder(
-        folderId: taskItemController.task.value.id,
-        folderName: taskItemController.task.value.title!);
+    _tabController.addListener(() {
+      if (_activeIndex.value == _tabController.index) return;
+
+      _activeIndex.value = _tabController.index;
+    });
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     super.dispose();
-    _tabController!.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _tabController!.addListener(() {
-      if (_activeIndex.value == _tabController!.index) return;
-
-      _activeIndex.value = _tabController!.index;
-    });
-    return Obx(
-      () => Scaffold(
-        appBar: StyledAppBar(
-          actions: [
-            if (taskItemController.canEdit)
-              IconButton(
-                icon: const Icon(Icons.edit_outlined),
-                onPressed: () => Get.find<NavigationController>()
-                    .to(TaskEditingView(task: taskItemController.task.value)),
-              ),
-            _AppBarMenu(controller: taskItemController)
-          ],
-          bottom: SizedBox(
-            height: 40,
-            child: TabBar(
+    return Scaffold(
+      appBar: StyledAppBar(
+        previousPageTitle: previousPage,
+        actions: [
+          _AppBarMenu(controller: taskItemController),
+          if (GetPlatform.isIOS) const SizedBox(width: 6),
+        ],
+        bottom: SizedBox(
+          height: 40,
+          child: Obx(
+            () => TabBar(
                 isScrollable: true,
                 controller: _tabController,
-                indicatorColor: Get.theme.colors().primary,
-                labelColor: Get.theme.colors().onSurface,
-                unselectedLabelColor: Get.theme.colors().onSurface.withOpacity(0.6),
+                indicatorColor: Theme.of(context).colors().primary,
+                labelColor: Theme.of(context).colors().onSurface,
+                unselectedLabelColor: Theme.of(context).colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   Tab(text: tr('overview')),
                   CustomTab(
                       title: tr('subtasks'),
                       currentTab: _activeIndex.value == 1,
-                      count: taskItemController.task.value.subtasks?.length),
+                      count: taskItemController.task.value.subtasks?.length ?? 0),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == 2,
-                      count: taskItemController.task.value.files?.length),
+                      count: taskItemController.task.value.files?.length ?? 0),
                   CustomTab(
                       title: tr('comments'),
                       currentTab: _activeIndex.value == 3,
@@ -135,16 +146,15 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
                 ]),
           ),
         ),
-        body: TabBarView(controller: _tabController, children: [
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
           TaskOverviewScreen(taskController: taskItemController, tabController: _tabController),
           SubtasksView(controller: taskItemController),
-          TaskDocumentsView(
-            folderId: taskItemController.task.value.id,
-            folderName: taskItemController.task.value.title,
-            documentsController: documentsController,
-          ),
+          ProjectDocumentsScreen(controller: taskItemController.documentsController),
           TaskCommentsView(controller: taskItemController),
-        ]),
+        ],
       ),
     );
   }

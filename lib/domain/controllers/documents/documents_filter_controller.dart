@@ -37,6 +37,8 @@ import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/select_group_screen.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 
 class DocumentsFilterController extends BaseFilterController {
   final FilesService _api = locator<FilesService>();
@@ -79,12 +81,7 @@ class DocumentsFilterController extends BaseFilterController {
 
   DocumentsFilterController() {
     suitableResultCount = (-1).obs;
-  }
-
-  @override
-  void onInit() async {
-    await loadFilters();
-    super.onInit();
+    loadFilters();
   }
 
   @override
@@ -95,7 +92,7 @@ class DocumentsFilterController extends BaseFilterController {
 
     suitableResultCount.value = -1;
 
-    applyFiltersDelegate?.call();
+    //applyFiltersDelegate?.call();
 
 // _getSavedFilters();
   }
@@ -264,7 +261,7 @@ class DocumentsFilterController extends BaseFilterController {
   // UNUSED
   @override
   Future<void> saveFilters() async {
-    await _storage.write(
+    await _storage.saveMapAsJson(
       'documentsFilters',
       {
         'contentTypes': {'buttons': contentTypes, 'value': _typeFilter},
@@ -305,7 +302,7 @@ class DocumentsFilterController extends BaseFilterController {
   // UNUSED
   // ignore: unused_element
   Future<void> _getSavedFilters() async {
-    final savedFilters = await _storage.read('documentFilters');
+    final savedFilters = await _storage.getMapAsJson('documentFilters');
 
     if (savedFilters != null) {
       try {
@@ -351,4 +348,17 @@ class DocumentsFilterController extends BaseFilterController {
     _authorFilter = _currentAppliedAuthorFilter;
     _searchSettingsFilter = _currentAppliedSearchSettingsFilter;
   }
+
+  // navigation
+  Future onUsersFilterPressed() async => await navigationController
+          .toScreen(const SelectUserScreen(), page: '/SelectUserScreen', arguments: {
+        'previousPage': tr('filter'),
+      });
+
+  Future onGroupsFilterPressed() async => await navigationController
+          .toScreen(const SelectGroupScreen(), page: '/SelectGroupScreen', arguments: {
+        'previousPage': tr('filter'),
+      });
+
+  void back() => navigationController.back();
 }

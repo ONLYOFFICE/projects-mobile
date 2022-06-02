@@ -32,22 +32,28 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/presentation/shared/widgets/option_with_switch.dart';
 
 class PriorityTile extends StatelessWidget {
   final TaskActionsController controller;
+
   const PriorityTile({
     Key? key,
     required this.controller,
+    this.padding = const EdgeInsets.only(left: 72, right: 16),
   }) : super(key: key);
+
+  final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => TileWithSwitch(
-        title: tr('highPriority'),
-        isSelected: controller.highPriority!.value,
-        onChanged: controller.changePriority));
+    return Padding(
+      padding: padding,
+      child: OptionWithSwitch(
+          title: tr('highPriority'),
+          switchValue: controller.highPriority,
+          switchOnChanged: controller.changePriority),
+    );
   }
 }

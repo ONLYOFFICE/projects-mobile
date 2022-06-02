@@ -42,6 +42,7 @@ import 'package:projects/internal/utils/debug_print.dart';
 
 class DiscussionsFilterController extends BaseFilterController {
   final DiscussionsService _api = locator<DiscussionsService>();
+
   final _sortController = Get.find<DiscussionsSortController>();
   final Storage _storage = locator<Storage>();
 
@@ -68,7 +69,6 @@ class DiscussionsFilterController extends BaseFilterController {
   String get otherFilter => _otherFilter;
 
   var _selfId;
-  String? _projectId;
 
   bool get _hasFilters =>
       _authorFilter.isNotEmpty ||
@@ -103,8 +103,6 @@ class DiscussionsFilterController extends BaseFilterController {
   DiscussionsFilterController() {
     suitableResultCount = (-1).obs;
   }
-
-  set projectId(String value) => _projectId = value;
 
   Future<void> changeAuthor(String filter, [dynamic newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
@@ -259,7 +257,7 @@ class DiscussionsFilterController extends BaseFilterController {
       projectFilter: _projectFilter,
       creationDateFilter: _creationDateFilter,
       otherFilter: _otherFilter,
-      projectId: _projectId,
+      projectId: projectId,
     );
 
     if (result != null) {
@@ -336,7 +334,7 @@ class DiscussionsFilterController extends BaseFilterController {
       'stopDate': stopDate,
     };
 
-    await _storage.write(
+    await _storage.saveMapAsJson(
       'discussionFilters',
       {
         'author': {'buttons': Map.from(author), 'value': _authorFilter},
@@ -376,7 +374,7 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   Future<void> _getSavedFilters() async {
-    final savedFilters = await _storage.read('discussionFilters', returnCopy: true);
+    final savedFilters = await _storage.getMapAsJson('discussionFilters');
 
     if (savedFilters != null) {
       try {

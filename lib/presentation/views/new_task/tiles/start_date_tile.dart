@@ -32,13 +32,17 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
+import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 class StartDateTile extends StatelessWidget {
   final TaskActionsController controller;
@@ -52,27 +56,32 @@ class StartDateTile extends StatelessWidget {
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        final bool _isSelected = controller.startDateText!.value.isNotEmpty;
+        final bool _isSelected = controller.startDateText.value.isNotEmpty;
         return NewItemTile(
           icon: SvgIcons.start_date,
-          text: _isSelected ? controller.startDateText!.value : tr('setStartDate'),
+          text: _isSelected ? controller.startDateText.value : tr('setStartDate'),
           caption: _isSelected ? '${tr('startDate')}:' : null,
           isSelected: _isSelected,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          iconColor: Theme.of(context).colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Theme.of(context).colors().onBackground,
           suffix: _isSelected
-              ? IconButton(
-                  icon: Icon(Icons.close_rounded, size: 24, color: Get.theme.colors().onBackground),
+              ? PlatformIconButton(
+                  padding: EdgeInsets.zero,
+                  icon: Icon(PlatformIcons(context).clear,
+                      size: 24, color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
                   onPressed: () => controller.changeStartDate(null))
               : null,
-          suffixPadding: const EdgeInsets.only(right: 10),
           onTap: () => Get.find<NavigationController>().toScreen(
             const SelectDateView(),
             arguments: {
               'controller': controller,
               'startDate': true,
-              'initialDate': controller.startDate
+              'initialDate': controller.startDate,
+              'previousPage':
+                  controller is NewTaskController ? NewTaskView.pageName : TaskEditingView.pageName,
             },
+            transition: Transition.rightToLeft,
+            page: '/SelectDateView',
           ),
         );
       },

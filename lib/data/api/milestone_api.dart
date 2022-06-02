@@ -58,10 +58,8 @@ class MilestoneApi {
       url += '&Count=25&StartIndex=$startIndex';
     }
 
-    if (sortBy != null &&
-        sortBy.isNotEmpty &&
-        sortOrder != null &&
-        sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+    if (sortBy != null && sortBy.isNotEmpty && sortOrder != null && sortOrder.isNotEmpty)
+      url += '&sortBy=$sortBy&sortOrder=$sortOrder';
 
     if (milestoneResponsibleFilter != null) {
       url += milestoneResponsibleFilter;
@@ -121,10 +119,8 @@ class MilestoneApi {
       url += '?Count=25&StartIndex=$startIndex';
     }
 
-    if (sortBy != null &&
-        sortBy.isNotEmpty &&
-        sortOrder != null &&
-        sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+    if (sortBy != null && sortBy.isNotEmpty && sortOrder != null && sortOrder.isNotEmpty)
+      url += '&sortBy=$sortBy&sortOrder=$sortOrder';
 
     if (milestoneResponsibleFilter != null) {
       url += milestoneResponsibleFilter;
@@ -170,8 +166,7 @@ class MilestoneApi {
 
   Future<ApiDTO<Map<String, dynamic>>> createMilestone(
       {required int projectId, required NewMilestoneDTO milestone}) async {
-    final url =
-        await locator.get<CoreApi>().createMilestoneUrl(projectID: projectId);
+    final url = await locator.get<CoreApi>().createMilestoneUrl(projectID: projectId);
 
     final result = ApiDTO<Map<String, dynamic>>();
     final body = milestone.toJson();

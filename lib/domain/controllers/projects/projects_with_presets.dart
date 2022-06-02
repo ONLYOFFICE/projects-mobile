@@ -31,8 +31,6 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:synchronized/synchronized.dart';
@@ -46,102 +44,58 @@ class ProjectsWithPresets {
 
   Lock lock = Lock();
 
-  ProjectsController? get myProjectsController {
+  ProjectsController get myProjectsController {
     _myProjectsController ?? _setupMyProjects();
-    return _myProjectsController;
+    return _myProjectsController!;
   }
 
-  ProjectsController? get folowedProjectsController {
+  ProjectsController get folowedProjectsController {
     _folowedProjectsController ?? _setupMyFolowedProjects();
-    return _folowedProjectsController;
+    return _folowedProjectsController!;
   }
 
-  ProjectsController? get activeProjectsController {
+  ProjectsController get activeProjectsController {
     _activeProjectsController ?? _setupActiveProjects();
-    return _activeProjectsController;
+    return _activeProjectsController!;
   }
 
-  ProjectsController? get myMembershipProjectController {
+  ProjectsController get myMembershipProjectController {
     _myMembershipProjectController ?? _setupMyMembershipProjects();
-    return _myMembershipProjectController;
+    return _myMembershipProjectController!;
   }
 
-  ProjectsController? get myManagedProjectController {
+  ProjectsController get myManagedProjectController {
     _myManagedProjectController ?? _setupMyManagedProjects();
-    return _myManagedProjectController;
+    return _myManagedProjectController!;
   }
 
   Future<void> _setupMyProjects() async {
-    _myProjectsController = Get.put(
-        ProjectsController(
-          Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
-              tag: '_myProjectPaginationController'),
-        ),
-        tag: '_myProjectsController')!
+    _myProjectsController = Get.put(ProjectsController(), tag: '_myProjectsController')!
       ..setup(PresetProjectFilters.myProjects, withFAB: false);
     await _myProjectsController!.loadProjects();
   }
 
   Future<void> _setupMyFolowedProjects() async {
-    _folowedProjectsController = Get.put(
-        ProjectsController(
-          Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
-              tag: '_folowedProjectPaginationController'),
-          // Get.find<PaginationController<ProjectDetailed>>(
-          //     tag: '_folowedProjectPaginationController'),
-          // Get.put<PaginationController<ProjectDetailed>>(
-          //     PaginationController<ProjectDetailed>(),
-          //     tag: '_folowedProjectPaginationController'),
-        ),
-        tag: '_folowedProjectsController')!
+    _folowedProjectsController = Get.put(ProjectsController(), tag: '_folowedProjectsController')!
       ..setup(PresetProjectFilters.myFollowedProjects, withFAB: false);
     await _folowedProjectsController!.loadProjects();
   }
 
   Future<void> _setupActiveProjects() async {
-    _activeProjectsController = Get.put(
-        ProjectsController(
-          Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
-              tag: '_activeProjectPaginationController'),
-          // Get.put<PaginationController<ProjectDetailed>>(
-          //     PaginationController<ProjectDetailed>()),
-          // Get.put<PaginationController<ProjectDetailed>>(
-          //     PaginationController<ProjectDetailed>(),
-          //     tag: '_activeProjectPaginationController'),
-        ),
-        tag: '_activeProjectsController')!
+    _activeProjectsController = Get.put(ProjectsController(), tag: '_activeProjectsController')!
       ..setup(PresetProjectFilters.active, withFAB: false);
     await _activeProjectsController!.loadProjects();
   }
 
   Future<void> _setupMyMembershipProjects() async {
-    _myMembershipProjectController = Get.put(
-        ProjectsController(
-          Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
-              tag: '_myMembershipProjectPaginationController'),
-        ),
-        tag: '_myMembershipProjectController')!
-      ..setup(PresetProjectFilters.myMembership, withFAB: false);
+    _myMembershipProjectController =
+        Get.put(ProjectsController(), tag: '_myMembershipProjectController')!
+          ..setup(PresetProjectFilters.myMembership, withFAB: false);
     await _myMembershipProjectController!.loadProjects();
   }
 
   Future<void> _setupMyManagedProjects() async {
-    _myManagedProjectController = Get.put(
-        ProjectsController(
-          Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
-              tag: '_myManagedProjectPaginationController'),
-        ),
-        tag: '_myManagedProjectController')!
+    _myManagedProjectController = Get.put(ProjectsController(), tag: '_myManagedProjectController')!
       ..setup(PresetProjectFilters.myManaged, withFAB: false);
     await _myManagedProjectController!.loadProjects();
   }

@@ -44,12 +44,12 @@ class _Milestone extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('milestonesWithMyTasks'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.milestone['my'] as bool,
               onTap: () => filterController.changeMilestone('my')),
           FilterElement(
               title: tr('noMilestone'),
-              titleColor: Get.theme.colors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.milestone['no'] as bool,
               onTap: () => filterController.changeMilestone('no')),
           FilterElement(
@@ -58,8 +58,12 @@ class _Milestone extends StatelessWidget {
                   : filterController.milestone['other'] as String,
               isSelected: filterController.milestone['other'].isNotEmpty as bool,
               onTap: () async {
-                final milestone =
-                    await Get.find<NavigationController>().toScreen(const SelectMilestoneScreen());
+                final milestone = await Get.find<NavigationController>().toScreen(
+                  const SelectMilestoneScreen(),
+                  transition: Transition.rightToLeft,
+                  page: '/SelectMilestoneScreen',
+                  arguments: {'previousPage': TasksFilterScreen.pageName},
+                );
                 filterController.changeMilestone('other', milestone);
               },
               cancelButtonEnabled: filterController.milestone['other'].isNotEmpty as bool?,

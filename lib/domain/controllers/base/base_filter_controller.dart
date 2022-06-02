@@ -31,16 +31,24 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 
 abstract class BaseFilterController extends GetxController {
   late RxInt suitableResultCount;
+  final platformController = Get.find<PlatformController>();
+  final navigationController = Get.find<NavigationController>();
 
   late String filtersTitle;
 
-  RxBool hasFilters = false.obs;
+  String? projectId;
+
+  final hasFilters = RxBool(false);
 
   void applyFilters();
+
   void resetFilters();
+
   void getSuitableResultCount();
 
   void saveFilters();

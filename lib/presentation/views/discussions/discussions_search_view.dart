@@ -30,16 +30,19 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussion_search_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 import 'package:projects/presentation/views/discussions/discussion_tile.dart';
 
@@ -49,23 +52,50 @@ class DiscussionsSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(DiscussionSearchController());
+    final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
+      appBar: StyledAppBar(
+        title: SearchField(
+          controller: controller.searchInputController,
+          margin: const EdgeInsets.only(right: 16, top: 4),
+          autofocus: true,
+          hintText: tr('enterQuery'),
+          onSubmitted: controller.newSearch,
+          onChanged: controller.newSearch,
+          onClearPressed: controller.clearSearch,
+        ),
+      ),
       body: Obx(
         () {
-          if (controller.loaded.value == false) return const ListLoadingSkeleton();
-          if (controller.nothingFound.isTrue)
-            return Column(children: const [NothingFound()]);
+          if (!controller.loaded.value) return const ListLoadingSkeleton();
+          if (controller.nothingFound.value)
+            return const NothingFound();
           else {
+            final scrollController = ScrollController();
             return PaginationListView(
+              scrollController: scrollController,
               paginationController: controller.paginationController,
-              child: ListView.builder(
+              child: ListView.separated(
+                controller: scrollController,
                 itemCount: controller.paginationController.data.length,
+                separatorBuilder: (_, i) => !platformController.isMobile
+                    ? const StyledDivider(leftPadding: 72)
+                    : const SizedBox(),
                 itemBuilder: (BuildContext context, int index) {
                   final discussion = controller.paginationController.data[index];
-                  final discussionItemController = Get.find<DiscussionItemController>();
-                  discussionItemController.setup(discussion);
+
+                  DiscussionItemController discussionItemController;
+                  if (Get.isRegistered<DiscussionItemController>(tag: discussion.id.toString()))
+                    discussionItemController =
+                        Get.find<DiscussionItemController>(tag: discussion.id.toString());
+                  else {
+                    discussionItemController = Get.put<DiscussionItemController>(
+                        DiscussionItemController(),
+                        tag: discussion.id.toString());
+                    discussionItemController.setup(discussion);
+                  }
+
                   return DiscussionTile(
                     controller: discussionItemController,
                     onTap: () => Get.find<NavigationController>().to(DiscussionDetailed(),

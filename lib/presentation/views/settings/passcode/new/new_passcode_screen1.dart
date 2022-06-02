@@ -42,8 +42,7 @@ class NewPasscodeScreen1 extends StatelessWidget with PasscodeScreenMixin {
   final passcodeController = Get.find<PasscodeSettingsController>();
 
   @override
-  void onNumberPressed(int number) =>
-      passcodeController.addNumberToPasscode(number);
+  void onNumberPressed(int number) => passcodeController.addNumberToPasscode(number);
 
   @override
   String get caption => tr('choosePasscode');

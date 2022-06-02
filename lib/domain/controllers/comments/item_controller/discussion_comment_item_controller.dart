@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,6 +43,7 @@ import 'package:projects/domain/controllers/discussions/discussion_item_controll
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_editing_view.dart';
 
@@ -55,7 +58,11 @@ class DiscussionCommentItemController extends GetxController implements CommentI
 
   @override
   Future<void> copyLink() async {
-    final projectId = Get.find<DiscussionItemController>().discussion.value.projectOwner!.id;
+    final projectId = Get.find<DiscussionItemController>(tag: discussionId.toString())
+        .discussion
+        .value
+        .projectOwner!
+        .id;
 
     final link = await _api.getDiscussionCommentLink(
       commentId: comment.value.commentId!,
@@ -72,23 +79,20 @@ class DiscussionCommentItemController extends GetxController implements CommentI
 
   @override
   Future deleteComment() async {
-    await Get.dialog(StyledAlertDialog(
+    await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
       titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
       acceptText: tr('delete').toUpperCase(),
+      acceptColor: Theme.of(Get.context!).colors().colorError,
       onCancelTap: Get.back,
       onAcceptTap: () async {
         final response = await _api.deleteComment(commentId: comment.value.commentId!);
         if (response != null) {
-          // ignore: unawaited_futures
-          Get.find<DiscussionItemController>().onRefresh(showLoading: false);
+          if (discussionId != null)
+            unawaited(Get.find<DiscussionItemController>(tag: discussionId.toString())
+                .onRefresh(showLoading: false));
           Get.back();
-          MessagesHandler.showSnackBar(
-            context: Get.context!,
-            text: tr('commentDeleted'),
-            buttonText: tr('confirm'),
-            buttonOnTap: ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar,
-          );
+          MessagesHandler.showSnackBar(context: Get.context!, text: tr('commentDeleted'));
         }
       },
     ));
@@ -96,10 +100,12 @@ class DiscussionCommentItemController extends GetxController implements CommentI
 
   @override
   void toCommentEditingView() {
-    Get.find<NavigationController>().to(const CommentEditingView(), arguments: {
-      'commentId': comment.value.commentId,
-      'commentBody': comment.value.commentBody,
-      'itemController': this,
-    });
+    Get.find<NavigationController>().toScreen(const CommentEditingView(),
+        arguments: {
+          'commentId': comment.value.commentId,
+          'commentBody': comment.value.commentBody,
+          'itemController': this,
+        },
+        page: '/CommentEditingView');
   }
 }

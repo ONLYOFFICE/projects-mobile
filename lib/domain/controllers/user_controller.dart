@@ -30,8 +30,13 @@
  *
  */
 
+import 'dart:async';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/dialogs.dart';
 import 'package:synchronized/synchronized.dart';
 
 import 'package:get/get.dart';
@@ -40,44 +45,82 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/internal/locator.dart';
 
 class UserController extends GetxController {
-  final AuthService _api = locator<AuthService>();
-  final _lock = Lock();
+  final user = Rxn<PortalUser>();
+  final securityInfo = Rxn<SecurityInfo>();
 
-  PortalUser? user;
-  SecurityInfo? securityInfo;
-  RxBool loaded = false.obs;
+  final dataUpdated = false.obs;
 
-  Future<bool> getUserInfo() async {
-    final response = await _lock.synchronized(() async {
-      if (user != null) return true;
-      final data = await _api.getSelfInfo();
-      if (data.response == null) return Future.value(false);
-      user = data.response;
-      loaded.value = securityInfo != null;
-      return Future.value(loaded.value);
-    });
-    return Future.value(response);
+  static const _timeoutDuration = 3;
+
+  Future<void> updateData() async {
+    if (await getUserInfo() && await getSecurityInfo()) dataUpdated.value = !dataUpdated.value;
   }
 
-  Future getSecurityInfo() async {
-    final response = await _lock.synchronized(() async {
-      securityInfo ??= await locator<ProjectService>().getProjectSecurityinfo();
-      loaded.value = user != null;
-      return Future.value(loaded.value);
+  Timer? _userInfoTimeoutTimer;
+  final _userInfoLock = Lock();
+
+  Future<bool> getUserInfo() async {
+    if (user.value != null && (_userInfoTimeoutTimer?.isActive == true || _userInfoLock.locked))
+      return true;
+
+    _userInfoTimeoutTimer = Timer(const Duration(seconds: _timeoutDuration), () {});
+
+    final response = await _userInfoLock.synchronized(
+      () async {
+        final response = await locator<AuthService>().getSelfInfo();
+
+        if (response.error == null) {
+          user.value = response.response;
+
+          return true;
+        } else {
+          if (response.error?.statusCode == 404) {
+            await Get.find<ErrorDialog>().show(tr('selfUserNotFound'), awaited: true);
+
+            await Get.find<LoginController>().logout();
+          } else
+            await Get.find<ErrorDialog>().show(response.error?.message ?? '');
+
+          return false;
+        }
+      },
+    );
+
+    return response;
+  }
+
+  Timer? _securityInfoTimeoutTimer;
+  final _securityInfoLock = Lock();
+
+  Future<bool> getSecurityInfo() async {
+    if (securityInfo.value != null &&
+        (_securityInfoTimeoutTimer?.isActive == true || _securityInfoLock.locked)) return true;
+
+    _securityInfoTimeoutTimer = Timer(const Duration(seconds: _timeoutDuration), () {});
+
+    final response = await _securityInfoLock.synchronized(() async {
+      final response = await locator<ProjectService>().getProjectSecurityinfo();
+      if (response == null) return false;
+      securityInfo.value = response;
+      return true;
     });
-    return Future.value(response);
+    return response;
   }
 
   Future<String?> getUserId() async {
-    if (user == null || user!.id == null) {
+    if (user.value == null || user.value?.id == null) {
       if (!await getUserInfo()) return null;
     }
-    return user!.id;
+    return user.value!.id;
   }
 
   void clear() {
-    user = null;
-    securityInfo = null;
-    loaded.value = false;
+    //user.close();
+    user.value = null;
+
+    //securityInfo.close();
+    securityInfo.value = null;
+
+    //dataUpdated.close();
   }
 }

@@ -31,7 +31,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -49,7 +48,7 @@ class FiltersRow extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16, bottom: 20),
           child: Text(
             title!,
-            style: TextStyleHelper.h6(color: Get.theme.colors().onSurface),
+            style: TextStyleHelper.headline6(color: Theme.of(context).colors().onSurface),
           ),
         ),
         Padding(
