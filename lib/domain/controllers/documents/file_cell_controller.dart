@@ -87,13 +87,35 @@ class FileCellController extends GetxController {
     loadingWithProgress = LoadingWithProgress(
         title: tr('downloading'),
         progress: progress,
-        onCancelTap: () {
-          Get.back();
-          cancelDownloadFile();
+        onCancelTap: () async {
+          loadingWithProgress.showLoading(false);
+          await cancelDownloadFile();
         });
 
     _setupFileIcon();
   }
+
+  static const allowEditInDocuments = [
+    '.docx',
+    '.xlsx',
+    '.pptx',
+    '.csv',
+    '.txt',
+    '.odt',
+    '.ods',
+    '.odp',
+    '.doc',
+    '.xls',
+    '.ppt',
+    '.rtf',
+    '.mht',
+    '.html',
+    '.htm',
+    '.epub',
+    '.fb2',
+    '.docxf',
+    '.oform'
+  ];
 
   void _setupFileIcon() {
     var iconString = '';
@@ -201,7 +223,14 @@ class FileCellController extends GetxController {
 
     if (result == null || result.isEmpty) return tr('error');
 
-    return await _api.waitFinishOperation(result[0].id!);
+    final loading = LoadingWithoutProgress();
+    loading.showLoading(true);
+
+    final res = await _api.waitFinishOperation(result[0].id!);
+
+    loading.showLoading(false);
+
+    return res;
   }
 
   Future<bool> renameFile(String newName) async {
@@ -213,53 +242,85 @@ class FileCellController extends GetxController {
     return result != null;
   }
 
-  // TODO @garanin change flutter_downloader to dio
   Future<void> _downloadFileCallback(String id, DownloadTaskStatus status, int progress) async {
     if (downloadTaskId != null && id == downloadTaskId) {
-      if (status == DownloadTaskStatus.running) {
-        if (this.progress.value != progress / 100 && (Platform.isAndroid || progress / 100 != 1))
-          this.progress.value = progress / 100;
+      if (status == DownloadTaskStatus.running &&
+          progress != 0 &&
+          this.progress.value != progress / 100 &&
+          (Platform.isAndroid || progress / 100 != 1)) {
+        this.progress.value = progress / 100;
       }
       if (status == DownloadTaskStatus.complete) {
         if (this.progress.value != 1) this.progress.value = 1;
+
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadComplete'));
       }
       if (status == DownloadTaskStatus.failed && Platform.isIOS) {
         this.progress.value = 0;
+
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('downloadError'));
       }
     }
   }
 
-  Future<ResultType> _openAlreadyDownloadedFile() async {
-    final res = (await FlutterDownloader.loadTasks())
-        ?.lastWhere((element) => element.taskId == downloadTaskId);
+  Future<ResultType?> _openAlreadyDownloadedFile() async {
+    final res = await downloadService.getTaskContent(downloadTaskId!);
+    if (res == null) return null;
 
-    final savedDir = fileAction.value == FileAction.OnlyDownload
+    final savedDir = fileAction.value == FileAction.OnlyDownload && Platform.isAndroid
         ? downloadService.downloadPath!
         : downloadService.tempPath!;
 
-    return (await OpenFile.open('$savedDir/${res!.filename!}')).type;
+    return (await OpenFile.open('$savedDir/${res.filename!}')).type;
   }
 
-  Future<ShareResultStatus> _showSaveFileForIos() async {
-    final res = (await FlutterDownloader.loadTasks())
-        ?.lastWhere((element) => element.taskId == downloadTaskId);
+  Future<ShareResultStatus?> _shareFileForIos(
+    BuildContext context, {
+    bool deleteAfter = true,
+  }) async {
+    if (downloadTaskId == null) return null;
 
-    final savedDir = fileAction.value == FileAction.OnlyDownload
+    final res = await downloadService.getTaskContent(downloadTaskId!);
+    if (res == null) return null;
+
+    final savedDir = fileAction.value == FileAction.OnlyDownload && Platform.isAndroid
         ? downloadService.downloadPath!
         : downloadService.tempPath!;
 
-    return (await Share.shareFilesWithResult(['$savedDir/${res!.filename!}'])).status;
+    final _file = File('$savedDir/${res.filename!}');
+    // ignore: avoid_slow_async_io
+    if (!(await _file.exists())) return null;
+
+    final box = context.findRenderObject() as RenderBox;
+    final result = (await Share.shareFilesWithResult(
+      ['$savedDir/${res.filename!}'],
+      sharePositionOrigin: box.localToGlobal(Offset.zero) & box.size,
+    ))
+        .status;
+
+    if (deleteAfter && result == ShareResultStatus.success) await _file.delete();
+
+    return result;
   }
 
-  Future<void> cancelDownloadFile() async {
-    if (downloadTaskId != null) await FlutterDownloader.cancel(taskId: downloadTaskId!);
+  Future<bool> cancelDownloadFile() async {
+    var tryes = 0;
+    while (downloadTaskId == null && tryes < 5) {
+      await Future.delayed(const Duration(seconds: 1));
+      tryes++;
+    }
+
+    await FlutterDownloader.cancel(taskId: downloadTaskId!);
     progress.value = 0;
+
+    return true;
   }
 
-  Future<void> downloadFile() async {
+  Future<void> downloadFile(BuildContext context) async {
     if (progress.value > 0) return;
+
+    if (Platform.isIOS && (await _shareFileForIos(context)) != null) return;
+
     await downloadProgressListener?.cancel();
 
     fileAction.value = FileAction.OnlyDownload;
@@ -275,7 +336,7 @@ class FileCellController extends GetxController {
     downloadProgressListener = progress.listen((value) async {
       if (value == 1) {
         progress.value = 0;
-        if (Platform.isIOS) await _showSaveFileForIos();
+        if (Platform.isIOS) await _shareFileForIos(context);
       }
     });
 
@@ -325,7 +386,7 @@ class FileCellController extends GetxController {
           file.fileType == FileType.Archive ||
           file.fileType == FileType.Unknown) return await _viewFile();
 
-      if (file.fileExst != '.pdf' && file.fileExst != '.fb2' && file.fileExst != '.epub')
+      if (allowEditInDocuments.contains(file.fileExst))
         await _openFileInDocumentsApp(parentId: parentId);
       else
         await _viewFile();

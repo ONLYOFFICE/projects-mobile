@@ -14,7 +14,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 2.0.0+232
+version: 2.0.0+253
 
 environment:
   sdk: '>=2.16.0 <3.0.0'
@@ -71,7 +71,7 @@ dependencies:
   cupertino_icons: ^1.0.4
 
   path_provider: ^2.0.10
-  flutter_downloader: ^1.7.3
+  flutter_downloader: ^1.7.4
   url_launcher: ^6.0.20
   # info about app version
   package_info: ^2.0.2

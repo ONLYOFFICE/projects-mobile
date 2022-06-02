@@ -47,7 +47,7 @@ class ProjectSearchController extends BaseSearchController {
   final _api = locator<ProjectService>();
 
   late String _selfId;
-  final bool onlyMyProjects;
+  final bool onlyMyProjects; // TODO not used
 
   final _paginationController = PaginationController<ProjectDetailed>();
 
@@ -62,9 +62,7 @@ class ProjectSearchController extends BaseSearchController {
   ProjectSearchController(
       {this.sortController, this.filterController, this.onlyMyProjects = false});
 
-  String _query = '';
   String _searchQuery = '';
-
   Timer? _searchDebounce;
 
   StreamSubscription? _refreshProjectsSubscription;
@@ -114,15 +112,11 @@ class ProjectSearchController extends BaseSearchController {
   void newSearch(String query, {bool needToClear = true}) {
     _searchDebounce?.cancel();
     _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
-      _query = query.toLowerCase();
+      _searchQuery = query.toLowerCase();
 
-      if (_searchQuery != _query || _query == '') {
-        _searchQuery = _query;
+      if (onlyMyProjects) _searchQuery += '&participant=$_selfId';
 
-        if (onlyMyProjects) _searchQuery += '&participant=$_selfId';
-
-        await _performSearch(needToClear: needToClear);
-      }
+      await _performSearch(needToClear: needToClear);
     });
   }
 

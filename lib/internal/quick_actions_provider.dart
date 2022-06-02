@@ -32,7 +32,9 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
@@ -41,36 +43,42 @@ import 'package:quick_actions/quick_actions.dart';
 class QuickActionsProvider {
   void setupQuickAction() {
     const quickActions = QuickActions();
-    quickActions.initialize((shortcutType) {
+    quickActions.initialize((shortcutType) async {
       switch (shortcutType) {
         case 'newProject':
-          Future.delayed(const Duration(milliseconds: 500), () {
-            Get.find<NavigationController>().toScreen(
-              const NewProject(),
-              transition: Transition.cupertinoDialog,
-              fullscreenDialog: true,
-              page: '/NewProject',
-            );
+          Future.delayed(const Duration(milliseconds: 1500), () async {
+            final isAuthValid = await locator<AuthService>().checkAuthorization();
+            if (isAuthValid)
+              await Get.find<NavigationController>().toScreen(
+                const NewProject(),
+                transition: Transition.cupertinoDialog,
+                fullscreenDialog: true,
+                page: '/NewProject',
+              );
           });
           break;
 
         case 'newTask':
-          Future.delayed(const Duration(milliseconds: 500), () {
-            Get.find<NavigationController>().toScreen(
-              const NewTaskView(),
-              arguments: {'projectDetailed': null},
-              page: '/NewTaskView',
-            );
+          Future.delayed(const Duration(milliseconds: 1500), () async {
+            final isAuthValid = await locator<AuthService>().checkAuthorization();
+            if (isAuthValid)
+              await Get.find<NavigationController>().toScreen(
+                const NewTaskView(),
+                arguments: {'projectDetailed': null},
+                page: '/NewTaskView',
+              );
           });
           break;
         case 'newDiscussion':
-          Future.delayed(const Duration(milliseconds: 500), () {
-            Get.find<NavigationController>().toScreen(
-              const NewDiscussionScreen(),
-              transition: Transition.cupertinoDialog,
-              fullscreenDialog: true,
-              page: '/NewDiscussionScreen',
-            );
+          Future.delayed(const Duration(milliseconds: 1500), () async {
+            final isAuthValid = await locator<AuthService>().checkAuthorization();
+            if (isAuthValid)
+              await Get.find<NavigationController>().toScreen(
+                const NewDiscussionScreen(),
+                transition: Transition.cupertinoDialog,
+                fullscreenDialog: true,
+                page: '/NewDiscussionScreen',
+              );
           });
           break;
         default:
@@ -82,9 +90,9 @@ class QuickActionsProvider {
     final newDiscussion = tr('newDiscussion');
 
     quickActions.setShortcutItems(<ShortcutItem>[
-      ShortcutItem(type: 'newProject', localizedTitle: newProject),
-      ShortcutItem(type: 'newTask', localizedTitle: newTask),
-      ShortcutItem(type: 'newDiscussion', localizedTitle: newDiscussion),
+      ShortcutItem(type: 'newProject', localizedTitle: newProject, icon: 'icon_project'),
+      ShortcutItem(type: 'newTask', localizedTitle: newTask, icon: 'icon_task'),
+      ShortcutItem(type: 'newDiscussion', localizedTitle: newDiscussion, icon: 'icon_discussion'),
     ]);
   }
 }

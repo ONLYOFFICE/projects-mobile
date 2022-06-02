@@ -487,6 +487,19 @@
 	"duplicateConfirmation": "保留两个",
 	"skipConfirmation": "跳过",
 	"loading": "正在加载",
-	"disablePasscode": "停用密码"
+	"disablePasscode": "停用密码",
+	"downloadComplete": "下载完成",
+	"downloadError": "下载出错",
+	"noPermission": "不允许",
+	"clearCacheQuestion": "清除缓存吗？",
+	"clearCacheQuestionDescription": "这一操作将通过删除临时文件释放您的设备空间。您的离线文件和个人数据将不会被删除。",
+	"openFileError": "无法打开文件",
+	"cancelDownload": "取消下载",
+	"downloading": "正在下载",
+	"faceID": "用 Face ID 打开",
+	"subtaskDeleted": "副任务已删除",
+	"newProject": "新建项目",
+	"forbidden":"禁止访问",
+	"unauthorized": "需要用户验证"
 
 }

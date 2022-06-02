@@ -51,7 +51,9 @@ class AuthApi {
 
     final result = ApiDTO<AuthToken>();
     try {
-      final response = await locator.get<CoreApi>().postRequest(url, body);
+      final response = await locator
+          .get<CoreApi>()
+          .postRequest(url, body, timelimit: const Duration(seconds: 5), retries: 2);
 
       if (response is http.Response) {
         result.response =
@@ -97,7 +99,9 @@ class AuthApi {
 
     final result = ApiDTO<PortalUser>();
     try {
-      final dynamic response = await locator.get<CoreApi>().getRequest(url);
+      final dynamic response = await locator
+          .get<CoreApi>()
+          .getRequest(url, timelimit: const Duration(seconds: 5), retries: 2);
 
       if (response is http.Response) {
         final dynamic responseJson = json.decode(response.body);
@@ -112,20 +116,20 @@ class AuthApi {
     return result;
   }
 
-  Future<ApiDTO<PortalUser>> getAccountInfo(AccountData accoutnData) async {
+  Future<ApiDTO<PortalUser>> getAccountInfo(AccountData accountData) async {
     final coreApi = locator.get<CoreApi>();
-    var url = await coreApi.selfInfoUrl();
 
-    url = '${accoutnData.scheme}${accoutnData.portal}/api/${coreApi.version}/people/@self';
+    final url = '${accountData.scheme}${accountData.portal}/api/${coreApi.version}/people/@self';
 
     final headers = await locator.get<CoreApi>().getHeaders();
-    headers['Authorization'] = accoutnData.token!;
+    headers['Authorization'] = accountData.token!;
 
     final request = HttpClientHelper.get(
       Uri.parse(url),
       cancelToken: locator.get<CoreApi>().cancellationToken,
-      timeLimit: Duration(seconds: locator.get<CoreApi>().timeout),
+      timeLimit: const Duration(seconds: 5),
       headers: headers,
+      retries: 2,
     );
 
     final result = ApiDTO<PortalUser>();
@@ -136,7 +140,8 @@ class AuthApi {
         final dynamic responseJson = json.decode(response.body);
         result.response = PortalUser.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = CustomError(message: response!.reasonPhrase!);
+        result.error =
+            CustomError(message: response!.reasonPhrase!, statusCode: response.statusCode);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

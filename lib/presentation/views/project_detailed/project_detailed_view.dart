@@ -102,10 +102,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
   @override
   void initState() {
-    if (Get.arguments['projectController'] != null) {
+    if (Get.arguments['projectController'] != null)
       projectController = Get.arguments['projectController'] as ProjectDetailsController;
-      previousPage = Get.arguments['previousPage'] as String?;
-    } else {
+    else {
       final projectDetails = Get.arguments['projectDetailed'] as ProjectDetailed;
 
       projectController = Get.put<ProjectDetailsController>(
@@ -114,6 +113,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       );
       projectController.fillProjectInfo(projectDetails);
     }
+
+    previousPage = Get.arguments['previousPage'] as String?;
 
     projectController.setup();
 
@@ -399,17 +400,18 @@ Future<void> _onSelected(
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           final result = await controller.deleteProject();
-          if (result != null) {
+          if (result) {
             Get.back();
             Get.back();
-            MessagesHandler.showSnackBar(
-              context: context,
-              text: tr('projectDeleted'),
-            );
+
+            MessagesHandler.showSnackBar(context: context, text: tr('projectDeleted'));
+
             locator<EventHub>().fire('needToRefreshProjects', {'all': true});
-          } else {
+            locator<EventHub>().fire('needToRefreshTasks', {'all': true});
+            locator<EventHub>().fire('needToRefreshDiscussions', {'all': true});
+            locator<EventHub>().fire('needToRefreshDocuments', {'all': true});
+          } else
             MessagesHandler.showSnackBar(context: context, text: tr('error'));
-          }
         },
       ));
       break;

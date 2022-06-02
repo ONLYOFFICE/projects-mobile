@@ -255,19 +255,20 @@ class CoreApi {
   Future<String> getUploadImagesUrl() async =>
       '${await getPortalURI()}/fckuploader.ashx?newEditor=true&esid=projects_comments&CKEditor=commentEditorcommentsObj&CKEditorFuncNum=75&langCode=ru';
 
-  Future<dynamic> getRequest(String url) async {
+  Future<dynamic> getRequest(String url, {Duration? timelimit, int? retries}) async {
     try {
       debugPrint(url);
       final headers = await getHeaders();
       final request = HttpClientHelper.get(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeLimit: Duration(seconds: timeout),
+        timeLimit: timelimit ?? Duration(seconds: timeout),
         headers: headers,
+        retries: retries ?? 3,
       );
       final response = await request;
 
-      if (response == null) return CustomError(message: '');
+      if (response == null) return CustomError(message: '', statusCode: response?.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
@@ -278,7 +279,8 @@ class CoreApi {
           error = json.decode(response.body)['error']['message'] as String?;
         }
 
-        return CustomError(message: error ?? response.reasonPhrase!);
+        return CustomError(
+            message: error ?? response.reasonPhrase!, statusCode: response.statusCode);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -290,21 +292,22 @@ class CoreApi {
     }
   }
 
-  Future<dynamic> postRequest(String url, Map? body) async {
+  Future<dynamic> postRequest(String url, Map? body, {Duration? timelimit, int? retries}) async {
     try {
       debugPrint(url);
       final headers = await getHeaders();
       final request = HttpClientHelper.post(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeLimit: Duration(seconds: timeout),
+        timeLimit: timelimit ?? Duration(seconds: timeout),
+        retries: retries ?? 3,
         headers: headers,
         body: jsonEncode(body),
       );
 
       final response = await request;
 
-      if (response == null) return CustomError(message: '');
+      if (response == null) return CustomError(message: '', statusCode: response?.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
@@ -315,7 +318,8 @@ class CoreApi {
           error = json.decode(response.body)['error']['message'] as String?;
         }
 
-        return CustomError(message: error ?? response.reasonPhrase!);
+        return CustomError(
+            message: error ?? response.reasonPhrase!, statusCode: response.statusCode);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -341,7 +345,7 @@ class CoreApi {
       );
       final response = await request;
 
-      if (response == null) return CustomError(message: '');
+      if (response == null) return CustomError(message: '', statusCode: response?.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
@@ -352,7 +356,8 @@ class CoreApi {
           error = json.decode(response.body)['error']['message'] as String?;
         }
 
-        return CustomError(message: error ?? response.reasonPhrase!);
+        return CustomError(
+            message: error ?? response.reasonPhrase!, statusCode: response.statusCode);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -383,7 +388,7 @@ class CoreApi {
       );
       final response = await request;
 
-      if (response == null) return CustomError(message: '');
+      if (response == null) return CustomError(message: '', statusCode: response?.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
@@ -394,7 +399,8 @@ class CoreApi {
           error = json.decode(response.body)['error']['message'] as String?;
         }
 
-        return CustomError(message: error ?? response.reasonPhrase!);
+        return CustomError(
+            message: error ?? response.reasonPhrase!, statusCode: response.statusCode);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -418,7 +424,7 @@ class CoreApi {
       );
       final response = await request;
 
-      if (response == null) return CustomError(message: '');
+      if (response == null) return CustomError(message: '', statusCode: response?.statusCode);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
@@ -429,7 +435,8 @@ class CoreApi {
           error = json.decode(response.body)['error']['message'] as String?;
         }
 
-        return CustomError(message: error ?? response.reasonPhrase!);
+        return CustomError(
+            message: error ?? response.reasonPhrase!, statusCode: response.statusCode);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -455,9 +462,10 @@ class CoreApi {
     if (_token == null || _token!.isEmpty) {
       _token = await _secureStorage.getString('token') ?? '';
     }
-
     return _token;
   }
+
+  set token(String token) => _token = token;
 
   Future<void> savePortalName() async {
     await _secureStorage.putString('portalName', _portalName);

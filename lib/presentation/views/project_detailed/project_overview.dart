@@ -103,7 +103,7 @@ class ProjectOverview extends StatelessWidget {
                         colorClickableText: Colors.pink,
                         style: TextStyleHelper.body1(),
                         trimMode: TrimMode.Line,
-                        delimiter: ' ',
+                        delimiter: '\n',
                         trimCollapsedText: tr('showMore'),
                         trimExpandedText: tr('showLess'),
                         moreStyle: TextStyleHelper.body2(color: Theme.of(context).colors().links),

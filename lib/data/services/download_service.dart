@@ -31,11 +31,12 @@
  */
 
 import 'dart:async';
-import 'dart:io' show Directory, File;
+import 'dart:io' show Directory, File, Platform;
 import 'dart:isolate';
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:collection/collection.dart';
 import 'package:android_path_provider/android_path_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projects/data/api/download_api.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/data/services/device_info_service.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -149,12 +151,15 @@ class DocumentsDownloadService {
     if (finalUrl.contains(Get.find<PortalInfoController>().portalName!))
       headers = Get.find<PortalInfoController>().getAuthHeader;
 
+    final androidSdkVersion = await locator<DeviceInfoService>().androidSdkVersion;
+
     return await FlutterDownloader.enqueue(
       url: finalUrl,
       fileName: fileName,
       headers: headers,
       savedDir: temp ? tempPath! : downloadPath!,
       showNotification: !temp,
+      saveInPublicStorage: !temp && Platform.isAndroid && (androidSdkVersion ?? 29) > 28,
     );
   }
 
@@ -214,6 +219,15 @@ class DocumentsDownloadService {
     }
 
     return true;
+  }
+
+  Future<void> removeFile(String taskId) async {
+    await FlutterDownloader.remove(taskId: taskId, shouldDeleteContent: true); // dont work
+  }
+
+  Future<DownloadTask?> getTaskContent(String taskId) async {
+    return (await FlutterDownloader.loadTasks())
+        ?.lastWhereOrNull((element) => element.taskId == taskId);
   }
 
   static void downloadCallback(String id, DownloadTaskStatus status, int progress) {

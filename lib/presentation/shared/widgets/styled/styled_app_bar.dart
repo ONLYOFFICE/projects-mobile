@@ -65,6 +65,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget backButtonIcon;
   final String? previousPageTitle;
   final double? titleWidth;
+  final bool hasDevider = true;
 
   StyledAppBar({
     Key? key,
@@ -72,7 +73,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.bottom,
     this.bottomHeight = 44,
     this.centerTitle,
-    this.elevation = 1,
+    this.elevation = 0,
     this.leading,
     this.onLeadingPressed,
     this.showBackButton = true,
@@ -94,29 +95,32 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    var leadingWidthCalculated = _kNavBarBackButtonTapWidth;
-
-    var titleWidthCalculated = titleWidth;
-    if (title == null && titleText != null && titleWidthCalculated == null) {
-      titleWidthCalculated = TextUtils.getTextWidth(
-        titleText!,
-        TextStyleHelper.headline6(),
-      );
-    }
-
-    final widthWindow =
-        Get.find<PlatformController>().isMobile ? MediaQuery.of(context).size.width : 540;
-
-    if (titleWidthCalculated != null) {
-      leadingWidthCalculated = (widthWindow - titleWidthCalculated / 2) > 56
-          ? (widthWindow - titleWidthCalculated) / 2
-          : 56.0;
-    } else if (leadingWidth != null) {
-      leadingWidthCalculated = leadingWidth!;
-    } else if (title == null) {
-      leadingWidthCalculated = widthWindow / 2;
-    } else {
+    var leadingWidthCalculated = leadingWidth;
+    if (leading == null) {
       leadingWidthCalculated = _kNavBarBackButtonTapWidth;
+
+      var titleWidthCalculated = titleWidth;
+      if (title == null && titleText != null && titleWidthCalculated == null) {
+        titleWidthCalculated = TextUtils.getTextWidth(
+          titleText!,
+          TextStyleHelper.headline6(),
+        );
+      }
+
+      final widthWindow =
+          Get.find<PlatformController>().isMobile ? MediaQuery.of(context).size.width : 540;
+
+      if (titleWidthCalculated != null) {
+        leadingWidthCalculated = (widthWindow - titleWidthCalculated / 2) > 56
+            ? (widthWindow - titleWidthCalculated) / 2
+            : 56.0;
+      } else if (leadingWidth != null) {
+        leadingWidthCalculated = leadingWidth!;
+      } else if (title == null) {
+        leadingWidthCalculated = widthWindow / 2;
+      } else {
+        leadingWidthCalculated = _kNavBarBackButtonTapWidth;
+      }
     }
 
     return AppBar(
@@ -156,6 +160,14 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       bottom: bottom == null
           ? null
           : PreferredSize(preferredSize: Size.fromHeight(bottomHeight), child: bottom!),
+      shape: hasDevider
+          ? Border(
+              bottom: BorderSide(
+                width: 1,
+                color: Theme.of(context).colors().outline.withOpacity(0.5),
+              ),
+            )
+          : null,
     );
   }
 }
@@ -201,7 +213,7 @@ class MaterialAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
-      backgroundColor: Theme.of(context).colors().background,
+      backgroundColor: Theme.of(context).colors().backgroundColor,
       pinned: true,
       title: title,
       actions: actions,
@@ -230,8 +242,9 @@ class CupertinoAppBar extends StatelessWidget {
                 actions: actions),
           )
         : CupertinoSliverNavigationBar(
-            backgroundColor: Theme.of(context).colors().background,
+            backgroundColor: Theme.of(context).colors().backgroundColor,
             padding: EdgeInsetsDirectional.zero,
+            border: null,
             largeTitle: title,
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -257,8 +270,9 @@ class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return CupertinoNavigationBar(
       padding: EdgeInsetsDirectional.zero,
+      border: null,
       transitionBetweenRoutes: false,
-      backgroundColor: Theme.of(context).colors().background,
+      backgroundColor: Theme.of(context).colors().backgroundColor,
       middle: title,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

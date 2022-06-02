@@ -55,10 +55,10 @@ class _TaskResponsible extends StatelessWidget {
             cancelButtonEnabled: filterController.taskResponsible!['other'].isNotEmpty as bool?,
             onTap: () async {
               final newUser = await Get.find<NavigationController>().toScreen(
-                const SelectUserScreen(),
-                transition: Transition.rightToLeft,
-                page: '/SelectUserScreen',
-              );
+                  const SelectUserScreen(),
+                  transition: Transition.rightToLeft,
+                  page: '/SelectUserScreen',
+                  arguments: {'previousPage': MilestoneFilterScreen.pageName});
               await filterController.changeTasksResponsible('other', newUser);
             },
             onCancelTap: () => filterController.changeTasksResponsible('other', null),

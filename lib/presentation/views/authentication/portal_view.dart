@@ -74,6 +74,13 @@ class PortalInputView extends StatelessWidget {
       appBar: controller.accountManager.accounts.isEmpty
           ? null
           : StyledAppBar(
+              leadingWidth: GetPlatform.isIOS
+                  ? TextUtils.getTextWidth(
+                        tr('cancel').toLowerCase().capitalizeFirst!,
+                        TextStyleHelper.button(),
+                      ) +
+                      16
+                  : null,
               leading: PlatformWidget(
                 cupertino: (_, __) => CupertinoButton(
                   padding: const EdgeInsets.only(left: 16),

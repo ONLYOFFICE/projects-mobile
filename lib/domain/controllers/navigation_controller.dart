@@ -32,13 +32,9 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
@@ -46,23 +42,9 @@ import 'package:projects/presentation/views/navigation_view.dart';
 class NavigationController extends GetxController {
   final tabIndex = 0.obs;
   final onMoreView = false.obs;
-  final selfUserItem = Rx(PortalUserItemController(portalUser: PortalUser()));
-  final platformController = Get.find<PlatformController>();
 
-  late bool isMobile;
+  final isMobile = Get.find<PlatformController>().isMobile;
   int treeLength = 0;
-
-  @override
-  void onInit() {
-    Get.find<UserController>().user.listen((value) {
-      if (value == null) return;
-
-      selfUserItem.value = PortalUserItemController(portalUser: value);
-    });
-
-    isMobile = platformController.isMobile;
-    super.onInit();
-  }
 
   void showMoreView() {
     onMoreView.value = true;
@@ -153,26 +135,19 @@ class NavigationController extends GetxController {
         arguments: arguments);
   }
 
-  Future<T?> showPlatformDialog<T>(Widget widget,
-      {Object? arguments, bool? barrierDismissible}) async {
-    if (GetPlatform.isIOS)
-      return await showCupertinoDialog(
-        context: Get.context!,
-        builder: (context) {
-          return widget;
-        },
-        routeSettings: RouteSettings(arguments: arguments),
-        barrierDismissible: barrierDismissible ?? false,
-      );
-    else
-      return await showDialog(
-        context: Get.context!,
-        builder: (context) {
-          return widget;
-        },
-        routeSettings: RouteSettings(arguments: arguments),
-        barrierDismissible: barrierDismissible ?? false,
-      );
+  Future<T?> showPlatformDialog<T>(
+    Widget widget, {
+    Object? arguments,
+    bool? barrierDismissible,
+  }) async {
+    final _route = DialogRoute(
+      builder: (_) => widget,
+      settings: RouteSettings(arguments: arguments),
+      context: Get.context!,
+      barrierDismissible: barrierDismissible ?? false,
+    );
+    final result = await Navigator.of(Get.context!).push(_route);
+    return result as T?;
   }
 
   Future to(

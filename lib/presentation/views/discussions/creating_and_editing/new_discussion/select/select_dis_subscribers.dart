@@ -45,7 +45,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
-import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
+import 'package:projects/presentation/shared/widgets/users_list.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 
 class SelectDiscussionSubscribers extends StatelessWidget {
@@ -95,17 +95,17 @@ class SelectDiscussionSubscribers extends StatelessWidget {
               controller: controller,
               usersDataSource: usersDataSource,
             )),
-        body: Obx(
-          () {
-            if (usersDataSource.loaded.value == true &&
-                usersDataSource.usersList.isNotEmpty &&
-                usersDataSource.isSearchResult.value == false) {
-              return StyledSmartRefresher(
-                enablePullDown: false,
-                controller: usersDataSource.refreshController,
-                onLoading: usersDataSource.onLoading,
-                enablePullUp: usersDataSource.pullUpEnabled,
-                child: ListView.separated(
+        body: StyledSmartRefresher(
+          enablePullDown: false,
+          controller: usersDataSource.refreshController,
+          onLoading: usersDataSource.onLoading,
+          enablePullUp: usersDataSource.pullUpEnabled,
+          child: Obx(
+            () {
+              if (usersDataSource.loaded.value == true &&
+                  usersDataSource.usersList.isNotEmpty &&
+                  usersDataSource.isSearchResult.value == false) {
+                return ListView.separated(
                     itemCount: usersDataSource.usersList.length,
                     separatorBuilder: (_, i) => !platformController.isMobile
                         ? const StyledDivider(leftPadding: 72)
@@ -118,22 +118,26 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                               fromUsersDataSource: true)
                         },
                       );
-                    }),
-              );
-            }
-            if (usersDataSource.nothingFound.value == true) {
-              return const NothingFound();
-            }
-            if (usersDataSource.loaded.value == true &&
-                usersDataSource.usersList.isNotEmpty &&
-                usersDataSource.isSearchResult.value == true) {
-              return UsersSearchResult(
-                usersDataSource: usersDataSource,
-                onTapFunction: controller.addSubscriber,
-              );
-            }
-            return const ListLoadingSkeleton();
-          },
+                    });
+              }
+              if (usersDataSource.nothingFound.value == true) {
+                return const NothingFound();
+              }
+              if (usersDataSource.loaded.value == true &&
+                  usersDataSource.usersList.isNotEmpty &&
+                  usersDataSource.isSearchResult.value == true) {
+                return UsersSimpleList(
+                  onTapFunction: controller.addSubscriber,
+                  users: usersDataSource.usersList,
+                );
+                // return UsersSearchResult(
+                //   usersDataSource: usersDataSource,
+                //   onTapFunction: controller.addSubscriber,
+                // );
+              }
+              return const ListLoadingSkeleton();
+            },
+          ),
         ),
       ),
     );

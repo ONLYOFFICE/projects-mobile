@@ -98,8 +98,12 @@ class FileCell extends StatelessWidget {
                   const SizedBox(width: 16),
                   PlatformPopupMenuButton(
                     padding: EdgeInsets.zero,
-                    onSelected: (dynamic value) =>
-                        _onFilePopupMenuSelected(value, documentsController, cellController),
+                    onSelected: (dynamic value) => _onFilePopupMenuSelected(
+                      context,
+                      value,
+                      documentsController,
+                      cellController,
+                    ),
                     icon: Icon(PlatformIcons(context).ellipsis,
                         color: Theme.of(context).colors().onSurface.withOpacity(0.5)),
                     itemBuilder: (context) {
@@ -172,7 +176,11 @@ class FileCell extends StatelessWidget {
 }
 
 Future<void> _onFilePopupMenuSelected(
-    value, BaseDocumentsController documentsController, FileCellController cellController) async {
+  BuildContext context,
+  value,
+  BaseDocumentsController documentsController,
+  FileCellController cellController,
+) async {
   switch (value) {
     case 'copyLink':
       final portalDomain = documentsController.portalInfoController.portalUri;
@@ -194,7 +202,7 @@ Future<void> _onFilePopupMenuSelected(
     case 'download':
       cellController.progress.value > 0
           ? await cellController.cancelDownloadFile()
-          : await cellController.downloadFile();
+          : await cellController.downloadFile(context);
       break;
     case 'copy':
       await Get.find<NavigationController>().toScreen(

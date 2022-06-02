@@ -37,7 +37,10 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 abstract class BaseSearchController extends GetxController {
   BaseSearchController() {
     textController.addListener(() {
-      if (textController.text.isNotEmpty) switchToSearchView.value = true;
+      if (textController.text.isNotEmpty) {
+        switchToSearchView.value = true;
+        loaded.value = false;
+      }
     });
   }
 

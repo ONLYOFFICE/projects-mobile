@@ -124,6 +124,7 @@ class NewProjectController extends BaseProjectEditorController {
       Get.find<NavigationController>().back();
 
       locator<EventHub>().fire('needToRefreshProjects', {'all': true});
+      locator<EventHub>().fire('needToRefreshDocuments', {'all': true});
 
       MessagesHandler.showSnackBar(
         context: Get.context!,

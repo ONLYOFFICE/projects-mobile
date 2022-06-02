@@ -1,0 +1,17 @@
+/* Bundle name */
+"CFBundleName" = "Projects";
+
+/* (No Commment) */
+"CFBundleDisplayName" = "Projects";
+
+/* Privacy - Camera Usage Description */
+"NSCameraUsageDescription" = "This app requires access to the camera, so that you can take photo and upload it in the app.";
+
+/* Privacy - Face ID Usage Description */
+"NSFaceIDUsageDescription" = "This app requires Face ID permission to authenticate using Face recognition.";
+
+/* Privacy - Photo Library Additions Usage Description */
+"NSPhotoLibraryAddUsageDescription" = "This app requires access to the photo library, so that you can upload your photos in the app.";
+
+/* Privacy - Photo Library Usage Description */
+"NSPhotoLibraryUsageDescription" = "This app requires access to the photo library, so that you can upload your photos in the app.";

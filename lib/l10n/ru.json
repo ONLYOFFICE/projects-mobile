@@ -498,5 +498,7 @@
 	"downloading": "Скачивание",
 	"faceID": "Открыть с помощью Face ID",
 	"subtaskDeleted": "Удалена подзадача",
-	"newProject": "Новый Проект"
+	"newProject": "Новый проект",
+	"forbidden":"Доступ запрещен",
+	"unauthorized": "Требуется аутентификация пользователя"
 }

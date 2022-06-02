@@ -40,18 +40,16 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 class AccountTile extends StatelessWidget {
   const AccountTile({
     Key? key,
-    @required this.userController,
+    required this.userController,
   }) : super(key: key);
 
-  final AccountTileController? userController;
+  final AccountTileController userController;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        userController?.onTap();
-      },
-      onLongPress: userController!.deleteAccount,
+      onTap: userController.onTap,
+      onLongPress: userController.deleteAccount,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: SizedBox(
@@ -70,7 +68,7 @@ class AccountTile extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Obx(() {
-                        return userController!.avatar.value;
+                        return userController.avatar.value;
                       }),
                     ),
                   ),
@@ -90,14 +88,14 @@ class AccountTile extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  userController!.name!.replaceAll(' ', '\u00A0'),
+                                  userController.name!.replaceAll(' ', '\u00A0'),
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyleHelper.subtitle1(
                                     color: Theme.of(context).colors().onSurface,
                                   ),
                                 ),
                                 Text(
-                                  userController!.portal!.replaceAll(' ', '\u00A0'),
+                                  userController.portal!.replaceAll(' ', '\u00A0'),
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyleHelper.caption(
                                     color: Theme.of(context).colors().onSurface.withOpacity(0.6),

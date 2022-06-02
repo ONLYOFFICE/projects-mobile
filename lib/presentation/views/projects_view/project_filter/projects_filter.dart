@@ -38,6 +38,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
@@ -76,7 +77,13 @@ class ProjectsFilterScreen extends StatelessWidget {
         titleText: tr('filter'),
         centerTitle: GetPlatform.isIOS,
         backgroundColor: backgroundColor,
-        leadingWidth: GetPlatform.isIOS ? 100 : null,
+        leadingWidth: GetPlatform.isIOS
+            ? TextUtils.getTextWidth(
+                  tr('closeLowerCase'),
+                  TextStyleHelper.button(),
+                ) +
+                16
+            : null,
         leading: PlatformWidget(
           cupertino: (_, __) => CupertinoButton(
             padding: const EdgeInsets.only(left: 16),

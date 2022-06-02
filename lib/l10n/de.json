@@ -498,5 +498,7 @@
 	"downloading": "Wird heruntergeladen",
 	"faceID": "Mit Face-ID öffnen",
 	"subtaskDeleted": "Teilaufgabe gelöscht",
-	"newProject": "Neues Projekt"
+	"newProject": "Neues Projekt",
+	"forbidden":"Zugriff auf das Modul Projekte ist verboten",
+	"unauthorized": "Benutzerauthentifizierung erforderlich"
 }

@@ -483,8 +483,8 @@
 		"beforeText": "The file with the name",
       "afterText": "already exists in the destination folder."
     },
-  "overwriteConfirmation": "Overwrite",
-  "duplicateConfirmation": "Keep both",
+	"overwriteConfirmation": "Overwrite",
+	"duplicateConfirmation": "Keep both",
 	"skipConfirmation": "Skip",
 	"loading": "Loading",
 	"disablePasscode": "Disable the passcode",
@@ -498,5 +498,8 @@
 	"downloading": "Downloading",
 	"faceID": "Open with Face ID",
 	"subtaskDeleted": "Subtask deleted",
-	"newProject": "New Project"
+	"newProject": "New project",
+	"forbidden":"Access is Forbidden",
+	"unauthorized": "User authentication required",
+	"selfUserNotFound": "Your account not found. Check authorization, please"
 }

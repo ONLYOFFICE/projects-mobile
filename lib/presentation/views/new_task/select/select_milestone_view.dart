@@ -79,50 +79,44 @@ class SelectMilestoneView extends StatelessWidget {
           onClearPressed: _milestoneController.clearSearchAndReloadMilestones,
         ),
       ),
-      body: Column(
-        children: [
-          Obx(
-            () {
-              if (_milestoneController.loaded.value == true) {
-                final scrollController = ScrollController();
+      body: Obx(
+        () {
+          if (_milestoneController.loaded.value == true) {
+            final scrollController = ScrollController();
 
-                return Expanded(
-                  child: PaginationListView(
-                    scrollController: scrollController,
-                    paginationController: _milestoneController.paginationController,
-                    child: ListView.separated(
-                      controller: scrollController,
-                      itemCount: _milestoneController.itemCount + 1,
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const Divider(indent: 16, endIndent: 16, height: 1);
-                      },
-                      itemBuilder: (BuildContext context, int index) {
-                        if (index == 0) {
-                          return _None(
-                            onTap: _controller.changeMilestoneSelection,
-                            isSelected: _controller.newMilestoneId == null,
-                          );
-                        }
-                        return _MilestoneSelectionTile(
-                          onTap: () {
-                            return _controller.changeMilestoneSelection(
-                              id: _milestoneController.itemList[index - 1].id,
-                              title: _milestoneController.itemList[index - 1].title,
-                            );
-                          },
-                          milestone: _milestoneController.itemList[index - 1],
-                          isSelected: _milestoneController.itemList[index - 1].id ==
-                              _controller.newMilestoneId,
-                        );
-                      },
-                    ),
-                  ),
-                );
-              }
-              return const ListLoadingSkeleton();
-            },
-          ),
-        ],
+            return PaginationListView(
+              scrollController: scrollController,
+              paginationController: _milestoneController.paginationController,
+              child: ListView.separated(
+                controller: scrollController,
+                itemCount: _milestoneController.itemCount + 1,
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider(indent: 16, endIndent: 16, height: 1);
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return _None(
+                      onTap: _controller.changeMilestoneSelection,
+                      isSelected: _controller.newMilestoneId == null,
+                    );
+                  }
+                  return _MilestoneSelectionTile(
+                    onTap: () {
+                      return _controller.changeMilestoneSelection(
+                        id: _milestoneController.itemList[index - 1].id,
+                        title: _milestoneController.itemList[index - 1].title,
+                      );
+                    },
+                    milestone: _milestoneController.itemList[index - 1],
+                    isSelected:
+                        _milestoneController.itemList[index - 1].id == _controller.newMilestoneId,
+                  );
+                },
+              ),
+            );
+          }
+          return const ListLoadingSkeleton();
+        },
       ),
     );
   }

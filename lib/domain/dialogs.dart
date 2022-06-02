@@ -30,6 +30,7 @@
  *
  */
 
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -45,11 +46,13 @@ class ErrorDialog extends GetxController {
 
   bool dialogIsShown = false;
 
-  Future<void> show(String message) async {
+  Future<void> show(String message, {bool awaited = false}) async {
     if (message.isNotEmpty) addToQueue(message);
 
-    // ignore: unawaited_futures
-    processQueue();
+    if (awaited)
+      await processQueue();
+    else
+      unawaited(processQueue());
   }
 
   void hide() {
@@ -74,7 +77,7 @@ class ErrorDialog extends GetxController {
         },
         child: SingleButtonDialog(
           titleText: tr('error'),
-          contentText: _customErrors[error] ?? error,
+          contentText: _customErrors[error.toLowerCase()] ?? error,
           acceptText: tr('ok'),
           onAcceptTap: () async => {
             Get.back(),
@@ -110,7 +113,6 @@ class ErrorDialog extends GetxController {
 
 Map _blockingErrors = {
   'unauthorized': 'unauthorized',
-  // 'bad gateway': 'Bad Gateway',
   'forbidden': 'Forbidden',
   'payment required': 'Payment required',
   'paymentrequired': 'Payment required',
@@ -121,6 +123,8 @@ Map _blockingErrors = {
 };
 
 Map<String, String> _customErrors = {
-  'User authentication failed': tr('authenticationFailed'),
-  'No address associated with hostname': tr('noAdress'),
+  'user authentication failed': tr('authenticationFailed'),
+  'no address associated with hostname': tr('noAdress'),
+  'unauthorized': tr('unauthorized'),
+  'forbidden': tr('forbidden'),
 };

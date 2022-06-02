@@ -46,6 +46,7 @@ import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -58,14 +59,14 @@ class AccountTileController extends GetxController {
 
   RxString userTitle = ''.obs;
 
-  AccountTileController({this.accountData}) {
-    if (accountData != null) setupUser();
+  AccountTileController({required this.accountData}) {
+    setupUser();
   }
 
-  final AccountData? accountData;
+  final AccountData accountData;
 
-  String? get name => accountData!.name;
-  String? get portal => accountData!.portal;
+  String? get name => accountData.name;
+  String? get portal => accountData.portal;
 
   Rx<Uint8List> avatarData = Uint8List.fromList([]).obs;
 
@@ -78,7 +79,7 @@ class AccountTileController extends GetxController {
               color: Theme.of(Get.context!).colors().onSurface) as Widget)
           .obs;
 
-  String? get displayName => accountData!.name;
+  String? get displayName => accountData.name;
 
   final _onTapLock = Lock();
 
@@ -86,13 +87,13 @@ class AccountTileController extends GetxController {
     try {
       Uint8List? avatarBytes;
 
-      if (accountData!.avatarUrl!.contains('http')) {
+      if (accountData.avatarUrl!.contains('http')) {
         avatarBytes = await _downloadService.downloadImageWithToken(
-            accountData!.avatarUrl!, accountData!.token!);
+            accountData.avatarUrl!, accountData.token!);
       } else {
-        final url = '${accountData!.scheme!}$portal${accountData!.avatarUrl!}';
+        final url = '${accountData.scheme!}$portal${accountData.avatarUrl!}';
 
-        avatarBytes = await _downloadService.downloadImageWithToken(url, accountData!.token!);
+        avatarBytes = await _downloadService.downloadImageWithToken(url, accountData.token!);
       }
 
       if (avatarBytes == null) return;
@@ -107,44 +108,46 @@ class AccountTileController extends GetxController {
   }
 
   Future<void> setupUser() async {
-    if (accountData?.portal != null) {
-      userTitle.value = accountData!.portal!;
+    if (accountData.portal != null) {
+      userTitle.value = accountData.portal!;
 
-      if (accountData!.token!.isNotEmpty) {
-        final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
+      if (accountData.token!.isNotEmpty) {
+        final responce = await locator<AuthService>().checkAccountAuthorization(accountData);
 
-        if (!isAuthValid) await Get.find<AccountManager>().clearTokenForAccount(accountData!);
+        if (responce.error != null)
+          await Get.find<AccountManager>().clearTokenForAccount(accountData);
+        else
+          await loadAvatar();
       }
     }
-
-    await loadAvatar();
   }
 
   Future<void> loginToSavedAccount() async {
-    final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
-    if (!isAuthValid) {
-      await Get.find<AccountManager>().clearTokenForAccount(accountData!);
+    final responce = await locator<AuthService>().checkAccountAuthorization(accountData);
+    if (responce.error != null) {
+      await Get.find<AccountManager>().clearTokenForAccount(accountData);
+
+      if (responce.error?.statusCode == 404)
+        await Get.find<ErrorDialog>().show(tr('selfUserNotFound'), awaited: true);
     }
 
-    if (accountData?.token == '') {
+    if (accountData.token == '') {
       final loginController = Get.find<LoginController>();
 
-      loginController.portalAdressController.text = accountData!.portal!;
-      loginController.emailController.text = accountData!.login!;
-      loginController.setupPortalUri();
-      locator.get<CoreApi>().setPortalName('${accountData!.scheme}${accountData!.portal}');
+      loginController.portalAdressController.text = accountData.portal!;
+      loginController.emailController.text = accountData.login!;
+      locator.get<CoreApi>().setPortalName('${accountData.scheme}${accountData.portal}');
 
       await Get.to(() => LoginView());
     } else {
       await locator<SecureStorage>()
-          .putString('portalName', '${accountData!.scheme}${accountData!.portal}');
+          .putString('portalName', '${accountData.scheme}${accountData.portal}');
       await Get.find<LoginController>()
-          .saveLoginData(token: accountData!.token!, expires: accountData!.expires!);
+          .saveLoginData(token: accountData.token!, expires: accountData.expires!);
 
       // TODO @garanin add cookie
 
-      await locator<SecureStorage>()
-          .putString('currentAccount', json.encode(accountData!.toJson()));
+      await locator<SecureStorage>().putString('currentAccount', json.encode(accountData.toJson()));
 
       locator<EventHub>().fire('loginSuccess');
     }
@@ -166,9 +169,7 @@ class AccountTileController extends GetxController {
         acceptText: tr('removeAccount').toUpperCase(),
         cancelText: tr('cancel').toUpperCase(),
         onAcceptTap: () async => {
-          await Get.find<AccountManager>().deleteAccounts(accountData: accountData!
-              // accountId: accountData!.id!, accountData: jsonEncode(accountData!.toJson())
-              ),
+          await Get.find<AccountManager>().deleteAccounts(accountData: accountData),
           Get.back(),
         },
         onCancelTap: Get.back,

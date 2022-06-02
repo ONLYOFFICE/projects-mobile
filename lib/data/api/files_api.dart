@@ -183,16 +183,19 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO> deleteFolder({required String folderId}) async {
+  Future<ApiDTO<List<Operation>>> deleteFolder({required String folderId}) async {
     final url = await locator.get<CoreApi>().getFolderByIdUrl(folderId);
-    final result = ApiDTO();
+    final result = ApiDTO<List<Operation>>();
 
     try {
       final response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = responseJson['response'];
+        result.response = (responseJson['response'] as List)
+            .cast<Map<String, dynamic>>()
+            .map(Operation.fromJson)
+            .toList();
       } else {
         result.error = response as CustomError;
       }

@@ -36,6 +36,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_platform_alert_dialog.dart';
 
 class StyledAlertDialog extends StatelessWidget {
   final Widget? title;
@@ -94,7 +95,7 @@ class StyledAlertDialog extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: PlatformAlertDialog(
+      child: StyledPlatformAlertDialog(
         title: _title,
         content: _content != null
             ? Container(

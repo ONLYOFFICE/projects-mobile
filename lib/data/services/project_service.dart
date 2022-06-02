@@ -90,7 +90,6 @@ class ProjectService {
     if (success) {
       return projects;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error!.message);
       return null;
     }
   }
@@ -103,7 +102,6 @@ class ProjectService {
     if (success) {
       return projects.response;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error!.message);
       return null;
     }
   }
@@ -145,7 +143,6 @@ class ProjectService {
     if (success) {
       return team.response;
     } else {
-      await Get.find<ErrorDialog>().show(team.error!.message);
       return null;
     }
   }
@@ -277,7 +274,6 @@ class ProjectService {
     if (success) {
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }

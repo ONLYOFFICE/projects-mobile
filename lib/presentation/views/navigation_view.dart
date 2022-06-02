@@ -144,7 +144,7 @@ class TabletLayout extends StatelessWidget {
             bottom: false,
             child: Container(
               color: Theme.of(context).colors().primarySurface,
-              width: 80,
+              width: 64,
               child: Column(
                 children: [
                   Obx(
@@ -239,14 +239,14 @@ class TabletLayout extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 60,
-                    width: 60,
+                    height: 40,
+                    width: 40,
                     child: PlatformIconButton(
                       padding: EdgeInsets.zero,
                       icon: ClipOval(
-                        child: Obx(() {
-                          return controller.selfUserItem.value.avatar.value;
-                        }),
+                        child: Obx(
+                          () => Get.find<ProfileController>(tag: 'SelfProfileScreen').avatar.value,
+                        ),
                       ),
                       onPressed: () => controller.toScreen(
                         const SelfProfileScreen(),
@@ -301,9 +301,6 @@ class MobileLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final navigationController = Get.find<NavigationController>();
 
-    final heightBottomNavigationBar =
-        navigationController.onMoreView.value ? 300 : 56 + MediaQuery.of(context).padding.bottom;
-
     return Obx(
       () => Scaffold(
         body: Stack(
@@ -323,7 +320,9 @@ class MobileLayout extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: SizedBox(
-          height: heightBottomNavigationBar.toDouble(),
+          height: navigationController.onMoreView.value
+              ? 300
+              : 56 + MediaQuery.of(context).padding.bottom,
           child: Column(
             children: [
               if (navigationController.onMoreView.value) const Expanded(child: MoreView()),

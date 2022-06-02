@@ -54,7 +54,7 @@ class DashboardView extends StatelessWidget {
     final dashboardController = Get.find<DashboardController>(tag: 'DashboardController');
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colors().background,
+      backgroundColor: Theme.of(context).colors().backgroundColor,
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [

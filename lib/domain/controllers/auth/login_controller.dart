@@ -45,6 +45,7 @@ import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -56,7 +57,6 @@ import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
-import 'package:projects/domain/controllers/auth/account_controller.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
@@ -83,8 +83,7 @@ class LoginController extends GetxController {
   String? _tfaKey;
   String? get tfaKey => _tfaKey;
 
-  Uri portalURI = Uri();
-  String get portalAdress => portalURI.authority;
+  String get portalAdress => _portalAdressController.text.removeAllWhitespace;
 
   final cookieManager = WebviewCookieManager();
 
@@ -253,7 +252,8 @@ class LoginController extends GetxController {
 
   Future<bool> _login(String token, String expires) async {
     await saveToken(token, expires);
-    if (await Get.find<UserController>().getUserId() == null) {
+    locator.get<CoreApi>().token = token;
+    if (!(await _authService.checkAuthorization())) {
       unawaited(clearToken());
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
       return false;
@@ -279,16 +279,23 @@ class LoginController extends GetxController {
       return;
     }
 
-    final portalString = setupPortalUri();
-
-    if (!portalURI.hasAuthority || portalString.isEmpty) {
+    if (portalAdress.isEmpty) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
     } else {
       loaded.value = false;
 
-      locator.get<CoreApi>().setPortalName(portalString);
+      _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
+      if (_portalAdressController.text[_portalAdressController.text.length - 1] == '.')
+        _portalAdressController.text =
+            _portalAdressController.text.substring(0, _portalAdressController.text.length - 1);
+
+      _portalAdressController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _portalAdressController.text.length),
+      );
+
+      locator.get<CoreApi>().setPortalName(portalAdress);
 
       final _capabilities = await _portalService.portalCapabilities();
 
@@ -300,29 +307,6 @@ class LoginController extends GetxController {
 
       loaded.value = true;
     }
-  }
-
-  String setupPortalUri() {
-    _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
-    _portalAdressController.selection = TextSelection.fromPosition(
-      TextPosition(offset: _portalAdressController.text.length),
-    );
-
-    var portalString = _portalAdressController.text;
-
-    if (portalString.isNotEmpty) {
-      if (portalString[portalString.length - 1] == '.')
-        portalString = portalString.substring(0, portalString.length - 1);
-
-      if (portalString.isURL) {
-        if (!portalString.contains('http')) portalString = 'https://$portalString';
-
-        portalURI = Uri.parse(portalString);
-      } else
-        return '';
-    }
-
-    return portalString;
   }
 
   Future<bool> sendRegistrationType() async {

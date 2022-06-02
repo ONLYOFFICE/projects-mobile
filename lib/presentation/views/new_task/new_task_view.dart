@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
@@ -77,7 +78,13 @@ class NewTaskView extends StatelessWidget {
               ? Theme.of(context).colors().backgroundColor
               : Theme.of(context).colors().surface,
           titleText: tr('newTask'),
-          leadingWidth: GetPlatform.isIOS ? 100 : null,
+          leadingWidth: GetPlatform.isIOS
+              ? TextUtils.getTextWidth(
+                    tr('cancel').toLowerCase().capitalizeFirst!,
+                    TextStyleHelper.button(),
+                  ) +
+                  16
+              : null,
           centerTitle: GetPlatform.isIOS,
           actions: [
             PlatformIconButton(

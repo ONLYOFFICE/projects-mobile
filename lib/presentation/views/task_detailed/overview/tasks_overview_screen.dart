@@ -50,8 +50,8 @@ import 'package:readmore/readmore.dart';
 part 'task.dart';
 
 class TaskOverviewScreen extends StatelessWidget {
-  final TaskItemController? taskController;
-  final TabController? tabController;
+  final TaskItemController taskController;
+  final TabController tabController;
 
   const TaskOverviewScreen({
     Key? key,
@@ -63,20 +63,33 @@ class TaskOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (taskController!.loaded.value || taskController!.firstReload.value) {
+        if (taskController.loaded.value || taskController.firstReload.value) {
           final scrollController = ScrollController();
-          final task = taskController!.task.value;
+          final task = taskController.task.value;
           return StyledSmartRefresher(
             scrollController: scrollController,
-            controller: taskController!.refreshController,
-            onRefresh: () => taskController!.reloadTask(showLoading: true),
+            controller: taskController.refreshController,
+            onRefresh: () => taskController.reloadTask(showLoading: true),
             child: ListView(
               controller: scrollController,
               children: [
                 _Task(taskController: taskController),
+                InfoTile(
+                  icon: AppIcon(
+                      icon: SvgIcons.project,
+                      color: Theme.of(context).colors().onBackground.withOpacity(0.75)),
+                  caption: '${tr('project')}:',
+                  captionStyle: TextStyleHelper.caption(
+                      color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
+                  subtitle: task.projectOwner!.title,
+                  subtitleStyle: TextStyleHelper.subtitle1(
+                    color: Theme.of(context).colors().links,
+                  ),
+                  onTap: taskController.toProjectOverview,
+                ),
                 if (task.description != null && task.description!.isNotEmpty)
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 21),
+                    padding: const EdgeInsets.only(top: 21),
                     child: InfoTile(
                       caption: '${tr('description')}:',
                       captionStyle: TextStyleHelper.caption(
@@ -90,7 +103,7 @@ class TaskOverviewScreen extends StatelessWidget {
                         colorClickableText: Colors.pink,
                         style: TextStyleHelper.body1(),
                         trimMode: TrimMode.Line,
-                        delimiter: ' ',
+                        delimiter: '\n',
                         trimCollapsedText: tr('showMore'),
                         trimExpandedText: tr('showLess'),
                         moreStyle: TextStyleHelper.body2(color: Theme.of(context).colors().links),
@@ -98,19 +111,6 @@ class TaskOverviewScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                InfoTile(
-                  icon: AppIcon(
-                      icon: SvgIcons.project,
-                      color: Theme.of(context).colors().onBackground.withOpacity(0.75)),
-                  caption: '${tr('project')}:',
-                  captionStyle: TextStyleHelper.caption(
-                      color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
-                  subtitle: task.projectOwner!.title,
-                  subtitleStyle: TextStyleHelper.subtitle1(
-                    color: Theme.of(context).colors().links,
-                  ),
-                  onTap: taskController!.toProjectOverview,
-                ),
                 if (task.milestone != null) const SizedBox(height: 20),
                 if (task.milestone != null)
                   InfoTile(

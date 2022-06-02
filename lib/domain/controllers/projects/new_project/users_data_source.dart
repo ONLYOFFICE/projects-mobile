@@ -160,6 +160,8 @@ class UsersDataSource extends GetxController {
       if (applyUsersSelection != null) {
         await applyUsersSelection!();
       }
+
+      nothingFound.value = usersList.isEmpty;
     }
   }
 

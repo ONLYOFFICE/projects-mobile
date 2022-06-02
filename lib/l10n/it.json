@@ -498,5 +498,7 @@
 	"downloading": "Scaricamento",
 	"faceID": "Aprire con Face ID",
 	"subtaskDeleted": "Sottoattività eliminata",
-	"newProject": "Nuovo Progetto"
+	"newProject": "Nuovo progetto",
+	"forbidden":"L'accesso è proibito",
+	"unauthorized": "È richiesta l'autenticazione dell'utente"
 }

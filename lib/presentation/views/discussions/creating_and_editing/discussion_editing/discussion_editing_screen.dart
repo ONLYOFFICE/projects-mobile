@@ -38,6 +38,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
+import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
@@ -72,7 +73,13 @@ class DiscussionEditingScreen extends StatelessWidget {
       child: Scaffold(
         appBar: StyledAppBar(
           titleText: tr('editDiscussion'),
-          leadingWidth: GetPlatform.isIOS ? 100 : null,
+          leadingWidth: GetPlatform.isIOS
+              ? TextUtils.getTextWidth(
+                    tr('cancel').toLowerCase().capitalizeFirst!,
+                    TextStyleHelper.button(),
+                  ) +
+                  16
+              : null,
           centerTitle: !GetPlatform.isAndroid,
           actions: [
             PlatformWidget(

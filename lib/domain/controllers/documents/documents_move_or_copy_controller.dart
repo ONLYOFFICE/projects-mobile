@@ -48,6 +48,7 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/loading_hud.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:synchronized/synchronized.dart';
 
@@ -266,7 +267,13 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
         return;
       }
 
+      final loading = LoadingWithoutProgress();
+      loading.showLoading(true);
+
       final errorMessage = await _api.waitFinishOperation(result[0].id!);
+
+      loading.showLoading(false);
+
       if (errorMessage == null) {
         Get.find<NavigationController>().close(nestingCounter);
         switch (mode) {

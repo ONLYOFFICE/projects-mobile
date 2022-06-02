@@ -162,15 +162,15 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     fillProjectInfo(_projectDetailed.value!);
 
-    projectTasksController!.setup(_projectDetailed.value!);
-    projectMilestonesController!.setup(projectDetailed: _projectDetailed.value);
-    projectDiscussionsController!.setup(_projectDetailed.value!);
-    unawaited(projectDocumentsController!.setupFolder(
+    projectTasksController?.setup(_projectDetailed.value!);
+    projectMilestonesController?.setup(projectDetailed: _projectDetailed.value);
+    projectDiscussionsController?.setup(_projectDetailed.value!);
+    unawaited(projectDocumentsController?.setupFolder(
       folderName: _projectDetailed.value!.title!,
       folderId: _projectDetailed.value!.projectFolder,
     ));
-    projectTeamDataSource!.setup(projectDetailed: _projectDetailed.value);
-    unawaited(projectTeamDataSource!.getTeam());
+    projectTeamDataSource?.setup(projectDetailed: _projectDetailed.value);
+    unawaited(projectTeamDataSource?.getTeam());
 
     loaded.value = true;
   }
@@ -192,7 +192,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future<void> copyLink() async {}
 
-  Future deleteProject() async {
+  Future<bool> deleteProject() async {
     final responce = await _projectService.deleteProject(projectId: _projectDetailed.value!.id!);
     if (responce) await _refreshProjectsSubscription?.cancel();
 
@@ -200,8 +200,12 @@ class ProjectDetailsController extends BaseProjectEditorController {
   }
 
   @override
-  Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
-      .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed.value!);
+  Future<bool> updateStatus({int? newStatusId}) async {
+    await refreshData(hidden: true);
+
+    return await Get.find<ProjectStatusesController>()
+        .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed.value!);
+  }
 
   @override
   Future<void> confirmTeamMembers() async {

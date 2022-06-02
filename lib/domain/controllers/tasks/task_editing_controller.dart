@@ -393,12 +393,10 @@ class TaskEditingController extends TaskActionsController {
       projectId: task.projectOwner!.id!,
       responsibles: [Get.find<UserController>().user.value!.id],
     );
-    _taskItemController.setLoaded = false;
     final updatedTask = await _api.updateTask(newTask: newTask);
-    _taskItemController.setLoaded = true;
 
     if (updatedTask != null) {
-      _taskItemController.task.value = updatedTask;
+      _taskItemController.reloadTask(showLoading: true);
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('taskAccepted'));
     }
   }

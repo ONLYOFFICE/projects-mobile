@@ -32,6 +32,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:projects/internal/account_provider/base_account_provider.dart';
 
 class IOSAccountProvider extends BaseAccountProvider {
@@ -39,10 +40,11 @@ class IOSAccountProvider extends BaseAccountProvider {
   Future<List<String>> getAccounts() async {
     final accounts = <String>[];
     final result = await channel.invokeMethod('getAccounts');
-    final accountss = jsonDecode(result as String);
-
-    for (final item in accountss) {
-      accounts.add(jsonEncode(item));
+    if (result is String && result.isNotEmpty) {
+      final accountss = jsonDecode(result);
+      for (final item in accountss) {
+        accounts.add(jsonEncode(item));
+      }
     }
     return accounts;
   }
