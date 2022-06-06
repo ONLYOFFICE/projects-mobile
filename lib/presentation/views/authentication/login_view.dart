@@ -52,23 +52,23 @@ class LoginView extends StatelessWidget {
   final controller = Get.find<LoginController>();
   final passwordFocusNode = FocusNode();
 
-  final styledAppBar = StyledAppBar(
-    previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
-    onLeadingPressed: Get.back,
-    titleWidth: TextUtils.getTextWidth(
-      tr('addNewAccount'),
-      TextStyleHelper.headline6(),
-    ),
-    elevation: 1,
-    title: Text(
-      tr('addNewAccount'),
-      style: TextStyleHelper.headline6(color: Theme.of(Get.context!).colors().onSurface),
-    ),
-    titleHeight: Platform.isIOS ? 50 : 56,
-  );
-
   @override
   Widget build(BuildContext context) {
+    final styledAppBar = StyledAppBar(
+      previousPageTitle: tr('back').toLowerCase().capitalizeFirst,
+      onLeadingPressed: controller.leaveLoginScreen,
+      titleWidth: TextUtils.getTextWidth(
+        tr('addNewAccount'),
+        TextStyleHelper.headline6(),
+      ),
+      elevation: 1,
+      title: Text(
+        tr('addNewAccount'),
+        style: TextStyleHelper.headline6(color: Theme.of(Get.context!).colors().onSurface),
+      ),
+      titleHeight: Platform.isIOS ? 50 : 56,
+    );
+
     return WillPopScope(
       onWillPop: () async {
         controller.leaveLoginScreen();
