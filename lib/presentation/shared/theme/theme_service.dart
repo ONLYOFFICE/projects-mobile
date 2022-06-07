@@ -31,13 +31,13 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
 
-import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/internal/locator.dart';
 
 class ThemeService {
   static Future<ThemeMode> savedThemeMode() async {
-    final themeMode = await locator<Storage>().getString('themeMode');
+    final themeMode = await locator<SecureStorage>().getString('themeMode');
 
     switch (themeMode) {
       case 'darkTheme':
