@@ -499,7 +499,11 @@
 	"faceID": "Open with Face ID",
 	"subtaskDeleted": "Subtask deleted",
 	"newProject": "New project",
-	"forbidden":"Access is Forbidden",
+	"forbidden": "Access is Forbidden",
 	"unauthorized": "User authentication required",
-	"selfUserNotFound": "Your account not found. Check authorization, please"
+	"selfUserNotFound": "Your account not found. Check authorization, please",
+	"projectModuleNotSupported": {
+		"projectModule": "Project module in ",
+		"notSupported": " not supported"
+	}
 }
