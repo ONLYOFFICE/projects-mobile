@@ -72,9 +72,18 @@ class StyledDateRangePickerDialog extends StatelessWidget {
         errorFormatText: tr('invalidFormat'),
         errorInvalidText: tr('outOfRange'),
         errorInvalidRangeText: tr('invalidRange'),
-        fieldStartHintText: tr('startDate'),
+        fieldStartHintText: _formatDate(initialDateRange.start),
         fieldEndLabelText: tr('endDate'),
+        fieldEndHintText: _formatDate(initialDateRange.end),
       ),
     );
+  }
+
+  String _formatDate(DateTime? date) {
+    if (date != null) {
+      return DateFormat.yMd().format(date);
+    } else {
+      return DateFormat.yMd().format(DateTime.now());
+    }
   }
 }
