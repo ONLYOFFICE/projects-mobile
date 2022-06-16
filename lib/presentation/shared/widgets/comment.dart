@@ -93,6 +93,7 @@ class Comment extends StatelessWidget {
             Obx(
               () => HtmlWidget(
                 controller.comment?.value.commentBody?.trim() ?? '',
+                isSelectable: true,
                 textStyle: TextStyleHelper.body1(color: Theme.of(context).colors().onBackground),
                 customStylesBuilder: (element) {
                   if (element.attributes.containsKey('style') &&
