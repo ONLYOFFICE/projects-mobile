@@ -74,7 +74,7 @@ class ModalScreenViewSkeleton extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 540, maxHeight: 620),
+            constraints: const BoxConstraints(maxWidth: 540, maxHeight: 680),
             child: Navigator(
               key: ModalNavigationData.key,
               initialRoute: modalNavigationData.initialPage,
