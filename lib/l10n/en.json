@@ -505,5 +505,7 @@
 	"projectModuleNotSupported": {
 		"projectModule": "Project module in ",
 		"notSupported": " not supported"
-	}
+	},
+	"Cannot delete the file because it is opened for editing": "Cannot delete the file because it is opened for editing",
+	"Users from groups":"Users from groups"
 }

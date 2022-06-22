@@ -62,7 +62,7 @@ class UsersFromGroups extends StatelessWidget {
       backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Theme.of(context).colors().surface,
-        titleText: 'Users from groups',
+        titleText: tr('Users from groups'),
         centerTitle: GetPlatform.isIOS,
         leadingWidth: GetPlatform.isIOS
             ? TextUtils.getTextWidth(
