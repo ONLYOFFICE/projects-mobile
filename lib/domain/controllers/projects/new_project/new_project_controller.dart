@@ -80,61 +80,65 @@ class NewProjectController extends BaseProjectEditorController {
   }
 
   Future<void> confirm() async {
-    titleController.text = titleController.text.trim();
-    needToFillTitle.value = titleController.text.isEmpty;
+    if (lock.locked) return;
 
-    needToFillManager.value = selectedProjectManager.value?.id == null;
+    unawaited(lock.synchronized(() async {
+      titleController.text = titleController.text.trim();
+      needToFillTitle.value = titleController.text.isEmpty;
 
-    if (needToFillTitle.value == true || needToFillManager.value == true) {
-      unawaited(900.milliseconds.delay().then((value) {
-        needToFillTitle.value = false;
-        needToFillManager.value = false;
-      }));
-      return;
-    }
+      needToFillManager.value = selectedProjectManager.value?.id == null;
 
-    final participants = <Participant>[];
+      if (needToFillTitle.value == true || needToFillManager.value == true) {
+        unawaited(900.milliseconds.delay().then((value) {
+          needToFillTitle.value = false;
+          needToFillManager.value = false;
+        }));
+        return;
+      }
 
-    for (final element in selectedTeamMembers) {
-      participants.add(
-        Participant(
-            iD: element.portalUser.id,
-            canReadMessages: true,
-            canReadFiles: true,
-            canReadTasks: true,
-            canReadContacts: true,
-            canReadMilestones: true),
-      );
-    }
+      final participants = <Participant>[];
 
-    final newProject = NewProjectDTO(
-        title: titleController.text,
-        description: descriptionController.text,
-        responsibleId: selectedProjectManager.value!.id,
-        participants: participants,
-        private: isPrivate.value,
-        notify: notificationEnabled.value,
-        notifyResponsibles: responsiblesNotificationEnabled,
-        tags: tagsText.value);
+      for (final element in selectedTeamMembers) {
+        participants.add(
+          Participant(
+              iD: element.portalUser.id,
+              canReadMessages: true,
+              canReadFiles: true,
+              canReadTasks: true,
+              canReadContacts: true,
+              canReadMilestones: true),
+        );
+      }
 
-    final result = await _api.createProject(project: newProject);
-    if (result != null && result.id != null) {
-      if (isFolowed.value) await followProject(projectId: result.id);
+      final newProject = NewProjectDTO(
+          title: titleController.text,
+          description: descriptionController.text,
+          responsibleId: selectedProjectManager.value!.id,
+          participants: participants,
+          private: isPrivate.value,
+          notify: notificationEnabled.value,
+          notifyResponsibles: responsiblesNotificationEnabled,
+          tags: tagsText.value);
 
-      Get.find<NavigationController>().back();
+      final result = await _api.createProject(project: newProject);
+      if (result != null && result.id != null) {
+        if (isFolowed.value) await followProject(projectId: result.id);
 
-      locator<EventHub>().fire('needToRefreshProjects', {'all': true});
-      locator<EventHub>().fire('needToRefreshDocuments', {'all': true});
+        Get.find<NavigationController>().back();
 
-      MessagesHandler.showSnackBar(
-        context: Get.context!,
-        text: tr('projectCreated'),
-        buttonOnTap: () => Get.find<NavigationController>()
-            .to(ProjectDetailedView(), arguments: {'projectDetailed': result}),
-        buttonText: tr('open').toUpperCase(),
-      );
-    } else
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+        locator<EventHub>().fire('needToRefreshProjects', {'all': true});
+        locator<EventHub>().fire('needToRefreshDocuments', {'all': true});
+
+        MessagesHandler.showSnackBar(
+          context: Get.context!,
+          text: tr('projectCreated'),
+          buttonOnTap: () => Get.find<NavigationController>()
+              .to(ProjectDetailedView(), arguments: {'projectDetailed': result}),
+          buttonText: tr('open').toUpperCase(),
+        );
+      } else
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+    }));
   }
 
   @override
