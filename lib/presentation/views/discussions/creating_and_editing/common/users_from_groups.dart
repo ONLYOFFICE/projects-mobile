@@ -43,6 +43,7 @@ import 'package:projects/internal/utils/text_utils.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 
@@ -111,6 +112,9 @@ class UsersFromGroups extends StatelessWidget {
               groupsDataSource: groupsDataSource,
               onTapFunction: controller.selectGroupMembers,
             );
+          }
+          if (groupsDataSource.loaded.value == true && groupsDataSource.groupsList.isEmpty) {
+            return const NothingFound();
           }
           return const ListLoadingSkeleton();
         },
