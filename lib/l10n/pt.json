@@ -500,5 +500,12 @@
 	"subtaskDeleted": "Subtarefa excluída",
 	"newProject": "Novo projeto",
 	"forbidden":"O acesso é proibido",
-	"unauthorized": "Autenticação do usuário necessária"
+	"unauthorized": "Autenticação do usuário necessária",
+	"selfUserNotFound": "Sua conta não foi encontrada. Por favor, verifique a autorização",
+    "projectModuleNotSupported": {
+        "projectModule": "Módulo de projetos em ",
+        "notSupported": " não é suportado"
+    },
+    "Cannot delete the file because it is opened for editing": "Não é possível excluir o arquivo por que ele está aberto para edição",
+    "Users from groups": "Usuários de grupos"
 }

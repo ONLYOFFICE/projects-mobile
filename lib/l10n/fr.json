@@ -500,5 +500,12 @@
 	"subtaskDeleted": "Sous-tâche supprimée",
 	"newProject": "Nouveau projet",
 	"forbidden":"Accès interdit",
-	"unauthorized": "Authentification de l'utilisateur requise"
+	"unauthorized": "Authentification de l'utilisateur requise",
+	"selfUserNotFound": "Votre compte n'a pas été trouvé. Veuillez vérifier l'autorisation",
+    "projectModuleNotSupported": {
+        "projectModule": "Le module de projets dans ",
+        "notSupported": " n'est pas pris en charge"
+    },
+    "Cannot delete the file because it is opened for editing": "Impossible de supprimer le fichier car il est en cours de modification",
+    "Users from groups": "Utilisateurs de groupes"
 }

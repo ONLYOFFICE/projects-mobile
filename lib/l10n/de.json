@@ -500,5 +500,12 @@
 	"subtaskDeleted": "Teilaufgabe gelöscht",
 	"newProject": "Neues Projekt",
 	"forbidden":"Zugriff auf das Modul Projekte ist verboten",
-	"unauthorized": "Benutzerauthentifizierung erforderlich"
+	"unauthorized": "Benutzerauthentifizierung erforderlich",
+	"selfUserNotFound": "Ihr Konto wurde nicht gefunden. Bitte überprüfen Sie die Autorisierung",
+    "projectModuleNotSupported": {
+        "projectModule": "Das Modul Projekte in ",
+        "notSupported": " nicht unterstützt"
+    },
+    "Cannot delete the file because it is opened for editing": "Datei kann nicht gelöscht werden, weil sie gerade bearbeitet wird",
+    "Users from groups": "Benutzer aus Gruppen"
 }

@@ -500,5 +500,12 @@
 	"subtaskDeleted": "Sottoattività eliminata",
 	"newProject": "Nuovo progetto",
 	"forbidden":"L'accesso è proibito",
-	"unauthorized": "È richiesta l'autenticazione dell'utente"
+	"unauthorized": "È richiesta l'autenticazione dell'utente",
+	"selfUserNotFound": "Il tuo account non è stato trovato. Ti preghiamo di controllare l'autorizzazione",
+    "projectModuleNotSupported": {
+        "projectModule": "Modulo progetto in ",
+        "notSupported": " non supportato"
+    },
+    "Cannot delete the file because it is opened for editing": "E' impossibile eliminare il file perchè viene aperto per la modifica",
+    "Users from groups": "Utenti di gruppi"
 }

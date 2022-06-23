@@ -500,5 +500,12 @@
 	"subtaskDeleted": "Удалена подзадача",
 	"newProject": "Новый проект",
 	"forbidden":"Доступ запрещен",
-	"unauthorized": "Требуется аутентификация пользователя"
+	"unauthorized": "Требуется аутентификация пользователя",
+	"selfUserNotFound": "Ваш аккаунт не найден. Пожалуйста, проверьте данные авторизации",
+    "projectModuleNotSupported": {
+		"projectModule": "Модуль проекта в ",
+		"notSupported": " не поддерживается"
+    },
+    "Cannot delete the file because it is opened for editing": "Невозможно удалить файл, так как файл открыт на редактирование",
+    "Users from groups": "Пользователи из групп"
 }
