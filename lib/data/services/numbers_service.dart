@@ -30,12 +30,14 @@
  *
  */
 
+import 'dart:io';
+
 import 'package:devicelocale/devicelocale.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 
 class NumbersService {
   final _numbers = FlutterLibphonenumber();
-  String? _locale;
+  late String? _locale;
 
   Future<void> init() async {
     await _numbers.init();
@@ -43,6 +45,14 @@ class NumbersService {
     _locale = await Devicelocale.currentLocale;
   }
 
-  List get countries => CountryManager().countries;
-  String get localeCode => _locale!.substring(_locale!.indexOf('_') + 1, _locale!.length);
+  List<CountryWithPhoneCode> get countries => CountryManager().countries;
+
+  String get localeCode {
+    final token = Platform.isIOS ? '-' : '_';
+    final localeList = _locale?.split(token);
+    if (localeList != null && localeList.length == 2)
+      return localeList[1];
+    else
+      return '';
+  }
 }
