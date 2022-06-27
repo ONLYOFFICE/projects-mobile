@@ -37,7 +37,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/2fa_sms_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/utils/adaptive_size.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -122,10 +121,10 @@ class _CountrySelection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 2),
             child: PlatformTextButton(
-              onPressed: () => Get.find<NavigationController>().to(const SelectCountryScreen()),
+              onPressed: () => Get.to(const SelectCountryScreen()),
               child: Obx(
                 () => Text(
-                  controller.deviceCountry.value.countryName ?? tr('chooseCountry'),
+                  controller.deviceCountry.value?.countryName ?? tr('chooseCountry'),
                   style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().primary),
                 ),
               ),

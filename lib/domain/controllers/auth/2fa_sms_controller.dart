@@ -39,7 +39,6 @@ import 'package:get/get.dart';
 import 'package:projects/data/services/numbers_service.dart';
 import 'package:projects/data/services/sms_code_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 
@@ -68,14 +67,14 @@ class TFASmsController extends GetxController {
   late String _locale;
   late List<CountryWithPhoneCode> _countries;
   RxList<CountriesToShow> countriesToShow = <CountriesToShow>[].obs;
-  late Rx<CountryWithPhoneCode> deviceCountry;
+  Rx<CountryWithPhoneCode?> deviceCountry = null.obs;
 
   final _phoneCodeController = TextEditingController();
-  late MaskedTextController _phoneNumberController;
+  TextEditingController _phoneNumberController = TextEditingController();
 
   TextEditingController get phoneCodeController => _phoneCodeController;
 
-  MaskedTextController get phoneNumberController => _phoneNumberController;
+  TextEditingController get phoneNumberController => _phoneNumberController;
 
   String? get phoneNoise => _phoneNoise;
 
@@ -93,11 +92,13 @@ class TFASmsController extends GetxController {
     countriesToShow.value = _setupCountriesToShow(_countries);
     try {
       deviceCountry = _countries
-          .firstWhere((element) => element.countryCode.toLowerCase() == _locale.toLowerCase())
+          .firstWhereOrNull((element) => element.countryCode.toLowerCase() == _locale.toLowerCase())
           .obs;
-      _phoneCodeController.text = deviceCountry.value.phoneCode;
-      _phoneNumberController = MaskedTextController(
-          mask: deleteNumberPrefix(deviceCountry.value.phoneMaskFixedLineInternational));
+      _phoneCodeController.text = deviceCountry.value?.phoneCode ?? '';
+      if (deviceCountry.value?.phoneMaskFixedLineInternational != null) {
+        _phoneNumberController = MaskedTextController(
+            mask: deleteNumberPrefix(deviceCountry.value!.phoneMaskFixedLineInternational));
+      }
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -147,10 +148,15 @@ class TFASmsController extends GetxController {
     deviceCountry.value = country;
     countriesToShow.value = _setupCountriesToShow(_countries);
     _phoneCodeController.text = country.phoneCode;
-    _phoneNumberController
-        .updateMask(deleteNumberPrefix(deviceCountry.value.phoneMaskFixedLineNational));
+    if (_phoneNumberController is MaskedTextController) {
+      (_phoneNumberController as MaskedTextController)
+          .updateMask(deleteNumberPrefix(deviceCountry.value!.phoneMaskFixedLineInternational));
+    } else {
+      _phoneNumberController = MaskedTextController(
+          mask: deleteNumberPrefix(deviceCountry.value!.phoneMaskFixedLineInternational));
+    }
     _phoneNumberController.clear();
-    Get.find<NavigationController>().back();
+    Get.back();
   }
 
   String deleteNumberPrefix(String number) {
@@ -159,8 +165,12 @@ class TFASmsController extends GetxController {
   }
 
   String get numberHint {
-    return deleteNumberPrefix(deviceCountry.value.phoneMaskFixedLineInternational)
-        .replaceAll('0', '_');
+    if (deviceCountry.value != null) {
+      return deleteNumberPrefix(deviceCountry.value?.phoneMaskFixedLineInternational ?? '')
+          .replaceAll('0', '_');
+    } else {
+      return '';
+    }
   }
 
   Future setPhone() async {
