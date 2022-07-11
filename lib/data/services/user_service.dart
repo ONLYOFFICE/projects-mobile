@@ -76,4 +76,16 @@ class UserService {
       return null;
     }
   }
+
+  Future<Map<String, dynamic>?> deleteAccount() async {
+    final result = await _api.deleteUser();
+    final success = result.response != null;
+
+    if (success) {
+      return result.response;
+    } else {
+      await Get.find<ErrorDialog>().show(result.error!.message);
+      return null;
+    }
+  }
 }
