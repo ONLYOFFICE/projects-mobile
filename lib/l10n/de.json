@@ -499,13 +499,18 @@
 	"faceID": "Mit Face-ID öffnen",
 	"subtaskDeleted": "Teilaufgabe gelöscht",
 	"newProject": "Neues Projekt",
-	"forbidden":"Zugriff auf das Modul Projekte ist verboten",
+	"forbidden": "Zugriff auf das Modul Projekte ist verboten",
 	"unauthorized": "Benutzerauthentifizierung erforderlich",
 	"selfUserNotFound": "Ihr Konto wurde nicht gefunden. Bitte überprüfen Sie die Autorisierung",
-    "projectModuleNotSupported": {
-        "projectModule": "Das Modul Projekte in ",
-        "notSupported": " nicht unterstützt"
-    },
-    "Cannot delete the file because it is opened for editing": "Datei kann nicht gelöscht werden, weil sie gerade bearbeitet wird",
-    "Users from groups": "Benutzer aus Gruppen"
+	"projectModuleNotSupported": {
+		"projectModule": "Das Modul Projekte in ",
+		"notSupported": " nicht unterstützt"
+	},
+	"Cannot delete the file because it is opened for editing": "Datei kann nicht gelöscht werden, weil sie gerade bearbeitet wird",
+	"Users from groups": "Benutzer aus Gruppen",
+	"Delete account": "Konto löschen",
+	"Terminate account": "Konto kündigen",
+	"Send the profile deletion instructions to the email address %@?": "Sollen die Anweisungen zum Löschen des Profils an die E-Mail-Adresse {} gesendet werden?",
+	"Instructions had been sent to your email": "Anweisungen wurden an Ihre E-Mail gesendet",
+	"Send": "Senden"
 }

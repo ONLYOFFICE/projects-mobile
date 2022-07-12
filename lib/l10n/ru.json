@@ -499,13 +499,18 @@
 	"faceID": "Открыть с помощью Face ID",
 	"subtaskDeleted": "Удалена подзадача",
 	"newProject": "Новый проект",
-	"forbidden":"Доступ запрещен",
+	"forbidden": "Доступ запрещен",
 	"unauthorized": "Требуется аутентификация пользователя",
 	"selfUserNotFound": "Ваш аккаунт не найден. Пожалуйста, проверьте данные авторизации",
-    "projectModuleNotSupported": {
+	"projectModuleNotSupported": {
 		"projectModule": "Модуль проекта в ",
 		"notSupported": " не поддерживается"
-    },
-    "Cannot delete the file because it is opened for editing": "Невозможно удалить файл, так как файл открыт на редактирование",
-    "Users from groups": "Пользователи из групп"
+	},
+	"Cannot delete the file because it is opened for editing": "Невозможно удалить файл, так как файл открыт на редактирование",
+	"Users from groups": "Пользователи из групп",
+	"Delete account": "Удалить аккаунт",
+	"Terminate account": "Удалить аккаунт",
+	"Send the profile deletion instructions to the email address %@?": "Отправить инструкцию по удалению профиля на адрес электронной почты {}?",
+	"Instructions had been sent to your email": "Инструкция отправлена на вашу почту",
+	"Send": "Отправить"
 }

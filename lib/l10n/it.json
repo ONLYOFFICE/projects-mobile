@@ -499,13 +499,18 @@
 	"faceID": "Aprire con Face ID",
 	"subtaskDeleted": "Sottoattività eliminata",
 	"newProject": "Nuovo progetto",
-	"forbidden":"L'accesso è proibito",
+	"forbidden": "L'accesso è proibito",
 	"unauthorized": "È richiesta l'autenticazione dell'utente",
 	"selfUserNotFound": "Il tuo account non è stato trovato. Ti preghiamo di controllare l'autorizzazione",
-    "projectModuleNotSupported": {
-        "projectModule": "Modulo progetto in ",
-        "notSupported": " non supportato"
-    },
-    "Cannot delete the file because it is opened for editing": "E' impossibile eliminare il file perchè viene aperto per la modifica",
-    "Users from groups": "Utenti di gruppi"
+	"projectModuleNotSupported": {
+		"projectModule": "Modulo progetto in ",
+		"notSupported": " non supportato"
+	},
+	"Cannot delete the file because it is opened for editing": "E' impossibile eliminare il file perchè viene aperto per la modifica",
+	"Users from groups": "Utenti di gruppi",
+	"Delete account": "Eliminare account",
+	"Terminate account": "Terminare l'account",
+	"Send the profile deletion instructions to the email address %@?": "Inviare le istruzioni per l'eliminazione del profilo all'indirizzo email {}?",
+	"Instructions had been sent to your email": "Le istruzioni sono state inviate alla tua email",
+	"Send": "Invia"
 }

@@ -510,7 +510,7 @@
 	"Users from groups": "Users from groups",
 	"Delete account": "Delete account",
 	"Terminate account": "Terminate account",
-	"Send the profile deletion instructions to the email address %@?": "Send the profile deletion instructions to the email address",
+	"Send the profile deletion instructions to the email address %@?": "Send the profile deletion instructions to the email address {}?",
 	"Instructions had been sent to your email": "Instructions had been sent to your email",
 	"Send": "Send"
 }
