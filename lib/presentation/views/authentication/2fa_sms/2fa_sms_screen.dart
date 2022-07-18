@@ -121,7 +121,7 @@ class _CountrySelection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 2),
             child: PlatformTextButton(
-              onPressed: () => Get.to<SelectCountryScreen>(const SelectCountryScreen()),
+              onPressed: () => Get.to(const SelectCountryScreen()),
               child: Obx(
                 () => Text(
                   controller.deviceCountry.value?.countryName ?? tr('chooseCountry'),
@@ -140,8 +140,7 @@ class _CountrySelection extends StatelessWidget {
                   child: PlatformTextField(
                     makeCupertinoDecorationNull: true,
                     controller: controller.phoneCodeController,
-                    onChanged: (value) {},
-                    autofocus: controller.deviceCountry.value?.phoneCode == null,
+                    autofocus: false,
                     cupertino: (_, __) => CupertinoTextFieldData(
                       padding: const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
                       prefix: Text(
@@ -168,7 +167,7 @@ class _CountrySelection extends StatelessWidget {
                   flex: 4,
                   child: PlatformTextField(
                     makeCupertinoDecorationNull: true,
-                    autofocus: controller.deviceCountry.value?.phoneCode != null,
+                    autofocus: true,
                     controller: controller.phoneNumberController,
                     keyboardType: TextInputType.number,
                     hintText: controller.numberHint,

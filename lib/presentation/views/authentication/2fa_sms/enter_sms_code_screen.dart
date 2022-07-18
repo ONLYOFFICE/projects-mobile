@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
@@ -79,9 +80,11 @@ class EnterSMSCodeScreen extends StatelessWidget {
                     color: Theme.of(context).colors().onBackground,
                   ),
                   SizedBox(height: h(20.74)),
-                  Text(tr('enterSendedCode'),
-                      style:
-                          TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface)),
+                  Text(
+                    tr('enterSendedCode'),
+                    style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface),
+                    textAlign: TextAlign.center,
+                  ),
                   Text(controller.phoneNoise!,
                       style: TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface)
                           .copyWith(fontWeight: FontWeight.w500)),
@@ -96,6 +99,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
                       style: TextStyleHelper.subtitle1(),
                       obscureText: true,
                       obscuringCharacter: '*',
+                      autofocus: true,
                       material: (_, __) => MaterialTextFieldData(
                         decoration: InputDecoration(
                           enabledBorder: UnderlineInputBorder(
@@ -107,6 +111,17 @@ class EnterSMSCodeScreen extends StatelessWidget {
                           ),
                           focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
+                              color: codeError
+                                  ? Theme.of(context).colors().colorError
+                                  : Theme.of(context).colors().onSurface.withOpacity(0.3),
+                            ),
+                          ),
+                        ),
+                      ),
+                      cupertino: (_, __) => CupertinoTextFieldData(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
                               color: codeError
                                   ? Theme.of(context).colors().colorError
                                   : Theme.of(context).colors().onSurface.withOpacity(0.3),

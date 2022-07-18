@@ -43,6 +43,7 @@ import 'package:projects/data/services/device_info_service.dart';
 import 'package:projects/data/services/package_info_service.dart';
 import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/settings_service.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
@@ -60,6 +61,7 @@ class SettingsController extends GetxController {
   final PackageInfoService _packageInfoService = locator<PackageInfoService>();
   final DeviceInfoService _deviceInfoService = locator<DeviceInfoService>();
   final Storage _storage = locator<Storage>();
+  final _secureStorage = locator<SecureStorage>();
   final platformController = Get.find<PlatformController>();
   final navigationController = Get.find<NavigationController>();
 
@@ -86,10 +88,10 @@ class SettingsController extends GetxController {
     appVersion = await _packageInfoService.version;
     buildNumber = await _packageInfoService.buildNumber;
 
-    var themeMode = await _storage.getString('themeMode');
+    var themeMode = await _secureStorage.getString('themeMode');
     if (themeMode == null) {
       themeMode = 'sameAsSystem';
-      await _storage.saveString('themeMode', themeMode);
+      await _secureStorage.putString('themeMode', themeMode);
     }
 
     final analytics = await _storage.getBool('shareAnalytics');
@@ -130,7 +132,7 @@ class SettingsController extends GetxController {
     }
 
     currentTheme.value = themeMode;
-    await _storage.saveString('themeMode', themeMode);
+    await _secureStorage.putString('themeMode', themeMode);
   }
 
   Future<void> changeAnalyticsSharingEnability(bool value) async {

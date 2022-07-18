@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:get/get.dart';
@@ -203,6 +204,16 @@ class _TagTextFieldWidget extends StatelessWidget {
             errorBorder: !validate.value
                 ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
                 : null,
+          ),
+        ),
+        cupertino: (_, __) => CupertinoTextFieldData(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colors().background,
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(color: Theme.of(context).colors().outline, width: 0.5),
+          ),
+          placeholderStyle: TextStyleHelper.body2(
+            color: Theme.of(context).colors().onSurface.withOpacity(0.5),
           ),
         ),
         style: TextStyleHelper.body2(color: Theme.of(context).colors().onSurface),

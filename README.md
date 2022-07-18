@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-GNU%20AGPL%20V3-green.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.en.html) 
 ![Platforms](https://img.shields.io/badge/Platforms-iOS%20%7C%20Android-lightgrey.svg)
-![Release](https://img.shields.io/badge/Release-v2.0.0-blue.svg?style=flat)
+![Release](https://img.shields.io/badge/Release-v2.0.1-blue.svg?style=flat)
 
 # ONLYOFFICE Projects Mobile
 

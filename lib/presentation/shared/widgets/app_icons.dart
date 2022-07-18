@@ -65,6 +65,7 @@ class SvgIcons {
   static const String high_priority = 'lib/assets/images/icons/high_priority.svg';
   static const String lock = 'lib/assets/images/icons/lock.svg';
   static const String logout = 'lib/assets/images/icons/logout.svg';
+  static const String delete = 'lib/assets/images/icons/delete_forever.svg';
   static const String message = 'lib/assets/images/icons/message.svg';
   static const String password_recovery = 'lib/assets/images/icons/password_recovery.svg';
   static const String ios_sort = 'lib/assets/images/icons/ios_sortbutton_icon.svg';

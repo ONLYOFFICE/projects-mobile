@@ -499,6 +499,18 @@
 	"faceID": "Ouvrir avec Face ID",
 	"subtaskDeleted": "Sous-tâche supprimée",
 	"newProject": "Nouveau projet",
-	"forbidden":"Accès interdit",
-	"unauthorized": "Authentification de l'utilisateur requise"
+	"forbidden": "Accès interdit",
+	"unauthorized": "Authentification de l'utilisateur requise",
+	"selfUserNotFound": "Votre compte n'a pas été trouvé. Veuillez vérifier l'autorisation",
+	"projectModuleNotSupported": {
+		"projectModule": "Le module de projets dans ",
+		"notSupported": " n'est pas pris en charge"
+	},
+	"Cannot delete the file because it is opened for editing": "Impossible de supprimer le fichier car il est en cours de modification",
+	"Users from groups": "Utilisateurs de groupes",
+	"Delete account": "Supprimer le compte",
+	"Terminate account": "Résilier le compte",
+	"Send the profile deletion instructions to the email address %@?": "Envoyer les instructions de suppression du profil à l'e-mail {} ?",
+	"Instructions had been sent to your email": "Les instructions ont été envoyées à votre e-mail",
+	"Send": "Envoyer"
 }

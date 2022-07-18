@@ -47,8 +47,6 @@ class SelectCountryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<TFASmsController>();
 
-    var previousContrysFirstLetter = '';
-
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
@@ -63,20 +61,14 @@ class SelectCountryScreen extends StatelessWidget {
           ],
         ),
         body: ListView.builder(
-          itemCount: controller.countriesToShow.length,
-          itemBuilder: (BuildContext context, int index) {
-            if (controller.countriesToShow[index].countryName![0] != previousContrysFirstLetter) {
-              previousContrysFirstLetter = controller.countriesToShow[index].countryName![0];
+            itemCount: controller.countriesToShow.length,
+            itemBuilder: (BuildContext context, int index) {
               return _CountryWithCodeTile(
-                showFirstLetter: true,
+                showFirstLetter: controller.countriesToShow[index].showFirstLetter,
                 showBorder: index != 0,
-                country: controller.countriesToShow[index],
+                country: controller.countriesToShow[index].countrie,
               );
-            }
-
-            return _CountryWithCodeTile(country: controller.countriesToShow[index]);
-          },
-        ),
+            }),
       ),
     );
   }
@@ -94,8 +86,7 @@ class _SarchField extends StatelessWidget {
       autofocus: true,
       style: TextStyleHelper.headline6(),
       hintText: tr('search'),
-      cupertino: (_, __) =>
-          CupertinoTextFieldData(placeholderStyle: TextStyleHelper.headline6().copyWith(height: 1)),
+      cupertino: (_, __) => CupertinoTextFieldData(placeholderStyle: TextStyleHelper.headline6()),
       material: (_, __) => MaterialTextFieldData(
         decoration: InputDecoration.collapsed(
           hintText: tr('search'),

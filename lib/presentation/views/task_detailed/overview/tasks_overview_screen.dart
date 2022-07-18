@@ -146,7 +146,10 @@ class TaskOverviewScreen extends StatelessWidget {
                       captionStyle: TextStyleHelper.caption(
                           color: Theme.of(context).colors().onBackground.withOpacity(0.6)),
                       subtitle:
-                          formatedDateFromString(now: DateTime.now(), stringDate: task.deadline!)),
+                          formatedDateFromString(now: DateTime.now(), stringDate: task.deadline!),
+                      subtitleStyle: DateTime.parse(task.deadline!).isBefore(DateTime.now())
+                          ? TextStyleHelper.subtitle1(color: Theme.of(context).colors().colorError)
+                          : TextStyleHelper.subtitle1(color: Theme.of(context).colors().onSurface)),
                 const SizedBox(height: 20),
                 InfoTile(
                     icon: AppIcon(

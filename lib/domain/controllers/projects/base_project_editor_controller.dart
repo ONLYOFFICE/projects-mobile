@@ -50,10 +50,13 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
+import 'package:synchronized/synchronized.dart';
 
 abstract class BaseProjectEditorController extends GetxController {
   final UserService _userService = locator<UserService>();
   final _projectService = locator<ProjectService>();
+
+  final lock = Lock();
 
   final usersDataSourse = Get.find<UsersDataSource>();
   UserSelectionMode selectionMode = UserSelectionMode.Single;

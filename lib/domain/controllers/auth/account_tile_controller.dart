@@ -32,6 +32,7 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -48,8 +49,9 @@ import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:synchronized/synchronized.dart';
@@ -112,9 +114,9 @@ class AccountTileController extends GetxController {
       userTitle.value = accountData.portal!;
 
       if (accountData.token!.isNotEmpty) {
-        final responce = await locator<AuthService>().checkAccountAuthorization(accountData);
+        final response = await locator<AuthService>().checkAccountAuthorization(accountData);
 
-        if (responce.error != null)
+        if (response.error != null)
           await Get.find<AccountManager>().clearTokenForAccount(accountData);
         else
           await loadAvatar();
@@ -123,11 +125,35 @@ class AccountTileController extends GetxController {
   }
 
   Future<void> loginToSavedAccount() async {
-    final responce = await locator<AuthService>().checkAccountAuthorization(accountData);
-    if (responce.error != null) {
+    if (_isPersonalPortal(accountData.portal)) {
+      final alertContent = RichText(
+        textAlign: Platform.isIOS ? TextAlign.center : TextAlign.left,
+        text: TextSpan(
+          style: TextStyleHelper.body2(
+              color: Theme.of(Get.context!).colors().onSurface.withOpacity(0.6)),
+          children: [
+            TextSpan(text: tr('projectModuleNotSupported.projectModule')),
+            TextSpan(text: accountData.portal, style: const TextStyle(fontWeight: FontWeight.bold)),
+            TextSpan(text: tr('projectModuleNotSupported.notSupported')),
+          ],
+        ),
+      );
+
+      await Get.find<NavigationController>().showPlatformDialog(
+        SingleButtonDialog(
+          titleText: tr('error'),
+          content: alertContent,
+          acceptText: tr('ok'),
+        ),
+      );
+      return;
+    }
+
+    final response = await locator<AuthService>().checkAccountAuthorization(accountData);
+    if (response.error != null) {
       await Get.find<AccountManager>().clearTokenForAccount(accountData);
 
-      if (responce.error?.statusCode == 404)
+      if (response.error?.statusCode == 404)
         await Get.find<ErrorDialog>().show(tr('selfUserNotFound'), awaited: true);
     }
 
@@ -151,6 +177,12 @@ class AccountTileController extends GetxController {
 
       locator<EventHub>().fire('loginSuccess');
     }
+  }
+
+  bool _isPersonalPortal(String? portalAdress) {
+    if (portalAdress == null) return false;
+    final domains = portalAdress.split('.');
+    return domains[0].contains('personal');
   }
 
   Future<void> onTap() async {

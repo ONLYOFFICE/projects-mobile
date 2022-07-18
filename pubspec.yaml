@@ -14,7 +14,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 
-version: 2.0.0+253
+version: 2.0.1+266
 
 environment:
   sdk: '>=2.16.0 <3.0.0'
@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0 
-  open_file: 3.2.1
+  open_file: ^3.2.1
   get: ^4.6.1
   get_it: ^7.2.0
   shared_preferences: ^2.0.13
@@ -57,7 +57,7 @@ dependencies:
   # to get device location country
   devicelocale: ^0.5.0
   # for sms 2FA
-  flutter_libphonenumber: ^1.2.1
+  flutter_libphonenumber: ^1.2.4
 #  tabbar: ^0.1.1
   extended_tabs: ^2.3.0
   cached_network_image: ^3.1.0+1
@@ -81,7 +81,7 @@ dependencies:
   flutter_cache_manager: ^3.3.0
   flutter_platform_widgets: ^1.20.0
   file_picker: ^4.5.1
-  share_plus: ^4.0.4
+  share_plus: ^4.0.9
   
   # app localization
   easy_localization: ^3.0.0

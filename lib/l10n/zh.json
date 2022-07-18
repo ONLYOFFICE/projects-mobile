@@ -499,7 +499,18 @@
 	"faceID": "用 Face ID 打开",
 	"subtaskDeleted": "副任务已删除",
 	"newProject": "新建项目",
-	"forbidden":"禁止访问",
-	"unauthorized": "需要用户验证"
-
+	"forbidden": "禁止访问",
+	"unauthorized": "需要用户验证",
+	"selfUserNotFound": "未找到您的账户。请检查登录信息",
+	"projectModuleNotSupported": {
+		"projectModule": "项目模块中的",
+		"notSupported": "不受支持"
+	},
+	"Cannot delete the file because it is opened for editing": "不能删除该文件，该文件正在为编辑打开的",
+	"Users from groups":"小组的用户",
+	"Delete account": "删除账户",
+	"Terminate account": "删除账户",
+	"Send the profile deletion instructions to the email address %@?": "将账户的删除指示发送到{}?电子邮件地址",
+	"Instructions had been sent to your email": "指示已发送到您的邮箱",
+	"Send": "发送"
 }

@@ -33,16 +33,18 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:projects/data/models/from_api/security_info.dart';
-import 'package:projects/data/services/project_service.dart';
-import 'package:projects/domain/controllers/auth/login_controller.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:synchronized/synchronized.dart';
-
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/authentication_service.dart';
+import 'package:projects/data/services/project_service.dart';
+import 'package:projects/data/services/user_service.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:synchronized/synchronized.dart';
 
 class UserController extends GetxController {
   final user = Rxn<PortalUser>();
@@ -122,5 +124,16 @@ class UserController extends GetxController {
     securityInfo.value = null;
 
     //dataUpdated.close();
+  }
+
+  Future<void> deleteUser() async {
+    final userService = locator<UserService>();
+    final result = await userService.deleteAccount();
+    if (result != null && result['statusCode'] == 200) {
+      await Get.find<NavigationController>().showPlatformDialog(SingleButtonDialog(
+        titleText: tr('Instructions had been sent to your email'),
+        acceptText: tr('ok'),
+      ));
+    }
   }
 }

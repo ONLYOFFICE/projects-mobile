@@ -116,6 +116,20 @@ class ProfileController extends GetxController {
     ));
   }
 
+  void deleteAccount(context) async {
+    await Get.find<NavigationController>().showPlatformDialog(StyledAlertDialog(
+      titleText: tr('Terminate account'),
+      contentText: tr('Send the profile deletion instructions to the email address %@?',
+          args: [email.value]),
+      acceptText: tr('Send'),
+      acceptColor: Theme.of(context as BuildContext).colors().colorError,
+      onAcceptTap: () async {
+        Get.back();
+        unawaited(Get.find<UserController>().deleteUser());
+      },
+    ));
+  }
+
   Future<void> loadAvatar() async {
     final photoUrl = await _photoService.getUserPhoto(user.value.id!);
     try {
