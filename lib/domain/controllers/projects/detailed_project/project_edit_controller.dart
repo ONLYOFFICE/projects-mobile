@@ -146,54 +146,58 @@ class ProjectEditController extends BaseProjectEditorController {
       .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed!);
 
   Future<void> confirmChanges() async {
-    titleController.text = titleController.text.trim();
-    needToFillTitle.value = titleController.text.isEmpty;
+    if (lock.locked) return;
 
-    needToFillManager.value = selectedProjectManager.value?.id == null;
+    unawaited(lock.synchronized(() async {
+      titleController.text = titleController.text.trim();
+      needToFillTitle.value = titleController.text.isEmpty;
 
-    if (needToFillTitle.value || needToFillManager.value) {
-      unawaited(900.milliseconds.delay().then((value) {
-        needToFillTitle.value = false;
-        needToFillManager.value = false;
-      }));
-      return;
-    }
+      needToFillManager.value = selectedProjectManager.value?.id == null;
 
-    final participants = <Participant>[];
+      if (needToFillTitle.value || needToFillManager.value) {
+        unawaited(900.milliseconds.delay().then((value) {
+          needToFillTitle.value = false;
+          needToFillManager.value = false;
+        }));
+        return;
+      }
 
-    for (final element in selectedTeamMembers) {
-      participants.add(
-        Participant(
-            iD: element.portalUser.id,
-            canReadMessages: true,
-            canReadFiles: true,
-            canReadTasks: true,
-            canReadContacts: true,
-            canReadMilestones: true),
+      final participants = <Participant>[];
+
+      for (final element in selectedTeamMembers) {
+        participants.add(
+          Participant(
+              iD: element.portalUser.id,
+              canReadMessages: true,
+              canReadFiles: true,
+              canReadTasks: true,
+              canReadContacts: true,
+              canReadMilestones: true),
+        );
+      }
+
+      final newProject = EditProjectDTO(
+        title: titleController.text,
+        description: descriptionController.text,
+        responsibleId: selectedProjectManager.value!.id,
+        participants: participants,
+        private: isPrivate.value,
+        status: _projectDetailed!.status,
+        tags: tagsText.value,
+        notify: notificationEnabled.value,
       );
-    }
 
-    final newProject = EditProjectDTO(
-      title: titleController.text,
-      description: descriptionController.text,
-      responsibleId: selectedProjectManager.value!.id,
-      participants: participants,
-      private: isPrivate.value,
-      status: _projectDetailed!.status,
-      tags: tagsText.value,
-      notify: notificationEnabled.value,
-    );
+      final success = await _projectService.editProject(
+        project: newProject,
+        projectId: _projectDetailed!.id!,
+      );
+      if (success) {
+        Get.back();
 
-    final success = await _projectService.editProject(
-      project: newProject,
-      projectId: _projectDetailed!.id!,
-    );
-    if (success) {
-      Get.back();
-
-      locator<EventHub>().fire('needToRefreshProjects', {'all': true});
-    } else
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+        locator<EventHub>().fire('needToRefreshProjects', {'all': true});
+      } else
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+    }));
   }
 
   void discardChanges() {

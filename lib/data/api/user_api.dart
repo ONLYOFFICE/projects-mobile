@@ -103,4 +103,24 @@ class UserApi {
 
     return result;
   }
+
+  Future<ApiDTO<Map<String, dynamic>>> deleteUser() async {
+    final url = await locator.get<CoreApi>().deleteProfile();
+
+    final result = ApiDTO<Map<String, dynamic>>();
+    try {
+      final response = await locator.get<CoreApi>().putFormDataRequest(url);
+
+      if (response is http.Response) {
+        final responseJson = json.decode(response.body);
+        result.response = responseJson as Map<String, dynamic>;
+      } else {
+        result.error = response as CustomError;
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
 }

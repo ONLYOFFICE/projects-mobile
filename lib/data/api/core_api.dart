@@ -77,6 +77,8 @@ class CoreApi {
 
   Future<String> allProfiles() async => '${await getPortalURI()}/api/$version/people';
 
+  Future<String> deleteProfile() async => '${await getPortalURI()}/api/$version/people/self/delete';
+
   Future<String> authUrl() async => '${await getPortalURI()}/api/$version/authentication';
 
   Future<String> copyTaskUrl({required int copyFrom}) async =>

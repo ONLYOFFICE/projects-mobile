@@ -72,9 +72,9 @@ class StyledDateRangePickerDialog extends StatelessWidget {
         errorFormatText: tr('invalidFormat'),
         errorInvalidText: tr('outOfRange'),
         errorInvalidRangeText: tr('invalidRange'),
-        fieldStartHintText: tr('startDate'),
         fieldEndLabelText: tr('endDate'),
       ),
     );
   }
+
 }

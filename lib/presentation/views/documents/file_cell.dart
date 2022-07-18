@@ -241,7 +241,7 @@ Future<void> _onFilePopupMenuSelected(
 
         locator<EventHub>().fire('needToRefreshDocuments');
       } else
-        MessagesHandler.showSnackBar(context: Get.context!, text: error);
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr(error));
       break;
     default:
   }

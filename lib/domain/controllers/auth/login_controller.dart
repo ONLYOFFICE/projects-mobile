@@ -35,7 +35,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/core_api.dart';
@@ -47,10 +47,14 @@ import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/auth/account_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/loading_hud.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 import 'package:projects/presentation/views/authentication/code_view.dart';
@@ -279,6 +283,34 @@ class LoginController extends GetxController {
       return;
     }
 
+    if (_isPersonalPortal(portalAdress)) {
+      portalFieldError.value = true;
+      // ignore: unawaited_futures
+      900.milliseconds.delay().then((_) => portalFieldError.value = false);
+
+      final alertContent = RichText(
+        textAlign: Platform.isIOS ? TextAlign.center : TextAlign.left,
+        text: TextSpan(
+          style: TextStyleHelper.body2(
+              color: Theme.of(Get.context!).colors().onSurface.withOpacity(0.6)),
+          children: [
+            TextSpan(text: tr('projectModuleNotSupported.projectModule')),
+            TextSpan(text: portalAdress, style: const TextStyle(fontWeight: FontWeight.bold)),
+            TextSpan(text: tr('projectModuleNotSupported.notSupported')),
+          ],
+        ),
+      );
+
+      await Get.find<NavigationController>().showPlatformDialog(
+        SingleButtonDialog(
+          titleText: tr('error'),
+          content: alertContent,
+          acceptText: tr('ok'),
+        ),
+      );
+      return;
+    }
+
     if (portalAdress.isEmpty) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
@@ -380,5 +412,10 @@ class LoginController extends GetxController {
     clearErrors();
 
     Get.back();
+  }
+
+  bool _isPersonalPortal(String portalAdress) {
+    final domains = portalAdress.split('.');
+    return domains[0].contains('personal');
   }
 }
