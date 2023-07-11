@@ -40,6 +40,13 @@ platform :android do
     end
   end
 
+  desc "Repair Flutter cache"
+  lane :repair_cache do
+    Dir.chdir "../.." do
+      sh("flutter", "pub", "cache", "repair")
+    end
+  end
+
   desc "Cleanup build"
   lane :cleanup do
     Dir.chdir "../.." do
@@ -103,6 +110,7 @@ platform :android do
     # Build artifacts and upload to store
     get_packages
     cleanup
+    repair_cache
     increment_build
     make_apk
     make_appbundle
