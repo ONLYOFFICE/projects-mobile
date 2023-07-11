@@ -48,7 +48,7 @@ class AnalyticsService {
   static const Params = _AnalyticsParams();
 
   // Private
-  final FirebaseAnalytics _analytics = FirebaseAnalytics();
+  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
   final Storage _storage = locator<Storage>();
 
   FirebaseAnalyticsObserver getAnalyticsObserver() =>

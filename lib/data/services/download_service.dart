@@ -156,7 +156,7 @@ class DocumentsDownloadService {
     return await FlutterDownloader.enqueue(
       url: finalUrl,
       fileName: fileName,
-      headers: headers,
+      headers: headers!,
       savedDir: temp ? tempPath! : downloadPath!,
       showNotification: !temp,
       saveInPublicStorage: !temp && Platform.isAndroid && (androidSdkVersion ?? 29) > 28,
@@ -230,7 +230,7 @@ class DocumentsDownloadService {
         ?.lastWhereOrNull((element) => element.taskId == taskId);
   }
 
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+  static void downloadCallback(String id, int status, int progress) {
     final send = IsolateNameServer.lookupPortByName(_portName);
     send?.send([id, status, progress]);
   }

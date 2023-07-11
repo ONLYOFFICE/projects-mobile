@@ -34,7 +34,7 @@ apply plugin: 'kotlin-kapt'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 33
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -98,7 +98,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
     //Room
-    implementation 'androidx.room:room-runtime:2.4.0'
-    implementation 'androidx.room:room-ktx:2.4.0'
-    kapt 'androidx.room:room-compiler:2.4.0'
+    implementation 'androidx.room:room-runtime:2.5.2'
+    implementation 'androidx.room:room-ktx:2.5.2'
+    kapt 'androidx.room:room-compiler:2.5.2'
 }
