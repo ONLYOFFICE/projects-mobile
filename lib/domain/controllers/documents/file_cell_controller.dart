@@ -55,7 +55,7 @@ import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_file_safe/open_file_safe.dart';
 import 'package:synchronized/synchronized.dart';
 
 enum FileAction { OnlyDownload, DownloadAndOpen }

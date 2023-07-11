@@ -994,13 +994,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  open_file:
+  open_file_safe:
     dependency: "direct main"
     description:
-      name: open_file
+      name: open_file_safe
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.1"
+    version: "3.2.3"
   package_config:
     dependency: transitive
     description:
