@@ -72,7 +72,7 @@ dependencies:
   cupertino_icons: ^1.0.4
 
   path_provider: ^2.0.10
-  flutter_downloader: ^1.7.4
+  flutter_downloader: ^1.10.4
   url_launcher: ^6.0.20
   # info about app version
   package_info: ^2.0.2

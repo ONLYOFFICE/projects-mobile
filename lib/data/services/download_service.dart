@@ -90,7 +90,7 @@ class DocumentsDownloadService {
 
     _port.listen((dynamic data) async {
       final id = data[0] as String;
-      final status = data[1] as DownloadTaskStatus;
+      final status = DownloadTaskStatus(data[1] as int);
       final progress = data[2] as int;
 
       debugPrint('Downloading: task ($id), status: ($status), progress: ($progress)');
